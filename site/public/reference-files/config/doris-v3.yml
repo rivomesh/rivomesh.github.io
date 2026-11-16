@@ -1,0 +1,41 @@
+formatVersion: 3
+pipelineId: mysql-to-doris
+nodeId: worker-1
+sourceType: MYSQL
+source:
+  clusterId: business-mysql
+  host: 127.0.0.1
+  port: 3306
+  database: business
+  username: replication_reader
+  password: ${MYSQL_PASSWORD}
+  serverId: 910031
+databases: [business]
+targets:
+  - id: doris-analytics
+    product: DORIS
+    url: jdbc:mysql://127.0.0.1:9030/?useSSL=false&connectTimeout=5000&socketTimeout=30000
+    username: rivomesh_loader
+    password: ${DORIS_PASSWORD}
+    metadataSchema: rivomesh_v3
+    mappings: {business: business_copy}
+    uniquePolicy: DOWNGRADE_BUSINESS
+    doris:
+      loadUrl: http://127.0.0.1:8040
+      redirectOrigins: []
+      replicas: 3
+      buckets: 4
+      secondaryIndexes: INVERTED
+      autoCreate: true
+      connectTimeoutMillis: 5000
+      requestTimeoutMillis: 30000
+      maxMessageBytes: 4194304
+      maximumRequestBytes: 16777216
+      maximumResponseBytes: 1048576
+journal:
+  mode: LOCAL
+  path: ../data/doris-journal
+  maxBytes: 1073741824
+chunkSize: 1000
+pollIntervalMillis: 200
+retryDelayMillis: 2000

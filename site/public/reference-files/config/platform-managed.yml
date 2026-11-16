@@ -1,0 +1,18 @@
+# Requires a previously initialized managed account directory and its matching audit database.
+# First start: use platform.yml, then enable managed accounts in the administrator UI.
+bind: 127.0.0.1
+port: 8080
+accessMode: MANAGED
+tasksDirectory: tasks
+dataDirectory: ../data/platform
+maxTasks: 20
+maxRunningTasks: 2
+workerHeapMiB: 256
+controlThreads: 4
+pollMillis: 3000
+autoStart: false
+auditMaxEvents: 1000000
+
+# Local HTTP preview only. Use secureCookie: true behind production HTTPS.
+sessions:
+  secureCookie: false

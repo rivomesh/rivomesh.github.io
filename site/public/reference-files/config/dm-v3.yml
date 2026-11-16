@@ -1,0 +1,31 @@
+formatVersion: 3
+pipelineId: mysql-to-dm
+nodeId: worker-1
+sourceType: MYSQL
+source:
+  clusterId: business-mysql
+  host: 127.0.0.1
+  port: 3306
+  database: business
+  username: replication_reader
+  password: ${MYSQL_PASSWORD}
+  serverId: 910034
+databases: [business]
+targets:
+  - id: dm-business
+    product: DM
+    url: jdbc:dm://127.0.0.1:5236?connectTimeout=5000&socketTimeout=30000
+    username: rivomesh_writer
+    password: ${DM_PASSWORD}
+    metadataSchema: rivomesh_v3
+    mappings: {business: business_copy}
+    uniquePolicy: DOWNGRADE_BUSINESS
+    dm:
+      acknowledgeTextConversions: true # Review JSON CLOB and decimal precision >38 text storage.
+journal:
+  mode: LOCAL
+  path: ../data/dm-journal
+  maxBytes: 1073741824
+chunkSize: 1000
+pollIntervalMillis: 200
+retryDelayMillis: 2000

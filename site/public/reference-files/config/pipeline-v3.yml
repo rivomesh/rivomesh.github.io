@@ -1,0 +1,50 @@
+formatVersion: 3
+pipelineId: sales-fanout
+nodeId: ${RIVOMESH_NODE_ID}
+sourceType: MYSQL
+source:
+  clusterId: sales-mysql
+  host: 127.0.0.1
+  port: 3306
+  username: rivomesh_reader
+  password: ${MYSQL_PASSWORD}
+  serverId: 910101
+  topology: AUTO
+databases: [sales, inventory]
+journal:
+  mode: LOCAL
+  path: ../data/sales-fanout
+  maxBytes: 10737418240
+  # For multiple hosts, use a shared transactional database instead:
+  # mode: EXTERNAL
+  # product: POSTGRESQL
+  # url: jdbc:postgresql://journal:5432/rivomesh?connectTimeout=5&socketTimeout=30
+  # username: rivomesh
+  # password: ${JOURNAL_PASSWORD}
+  # namespace: rivomesh_journal
+targets:
+  - id: postgres
+    product: POSTGRESQL
+    url: jdbc:postgresql://127.0.0.1:5432/business?connectTimeout=5&socketTimeout=30
+    username: rivomesh_writer
+    password: ${POSTGRES_PASSWORD}
+    metadataSchema: rivomesh_v3
+    uniquePolicy: DOWNGRADE_BUSINESS
+    mappings:
+      sales: sales_replica
+      inventory: inventory_replica
+  - id: gauss
+    product: GAUSS
+    url: jdbc:postgresql://127.0.0.1:8000/business?prepareThreshold=0&connectTimeout=5&socketTimeout=30
+    username: rivomesh_writer
+    password: ${GAUSS_PASSWORD}
+    metadataSchema: rivomesh_v3
+    uniquePolicy: DOWNGRADE_BUSINESS
+    mappings:
+      sales: sales_replica
+      inventory: inventory_replica
+chunkSize: 1000
+leaseMillis: 30000
+heartbeatMillis: 5000
+pollIntervalMillis: 200
+maxTransactionRows: 100000

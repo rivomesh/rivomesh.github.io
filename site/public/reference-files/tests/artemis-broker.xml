@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns="urn:activemq">
+  <core xmlns="urn:activemq:core">
+    <name>rivomesh-artemis</name>
+    <persistence-enabled>true</persistence-enabled>
+    <journal-type>NIO</journal-type>
+    <journal-datasync>true</journal-datasync>
+    <journal-sync-transactional>true</journal-sync-transactional>
+    <journal-sync-non-transactional>true</journal-sync-non-transactional>
+    <journal-file-size>1M</journal-file-size>
+    <journal-min-files>2</journal-min-files>
+    <journal-pool-files>2</journal-pool-files>
+    <bindings-directory>data/bindings</bindings-directory>
+    <journal-directory>data/journal</journal-directory>
+    <paging-directory>data/paging</paging-directory>
+    <large-messages-directory>data/large-messages</large-messages-directory>
+    <max-disk-usage>90</max-disk-usage>
+    <acceptors><acceptor name="core">tcp://0.0.0.0:61616?protocols=CORE,AMQP;tcpSendBufferSize=65536;tcpReceiveBufferSize=65536</acceptor></acceptors>
+    <security-settings>
+      <security-setting match="#">
+        <permission type="createNonDurableQueue" roles="amq"/>
+        <permission type="deleteNonDurableQueue" roles="amq"/>
+        <permission type="createDurableQueue" roles="amq"/>
+        <permission type="deleteDurableQueue" roles="amq"/>
+        <permission type="createAddress" roles="amq"/>
+        <permission type="deleteAddress" roles="amq"/>
+        <permission type="consume" roles="amq"/>
+        <permission type="browse" roles="amq"/>
+        <permission type="send" roles="amq"/>
+        <permission type="manage" roles="amq"/>
+      </security-setting>
+    </security-settings>
+    <address-settings>
+      <address-setting match="activemq.management.#">
+        <auto-create-addresses>true</auto-create-addresses>
+        <auto-delete-addresses>true</auto-delete-addresses>
+        <auto-create-queues>true</auto-create-queues>
+        <auto-delete-queues>true</auto-delete-queues>
+      </address-setting>
+      <address-setting match="rivomesh.#">
+        <no-expiry>true</no-expiry>
+        <max-delivery-attempts>-1</max-delivery-attempts>
+        <address-full-policy>PAGE</address-full-policy>
+        <max-size-bytes>16M</max-size-bytes>
+        <page-size-bytes>1M</page-size-bytes>
+        <auto-create-queues>false</auto-create-queues>
+        <auto-delete-queues>false</auto-delete-queues>
+        <auto-delete-created-queues>false</auto-delete-created-queues>
+        <auto-create-addresses>false</auto-create-addresses>
+        <auto-delete-addresses>false</auto-delete-addresses>
+      </address-setting>
+    </address-settings>
+  </core>
+</configuration>

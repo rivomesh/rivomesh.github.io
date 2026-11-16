@@ -1,0 +1,37 @@
+package io.rivomesh.cdc;
+
+import io.rivomesh.api.SourcePosition;
+import java.util.*;
+
+public interface SourceAdapter extends AutoCloseable {
+    interface Receiver {
+        void committed(SourceTransaction transaction)throws Exception;
+        /** Notify before waiting for a blocked delivery callback when closing a stream. */
+        default void cancelled(){}
+    }
+    interface Snapshot extends AutoCloseable {
+        SourcePosition baseline();
+        List<List<Cell>> next(int maximumRows)throws Exception;
+    }
+    interface Stream extends AutoCloseable { void check()throws Exception; }
+    /** One source-consistent view across tables; the write gate is bounded and explicitly released. */
+    interface ConsistentRead extends AutoCloseable {
+        SourcePosition baseline();
+        Snapshot table(TableSchema table)throws Exception;
+        void releaseWrites()throws Exception;
+        void verify()throws Exception;
+        @Override void close()throws Exception;
+    }
+    String type();
+    List<TableSchema> discover()throws Exception;
+    Snapshot snapshot(TableSchema table)throws Exception;
+    Stream stream(SourcePosition captured,Receiver receiver)throws Exception;
+    SourcePosition position()throws Exception;
+    void validateFailover(SourcePosition captured,List<SourcePosition> snapshotDependencies)throws Exception;
+    boolean includes(SourcePosition position,String transactionId);
+    default boolean covers(SourcePosition captured,SourcePosition required){throw new UnsupportedOperationException("SOURCE_POSITION_COMPARISON_UNSUPPORTED");}
+    default ConsistentRead consistentRead(List<TableSchema> tables,long maximumGateMillis,long maximumReadMillis)throws Exception{
+        throw new UnsupportedOperationException("SOURCE_CONSISTENT_READ_UNSUPPORTED");
+    }
+    @Override void close()throws Exception;
+}

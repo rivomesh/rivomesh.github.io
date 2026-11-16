@@ -1,0 +1,54 @@
+package io.rivomesh.platform;
+
+import java.io.*;
+import java.nio.file.*;
+import java.util.concurrent.TimeUnit;
+
+/** Separate JVMs bound heap and isolate source failures between independent task configurations. */
+public interface TaskWorker {
+    boolean alive();
+    int exitCode();
+    void stop() throws Exception;
+    default void requestStop() {}
+    interface Factory { TaskWorker start(Path config, Path log, int heapMiB) throws Exception; }
+
+    final class Jvm implements TaskWorker {
+        private final Process process;
+        private final Thread output;
+        private volatile long stopRequested;
+        public Jvm(Path config, Path log, int heapMiB) throws Exception {
+            String cp = System.getProperty("surefire.test.class.path", System.getProperty("java.class.path"));
+            process = new ProcessBuilder(Paths.get(System.getProperty("java.home"), "bin", "java").toString(),
+                    "-Xmx" + heapMiB + "m", "-cp", cp, "io.rivomesh.Main", "run", config.toAbsolutePath().toString())
+                    .redirectErrorStream(true).start();
+            output = new Thread(() -> {
+                try (InputStream in = process.getInputStream()) {
+                    byte[] buffer = new byte[8192]; int n;
+                    while ((n = in.read(buffer)) >= 0) {
+                        if (Files.exists(log) && Files.size(log) + n > 8L * 1024 * 1024)
+                            Files.move(log, log.resolveSibling(log.getFileName()+".1"), StandardCopyOption.REPLACE_EXISTING);
+                        try (OutputStream out = Files.newOutputStream(log, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) { PrivateFiles.ownerOnly(log); out.write(buffer,0,n); }
+                    }
+                } catch (IOException ignored) {
+                    // Losing log storage cannot leave an unobserved worker consuming unbounded output.
+                    process.destroy();
+                }
+            }, "task-log-" + config.getFileName());
+            output.setDaemon(true); output.start();
+        }
+        public boolean alive() { return process.isAlive(); }
+        public int exitCode() { return process.exitValue(); }
+        public synchronized void requestStop() {
+            if(stopRequested==0)stopRequested=System.nanoTime();
+            process.destroy();
+        }
+        public void stop() throws Exception {
+            if (process.isAlive()) {
+                requestStop();
+                long remaining=Math.max(0,TimeUnit.SECONDS.toNanos(15)-(System.nanoTime()-stopRequested));
+                if (!process.waitFor(remaining, TimeUnit.NANOSECONDS)) { process.destroyForcibly(); process.waitFor(5,TimeUnit.SECONDS); }
+            }
+            output.join(1000);
+        }
+    }
+}

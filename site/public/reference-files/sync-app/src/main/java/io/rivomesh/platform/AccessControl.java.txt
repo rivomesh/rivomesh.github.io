@@ -1,0 +1,27 @@
+package io.rivomesh.platform;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.*;
+
+/** Immutable credential snapshot. Only fixed-length digests are retained by the HTTP server. */
+final class AccessControl {
+    static final class Principal {
+        final String id,authorizationRevision;final PlatformConfig.Role role;final Set<String> taskIds;
+        Principal(String id,PlatformConfig.Role role){this(id,role,null);}
+        Principal(String id,PlatformConfig.Role role,Collection<String> taskIds){this(id,role,taskIds,null);}
+        Principal(String id,PlatformConfig.Role role,Collection<String> taskIds,String revision){this.id=id;this.role=role;this.authorizationRevision=revision;this.taskIds=taskIds==null?null:Collections.unmodifiableSet(new LinkedHashSet<>(taskIds));}
+        boolean task(String id){return taskIds==null||taskIds.contains(id);}
+        boolean scoped(){return taskIds!=null;}
+        boolean operates(){return role!=PlatformConfig.Role.VIEWER;}
+        boolean administers(){return role==PlatformConfig.Role.ADMIN;}
+        Map<String,Object> view(){Map<String,Object> result=new LinkedHashMap<>();result.put("id",id);result.put("role",role.name());result.put("taskScope",taskIds==null?null:new ArrayList<>(taskIds));List<String> permissions=new ArrayList<>();permissions.add("TASK_READ");if(operates())permissions.add("TASK_CONTROL");if(administers()){permissions.add("TASK_CREATE");permissions.add("TASK_CONFIG");permissions.add("AUDIT_READ");permissions.add("ACCOUNT_ADMIN");}result.put("permissions",permissions);return result;}
+    }
+    private final Map<Principal,byte[]> credentials=new LinkedHashMap<>();
+    AccessControl(PlatformConfig config){config.validateAccess();if(config.authToken!=null)credentials.put(new Principal("legacy-admin",PlatformConfig.Role.ADMIN),digest(config.authToken));for(PlatformConfig.User user:config.users)credentials.put(new Principal(user.id,user.role,user.taskIds),digest(user.token));}
+    private static byte[] digest(String value){try{return MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8));}catch(java.security.NoSuchAlgorithmException impossible){throw new IllegalStateException(impossible);}}
+    Principal authenticate(String authorization){
+        if(authorization==null||!authorization.startsWith("Bearer ")||authorization.length()>4103)return null;byte[] requested=digest(authorization.substring(7));Principal matched=null;
+        for(Map.Entry<Principal,byte[]> credential:credentials.entrySet())if(MessageDigest.isEqual(credential.getValue(),requested))matched=credential.getKey();return matched;
+    }
+}

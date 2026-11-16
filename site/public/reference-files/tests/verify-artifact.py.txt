@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+"""Check the distributable, not just Maven's intermediate class directories."""
+import io
+import hashlib
+import re
+import struct
+import sys
+import zipfile
+from pathlib import Path
+
+root = Path(__file__).resolve().parents[1]
+artifact = Path(sys.argv[1]) if len(sys.argv) > 1 else root / "sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar"
+with zipfile.ZipFile(artifact) as jar:
+    names = jar.namelist()
+    assert len(names) == len(set(names)), "Duplicate ZIP entries"
+    assert not any("/cscec/" in name for name in names), "Old application package present"
+    assert not any(name.startswith("io/rivomesh/") and "/internal/" not in name
+                   and re.search(r"(?:Test|Acceptance)(?:\$[^/]*)?\.class$", name)
+                   for name in names), "Test class included in release"
+    for resource in ("index.html", "app.js", "app.css", "configuration-editor.js", "audit.js", "accounts.js", "validation.js"):
+        assert jar.read("console/" + resource) == (root / "sync-app/src/main/resources/console" / resource).read_bytes(), "Stale console asset: " + resource
+    for name in names:
+        if name.startswith("io/rivomesh/") and "/internal/" not in name and name.endswith(".class"):
+            assert struct.unpack(">H", jar.read(name)[6:8])[0] <= 52, "Application requires newer Java: " + name
+    for name in (
+        "io/rivomesh/Main.class",
+        "io/rivomesh/cdc/RowValues.class",
+        "io/rivomesh/validation/ValidationStore.class",
+        "io/rivomesh/PipelineReconciliation.class",
+        "io/rivomesh/PipelineRepair.class",
+        "io/rivomesh/repair/RepairPlan.class",
+        "io/rivomesh/repair/RepairPlans.class",
+        "io/rivomesh/repair/RepairProbe.class",
+        "io/rivomesh/cdc/PausedRepairFence.class",
+        "io/rivomesh/platform/ValidationRequest.class",
+        "io/rivomesh/platform/RepairRequest.class",
+        "io/rivomesh/cdc/RepairDependencies.class",
+        "io/rivomesh/cdc/RepairConnectionGuard.class",
+        "io/rivomesh/cdc/TargetRead.class",
+        "io/rivomesh/cdc/JdbcTargetRead.class",
+        "io/rivomesh/MysqlConsistentRead.class",
+        "io/rivomesh/PipelineValidationBarrier.class",
+        "io/rivomesh/cdc/SourceAdapter$ConsistentRead.class",
+        "io/rivomesh/cdc/KingbaseProfile.class",
+        "io/rivomesh/cdc/Gbase8cProfile.class",
+        "com/gbase8c/Driver.class",
+        "META-INF/rivomesh-licenses/gbase8c-jdbc.txt",
+        "io/rivomesh/cdc/DmProfile.class",
+        "io/rivomesh/cdc/DmStorage.class",
+        "dm/jdbc/driver/DmDriver.class",
+        "com/kingbase8/Driver.class",
+        "io/rivomesh/platform/AccountDirectory.class",
+        "io/rivomesh/transport/hive/HiveTransport.class",
+        "io/rivomesh/cdc/HiveSink.class",
+        "io/rivomesh/gaussdb/jdbc/Driver.class",
+        "io/rivomesh/transport/pulsar/PulsarTransport.class",
+        "io/rivomesh/transport/rocketmq/RocketTransport.class",
+        "io/rivomesh/transport/artemis/ArtemisTransport.class",
+        "io/rivomesh/cdc/ClassicMessagePublisher.class",
+        "io/rivomesh/transport/classic/ClassicTransport.class",
+        "io/rivomesh/classic/internal/jms/Message.class",
+        "io/rivomesh/cdc/ClickHouseSink.class",
+        "io/rivomesh/cdc/ClickHouseMaterializer.class",
+        "io/rivomesh/cdc/ClickHouseHttpClient.class",
+        "io/rivomesh/cdc/ClickHouseRowBinary.class",
+        "io/rivomesh/cdc/ClickHouseIndexPlan.class",
+        "io/rivomesh/artemis/internal/netty/channel/Channel.class",
+        "io/rivomesh/artemis/internal/json/Json.class",
+        "io/rivomesh/pulsar/internal/slf4j/Logger.class",
+        "io/rivomesh/rocketmq/internal/netty/channel/Channel.class",
+        "io/rivomesh/rocketmq/internal/fastjson2/JSON.class",
+    ):
+        assert name in names, "Missing runtime class: " + name
+    for name in names:
+        if (name.startswith("com/gbase8c/") or name.startswith("com/kingbase8/") or name.startswith("dm/jdbc/")) and name.endswith(".class"):
+            assert struct.unpack(">H",jar.read(name)[6:8])[0]<=52, "Vendor JDBC runtime requires newer Java: "+name
+    gbase_vendor=root / "gbase8c-driver/target/vendor/gbase8c-jdbc-3.0.0B02.jar"
+    assert hashlib.sha256(gbase_vendor.read_bytes()).hexdigest()=="fe115f05124f6b9f37e49c829a0def28f7d09a6d871dd62a0c9f856b0aaa7e91", "Wrong GBase 8c SDK"
+    with zipfile.ZipFile(gbase_vendor) as vendor:
+        for entry in vendor.namelist():
+            if entry.startswith("com/gbase8c/") and entry.endswith(".class"):
+                assert jar.read(entry)==vendor.read(entry), "Changed GBase vendor class: "+entry
+        assert jar.read("META-INF/rivomesh-licenses/gbase8c-jdbc.txt")==vendor.read("META-INF/LICENSE"), "Lost GBase license"
+    sdk=jar.read("rivomesh-sdk/hive-jdbc-4.0.1-standalone.jar")
+    assert hashlib.sha256(sdk).hexdigest()=="5d74bb0130aae6a8a2fad9cf5ffa1608974a55f1013464334490f7e06311959e", "Wrong private Hive SDK"
+    assert "org/apache/hive/jdbc/HiveDriver.class" not in names, "Hive SDK leaked into the core loader"
+    with zipfile.ZipFile(io.BytesIO(sdk)) as private:
+        assert struct.unpack(">H", private.read("org/apache/hive/jdbc/HiveDriver.class")[6:8])[0]<=52, "Hive driver requires newer Java"
+    assert b"atDebug" not in jar.read("org/slf4j/Logger.class"), "Core SLF4J 1.7 API replaced"
+    assert "Main-Class: io.rivomesh.Main" in jar.read("META-INF/MANIFEST.MF").decode(), "Wrong executable entry point"
+    drivers = jar.read("META-INF/services/java.sql.Driver").decode().splitlines()
+    for driver in ("com.mysql.cj.jdbc.Driver", "org.postgresql.Driver", "org.h2.Driver", "io.rivomesh.gaussdb.jdbc.Driver", "com.kingbase8.Driver", "com.gbase8c.Driver", "dm.jdbc.driver.DmDriver"):
+        assert driver in drivers, "Missing JDBC service: " + driver
+print("ARTIFACT_ACCEPTED:", artifact.name, artifact.stat().st_size, "bytes; SHA-256", hashlib.sha256(artifact.read_bytes()).hexdigest())

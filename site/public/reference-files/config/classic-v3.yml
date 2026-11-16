@@ -1,0 +1,34 @@
+formatVersion: 3
+pipelineId: classic-copy
+nodeId: ${RIVOMESH_NODE_ID}
+sourceType: MYSQL
+source:
+  clusterId: business-mysql
+  host: 127.0.0.1
+  port: 3306
+  username: rivomesh_reader
+  password: ${MYSQL_PASSWORD}
+  serverId: 910401
+  topology: AUTO
+databases: [sales]
+journal:
+  mode: LOCAL
+  path: ../data/classic-copy
+  maxBytes: 10737418240
+targets:
+  - id: classic
+    product: ACTIVEMQ_CLASSIC
+    url: activemq://127.0.0.1:61616
+    username: rivomesh_publisher
+    password: ${CLASSIC_PASSWORD}
+    mappings:
+      sales: sales_events
+    messaging:
+      stream: rivomesh
+      broker: rivomesh-core
+      adminUrl: http://127.0.0.1:8161/api/jolokia/
+      autoCreate: true
+      replicas: 1
+      connectTimeoutMillis: 5000
+      requestTimeoutMillis: 10000
+      maxMessageBytes: 1048576

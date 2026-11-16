@@ -1,0 +1,100 @@
+{
+  "formatVersion": 1,
+  "runId": "rivomesh-bench-009b8ee74f4c",
+  "status": "PASSED",
+  "startedAt": "2026-11-14T23:27:10.215016+00:00",
+  "host": {
+    "system": "Darwin",
+    "release": "25.6.0",
+    "machine": "arm64",
+    "logicalCpus": 10,
+    "processor": "Apple M1 Pro",
+    "physicalMemoryBytes": 17179869184,
+    "loadAverageAtStart": [
+      66.591796875,
+      66.94970703125,
+      48.564453125
+    ],
+    "journalFilesystemCapacityAtStart": {
+      "totalBytes": 994662584320,
+      "freeBytes": 89986752512
+    },
+    "loadAverageAtEnd": [
+      40.84130859375,
+      59.75341796875,
+      46.94091796875
+    ]
+  },
+  "storageDescription": "Apple macOS Docker Desktop shared VM; existing unrelated workloads active; local smoke validation only, not a hardware standard",
+  "workload": {
+    "rows": 1000,
+    "payload_bytes": 256,
+    "chunk_size": 1000,
+    "timeout": 180,
+    "storage_description": "Apple macOS Docker Desktop shared VM; existing unrelated workloads active; local smoke validation only, not a hardware standard"
+  },
+  "measurements": {
+    "sourceLoadSeconds": 0.28045041719451547,
+    "snapshotVisibilitySeconds": 23.081648792140186,
+    "snapshotRowsPerSecond": 43.32446130713687,
+    "snapshotSourceContentSha256": "559952bdb06f28ca2c7ecba7d68fc6e5eab38e37c52372d8ce71461667afb92e",
+    "snapshotTargetContentSha256": "559952bdb06f28ca2c7ecba7d68fc6e5eab38e37c52372d8ce71461667afb92e",
+    "snapshotContentSha256": "559952bdb06f28ca2c7ecba7d68fc6e5eab38e37c52372d8ce71461667afb92e",
+    "sourceMutationSeconds": 0.5980661250650883,
+    "cdcCatchUpSeconds": 1.94323516683653,
+    "cdcChanges": 1200,
+    "cdcChangesPerSecond": 617.5269058934991,
+    "afterWritesCatchUpSeconds": 1.3451690417714417,
+    "cdcSourceContentSha256": "53a2d1a59430af7e1b816e6e0959ea1add776a21fdffab8720d599dd803420a4",
+    "cdcTargetContentSha256": "53a2d1a59430af7e1b816e6e0959ea1add776a21fdffab8720d599dd803420a4",
+    "cdcContentSha256": "53a2d1a59430af7e1b816e6e0959ea1add776a21fdffab8720d599dd803420a4"
+  },
+  "limits": {
+    "cpusPerContainer": "1",
+    "databaseMemory": "1g",
+    "workerMemory": "1g",
+    "workerHeapMiB": 256
+  },
+  "scope": "One source, one target, one keyed table, LOCAL journal, ASCII payload; startup-inclusive snapshot visibility and write-inclusive CDC catch-up. Not peak throughput, p99 latency, crash recovery, a hardware standard or an SLO.",
+  "artifactSha256": "602b83e14dd5ca9cf89a9038fa7b380018d9ae647a0e80d386015638360b9d42",
+  "docker": {
+    "ServerVersion": "29.9.2",
+    "NCPU": 10,
+    "MemTotal": 16745824256,
+    "Driver": "overlay2",
+    "OperatingSystem": "Docker Desktop",
+    "Architecture": "aarch64"
+  },
+  "containers": [
+    {
+      "imageId": "sha256:ae113cae2661960c4665a586812ae8150b2a133772a9f3ad63d1f1ae4f9e8ce7",
+      "image": "mysql:8.4",
+      "nanoCpus": 1000000000,
+      "memoryBytes": 1073741824,
+      "mountTypes": [
+        "volume"
+      ]
+    },
+    {
+      "imageId": "sha256:6865912920d21689de1485f9965b718ef0d5cac229ba7be3042d7251738bd9de",
+      "image": "postgres:17.12",
+      "nanoCpus": 1000000000,
+      "memoryBytes": 1073741824,
+      "mountTypes": [
+        "volume"
+      ]
+    }
+  ],
+  "databaseRuntime": {
+    "mysqlVersionFlushSyncBuffer": "8.4.13\t1\t1\t268435456",
+    "postgresVersionDurabilityBuffer": "PostgreSQL 17.12 (Debian 17.12-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit\non|on|256MB"
+  },
+  "worker": {
+    "imageId": "sha256:1afe630c420f3f276515f570d8d4c82394dd6f072e5619244299438e692f9f09",
+    "nanoCpus": 1000000000,
+    "memoryBytes": 1073741824,
+    "javaVersion": "openjdk version \"1.8.0_512\"\nOpenJDK Runtime Environment (Temurin)(build 1.8.0_512-b09)\nOpenJDK 64-Bit Server VM (Temurin)(build 25.512-b09, mixed mode)"
+  },
+  "cleanupExitCode": 0,
+  "finishedAt": "2026-11-14T23:28:03.770419+00:00"
+}

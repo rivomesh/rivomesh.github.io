@@ -1,0 +1,23 @@
+{
+  "name": "rivomesh-website",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vitepress dev site --host 127.0.0.1",
+    "build": "vitepress build site",
+    "preview": "vitepress preview site --host 127.0.0.1",
+    "docs:sync": "node scripts/sync-docs.mjs",
+    "check": "node scripts/check-content.mjs",
+    "check:build": "node scripts/check-build.mjs",
+    "media:generate": "node scripts/generate-media.mjs"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5",
+    "vitepress": "1.6.4",
+    "vue": "^3.5.45"
+  }
+}

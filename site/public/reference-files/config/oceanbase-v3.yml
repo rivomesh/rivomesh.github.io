@@ -1,0 +1,29 @@
+formatVersion: 3
+pipelineId: mysql-to-oceanbase
+nodeId: worker-1
+sourceType: MYSQL
+source:
+  clusterId: business-mysql
+  host: 127.0.0.1
+  port: 3306
+  database: business
+  username: replication_reader
+  password: ${MYSQL_PASSWORD}
+  serverId: 910032
+databases: [business]
+targets:
+  - id: oceanbase-business
+    product: OCEANBASE
+    url: jdbc:mysql://127.0.0.1:2881/?useSSL=false&connectTimeout=5000&socketTimeout=30000
+    username: rivomesh@business
+    password: ${OCEANBASE_PASSWORD}
+    metadataSchema: rivomesh_v3
+    mappings: {business: business_copy}
+    uniquePolicy: DOWNGRADE_BUSINESS
+journal:
+  mode: LOCAL
+  path: ../data/oceanbase-journal
+  maxBytes: 1073741824
+chunkSize: 1000
+pollIntervalMillis: 200
+retryDelayMillis: 2000

@@ -1,0 +1,38 @@
+formatVersion: 3
+pipelineId: mysql-to-hive
+nodeId: worker-1
+sourceType: MYSQL
+source:
+  clusterId: business-mysql
+  host: 127.0.0.1
+  port: 3306
+  database: business
+  username: replication_reader
+  password: ${MYSQL_PASSWORD}
+  serverId: 910041
+databases: [business]
+targets:
+  - id: hive-warehouse
+    product: HIVE
+    # Server default and all readers: hive.query.results.cache.enabled=false
+    url: jdbc:hive2://127.0.0.1:10000/default
+    username: rivomesh_loader
+    password: ${HIVE_PASSWORD}
+    metadataSchema: rivomesh_v3
+    mappings: {business: business_copy}
+    uniquePolicy: DOWNGRADE_BUSINESS
+    hive:
+      autoCreate: true
+      # Review the per-table plan before explicitly accepting secondary-index omission.
+      acknowledgeIndexOmission: false
+      queryTimeoutSeconds: 300
+      maximumSqlBytes: 4194304
+      maximumResponseBytes: 16777216
+      maxMessageBytes: 1048576
+journal:
+  mode: LOCAL
+  path: ../data/hive-journal
+  maxBytes: 1073741824
+chunkSize: 1000
+pollIntervalMillis: 200
+retryDelayMillis: 2000

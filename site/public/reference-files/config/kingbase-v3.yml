@@ -1,0 +1,29 @@
+formatVersion: 3
+pipelineId: mysql-to-kingbase
+nodeId: worker-1
+sourceType: MYSQL
+source:
+  clusterId: business-mysql
+  host: 127.0.0.1
+  port: 3306
+  database: business
+  username: replication_reader
+  password: ${MYSQL_PASSWORD}
+  serverId: 910033
+databases: [business]
+targets:
+  - id: kingbase-business
+    product: KINGBASE
+    url: jdbc:kingbase8://127.0.0.1:54321/test?connectTimeout=10&socketTimeout=30
+    username: rivomesh_writer
+    password: ${KINGBASE_PASSWORD}
+    metadataSchema: rivomesh_v3
+    mappings: {business: business_copy}
+    uniquePolicy: DOWNGRADE_BUSINESS
+journal:
+  mode: LOCAL
+  path: ../data/kingbase-journal
+  maxBytes: 1073741824
+chunkSize: 1000
+pollIntervalMillis: 200
+retryDelayMillis: 2000

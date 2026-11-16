@@ -1,0 +1,73 @@
+---
+sourcePath: docs/verification/2026-11-15-hive/README.md
+---
+
+# Hive experimental acceptance / Hive 实验适配验收
+
+2026-11-15. **Current independent native and corrected real MySQL mixed profiles passed.** 原生用例与真实源采集链路分别有证据，完整平台需求仍未完成。
+
+## Current release and verified scope
+
+Native-accepted release SHA-256 `5c23ea0d7f05c726f731ebf985392bb2fea4572797432cfcc773a287209cacb6`,184135976bytes; preserved privately at `target/release-evidence/hive-cache-5c23ea.jar`. The first profile requires server default, writer and every reader to disable `hive.query.results.cache.enabled`. This release retains the earlier data/checkpoint layout and refuses an enabled writer session with `HIVE_QUERY_CACHE_DISABLED_REQUIRED`.
+
+| Evidence | Actual scope |
+|---|---|
+| `package-cache.log` | Root selected unit/API:2 Classic SDK+126 application=128 passing;0failure/error/skip |
+| `release-unit-cache.log` | Separate actual-fat-JAR-first execution:126 application cases passing; not126 additional distinct scenarios |
+| `native-cache.log` | Complete Java8/native Hive case, terminal accepted marker, same final JAR hash and own-project cleanup |
+| `ui-cache-guidance.log` |33DOM checks, including bilingual cache-recovery instructions; guidance packaged in9ba60d UI release; see byte comparison below |
+| `deployment-plan.log` | Static Helm/native parity, roles, grants and deployment checks; not live Kubernetes acceptance |
+
+Independent native case uses released MessageSink/JdbcJournal/Hive classes. Harness is freshly compiled only against the release JAR; synthetic transactions/SourcePosition exercise the Sink contract, not actual binlog capture. It verified:
+
+- Native enabled-cache session rejected before initialization. A test-only reflective access to the real materializer client sets the native session flag, then calls real `prepare`; no alternate production class is substituted.
+- Managed full-ACID ORC history/latest-version views, PK movement/replay, keyless identical2→1 deletion, stale native versions unable to replace newer data.
+- Exact uint64 maximum,65digit/30scale decimal as text, large JSON number text, base64 bytes, mixed-case column metadata/value handling.
+- Real native row/receipt completion followed by injected confirmation loss before Journal progress; transaction checkpoint remains0 and replay preserves business multiplicity.
+- Hive restart, materializer/JDBC reopen against the same Journal, subsequent transaction/checkpoint advancement.
+- Server stopped before coordinated embedded Derby+warehouse backup/restore. Older nonempty target with newer H2 progress rejects missing latest receipt and preserves the saved checkpoint.
+
+## Environment and reproduction
+
+Official `apache/hive:4.0.1` ARM64, native version `4.0.1 r3af4517eb8cfd9407ad34ed78a0b48b57dfaa264`, Java8. Image index digest `5194161ef50b80875f937dff04936df047cbe894e9727ab8f0606349345b1bd3`, ARM64 manifest `2f3fe8486bb58e849d86eb2c2cddb7508d800f773ee811399fe6db444dd76ef3`. The private unmodified standalone Hive JDBC4.0.1 SDK is43636739bytes, SHA-256 `5d74bb0130aae6a8a2fad9cf5ffa1608974a55f1013464334490f7e06311959e`.
+
+One HiveServer2, embedded persistent Derby, local persistent warehouse, MR/local execution. PID files use `HIVESERVER2_PID_DIR` on a dedicated64KiB `/run/rivomesh-hive` tmpfs, while data remains persistent. The image's installed `/opt/hive/bin/ext/hiveserver2.sh` uses that variable; [Docker tmpfs lifecycle](https://docs.docker.com/engine/storage/tmpfs/) explains why runtime PID files do not survive stop.
+
+Build first, keep the release JAR unchanged during a case, then run `bash tests/hive-materializer-run.sh` or `bash tests/hive-pipeline-run.sh`. Only each script's own project/volumes are operated. Private task documents, complete stacks and worker logs stay in ignored `target/`; curated records here retain failed cases too. Exact image/source/target versions for the earlier mixed case are in `pipeline-versions.log`.
+
+## Failed and earlier cases retained
+
+| Record | Outcome and limitation |
+|---|---|
+| `view-alias-failed.log` | Failed at unquoted internal view rank alias; fixed before accepted native cases |
+| `native-first.log`, `artifact-first.log`, `package-first.log` | Earlier645032 release: basic independent native case passed;124app+2SDK passed,25 environment-gated integration tests skipped. It predates the extra confirmation-loss/case/cache checks |
+| `native-pid-failed.log`, `pid-diagnostic.log` | fb34a1 candidate passed data/confirmation-loss, then failed restart because stale PID7 matched a new shell; fixture runtime directory corrected |
+| `native-current.log`, `artifact-plan.log`, `package-plan.log`, `release-unit-plan.log` | fb34a1 independent native case passed after PID correction. This does not prove general cached read correctness |
+| `pipeline-cache-aborted.log`, `cache-progress.json` | fb34a1 real MySQL8.4.13→PostgreSQL17.12+Hive snapshot/types/CDC/outage/catch-up passed, then worker-restart query validation failed. We explicitly terminated only observed harness PID41; exit143/cleanup retained. Not full pipeline acceptance |
+| `cache-enabled-probe.log`, `cache-disabled-probe.log` | Native Beeline detail query returned IDs3,4,5 while cached COUNT returned0. A fresh session with only results cache disabled returned COUNT3; stats remained enabled |
+
+The aborted case's source and PostgreSQL detail queries each returned3,4,5; both Journal target ACKs were4 with pendingBytes0. It was an observed unsafe cached read in that fixture, not evidence of missing captured rows or a claim that all Hive deployments share the issue. No source GTID/checkpoint was altered. The new cache-disabled profile is accepted by the final frozen-release case below; earlier results do not substitute for that case.
+
+## Remaining boundaries
+
+Single-server/local-storage first profile only. Resource UUIDs are Rivomesh Metastore properties, not independently authenticated storage identity. Arbitrary partial-table/file rollback, external tampering, clusters/HDFS/S3/external Metastore/Tez/Kerberos/TLS/compaction, all-JDK compatibility, throughput and production sizing remain unaccepted. Source cross-table visibility is not atomic. Secondary indexes are explicitly omitted, never presented as ordinary-index equivalents. The wider Rivomesh objective remains active.
+
+## Corrected-profile mixed core passed, end-of-run asset gate failed
+
+`pipeline-ui-stale-failed.log` release5c23ea completed every real MySQL8.4.13→PostgreSQL17.12+Hive4.0.1 assertion: snapshot/types/generated/keyless, CDC, Hive outage with PostgreSQL progress and automatic catch-up, worker SIGKILL retaining generation/snapshot identity, PostgreSQL CHECK rollback while Hive continues, repair/original-generation resume, missing Hive view isolated while PostgreSQL continues, and truthful FENCED/UNCONFIRMED pause results. The terminal HIVE_PIPELINE_ACCEPTED marker is present.
+
+The script nevertheless exited1 because its final verifier detected that console/app.js had been edited during the case to add cache-recovery instructions. The tested JAR hash remained5c23ea; this was an actual stale-worktree-assets gate failure, not a passed entire script. It is retained as FAILED. The UI change passed33DOM checks and is being packaged. The next case will run with source/UI frozen and must pass the final gate; the verifier was not weakened or bypassed.
+
+## Frozen UI release
+
+Final UI repack SHA-256 `9ba60d0f57c78214deafced517bfb36c98ade81ee62c20d8a99fe92a573b6b12`,184136264bytes, preserved privately at `target/release-evidence/hive-ui-9ba60d.jar`. `runtime-ui-comparison.json` compared every archive entry: all65129 class files and all SDK/runtime resources are byte-identical to native-accepted5c23ea; only console/app.js changed. The33DOM checks cover bilingual cache handling, and the artifact verifier confirms packed assets equal current source.
+
+This packaging invocation used `-DskipTests`; it is not another128-test execution. The last128 root and126 fat-JAR application tests are on the identical Java classes in5c23ea. New9ba60d mixed recovery completed with production source/UI frozen and passed its final asset gate, as recorded below.
+
+## Frozen final mixed profile accepted
+
+`pipeline-final.log` completed on exact9ba60d (184136264bytes), session21923 exit0, including final ARTIFACT_ACCEPTED and own-project container/volume cleanup. `pipeline-final-versions.log` records actual MySQL8.4.13/PostgreSQL17.12 and image identities. The source was real binlog capture; worker processes used the actual immutable fat JAR.
+
+Verified snapshot/CDC/types/generated/keyless and source UNIQUE/storage preflight, Hive outage with independent PostgreSQL progress and automatic catch-up, actual worker SIGKILL preserving stream/snapshot IDs, PostgreSQL CHECK rollback while Hive continues, repaired original-generation resume, missing Hive view isolation with PostgreSQL progress, and SQL FENCED versus Hive UNCONFIRMED pause results. Cache was disabled by server default for every new connection, not patched only in a verification query. This is one complete small local-storage mixed profile, not multiple clusters or a throughput benchmark.
+
+The earlier stale-assets, cache and PID failures remain failed records. The final gate was neither bypassed nor weakened. Production source/UI remained frozen throughout this successful run; documentation updates occurred afterward.

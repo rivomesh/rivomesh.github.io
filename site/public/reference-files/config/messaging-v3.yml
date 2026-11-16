@@ -1,0 +1,150 @@
+formatVersion: 3
+pipelineId: sales-events
+nodeId: rivomesh-node
+sourceType: MYSQL
+source:
+  clusterId: sales-mysql
+  host: 127.0.0.1
+  port: 3306
+  username: rivomesh_reader
+  password: ${MYSQL_PASSWORD}
+  serverId: 910201
+  topology: AUTO
+databases: [sales, inventory]
+journal:
+  mode: LOCAL
+  path: ../data/sales-events
+  maxBytes: 10737418240
+targets:
+  - id: kafka
+    product: KAFKA
+    url: kafka://127.0.0.1:9092
+    mappings:
+      sales: kafka_sales
+      inventory: kafka_inventory
+    messaging:
+      topic: rivomesh.sales_events
+      securityProtocol: PLAINTEXT
+      # SASL_SSL / SASL_PLAINTEXT require target username/password:
+      # saslMechanism: SCRAM-SHA-512
+      autoCreate: true
+      replicas: 1
+      maxMessageBytes: 1048576
+      endpoints: []
+      # Broker auto.create.topics.enable must be false. Rivomesh uses explicit Admin creation.
+  - id: rabbit
+    product: RABBITMQ
+    # No path uses the default '/' vhost. Explicit root: /%2f, custom vhost: /sales.
+    url: amqp://127.0.0.1:5672
+    username: rivomesh_publisher
+    password: ${RABBITMQ_PASSWORD}
+    mappings:
+      sales: rabbit_sales
+      inventory: rabbit_inventory
+    messaging:
+      autoCreate: true
+      queueType: quorum
+      replicas: 1
+      connectTimeoutMillis: 5000
+      requestTimeoutMillis: 10000
+      maxMessageBytes: 1048576
+      # Extra nodes must use the same scheme and vhost as url:
+      endpoints: []
+  - id: jetstream
+    product: NATS_JETSTREAM
+    url: nats://127.0.0.1:4222
+    mappings:
+      sales: nats_sales
+      inventory: nats_inventory
+    messaging:
+      stream: SALES_EVENTS
+      token: ${NATS_TOKEN}
+      autoCreate: true
+      replicas: 1
+      connectTimeoutMillis: 5000
+      requestTimeoutMillis: 10000
+      maxMessageBytes: 1048576
+      endpoints: []
+  - id: redis
+    product: REDIS_STREAMS
+    # Direct standalone Redis >=7.2; Sentinel/Cluster are separate future profiles.
+    url: redis://127.0.0.1:6379/0
+    username: default
+    password: ${REDIS_PASSWORD}
+    mappings:
+      sales: redis_sales
+      inventory: redis_inventory
+    messaging:
+      stream: sales:events
+      autoCreate: true
+      replicas: 1  # Local AOF fsync; 2 additionally requires one replica AOF fsync.
+      connectTimeoutMillis: 5000
+      requestTimeoutMillis: 10000
+      maxMessageBytes: 1048576
+      endpoints: []
+      # Requires appendonly=yes, noeviction, no TTL/trimming; never volatile Pub/Sub.
+  - id: pulsar
+    product: PULSAR
+    url: pulsar://127.0.0.1:6650
+    mappings:
+      sales: pulsar_sales
+      inventory: pulsar_inventory
+    messaging:
+      adminUrl: http://127.0.0.1:8080
+      cluster: standalone
+      topic: persistent://public/default/sales_events
+      # Omit token for an anonymous test broker; token auth requires actual acceptance.
+      token: ${PULSAR_TOKEN}
+      autoCreate: true
+      replicas: 1  # Minimum BookKeeper ACK copies, not the number of Pulsar brokers.
+      connectTimeoutMillis: 5000
+      requestTimeoutMillis: 10000
+      maxMessageBytes: 1048576
+      endpoints: []
+  - id: rocket
+    product: ROCKETMQ
+    # Native TCP NameServer, not the RocketMQ 5 gRPC Proxy.
+    url: rocketmq://127.0.0.1:9876
+    mappings:
+      sales: rocket_sales
+      inventory: rocket_inventory
+    messaging:
+      # A stable generation suffix is appended; see the UI destination card after initialization.
+      topic: sales_events
+      cluster: BusinessCluster
+      broker: broker-a
+      minimumRetentionHours: 87600
+      replicas: 1  # This profile confirms one local synchronous disk copy only.
+      autoCreate: true
+      connectTimeoutMillis: 5000
+      requestTimeoutMillis: 10000
+      maxMessageBytes: 1048576
+      endpoints: []
+      # Broker: SYNC_FLUSH, ASYNC_MASTER, autoCreateTopicEnable=false,
+      # transientStorePoolEnable=false, cleanFileForciblyEnable=false,
+      # fileReservedTime>=87600. ACL/TLS and replicated profiles are not enabled yet.
+  - id: artemis
+    product: ACTIVEMQ_ARTEMIS
+    url: artemis://127.0.0.1:61616
+    username: rivomesh_publisher
+    password: ${ARTEMIS_PASSWORD}
+    mappings:
+      sales: artemis_sales
+      inventory: artemis_inventory
+    messaging:
+      stream: rivomesh # Queue prefix; physical name adds .<generation binding hash>.
+      # Optional expected broker name; omit to use the connected broker's persistent node identity.
+      # broker: rivomesh-artemis
+      replicas: 1
+      autoCreate: true
+      connectTimeoutMillis: 5000
+      requestTimeoutMillis: 10000
+      maxMessageBytes: 1048576
+      endpoints: []
+      # Persistent non-destructive ANYCAST queue, no expiry/discard/auto-delete;
+      # see the Artemis policy and temporary management-channel requirements in the manual.
+chunkSize: 1000
+maxTransactionRows: 100000
+leaseMillis: 30000
+heartbeatMillis: 5000
+pollIntervalMillis: 200

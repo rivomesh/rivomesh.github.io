@@ -1,0 +1,77 @@
+{
+  "scope": "MySQL source -> PostgreSQL target, one keyed ASCII table, snapshot/CDC and exact content checks. Not whole-platform/JDBC/MQ/TLS/failover acceptance or a hardware throughput standard.",
+  "artifactSha256": "2985bbbb51b84ec8de97d8a9b44c88d5a5a1d737032b1e13263d03d4a9134aa0",
+  "matrixSha256": "e8cd948c5230823b60351a1d3d6fca986ea3a4f61104c33533a273266567221d",
+  "profiles": [
+    {
+      "java": "8",
+      "journalMode": "LOCAL",
+      "file": "java-8-local.json",
+      "sourceReport": "target/benchmarks/rivomesh-bench-29fe78ebb1da/report.json",
+      "sha256": "758d1d709290e504e6be12684e9cb38d45944c0ad9295e25fd0f15706d9decee"
+    },
+    {
+      "java": "8",
+      "journalMode": "EXTERNAL",
+      "file": "java-8-external.json",
+      "sourceReport": "target/benchmarks/rivomesh-bench-b6c83e83dab3/report.json",
+      "sha256": "5fd0537d7e5787b740bf60641ebcdb6b2edd81d23ef4764f4db7768ebbd032da"
+    },
+    {
+      "java": "11",
+      "journalMode": "LOCAL",
+      "file": "java-11-local.json",
+      "sourceReport": "target/benchmarks/rivomesh-bench-fd4240a3079f/report.json",
+      "sha256": "0ce18bc3cfe6d14423db858a3e1aebaf6a87416747f5f59861d00d12bd7d359f"
+    },
+    {
+      "java": "11",
+      "journalMode": "EXTERNAL",
+      "file": "java-11-external.json",
+      "sourceReport": "target/benchmarks/rivomesh-bench-1a08854e973d/report.json",
+      "sha256": "0dbe2fcc6945416a545d137018d713496e061a78b60baf379c5d60566d3d4739"
+    },
+    {
+      "java": "17",
+      "journalMode": "LOCAL",
+      "file": "java-17-local.json",
+      "sourceReport": "target/benchmarks/rivomesh-bench-2ea4b8b507bf/report.json",
+      "sha256": "f5647a6c87eee2fac14acadcbd83706851c385d033057536ff6b7370016288d6"
+    },
+    {
+      "java": "17",
+      "journalMode": "EXTERNAL",
+      "file": "java-17-external.json",
+      "sourceReport": "target/benchmarks/rivomesh-bench-8c579b5c9ba2/report.json",
+      "sha256": "f6ad4d5c39411176f9fcdf7e6aa5078d4c4eb042ef73e274f252e619368f6a01"
+    },
+    {
+      "java": "21",
+      "journalMode": "LOCAL",
+      "file": "java-21-local.json",
+      "sourceReport": "target/benchmarks/rivomesh-bench-55c5220ffa6e/report.json",
+      "sha256": "7520d69b4f873e5908f672a10ca2575855386c0a827557456a3837b2b1514c3d"
+    },
+    {
+      "java": "21",
+      "journalMode": "EXTERNAL",
+      "file": "java-21-external.json",
+      "sourceReport": "target/benchmarks/rivomesh-bench-0c0ca58396d9/report.json",
+      "sha256": "b78f330a8ec22ccc2d0308fe885f6f820f68a8520e2225d009aa4d7e6c72540e"
+    },
+    {
+      "java": "25",
+      "journalMode": "LOCAL",
+      "file": "java-25-local.json",
+      "sourceReport": "target/benchmarks/rivomesh-bench-5cb7d46737d3/report.json",
+      "sha256": "66c618af31c6e4532c291f83d46a40084341fd8428c9cd9a6fde6702924b9133"
+    },
+    {
+      "java": "25",
+      "journalMode": "EXTERNAL",
+      "file": "java-25-external.json",
+      "sourceReport": "target/benchmarks/rivomesh-bench-86f95f9d0e2c/report.json",
+      "sha256": "e87e91e3d2a2920d084b3f5784f52bf3512af974a41522ddbd25d8380d5d400b"
+    }
+  ]
+}

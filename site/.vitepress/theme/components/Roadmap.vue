@@ -1,0 +1,9 @@
+<script setup>
+import { computed, ref } from 'vue'
+import data from '../../data/requirements.json'
+const category=ref('ALL'), status=ref('ALL'), query=ref('')
+const names={CLUSTER:'统一控制',SESSION:'会话保持',RECOVERY:'人工恢复',SOURCE:'源端兼容',JAVA:'Java 运行时',DOCS:'完整文档',CARRYOVER:'历史范围'}
+const epics=[...new Set(data.requirements.map(r=>r.epic))]
+const rows=computed(()=>data.requirements.filter(r=>(category.value==='ALL'||r.epic===category.value)&&(status.value==='ALL'||r.status===status.value)&&`${r.id} ${r.title['zh-CN']} ${r.gap['zh-CN']}`.toLowerCase().includes(query.value.toLowerCase())))
+</script>
+<template><div class="roadmap-stats"><div><strong>{{data.requirements.length}}</strong><span>待完成需求</span></div><div><strong>{{data.requirements.filter(r=>r.status==='PARTIAL').length}}</strong><span>已有基础 · PARTIAL</span></div><div><strong>{{data.requirements.filter(r=>r.status==='NEW').length}}</strong><span>尚未实现 · NEW</span></div></div><div class="catalog-tools"><label>需求方向<select v-model="category"><option value="ALL">全部方向</option><option v-for="e in epics" :key="e" :value="e">{{names[e]||e}}</option></select></label><label>状态<select v-model="status"><option value="ALL">全部未完成</option><option value="PARTIAL">PARTIAL · 已有基础</option><option value="NEW">NEW · 尚未实现</option></select></label><label class="grow">查找需求<input v-model="query" placeholder="需求 ID 或关键词" type="search"></label></div><p class="result-count" aria-live="polite">显示 {{rows.length}} 项需求 · 展开查看差距与验收条件</p><details v-for="r in rows" :key="r.id" class="requirement"><summary><code>{{r.id}}</code><strong>{{r.title['zh-CN']}}</strong><span class="status-pill">{{r.priority}} · {{r.status}}</span></summary><p><b>当前差距：</b>{{r.gap['zh-CN']}}</p><p><b>验收条件：</b>{{r.acceptance['zh-CN']}}</p><p v-if="r.dependsOn.length"><b>依赖：</b>{{r.dependsOn.join('、')}}</p></details><p v-if="!rows.length">没有匹配的需求，请调整筛选条件。</p></template>

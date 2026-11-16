@@ -1,0 +1,20 @@
+# Paths are relative to this platform configuration file.
+# Individual VIEWER/OPERATOR/ADMIN accounts: platform-rbac.yml
+bind: 127.0.0.1
+port: 8080
+authToken: ${RIVOMESH_TOKEN} # At least 24 bytes; never put it in a URL.
+tasksDirectory: tasks
+dataDirectory: ../data/platform
+maxTasks: 20
+maxRunningTasks: 2
+workerHeapMiB: 256
+controlThreads: 4
+pollMillis: 3000
+autoStart: false # Only applies to newly discovered files; persisted task intent takes precedence.
+
+# Logical audit retention; protect/monitor the persistent data directory.
+auditMaxEvents: 1000000
+
+# Local HTTP preview only. Use secureCookie: true behind production HTTPS.
+sessions:
+  secureCookie: false

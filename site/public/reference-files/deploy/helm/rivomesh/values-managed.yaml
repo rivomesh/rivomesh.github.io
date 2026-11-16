@@ -1,0 +1,7 @@
+# Only after managed access has been initialized on this persistent controller volume.
+auth:
+  mode: MANAGED
+  legacyTokenEnabled: false
+  users: []
+persistence:
+  existingClaim: rivomesh-data

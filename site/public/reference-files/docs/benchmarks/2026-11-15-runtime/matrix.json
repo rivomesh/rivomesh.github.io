@@ -1,0 +1,110 @@
+{
+  "formatVersion": 1,
+  "status": "PASSED",
+  "artifactSha256": "2985bbbb51b84ec8de97d8a9b44c88d5a5a1d737032b1e13263d03d4a9134aa0",
+  "startedAt": "2026-11-14T23:52:50.278142+00:00",
+  "scope": "MySQL source -> PostgreSQL target, one keyed ASCII table, snapshot/CDC and exact content checks. Not whole-platform/JDBC/MQ/TLS/failover acceptance or a hardware throughput standard.",
+  "profiles": [
+    {
+      "java": "8",
+      "journalMode": "LOCAL",
+      "status": "PASSED",
+      "exitCode": 0,
+      "report": "target/benchmarks/rivomesh-bench-29fe78ebb1da/report.json",
+      "actualJavaVersion": "openjdk version \"1.8.0_512\"\nOpenJDK Runtime Environment (Temurin)(build 1.8.0_512-b09)\nOpenJDK 64-Bit Server VM (Temurin)(build 25.512-b09, mixed mode)",
+      "runtimeMatches": true,
+      "artifactMatches": true
+    },
+    {
+      "java": "8",
+      "journalMode": "EXTERNAL",
+      "status": "PASSED",
+      "exitCode": 0,
+      "report": "target/benchmarks/rivomesh-bench-b6c83e83dab3/report.json",
+      "actualJavaVersion": "openjdk version \"1.8.0_512\"\nOpenJDK Runtime Environment (Temurin)(build 1.8.0_512-b09)\nOpenJDK 64-Bit Server VM (Temurin)(build 25.512-b09, mixed mode)",
+      "runtimeMatches": true,
+      "artifactMatches": true
+    },
+    {
+      "java": "11",
+      "journalMode": "LOCAL",
+      "status": "PASSED",
+      "exitCode": 0,
+      "report": "target/benchmarks/rivomesh-bench-fd4240a3079f/report.json",
+      "actualJavaVersion": "openjdk version \"11.0.33\" 2026-10-20\nOpenJDK Runtime Environment Temurin-11.0.33+10 (build 11.0.33+10)\nOpenJDK 64-Bit Server VM Temurin-11.0.33+10 (build 11.0.33+10, mixed mode, sharing)",
+      "runtimeMatches": true,
+      "artifactMatches": true
+    },
+    {
+      "java": "11",
+      "journalMode": "EXTERNAL",
+      "status": "PASSED",
+      "exitCode": 0,
+      "report": "target/benchmarks/rivomesh-bench-1a08854e973d/report.json",
+      "actualJavaVersion": "openjdk version \"11.0.33\" 2026-10-20\nOpenJDK Runtime Environment Temurin-11.0.33+10 (build 11.0.33+10)\nOpenJDK 64-Bit Server VM Temurin-11.0.33+10 (build 11.0.33+10, mixed mode, sharing)",
+      "runtimeMatches": true,
+      "artifactMatches": true
+    },
+    {
+      "java": "17",
+      "journalMode": "LOCAL",
+      "status": "PASSED",
+      "exitCode": 0,
+      "report": "target/benchmarks/rivomesh-bench-2ea4b8b507bf/report.json",
+      "actualJavaVersion": "openjdk version \"17.0.21\" 2026-10-20\nOpenJDK Runtime Environment Temurin-17.0.21+9 (build 17.0.21+9)\nOpenJDK 64-Bit Server VM Temurin-17.0.21+9 (build 17.0.21+9, mixed mode, sharing)",
+      "runtimeMatches": true,
+      "artifactMatches": true
+    },
+    {
+      "java": "17",
+      "journalMode": "EXTERNAL",
+      "status": "PASSED",
+      "exitCode": 0,
+      "report": "target/benchmarks/rivomesh-bench-8c579b5c9ba2/report.json",
+      "actualJavaVersion": "openjdk version \"17.0.21\" 2026-10-20\nOpenJDK Runtime Environment Temurin-17.0.21+9 (build 17.0.21+9)\nOpenJDK 64-Bit Server VM Temurin-17.0.21+9 (build 17.0.21+9, mixed mode, sharing)",
+      "runtimeMatches": true,
+      "artifactMatches": true
+    },
+    {
+      "java": "21",
+      "journalMode": "LOCAL",
+      "status": "PASSED",
+      "exitCode": 0,
+      "report": "target/benchmarks/rivomesh-bench-55c5220ffa6e/report.json",
+      "actualJavaVersion": "openjdk version \"21.0.13\" 2026-10-20 LTS\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)",
+      "runtimeMatches": true,
+      "artifactMatches": true
+    },
+    {
+      "java": "21",
+      "journalMode": "EXTERNAL",
+      "status": "PASSED",
+      "exitCode": 0,
+      "report": "target/benchmarks/rivomesh-bench-0c0ca58396d9/report.json",
+      "actualJavaVersion": "openjdk version \"21.0.13\" 2026-10-20 LTS\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)",
+      "runtimeMatches": true,
+      "artifactMatches": true
+    },
+    {
+      "java": "25",
+      "journalMode": "LOCAL",
+      "status": "PASSED",
+      "exitCode": 0,
+      "report": "target/benchmarks/rivomesh-bench-5cb7d46737d3/report.json",
+      "actualJavaVersion": "openjdk version \"25.0.5\" 2026-10-20 LTS\nOpenJDK Runtime Environment Temurin-25.0.5+8 (build 25.0.5+8-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.5+8 (build 25.0.5+8-LTS, mixed mode, sharing)",
+      "runtimeMatches": true,
+      "artifactMatches": true
+    },
+    {
+      "java": "25",
+      "journalMode": "EXTERNAL",
+      "status": "PASSED",
+      "exitCode": 0,
+      "report": "target/benchmarks/rivomesh-bench-86f95f9d0e2c/report.json",
+      "actualJavaVersion": "openjdk version \"25.0.5\" 2026-10-20 LTS\nOpenJDK Runtime Environment Temurin-25.0.5+8 (build 25.0.5+8-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.5+8 (build 25.0.5+8-LTS, mixed mode, sharing)",
+      "runtimeMatches": true,
+      "artifactMatches": true
+    }
+  ],
+  "finishedAt": "2026-11-14T23:58:12.994808+00:00"
+}

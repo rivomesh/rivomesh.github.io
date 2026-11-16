@@ -1,0 +1,37 @@
+formatVersion: 3
+pipelineId: analytics-copy
+nodeId: ${RIVOMESH_NODE_ID}
+sourceType: MYSQL
+source:
+  clusterId: business-mysql
+  host: 127.0.0.1
+  port: 3306
+  username: rivomesh_reader
+  password: ${MYSQL_PASSWORD}
+  serverId: 910301
+  topology: AUTO
+databases: [sales]
+journal:
+  mode: LOCAL
+  path: ../data/analytics-copy
+  maxBytes: 10737418240
+targets:
+  - id: clickhouse
+    product: CLICKHOUSE
+    url: http://127.0.0.1:8123
+    username: rivomesh_writer
+    password: ${CLICKHOUSE_PASSWORD}
+    metadataSchema: rivomesh_v3
+    uniquePolicy: DOWNGRADE_BUSINESS
+    mappings:
+      sales: sales_copy
+    clickhouse:
+      secondaryIndexes: DATA_SKIPPING
+      autoCreate: true
+      connectTimeoutMillis: 5000
+      requestTimeoutMillis: 30000
+      maximumRequestBytes: 16777216
+      maximumResponseBytes: 1048576
+      maxMessageBytes: 4194304
+chunkSize: 1000
+pollIntervalMillis: 200
