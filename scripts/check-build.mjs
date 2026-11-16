@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-const root=path.resolve('site/.vitepress/dist'), base=process.env.SITE_BASE||'/rivomesh.github.io/'
+const root=path.resolve('site/.vitepress/dist'), base=process.env.SITE_BASE||'/'
 async function walk(p){const out=[];for(const e of await fs.readdir(p,{withFileTypes:true})){const f=path.join(p,e.name);if(e.isDirectory())out.push(...await walk(f));else out.push(f)}return out}
 const files=await walk(root),known=new Set(files),broken=[];let count=0
 for(const file of files.filter(f=>f.endsWith('.html'))){

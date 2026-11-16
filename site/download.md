@@ -30,4 +30,4 @@ mvn -s build/settings.xml verify
 
 正式发布将进一步完善候选包校验、许可证与 NOTICE、依赖清单、升级说明及兼容性证据。当前 [SDD 任务与验收](/roadmap)公开记录尚未完成的范围。
 
-网站源码：[zhangjiayin/rivomesh.github.io](https://github.com/zhangjiayin/rivomesh.github.io)。
+网站源码：[rivomesh/rivomesh.github.io](https://github.com/rivomesh/rivomesh.github.io)。

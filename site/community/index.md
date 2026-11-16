@@ -14,7 +14,7 @@ RivoMesh 正在准备首次公开发布。欢迎从文档、可复现问题、�
 
 ## 在哪里参与
 
-[网站 GitHub 仓库](https://github.com/zhangjiayin/rivomesh.github.io) · [网站问题反馈](https://github.com/zhangjiayin/rivomesh.github.io/issues) · [网站 Pull Requests](https://github.com/zhangjiayin/rivomesh.github.io/pulls)
+[网站 GitHub 仓库](https://github.com/rivomesh/rivomesh.github.io) · [网站问题反馈](https://github.com/rivomesh/rivomesh.github.io/issues) · [网站 Pull Requests](https://github.com/rivomesh/rivomesh.github.io/pulls)
 
 核心项目源码准备公开到 `zhangjiayin/rivomesh`。产品实现与连接器问题应在核心仓库公开后提交到对应入口；网站仓库用于网站与文档反馈。
 

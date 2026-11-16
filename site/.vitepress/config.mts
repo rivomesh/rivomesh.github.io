@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
-const base = process.env.SITE_BASE || '/rivomesh.github.io/'
+const base = process.env.SITE_BASE || '/'
+const origin = process.env.SITE_ORIGIN || 'https://rivomesh.github.io'
 const doc = (name: string) => '/reference/zh-CN/' + name
 const items = (entries: [string,string][]) => entries.map(([text,name])=>({text,link:doc(name)}))
 const sidebar = [
@@ -12,8 +13,8 @@ const sidebar = [
 export default defineConfig({
   title:'RivoMesh',description:'面向政企数据集成的实时数据同步平台。可恢复全量、增量同步、多目标分发与可视化管理。',
   lang:'zh-CN',base,cleanUrls:false,lastUpdated:false,
-  sitemap:{hostname:'https://zhangjiayin.github.io'+base},
-  head:[['link',{rel:'icon',type:'image/svg+xml',href:base+'brand/favicon.svg'}],['link',{rel:'alternate icon',href:base+'favicon.ico'}],['link',{rel:'apple-touch-icon',href:base+'brand/apple-touch-icon.png'}],['meta',{name:'theme-color',content:'#15394b'}],['meta',{property:'og:image',content:'https://zhangjiayin.github.io'+base+'brand/social-card.png'}]],
+  sitemap:{hostname:origin+base},
+  head:[['link',{rel:'icon',type:'image/svg+xml',href:base+'brand/favicon.svg'}],['link',{rel:'alternate icon',href:base+'favicon.ico'}],['link',{rel:'apple-touch-icon',href:base+'brand/apple-touch-icon.png'}],['meta',{name:'theme-color',content:'#15394b'}],['meta',{property:'og:image',content:origin+base+'brand/social-card.png'}]],
   markdown:{lineNumbers:true},
   themeConfig:{
     logo:{light:'/brand/logo.svg',dark:'/brand/logo-light.svg'},siteTitle:'RivoMesh',
@@ -21,7 +22,7 @@ export default defineConfig({
     sidebar:{'/guide/':sidebar,'/reference/zh-CN/':sidebar,'/reference/sdd/':sidebar,'/reference/recovery':sidebar,'/reference/validation':sidebar,'/reference/en/':[{text:'English documentation',items:[{text:'Overview',link:'/en/'},...['pipeline-v3','console-and-deployment','messaging-v3','account-management','security-audit','managed-validation','managed-repair','performance','implementation-status','platform-design'].map(name=>({text:name.replaceAll('-',' '),link:'/reference/en/'+name}))]}]},
     search:{provider:'local',options:{miniSearch:{options:{tokenize:(text:string)=>text.toLowerCase().match(/[a-z0-9_]+|[\u4e00-\u9fff]/g)||[],processTerm:(term:string)=>term}},locales:{root:{translations:{button:{buttonText:'搜索文档',buttonAriaLabel:'搜索文档'},modal:{noResultsText:'未找到相关内容',resetButtonTitle:'清空',backButtonTitle:'返回',displayDetails:'显示详情',footer:{selectText:'选择',navigateText:'切换',closeText:'关闭'}}}}}}},
     outline:{label:'本页目录',level:[2,3]},docFooter:{prev:'上一篇',next:'下一篇'},sidebarMenuLabel:'文档目录',returnToTopLabel:'回到顶部',darkModeSwitchLabel:'切换主题',notFound:{title:'页面未找到',quote:'从文档导航重新出发，找到你需要的内容。',linkLabel:'返回首页'},
-    socialLinks:[{icon:'github',link:'https://github.com/zhangjiayin/rivomesh.github.io'}],
+    socialLinks:[{icon:'github',link:'https://github.com/rivomesh/rivomesh.github.io'}],
     footer:{message:'RivoMesh · 让数据连接业务，让同步更易管理。',copyright:'© 2026 RivoMesh contributors'}
   }
 })

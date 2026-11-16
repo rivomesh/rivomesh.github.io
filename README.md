@@ -1,6 +1,6 @@
 # RivoMesh 官网与文档站
 
-RivoMesh 发布前官网，源码仓库目标为 <https://github.com/zhangjiayin/rivomesh.github.io>。
+RivoMesh 发布前官网，源码仓库目标为 <https://github.com/rivomesh/rivomesh.github.io>。
 
 基于 VitePress 1.6，包含原创首页、连接器目录、SDD 交互路线图、中英文文档、站内本地检索、真实控制台截图、Logo / favicon，以及 100 秒中文配音产品视频。结构参考 [ShardingSphere](https://shardingsphere.apache.org/index_zh.html) 与 [SeaTunnel](https://seatunnel.apache.org/zh-CN/)，文案依据本地 RivoMesh 源码与 SDD，未使用第三方品牌图形或虚构用户数据。
 
@@ -15,7 +15,7 @@ npm ci
 npm run dev
 ```
 
-打开终端显示的地址，默认是 <http://127.0.0.1:5173/rivomesh.github.io/>。
+打开终端显示的地址，默认是 <http://127.0.0.1:5173/>。
 
 ```bash
 npm run check
@@ -30,15 +30,17 @@ npm run preview
 
 已提供 `.github/workflows/deploy.yml`，推送 `main` 后构建并通过 GitHub Actions 发布。网站 CI 使用已提交的文档与媒体快照，发布不依赖同级 Java 源码目录。
 
-1. 将本目录提交到 `zhangjiayin/rivomesh.github.io` 的 `main`。
+1. 将本目录提交到 `rivomesh/rivomesh.github.io` 的 `main`。
 2. 在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。
 3. 查看 `Deploy documentation to GitHub Pages` 工作流。
 
-该仓库属于用户 `zhangjiayin`，默认页面地址为：
+仓库已迁入 `rivomesh` 组织，作为组织站点发布到：
 
-**https://zhangjiayin.github.io/rivomesh.github.io/**
+**https://rivomesh.github.io/**
 
-仓库名不会让站点自动变为 `https://rivomesh.github.io/`；后者需要对应账户/组织的用户站点配置。当前 `base` 已按上述仓库子路径配置。若后续迁移域名，可通过 `SITE_BASE=/` 构建，并调整配置中的 sitemap 主机名、社交分享绝对 URL 与域名配置。
+默认 `base` 为 `/`，本地预览、站内链接、favicon、视频和构建链接检查均使用根路径。Pages 的发布源必须选择 **GitHub Actions**，不能直接用 Jekyll 发布 `main` 源码分支。
+
+如果将来改用其他域名或项目子路径，分别通过 `SITE_ORIGIN=https://example.com` 和 `SITE_BASE=/docs/` 调整构建；构建和 `check:build` 应使用相同 `SITE_BASE`。
 
 ## 内容维护
 

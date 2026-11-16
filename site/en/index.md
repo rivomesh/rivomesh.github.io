@@ -28,4 +28,4 @@ MySQL is the implemented source. PostgreSQL and Oracle source adapters remain pl
 
 All 48 requirements in RM-SDD-001 are unfinished. PARTIAL denotes an existing foundation, not completion. Priorities and proposed milestones are not release dates. Earlier manuals preserve historical batch notes; consult the latest dedicated manual and SDD baseline for current scope.
 
-[Chinese home](/) · [Website repository](https://github.com/zhangjiayin/rivomesh.github.io)
+[Chinese home](/) · [Website repository](https://github.com/rivomesh/rivomesh.github.io)
