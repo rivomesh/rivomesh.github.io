@@ -1,0 +1,957 @@
+[
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/development-v3.html",
+    "title": "Rivomesh engineering checkpoint",
+    "group": "architecture",
+    "rank": 99,
+    "sourcePath": "docs/development-v3.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/account-management.html",
+    "title": "Account management",
+    "group": "reference",
+    "rank": 0,
+    "sourcePath": "docs/en/account-management.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/browser-sessions.html",
+    "title": "Browser sessions",
+    "group": "reference",
+    "rank": 1,
+    "sourcePath": "docs/en/browser-sessions.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/classic-v3.html",
+    "title": "ActiveMQ Classic",
+    "group": "connectors",
+    "rank": 2,
+    "sourcePath": "docs/en/classic-v3.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/clickhouse-v3.html",
+    "title": "ClickHouse",
+    "group": "connectors",
+    "rank": 3,
+    "sourcePath": "docs/en/clickhouse-v3.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/common-cut-repair.html",
+    "title": "COMMON_CUT repair",
+    "group": "reference",
+    "rank": 2,
+    "sourcePath": "docs/en/common-cut-repair.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/configuration-editor.html",
+    "title": "Configuration revisions",
+    "group": "reference",
+    "rank": 2,
+    "sourcePath": "docs/en/configuration-editor.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/console-and-deployment.html",
+    "title": "Console & deployment",
+    "group": "reference",
+    "rank": 1,
+    "sourcePath": "docs/en/console-and-deployment.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/development-preview.html",
+    "title": "Development preview",
+    "group": "architecture",
+    "rank": 3,
+    "sourcePath": "docs/en/development-preview.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/dm-v3.html",
+    "title": "达梦 DM",
+    "group": "connectors",
+    "rank": 6,
+    "sourcePath": "docs/en/dm-v3.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/doris-v3.html",
+    "title": "Apache Doris",
+    "group": "connectors",
+    "rank": 4,
+    "sourcePath": "docs/en/doris-v3.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/gaussdb-index-policy.html",
+    "title": "GaussDB index policy",
+    "group": "connectors",
+    "rank": 0,
+    "sourcePath": "docs/en/gaussdb-index-policy.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/gbase8c-v3.html",
+    "title": "GBase 8c",
+    "group": "connectors",
+    "rank": 8,
+    "sourcePath": "docs/en/gbase8c-v3.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/hive-v3.html",
+    "title": "Apache Hive",
+    "group": "connectors",
+    "rank": 5,
+    "sourcePath": "docs/en/hive-v3.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/implementation-status.html",
+    "title": "Implementation status",
+    "group": "architecture",
+    "rank": 3,
+    "sourcePath": "docs/en/implementation-status.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/kingbase-v3.html",
+    "title": "金仓 Kingbase",
+    "group": "connectors",
+    "rank": 7,
+    "sourcePath": "docs/en/kingbase-v3.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/managed-repair.html",
+    "title": "Managed repair",
+    "group": "reference",
+    "rank": 3,
+    "sourcePath": "docs/en/managed-repair.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/managed-validation.html",
+    "title": "Managed validation",
+    "group": "reference",
+    "rank": 1,
+    "sourcePath": "docs/en/managed-validation.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/messaging-v3.html",
+    "title": "Messaging targets",
+    "group": "connectors",
+    "rank": 1,
+    "sourcePath": "docs/en/messaging-v3.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/node-registry.html",
+    "title": "Node registry",
+    "group": "architecture",
+    "rank": 1,
+    "sourcePath": "docs/en/node-registry.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/oceanbase-v3.html",
+    "title": "OceanBase",
+    "group": "connectors",
+    "rank": 9,
+    "sourcePath": "docs/en/oceanbase-v3.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/performance.html",
+    "title": "Performance & runtimes",
+    "group": "reference",
+    "rank": 5,
+    "sourcePath": "docs/en/performance.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/pipeline-v3.html",
+    "title": "V3 pipelines",
+    "group": "reference",
+    "rank": 0,
+    "sourcePath": "docs/en/pipeline-v3.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/platform-design.html",
+    "title": "Platform design",
+    "group": "architecture",
+    "rank": 0,
+    "sourcePath": "docs/en/platform-design.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/reconciliation-workflow.html",
+    "title": "Reconciliation workflow",
+    "group": "reference",
+    "rank": 0,
+    "sourcePath": "docs/en/reconciliation-workflow.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/recovery.html",
+    "title": "Recovery & consistency",
+    "group": "reference",
+    "rank": 4,
+    "sourcePath": "docs/en/recovery.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/rename-migration.html",
+    "title": "Rename migration",
+    "group": "reference",
+    "rank": 6,
+    "sourcePath": "docs/en/rename-migration.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/requirements-and-decisions.html",
+    "title": "Requirements & decisions",
+    "group": "architecture",
+    "rank": 2,
+    "sourcePath": "docs/en/requirements-and-decisions.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/security-audit.html",
+    "title": "Security audit",
+    "group": "reference",
+    "rank": 4,
+    "sourcePath": "docs/en/security-audit.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/shared-access.html",
+    "title": "Shared access",
+    "group": "reference",
+    "rank": 2,
+    "sourcePath": "docs/en/shared-access.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/task-authorization.html",
+    "title": "Task authorization",
+    "group": "reference",
+    "rank": 3,
+    "sourcePath": "docs/en/task-authorization.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/validation.html",
+    "title": "Validation records",
+    "group": "evidence",
+    "rank": 999,
+    "sourcePath": "docs/en/validation.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/recovery.html",
+    "title": "恢复与一致性",
+    "group": "reference",
+    "rank": 5,
+    "sourcePath": "docs/recovery.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/sdd/acceptance.html",
+    "title": "Acceptance matrix",
+    "group": "sdd",
+    "rank": 4,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/acceptance.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/acceptance.html",
+    "title": "验收矩阵",
+    "group": "sdd",
+    "rank": 4,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/acceptance.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/sdd/design-control-store.html",
+    "title": "Control store design",
+    "group": "sdd",
+    "rank": 5,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-control-store.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/design-control-store.html",
+    "title": "共享控制库设计",
+    "group": "sdd",
+    "rank": 5,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-control-store.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/sdd/design-global-control.html",
+    "title": "Global control design",
+    "group": "sdd",
+    "rank": 7,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-global-control.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/design-global-control.html",
+    "title": "全局控制设计",
+    "group": "sdd",
+    "rank": 7,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-global-control.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/sdd/design-sessions.html",
+    "title": "Session design",
+    "group": "sdd",
+    "rank": 6,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-sessions.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/design-sessions.html",
+    "title": "会话设计",
+    "group": "sdd",
+    "rank": 6,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-sessions.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/sdd/design-shared-access.html",
+    "title": "Shared access design",
+    "group": "sdd",
+    "rank": 8,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-shared-access.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/design-shared-access.html",
+    "title": "共享访问设计",
+    "group": "sdd",
+    "rank": 8,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-shared-access.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/sdd/plan.html",
+    "title": "Implementation plan",
+    "group": "sdd",
+    "rank": 2,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/plan.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/plan.html",
+    "title": "实施计划",
+    "group": "sdd",
+    "rank": 2,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/plan.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/sdd/spec.html",
+    "title": "Requirements",
+    "group": "sdd",
+    "rank": 1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/spec.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/spec.html",
+    "title": "需求规格",
+    "group": "sdd",
+    "rank": 1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/spec.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/sdd/tasks.html",
+    "title": "Task inventory",
+    "group": "sdd",
+    "rank": 3,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/tasks.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/tasks.html",
+    "title": "任务清单",
+    "group": "sdd",
+    "rank": 3,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/tasks.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/index.html",
+    "title": "SDD 文档索引",
+    "group": "sdd",
+    "rank": 0,
+    "sourcePath": "docs/sdd/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/validation.html",
+    "title": "验证记录汇总",
+    "group": "evidence",
+    "rank": 0,
+    "sourcePath": "docs/validation.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-accounts.html",
+    "title": "11-15-accounts · Managed local accounts / 本地账号管理验收",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-accounts/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-audit.html",
+    "title": "11-15-audit · Security audit acceptance / 安全审计验收",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-audit/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-classic.html",
+    "title": "11-15-classic · Classic acceptance, 2026-11-15",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-classic/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-configuration.html",
+    "title": "11-15-configuration · Configuration editing acceptance / 配置编辑验收",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-configuration/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-dm.html",
+    "title": "11-15-dm · DM8 native-mode acceptance / 达梦原生验收",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-dm/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-doris-hardening.html",
+    "title": "11-15-doris-hardening · Doris SQL-mode and encoding hardening / SQL 模式与字符校验",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-doris-hardening/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-doris.html",
+    "title": "11-15-doris · Doris acceptance / Doris 验收",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-doris/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-gbase8c.html",
+    "title": "11-15-gbase8c · GBase 8c native acceptance / 南大通用 8c 原生验收",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-gbase8c/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-hive.html",
+    "title": "11-15-hive · Hive experimental acceptance / Hive 实验适配验收",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-hive/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-kingbase.html",
+    "title": "11-15-kingbase · Kingbase PG/UTF8 native acceptance / 金仓原生验收",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-kingbase/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-oceanbase.html",
+    "title": "11-15-oceanbase · OceanBase experimental implementation — full recovery NOT accepted",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-oceanbase/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-row-reconciliation.html",
+    "title": "11-15-row-reconciliation · SQL row reconciliation / SQL 逐行校验首批验收",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-row-reconciliation/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-task-scopes.html",
+    "title": "11-15-task-scopes · Exact task grants acceptance / 精确任务授权验收",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-task-scopes/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-15-validation-barrier.html",
+    "title": "11-15-validation-barrier · Common validation barrier / 共同校验屏障基础验收",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-15-validation-barrier/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-16-browser-sessions.html",
+    "title": "11-16-browser-sessions · RM-SDD-001：浏览器会话验收 / Browser-session acceptance",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-16-browser-sessions/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-16-browser-sessions-commands.html",
+    "title": "11-16-browser-sessions · Reproduction commands",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-16-browser-sessions/commands.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-16-common-cut-repair.html",
+    "title": "11-16-common-cut-repair · COMMON_CUT SQL repair / 共同校验点 SQL 修复",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-16-common-cut-repair/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-16-difference-details.html",
+    "title": "11-16-difference-details · Administrator difference details / 管理员差异详情",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-16-difference-details/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-16-managed-repair.html",
+    "title": "11-16-managed-repair · Managed repair / 管理界面修复",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-16-managed-repair/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-16-managed-validation.html",
+    "title": "11-16-managed-validation · Managed validation jobs / 管理界面校验作业首批验收",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-16-managed-validation/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-16-node-registry.html",
+    "title": "11-16-node-registry · CP-01：共享节点目录验收 / Shared node registry acceptance",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-16-node-registry/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/account-management.html",
+    "title": "账号管理",
+    "group": "reference",
+    "rank": 0,
+    "sourcePath": "docs/zh-CN/account-management.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/browser-sessions.html",
+    "title": "浏览器会话",
+    "group": "reference",
+    "rank": 1,
+    "sourcePath": "docs/zh-CN/browser-sessions.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/classic-v3.html",
+    "title": "ActiveMQ Classic",
+    "group": "connectors",
+    "rank": 2,
+    "sourcePath": "docs/zh-CN/classic-v3.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/clickhouse-v3.html",
+    "title": "ClickHouse",
+    "group": "connectors",
+    "rank": 3,
+    "sourcePath": "docs/zh-CN/clickhouse-v3.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/common-cut-repair.html",
+    "title": "共同校验点修复",
+    "group": "reference",
+    "rank": 2,
+    "sourcePath": "docs/zh-CN/common-cut-repair.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/configuration-editor.html",
+    "title": "配置编辑与版本恢复",
+    "group": "reference",
+    "rank": 2,
+    "sourcePath": "docs/zh-CN/configuration-editor.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/console-and-deployment.html",
+    "title": "控制台与部署",
+    "group": "reference",
+    "rank": 1,
+    "sourcePath": "docs/zh-CN/console-and-deployment.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/development-preview.html",
+    "title": "开发预览",
+    "group": "architecture",
+    "rank": 3,
+    "sourcePath": "docs/zh-CN/development-preview.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/dm-v3.html",
+    "title": "达梦 DM",
+    "group": "connectors",
+    "rank": 6,
+    "sourcePath": "docs/zh-CN/dm-v3.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/doris-v3.html",
+    "title": "Apache Doris",
+    "group": "connectors",
+    "rank": 4,
+    "sourcePath": "docs/zh-CN/doris-v3.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/gaussdb-index-policy.html",
+    "title": "GaussDB 索引策略",
+    "group": "connectors",
+    "rank": 0,
+    "sourcePath": "docs/zh-CN/gaussdb-index-policy.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/gbase8c-v3.html",
+    "title": "GBase 8c",
+    "group": "connectors",
+    "rank": 8,
+    "sourcePath": "docs/zh-CN/gbase8c-v3.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/hive-v3.html",
+    "title": "Apache Hive",
+    "group": "connectors",
+    "rank": 5,
+    "sourcePath": "docs/zh-CN/hive-v3.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/implementation-status.html",
+    "title": "当前实施状态",
+    "group": "architecture",
+    "rank": 3,
+    "sourcePath": "docs/zh-CN/implementation-status.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/kingbase-v3.html",
+    "title": "金仓 Kingbase",
+    "group": "connectors",
+    "rank": 7,
+    "sourcePath": "docs/zh-CN/kingbase-v3.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/managed-repair.html",
+    "title": "管理界面数据修复",
+    "group": "reference",
+    "rank": 3,
+    "sourcePath": "docs/zh-CN/managed-repair.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/managed-validation.html",
+    "title": "管理界面数据校验",
+    "group": "reference",
+    "rank": 1,
+    "sourcePath": "docs/zh-CN/managed-validation.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/messaging-v3.html",
+    "title": "消息目标与投递协议",
+    "group": "connectors",
+    "rank": 1,
+    "sourcePath": "docs/zh-CN/messaging-v3.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/node-registry.html",
+    "title": "共享节点目录",
+    "group": "architecture",
+    "rank": 1,
+    "sourcePath": "docs/zh-CN/node-registry.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/oceanbase-v3.html",
+    "title": "OceanBase",
+    "group": "connectors",
+    "rank": 9,
+    "sourcePath": "docs/zh-CN/oceanbase-v3.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/performance.html",
+    "title": "性能与运行时验证",
+    "group": "reference",
+    "rank": 5,
+    "sourcePath": "docs/zh-CN/performance.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/pipeline-v3.html",
+    "title": "同步任务与 V3 配置",
+    "group": "reference",
+    "rank": 0,
+    "sourcePath": "docs/zh-CN/pipeline-v3.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/platform-design.html",
+    "title": "完整平台设计",
+    "group": "architecture",
+    "rank": 0,
+    "sourcePath": "docs/zh-CN/platform-design.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/reconciliation-workflow.html",
+    "title": "校验与修复流程",
+    "group": "reference",
+    "rank": 0,
+    "sourcePath": "docs/zh-CN/reconciliation-workflow.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/rename-migration.html",
+    "title": "版本与更名迁移",
+    "group": "reference",
+    "rank": 6,
+    "sourcePath": "docs/zh-CN/rename-migration.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/requirements-and-decisions.html",
+    "title": "需求与决策",
+    "group": "architecture",
+    "rank": 2,
+    "sourcePath": "docs/zh-CN/requirements-and-decisions.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/security-audit.html",
+    "title": "安全审计",
+    "group": "reference",
+    "rank": 4,
+    "sourcePath": "docs/zh-CN/security-audit.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/shared-access.html",
+    "title": "共享账号、会话与审计",
+    "group": "reference",
+    "rank": 2,
+    "sourcePath": "docs/zh-CN/shared-access.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/task-authorization.html",
+    "title": "按任务授权",
+    "group": "reference",
+    "rank": 3,
+    "sourcePath": "docs/zh-CN/task-authorization.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/install.html",
+    "title": "安装与启动",
+    "rank": 0,
+    "group": "sync"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/create-task.html",
+    "title": "创建同步任务",
+    "rank": 1,
+    "group": "sync"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/monitoring.html",
+    "title": "查看状态与日常操作",
+    "rank": 2,
+    "group": "sync"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/troubleshooting.html",
+    "title": "常见故障处理",
+    "rank": 0,
+    "group": "operations"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/data-validation.html",
+    "title": "核对数据与修复差异",
+    "rank": 1,
+    "group": "operations"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/backup.html",
+    "title": "备份与故障恢复",
+    "rank": 2,
+    "group": "operations"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/access.html",
+    "title": "账号与使用权限",
+    "rank": 0,
+    "group": "security"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/index.html",
+    "title": "使用指南",
+    "rank": 0,
+    "group": "start"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/introduction.html",
+    "title": "项目介绍",
+    "rank": 1,
+    "group": "start"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/quick-start.html",
+    "title": "快速开始",
+    "rank": 2,
+    "group": "start"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/compatibility.html",
+    "title": "兼容性与能力边界",
+    "rank": 3,
+    "group": "start"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/scenarios.html",
+    "title": "场景与试点指南",
+    "rank": 4,
+    "group": "start"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/faq.html",
+    "title": "常见问题",
+    "rank": 5,
+    "group": "start"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/connectors.html",
+    "title": "连接器目录",
+    "rank": -1,
+    "group": "connectors"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/roadmap.html",
+    "title": "项目路线图",
+    "rank": -1,
+    "group": "sdd"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/index.html",
+    "title": "User guide",
+    "rank": 0,
+    "group": "start"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/introduction.html",
+    "title": "Introduction",
+    "rank": 1,
+    "group": "start"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/quick-start.html",
+    "title": "Quick start",
+    "rank": 2,
+    "group": "start"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/compatibility.html",
+    "title": "Compatibility",
+    "rank": 3,
+    "group": "start"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/connectors.html",
+    "title": "Connector catalog",
+    "rank": -1,
+    "group": "connectors"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/roadmap.html",
+    "title": "Roadmap",
+    "rank": -1,
+    "group": "sdd"
+  }
+]

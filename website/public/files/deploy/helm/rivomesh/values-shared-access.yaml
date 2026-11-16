@@ -1,0 +1,7 @@
+# Shared identity/session/audit; global task routing/HA remain separate.
+cluster:
+  enabled: true
+  sharedAccess: true
+  id: migration-registry
+  url: jdbc:postgresql://control-db:5432/rivomesh_control
+  existingSecret: rivomesh-control-store

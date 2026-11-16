@@ -1,0 +1,27 @@
+[
+  {
+    "title": "数据库同步是什么",
+    "time": 0,
+    "duration": 19
+  },
+  {
+    "title": "准备并创建任务",
+    "time": 19,
+    "duration": 20
+  },
+  {
+    "title": "检查、启动与观察",
+    "time": 39,
+    "duration": 20
+  },
+  {
+    "title": "校验与按计划修复",
+    "time": 59,
+    "duration": 20
+  },
+  {
+    "title": "跟着使用指南完成同步",
+    "time": 79,
+    "duration": 23
+  }
+]

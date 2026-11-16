@@ -1,0 +1,140 @@
+[
+  {
+    "id": "MYSQL",
+    "role": "SOURCE",
+    "status": "AVAILABLE",
+    "note": "5.7.44 / 8.4 v3 JSON, keyless, supported generated columns; 8.0 / 8.4 v2 HA; see runtime/version matrix"
+  },
+  {
+    "id": "GAUSS_POSTGRESQL",
+    "role": "SINK",
+    "status": "PARTIALLY_VERIFIED",
+    "note": "openGauss 7.0.0-RC3 verified; distributed/commercial GaussDB unverified"
+  },
+  {
+    "id": "POSTGRESQL",
+    "role": "SINK",
+    "status": "AVAILABLE",
+    "note": "PostgreSQL 17.12 snapshot / CDC / restart / JSON verified"
+  },
+  {
+    "id": "MYSQL",
+    "role": "SINK",
+    "status": "AVAILABLE",
+    "note": "V3 Web/CLI: separate MySQL 8.4 instance; PG/Gauss/MySQL fan-out and both journal recovery modes verified"
+  },
+  {
+    "id": "RABBITMQ",
+    "role": "SINK",
+    "status": "PARTIALLY_VERIFIED",
+    "note": "4.1.4 quorum queue; confirmed at-least-once, worker/broker restart verified; cluster/TLS acceptance pending"
+  },
+  {
+    "id": "NATS_JETSTREAM",
+    "role": "SINK",
+    "status": "PARTIALLY_VERIFIED",
+    "note": "2.11.8 File stream; confirmed at-least-once, worker/broker restart verified; cluster/TLS acceptance pending"
+  },
+  {
+    "id": "KAFKA",
+    "role": "SINK",
+    "status": "PARTIALLY_VERIFIED",
+    "note": "3.9.2 dedicated single-partition topic, all-ISR/idempotent producer; worker/broker restart verified; cluster/SASL/TLS acceptance pending"
+  },
+  {
+    "id": "REDIS_STREAMS",
+    "role": "SINK",
+    "status": "PARTIALLY_VERIFIED",
+    "note": "7.4.2 direct standalone, AOF/noeviction, same-connection WAITAOF; worker/broker restart verified; Sentinel/Cluster/TLS acceptance pending"
+  },
+  {
+    "id": "PULSAR",
+    "role": "SINK",
+    "status": "PARTIALLY_VERIFIED",
+    "note": "4.0.14 persistent non-partitioned topic, isolated Java 8 SDK; transport, snapshot/CDC, worker kill and three broker stop/start rounds verified; cluster/token/TLS pending"
+  },
+  {
+    "id": "ROCKETMQ",
+    "role": "SINK",
+    "status": "PARTIALLY_VERIFIED",
+    "note": "Native Java 8 client 5.5.1 / broker 5.5.0: local SYNC_FLUSH, one queue, broker/client restart and lost-topic protection verified; snapshot/CDC, worker kill and three broker stop/start rounds verified; native receipt/content and older nonempty backup rollback refusal verified; ACL/TLS/replicated profiles pending"
+  },
+  {
+    "id": "ACTIVEMQ_ARTEMIS",
+    "role": "SINK",
+    "status": "PARTIALLY_VERIFIED",
+    "note": "2.57.0 broker / isolated Java 8 Core client 2.19.1 with Netty 4.1.130: transport, persistent non-destructive queue, consumer ACK, broker/client restart and native receipt refusal of an older same-ID nonempty backup verified; mixed pipeline/security/cluster acceptance pending"
+  },
+  {
+    "id": "CLICKHOUSE",
+    "role": "SINK",
+    "status": "PARTIALLY_VERIFIED",
+    "note": "25.8.33.6 native HTTP/RowBinary, versioned FINAL views, keyless/PK replay and old nonempty backup refusal verified; MySQL snapshot/CDC, independent outage, worker restart and missing-view isolation verified; single direct server profile"
+  },
+  {
+    "id": "ACTIVEMQ_CLASSIC",
+    "role": "SINK",
+    "status": "PARTIALLY_VERIFIED",
+    "note": "5.19.12 single KahaDB broker / Java8 client5.16.8: persistent local transactions, selected-consumer ACK, wrong-selector/purge guards, restart and actual older nonempty backup refusal verified; MySQL8.4+PostgreSQL17 snapshot/CDC, broker outage, worker kill, SQL failure/retry and purge isolation verified; TLS/cluster/capacity acceptance pending"
+  },
+  {
+    "id": "DORIS",
+    "role": "SINK",
+    "status": "PARTIALLY_VERIFIED",
+    "note": "4.1.3 ARM64 / Java8 native Stream Load, Unique MoW views and durable receipts; native restart/old nonempty backup refusal and actual MySQL8.4+PostgreSQL17 snapshot/CDC/outage/catchup/worker kill/SQL repair/view-loss isolation verified; clusters/TLS/capacity/other JDKs pending"
+  },
+  {
+    "id": "OCEANBASE",
+    "role": "SINK",
+    "status": "EXPERIMENTAL",
+    "note": "MySQL-mode user tenant / transactional JDBC profile implemented; actual native acceptance pending; Oracle mode pending"
+  },
+  {
+    "id": "HIVE",
+    "role": "SINK",
+    "status": "EXPERIMENTAL",
+    "note": "Hive4.0.1 / Java8 ACID ORC history/views; query-results cache must be disabled for writer/readers; experimental first profile, see versioned acceptance records; not a transactional JDBC sink"
+  },
+  {
+    "id": "KINGBASE",
+    "role": "SINK",
+    "status": "EXPERIMENTAL",
+    "note": "V009R001C001B0025 PG/UTF8 / Java8 driver9.0.1: native transactions and actual MySQL8.4+PostgreSQL17 snapshot/CDC, signed microsecond TIME/keyless, target outage, worker kill, SQL repair and missing-table isolation verified; first profile only, other modes/RAC/distributed/security/capacity pending"
+  },
+  {
+    "id": "DM",
+    "role": "SINK",
+    "status": "EXPERIMENTAL",
+    "note": "DM8.1.4.80 native0/UTF8/blank1 with Java8 driver8.1.3.140: native transactions, reviewed JSON/wide-decimal text, empty-layout guards and actual MySQL8.4+PostgreSQL17 snapshot/CDC/TIME/text-key/outage/worker-kill/SQL-repair/missing-table isolation verified; other modes/clusters/security/capacity pending"
+  },
+  {
+    "id": "GBASE_8C",
+    "role": "SINK",
+    "status": "EXPERIMENTAL",
+    "note": "V6_S1.3.0B19 PG/UTF8 / vendor JDBC3.0.0B02: first native transactions and actual MySQL8.4+PostgreSQL17 snapshot/CDC/TIME/keyless/text-key/outage/worker-kill/SQL-repair/missing-table isolation verified; other modes/distributed/security/capacity pending; 8a/8s are separate families"
+  },
+  {
+    "id": "POSTGRESQL",
+    "role": "SOURCE",
+    "status": "PLANNED",
+    "note": ""
+  },
+  {
+    "id": "ORACLE",
+    "role": "SOURCE",
+    "status": "PLANNED",
+    "note": ""
+  },
+  {
+    "id": "GBASE_8A",
+    "role": "SINK",
+    "status": "PLANNED",
+    "note": ""
+  },
+  {
+    "id": "GBASE_8S",
+    "role": "SINK",
+    "status": "PLANNED",
+    "note": ""
+  }
+]

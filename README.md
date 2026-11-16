@@ -1,12 +1,12 @@
 # RivoMesh 官网与文档站
 
-RivoMesh 发布前官网，源码仓库目标为 <https://github.com/rivomesh/rivomesh.github.io>。
+官网：**https://rivomesh.github.io/**
 
-首页以“RivoMesh · 数据库实时同步平台”说明产品定位，按核心功能、同步架构、应用场景、文档与获取、社区和路线图组织内容。核心源码与反馈入口为 <https://github.com/rivomesh/rivomesh>，官网与文档站的维护入口为本仓库。
+核心项目：[rivomesh/rivomesh](https://github.com/rivomesh/rivomesh)。官网仓库：[rivomesh/rivomesh.github.io](https://github.com/rivomesh/rivomesh.github.io)。
 
-基于 VitePress 1.6，包含原创首页、连接器目录、SDD 交互路线图、中英文文档、站内本地检索、真实控制台截图、Logo / favicon，以及 100 秒中文配音产品视频。结构参考 [ShardingSphere](https://shardingsphere.apache.org/index_zh.html) 与 [SeaTunnel](https://seatunnel.apache.org/zh-CN/)，文案依据本地 RivoMesh 源码与 SDD，未使用第三方品牌图形或虚构用户数据。
+本站根据同级 RivoMesh 核心源码重新生成，采用全新页面、主题、文档路由、固定导航和品牌素材。VitePress 负责 Markdown 编译、客户端路由与静态输出；布局、侧栏、搜索、连接器目录和 SDD 展示使用本仓库自有组件。
 
-[初版首页截图（历史记录）](preview/homepage-desktop.png) · [网站验证记录](preview/verification.md)
+验证记录与页面截图见 [quality/verification.md](quality/verification.md)。
 
 ## 本地运行
 
@@ -17,62 +17,73 @@ npm ci
 npm run dev
 ```
 
-打开终端显示的地址，默认是 <http://127.0.0.1:5173/>。
+访问终端显示的本地地址，通常为 <http://127.0.0.1:5173/>。
 
 ```bash
 npm run check
+npm test
 npm run build
-npm run check:build
 npm run preview
 ```
 
-`check` 检查站内文档链接、SDD ID/依赖和关键素材，构建另外执行 VitePress 的死链检查。构建产物在 `site/.vitepress/dist`。正式网站为纯静态输出，不需要 Java 服务或外部检索服务。
+构建输出为 `website/.vitepress/dist`。构建会检查站内链接、每篇文档的侧栏顺序与唯一当前页，并生成旧版 URL 的兼容跳转。日常运行和 CI 无需读取同级 Java 项目。
 
-## GitHub Pages
+## 面向用户的内容与统一导航
 
-已提供 `.github/workflows/deploy.yml`，推送 `main` 后构建并通过 GitHub Actions 发布。网站 CI 使用已提交的文档与媒体快照，发布不依赖同级 Java 源码目录。
+- 中文主目录按安装、创建任务、查看状态、故障处理、数据核对、备份和权限组织。
+- 架构、SDD 与验收资料放在独立项目入口，搜索默认聚焦使用文档；详细配置默认折叠。
+- 所有文档使用 `/docs/zh/…` 或 `/docs/en/…` 路径。
+- 每种语言只有一棵导航树，由源码导入清单生成，不按文章路径切换不同侧栏。
+- `Layout.vue` 在文档路由之间保留同一个 `DocSidebar` 实例。
+- 侧栏拥有独立滚动区；正文导航不调用侧栏滚动，也不根据文章重新展开分组。
+- 折叠状态保存到本地存储，滚动位置保存到会话存储；刷新时恢复。
+- 首次进入或点击“定位当前文档”时定位当前条目。
+- 正文目录、分页、面包屑与语言切换由同一文档注册表派生。
 
-1. 将本目录提交到 `rivomesh/rivomesh.github.io` 的 `main`。
-2. 在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。
-3. 查看 `Deploy documentation to GitHub Pages` 工作流。
+`tests/navigation.spec.js` 会遍历全部中文文档和返回路径，检查面板 DOM 身份、滚动位置、分组顺序、折叠持久化及当前页；另验证本地搜索。静态发布检查对中英文每篇文档再次核对完整菜单。
 
-仓库已迁入 `rivomesh` 组织，作为组织站点发布到：
+## 目录结构
 
-**https://rivomesh.github.io/**
+| 路径 | 用途 |
+| --- | --- |
+| `website/.vitepress/theme/` | 全新自有布局、侧栏、搜索、首页与组件 |
+| `website/docs/zh/start/`、`website/docs/en/start/` | 面向使用者的原创入门说明 |
+| `website/docs/*/reference/`、`sdd/`、`evidence/` | 从核心源码导入的手册、规格与验收快照 |
+| `website/.vitepress/data/` | 导航、文档、连接器与 SDD 注册数据 |
+| `website/public/source-snapshot.json` | 文档原始 SHA-256、目录状态与捕获时间 |
+| `website/public/search-index.json` | 按需加载的静态全文索引 |
+| `website/public/files/` | 手册引用的配置和结构化附件 |
+| `website/public/brand/`、`media/` | 新 Logo、favicon、分享图、截图与讲解视频 |
+| `tooling/` | 源码导入、媒体生成、发布跳转与检查工具 |
+| `tests/` | 导航与搜索回归验证 |
 
-默认 `base` 为 `/`，本地预览、站内链接、favicon、视频和构建链接检查均使用根路径。Pages 的发布源必须选择 **GitHub Actions**，不能直接用 Jekyll 发布 `main` 源码分支。
-
-如果将来改用其他域名或项目子路径，分别通过 `SITE_ORIGIN=https://example.com` 和 `SITE_BASE=/docs/` 调整构建；构建和 `check:build` 应使用相同 `SITE_BASE`。
-
-## 内容维护
-
-- `site/index.md` 与 `.vitepress/theme/components/HomePage.vue`：首页。
-- `site/guide/`：面向初次使用者的原创中文说明、快速开始、兼容性和 FAQ。
-- `site/reference/`：从核心项目同步的文档快照，包括双语手册、SDD 与验证记录。
-- `site/.vitepress/data/source-manifest.json`：源文档 SHA-256 及快照日期。
-- `site/.vitepress/data/requirements.json`：原始 SDD 基线，路线图直接从此生成。
-- `site/public/reference-files/`：手册引用的配置、源文件和部分验证附件；代码类附件用 `.txt` 防止误作页面执行。
-- `site/ecosystem/`、`community/`、`download.md`、`tour.md`：连接器、贡献、获取和产品导览。
-
-更新核心源码文档：
+## 更新源码文档
 
 ```bash
 npm run docs:sync -- ../rivomesh
 npm run check
+npm test
 npm run build
 ```
 
-同步只发生在手动调用时。网站 CI 使用已提交的快照，不依赖同级源码目录或尚未公开的核心仓库。同步后需核对原创页面、连接器摘要与新源码是否一致；SDD 基线和新交付可能有不同日期，不能仅靠新增文档自动关闭需求。不要直接修改生成的 `site/reference/` 后再同步，应先改核心项目文档。发布前请审阅附件内容。
+导入器读取核心项目的 Markdown、SDD `requirements.json` 与 `AdapterCatalog.java`，为全部手册建立唯一文档路由和两棵语言导航树。它只重建生成目录，保留 `start/` 原创文档；旧地址规范化到 `rivomesh` 组织，源码外链统一指向核心仓库。
 
-## 品牌与媒体
+SDD 状态取自实际清单，DONE、PARTIAL、NEW 分开计算。不要把新增操作手册自动当作全部需求已经完成。快照清单的原始哈希对应源文件，站内链接与纯文本占位符会在导入时转换。
 
-- `site/public/brand/`：原创 SVG 图标、字标、深色版本、分享图与 Apple Touch 图标。
-- `site/public/favicon.ico`：包含 PNG 数据的 32px ICO。
-- `site/public/media/`：真实开发预览截图、H.264/AAC MP4、WebVTT 字幕与完整文字稿。
-- `scripts/generate-media.mjs`：可重建视频和派生素材；依赖 macOS `say`（Tingting）及 FFmpeg，日常构建不需要这些工具。
+## 品牌与视频
 
-截图采自本地 `127.0.0.1:18088` 开发预览，已裁去浏览器标签栏与地址栏。截图不会伪装成实时监控；没有修改或启动同步任务。生成脚本读取 `/tmp/rivomesh-{console,wizard,catalog}-window.png`，已有截图时也能重新生成视频。更新真实截图后应检查画面中的任务、地址和凭据，避免发布敏感信息。
+品牌图标、横版字标、SVG/ICO favicon、Apple Touch 图标与分享图均由新的素材工具生成。产品导览包含中文合成语音、字幕、完整文字稿和章节跳转。
 
-## 发布前核对
+```bash
+npm run media:generate
+```
 
-正式 Release 包、校验和、公共镜像与核心仓库公开入口准备完成后，再更新获取页面。许可证、NOTICE、SBOM 与贡献治理按 SDD 的实际交付补齐，不将规划写成现有认证或正式发布。本站没有添加行为分析脚本或远程字体。
+媒体重建需要 macOS `say` 的 Tingting 语音与 FFmpeg。原始截图输入为 `/tmp/rivomesh-{console,wizard,catalog}-window.png`；工具会裁去浏览器栏后生成产品素材。截图来自本地开发预览，仅展示部分界面，不能作为实时运行或生产性能证明。网页构建不需要上述媒体生成环境。
+
+## GitHub Pages 发布
+
+`.github/workflows/deploy.yml` 在 `main` 推送后执行依赖安装、内容检查、导航测试、静态构建和 Pages 发布。仓库 Pages 发布源应为 **GitHub Actions**。
+
+部署目标是组织根站点 `https://rivomesh.github.io/`。`base` 固定为 `/`；没有 CNAME 或个人域名继承配置。媒体、favicon、站内搜索和文档链接均使用根路径。
+
+参照的信息结构：[ShardingSphere](https://shardingsphere.apache.org/index_zh.html) 与 [SeaTunnel](https://seatunnel.apache.org/zh-CN/)。具体产品定位、能力与计划来自 RivoMesh 源码，网站使用自有品牌。

@@ -1,0 +1,56 @@
+image:
+  repository: rivomesh
+  tag: 0.1.0-SNAPSHOT
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+auth:
+  mode: CONFIG # MANAGED without bootstrap credentials requires an initialized persistent directory.
+  legacyTokenEnabled: true
+  existingSecret: rivomesh-auth
+  key: token
+  users: [] # Entries: {id, role: VIEWER|OPERATOR|ADMIN, secretRef: {name, key}}
+service:
+  port: 8080
+persistence:
+  existingClaim: ""
+  storageClass: ""
+  size: 10Gi
+platform:
+  maxTasks: 20
+  maxRunningTasks: 2
+  workerHeapMiB: 256
+  controlThreads: 4
+  pollMillis: 3000
+  autoStart: false
+  auditMaxEvents: 1000000
+sessions:
+  enabled: true
+  secureCookie: true
+  rememberBrowser: false
+  idleSeconds: 1800
+  absoluteSeconds: 28800
+  maximum: 1000
+  publicOrigin: "" # Set https://console.example when TLS terminates upstream.
+# Registry only: use separate Helm releases/PVCs per node. Global task routing is pending.
+cluster:
+  enabled: false
+  sharedAccess: false # Shared accounts/sessions/audit; task routing remains separate.
+  id: rivomesh
+  nodeId: "" # Defaults to the release name, stable across pod recreation.
+  driver: org.postgresql.Driver
+  url: ""
+  namespace: rivomesh_control
+  existingSecret: ""
+  usernameKey: username
+  passwordKey: password
+  advertiseUrl: "" # Defaults to this release's in-cluster Service URL.
+  heartbeatMillis: 2000
+  leaseMillis: 15000
+  maximumNodes: 1000
+resources:
+  requests:
+    cpu: 500m
+    memory: 512Mi
+  limits:
+    cpu: "2"
+    memory: 2Gi

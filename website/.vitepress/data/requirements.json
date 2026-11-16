@@ -1,0 +1,1327 @@
+{
+  "specId": "RM-SDD-001",
+  "version": "0.3",
+  "date": "2026-11-16",
+  "state": "IMPLEMENTING",
+  "scope": "CP-01 shared registry and SE-01/02/03/05 single-controller sessions complete; global task/control authority remains open",
+  "baseline": {
+    "artifactSha256": "10d95a3990835f2286f036b962d88fc8533ade427753ad9961ef1429988a88e2",
+    "rootTests": 207,
+    "releaseFirstAppTests": 205,
+    "domTests": 49,
+    "evidence": "docs/verification/2026-11-16-managed-repair/README.md"
+  },
+  "requirements": [
+    {
+      "id": "CP-01",
+      "epic": "CLUSTER",
+      "priority": "P0",
+      "status": "DONE",
+      "title": {
+        "zh-CN": "统一节点注册与状态",
+        "en": "Global node registry and state"
+      },
+      "gap": {
+        "zh-CN": "共享节点目录已通过PostgreSQL/MySQL双节点、kill/重开及控制库中断验收；任务权威/远端命令仍属CP-02/03。",
+        "en": "Shared registry passes PostgreSQL/MySQL two-node,kill/rejoin and storage-outage acceptance;global task authority/commands remain CP-02/03."
+      },
+      "acceptance": {
+        "zh-CN": "部署两个节点后，任一管理入口均显示相同节点ID、角色、版本/JDK/架构、容量、心跳时间和任务归属；失联显示过期/未知，不能伪装成健康。",
+        "en": "With two nodes,any console shows the same IDs,roles,versions/JDK/architecture,capacity,heartbeat age and ownership;stale/unreachable nodes are explicitly marked."
+      },
+      "dependsOn": [],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
+        "sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java",
+        "sync-app/src/main/java/io/rivomesh/platform/JdbcControlStore.java",
+        "tests/node-registry-native.py",
+        "docs/verification/2026-11-16-node-registry/README.md"
+      ],
+      "verification": {
+        "artifactSha256": "e42cd685bcc9fb38a1e0e82819230ac58869a54f40c4417d39cd596337b91d11",
+        "archive": "docs/verification/2026-11-16-node-registry/README.md"
+      }
+    },
+    {
+      "id": "CP-02",
+      "epic": "CLUSTER",
+      "priority": "P0",
+      "status": "NEW",
+      "title": {
+        "zh-CN": "全局任务、配置与操作权威状态",
+        "en": "Global task/configuration authority"
+      },
+      "gap": {
+        "zh-CN": "控制器注册表、配置历史、报告路径及锁依赖本地目录，尚非统一控制面。",
+        "en": "Controller registry,configuration history,report paths and locks are local."
+      },
+      "acceptance": {
+        "zh-CN": "同一集群中从A创建/修改任务后B读到同一全局修订；全局taskId唯一，独立任务与源配置仍隔离；单机模式保留可运行配置。",
+        "en": "A task created/edited through A appears at B with the same global revision;IDs are unique within a cluster;independent sources remain isolated and standalone mode remains usable."
+      },
+      "dependsOn": [
+        "CP-01"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java"
+      ]
+    },
+    {
+      "id": "CP-03",
+      "epic": "CLUSTER",
+      "priority": "P0",
+      "status": "NEW",
+      "title": {
+        "zh-CN": "跨节点持久命令路由",
+        "en": "Durable cross-node command routing"
+      },
+      "gap": {
+        "zh-CN": "当前Worker工厂只在本机启动/停止Java进程。",
+        "en": "The Worker factory launches/stops local JVMs only."
+      },
+      "acceptance": {
+        "zh-CN": "任一入口可控制B的任务：创建、检查、启停、暂停/恢复、重试、校验/修复；命令含全局请求ID/修订/owner代次，重复投递只生效一次，202仅表示接受，返回已执行/拒绝/未知结果。",
+        "en": "Any entry controls tasks on B;typed commands cover create/check/lifecycle/retry/validation/repair and carry request ID,revision and owner generation;duplicate delivery is idempotent and acceptance is distinct from execution."
+      },
+      "dependsOn": [
+        "CP-02"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java",
+        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java"
+      ]
+    },
+    {
+      "id": "CP-04",
+      "epic": "CLUSTER",
+      "priority": "P0",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "故障接管、隔离与资源调度",
+        "en": "Failover,fencing and placement"
+      },
+      "gap": {
+        "zh-CN": "已有Worker租约/epoch，缺少统一节点调度、远端生命周期和滚动升级协议。",
+        "en": "Worker leases/epochs exist;global scheduling,remote lifecycle and rolling-upgrade protocols do not."
+      },
+      "acceptance": {
+        "zh-CN": "节点断电/网络分区/旧节点恢复时同一任务无双写；未确认停机可标记未知并隔离；按JDK、连接器、存储可达性和配额调度；排空迁移保留断点。",
+        "en": "Power loss,partition and stale-node return never permit dual writers;unconfirmed stops remain unknown/fenced;placement respects JDK,adapter,storage reachability and quotas;drain/move preserves progress."
+      },
+      "dependsOn": [
+        "CP-03",
+        "JV-01",
+        "LG-05"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
+        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java"
+      ]
+    },
+    {
+      "id": "CP-05",
+      "epic": "CLUSTER",
+      "priority": "P0",
+      "status": "NEW",
+      "title": {
+        "zh-CN": "共享权限、审计和密钥引用",
+        "en": "Shared authorization,audit and secret references"
+      },
+      "gap": {
+        "zh-CN": "现有账号与操作审计是控制器本地持久化，缺少集群一致视图。",
+        "en": "Accounts and operation audit persist locally without cluster-wide authority."
+      },
+      "acceptance": {
+        "zh-CN": "从A撤销权限后B拒绝新命令；同一远端操作可按请求ID/任务/节点/计划追踪；界面不返回密钥，节点仅获得授权任务必需的密钥引用。",
+        "en": "Revocation at A is enforced at B;remote actions correlate by request/task/node/plan;secrets are not returned to UI and agents receive only authorized task references."
+      },
+      "dependsOn": [
+        "CP-02"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
+        "docs/zh-CN/account-management.md",
+        "docs/zh-CN/security-audit.md"
+      ]
+    },
+    {
+      "id": "CP-06",
+      "epic": "CLUSTER",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "全局日志、指标与诊断界面",
+        "en": "Cluster logs,metrics and diagnostics"
+      },
+      "gap": {
+        "zh-CN": "已有本机任务界面、积压和错误展示，未聚合远端状态。",
+        "en": "Local task/backlog/error UI exists without remote aggregation."
+      },
+      "acceptance": {
+        "zh-CN": "界面按节点/任务/目标过滤状态、延迟、积压、日志和错误；注明采集时间及失联范围；远端日志分页/限流且不泄露业务值或凭据。",
+        "en": "UI filters node/task/destination status,lag,backlog,logs and errors with observation timestamps and bounded redacted log access."
+      },
+      "dependsOn": [
+        "CP-01",
+        "CP-03",
+        "CP-05"
+      ],
+      "evidence": [
+        "sync-app/src/main/resources/console/app.js",
+        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java"
+      ]
+    },
+    {
+      "id": "CP-07",
+      "epic": "CLUSTER",
+      "priority": "P0",
+      "status": "NEW",
+      "title": {
+        "zh-CN": "控制面HA及控制/数据面解耦",
+        "en": "Control-plane HA and worker independence"
+      },
+      "gap": {
+        "zh-CN": "单控制目录文件锁不等于HA，控制器关闭还会停止其子进程。",
+        "en": "A local controller lock is not HA;controller shutdown stops child workers."
+      },
+      "acceptance": {
+        "zh-CN": "管理实例故障后其他入口可继续查询/控制；接收但未完成的命令可恢复；按明确策略已有Worker可继续安全同步；仅部署多个replica或共享目录不能算通过。",
+        "en": "Another entry survives controller failure;accepted commands recover;existing workers continue safely under documented policy;replica count/shared files alone are insufficient."
+      },
+      "dependsOn": [
+        "CP-03",
+        "CP-05",
+        "SE-04"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
+        "sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java"
+      ]
+    },
+    {
+      "id": "SE-01",
+      "epic": "SESSION",
+      "priority": "P0",
+      "status": "DONE",
+      "title": {
+        "zh-CN": "刷新后恢复登录态",
+        "en": "Session survives page reload"
+      },
+      "gap": {
+        "zh-CN": "已完成单控制器刷新/新页面恢复；跨控制器连续性仍属SE-04。",
+        "en": "Single-controller reload/new-page restoration complete;cross-controller continuity remains SE-04."
+      },
+      "acceptance": {
+        "zh-CN": "登录后刷新、重新打开同一站点页面可恢复未过期会话和原权限，不需再次输入令牌；过期则回到登录页且不误发操作。",
+        "en": "Reload/reopening the site restores an unexpired session and permissions without reentering the token;expired sessions return to login without unintended actions."
+      },
+      "dependsOn": [],
+      "evidence": [
+        "sync-app/src/main/resources/console/app.js",
+        "sync-app/src/main/java/io/rivomesh/platform/BrowserSessions.java",
+        "sync-app/src/test/java/io/rivomesh/platform/BrowserSessionsTest.java",
+        "tests/browser-sessions-tls.py",
+        "tests/browser-sessions-runtime.py",
+        "docs/verification/2026-11-16-browser-sessions/README.md"
+      ],
+      "implementation": {
+        "scope": "Completed single-controller browser sessions; shared authority SE-04 excluded",
+        "design": "docs/sdd/001-control-recovery-compatibility/design-sessions.md"
+      },
+      "verification": {
+        "artifactSha256": "95127453ff4e6b9a6b0f16d80ea1a16c2c5861b4a260226e875bab6bc72c60a3",
+        "archive": "docs/verification/2026-11-16-browser-sessions/README.md"
+      }
+    },
+    {
+      "id": "SE-02",
+      "epic": "SESSION",
+      "priority": "P0",
+      "status": "DONE",
+      "title": {
+        "zh-CN": "会话期限、退出和撤销",
+        "en": "Session expiry,logout and revocation"
+      },
+      "gap": {
+        "zh-CN": "已完成期限、退出、目录修订撤销及可配置记住浏览器；当前内存存储重启失效。",
+        "en": "Expiry,logout,directory-revision revocation and optional browser persistence complete;memory sessions expire on controller restart."
+      },
+      "acceptance": {
+        "zh-CN": "可配置空闲/绝对有效期；退出、账号停用、令牌轮换或权限撤销按策略失效；多标签页一致；浏览器关闭后的持久记住登录为单独可配置策略。",
+        "en": "Idle/absolute expiry is configurable;logout,disable,rotation and revocation invalidate sessions as specified;tabs agree;remembering across browser closure is a separate configurable policy."
+      },
+      "dependsOn": [
+        "SE-01"
+      ],
+      "evidence": [
+        "sync-app/src/main/resources/console/app.js",
+        "docs/zh-CN/account-management.md",
+        "sync-app/src/main/java/io/rivomesh/platform/BrowserSessions.java",
+        "sync-app/src/test/java/io/rivomesh/platform/BrowserSessionsTest.java",
+        "tests/browser-sessions-tls.py",
+        "tests/browser-sessions-runtime.py",
+        "docs/verification/2026-11-16-browser-sessions/README.md"
+      ],
+      "implementation": {
+        "scope": "Completed single-controller browser sessions; shared authority SE-04 excluded",
+        "design": "docs/sdd/001-control-recovery-compatibility/design-sessions.md"
+      },
+      "verification": {
+        "artifactSha256": "95127453ff4e6b9a6b0f16d80ea1a16c2c5861b4a260226e875bab6bc72c60a3",
+        "archive": "docs/verification/2026-11-16-browser-sessions/README.md"
+      }
+    },
+    {
+      "id": "SE-03",
+      "epic": "SESSION",
+      "priority": "P0",
+      "status": "DONE",
+      "title": {
+        "zh-CN": "安全会话传输和CSRF防护",
+        "en": "Secure session transport and CSRF protection"
+      },
+      "gap": {
+        "zh-CN": "已完成受保护Cookie、Origin/CSRF及TLS代理实测；生产TLS由代理终止。",
+        "en": "Protected cookies,Origin/CSRF and real TLS-proxy acceptance complete;the proxy terminates production TLS."
+      },
+      "acceptance": {
+        "zh-CN": "浏览器端不保存可读的长期认证令牌；会话标识采用受保护cookie/等效方案，生产HTTPS及HttpOnly/SameSite策略可验证；cookie鉴权写操作具备CSRF/Origin检查；会话不进URL或日志。",
+        "en": "No readable long-lived browser credential;protected cookie/equivalent transport,HTTPS and HttpOnly/SameSite policy are verified;cookie-authenticated mutations enforce CSRF/Origin checks;session IDs never enter URLs/logs."
+      },
+      "dependsOn": [
+        "SE-01"
+      ],
+      "evidence": [
+        "sync-app/src/main/resources/console/app.js",
+        "sync-app/src/main/java/io/rivomesh/platform/ConsoleServer.java",
+        "sync-app/src/main/java/io/rivomesh/platform/BrowserSessions.java",
+        "sync-app/src/test/java/io/rivomesh/platform/BrowserSessionsTest.java",
+        "tests/browser-sessions-tls.py",
+        "tests/browser-sessions-runtime.py",
+        "docs/verification/2026-11-16-browser-sessions/README.md"
+      ],
+      "implementation": {
+        "scope": "Completed single-controller browser sessions; shared authority SE-04 excluded",
+        "design": "docs/sdd/001-control-recovery-compatibility/design-sessions.md"
+      },
+      "verification": {
+        "artifactSha256": "95127453ff4e6b9a6b0f16d80ea1a16c2c5861b4a260226e875bab6bc72c60a3",
+        "archive": "docs/verification/2026-11-16-browser-sessions/README.md"
+      }
+    },
+    {
+      "id": "SE-04",
+      "epic": "SESSION",
+      "priority": "P0",
+      "status": "NEW",
+      "title": {
+        "zh-CN": "跨控制节点的会话连续性",
+        "en": "Session continuity across controllers"
+      },
+      "gap": {
+        "zh-CN": "负载均衡切换后没有共享会话权威状态。",
+        "en": "No shared session authority for load-balanced controllers."
+      },
+      "acceptance": {
+        "zh-CN": "登录A后请求落到B仍合法；重启/切换控制实例按有效期恢复；集群撤销即时按规定传播，不以粘性会话掩盖状态缺失。",
+        "en": "Login at A remains valid at B;controller restart/failover follows expiry/recovery policy;revocation propagates as specified without relying on sticky sessions to hide missing state."
+      },
+      "dependsOn": [
+        "SE-02",
+        "SE-03",
+        "CP-02"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java"
+      ]
+    },
+    {
+      "id": "SE-05",
+      "epic": "SESSION",
+      "priority": "P1",
+      "status": "DONE",
+      "title": {
+        "zh-CN": "CLI/API兼容及身份冲突规则",
+        "en": "CLI/API compatibility and identity conflicts"
+      },
+      "gap": {
+        "zh-CN": "已完成Bearer兼容、不回退/身份冲突规则、权限重验、退出竞态及自身轮换。",
+        "en": "Bearer compatibility,no-fallback/conflict rules,grant checks,logout races and self-rotation complete."
+      },
+      "acceptance": {
+        "zh-CN": "既有CLI/API令牌可继续使用；cookie与Authorization身份冲突有明确拒绝/优先规则；会话恢复重验权限，晚到响应不能复活退出会话，双语提示一致。",
+        "en": "Existing API tokens work;conflicting cookie/header identities follow explicit rules;restoration rechecks grants and late responses cannot revive logout;messages are bilingual."
+      },
+      "dependsOn": [
+        "SE-03",
+        "CP-05"
+      ],
+      "evidence": [
+        "sync-app/src/main/resources/console/app.js",
+        "sync-app/src/main/java/io/rivomesh/platform/AccessControl.java",
+        "sync-app/src/main/java/io/rivomesh/platform/BrowserSessions.java",
+        "sync-app/src/test/java/io/rivomesh/platform/BrowserSessionsTest.java",
+        "tests/browser-sessions-tls.py",
+        "tests/browser-sessions-runtime.py",
+        "docs/verification/2026-11-16-browser-sessions/README.md"
+      ],
+      "implementation": {
+        "scope": "Completed single-controller browser sessions; shared authority SE-04 excluded",
+        "design": "docs/sdd/001-control-recovery-compatibility/design-sessions.md"
+      },
+      "verification": {
+        "artifactSha256": "95127453ff4e6b9a6b0f16d80ea1a16c2c5861b4a260226e875bab6bc72c60a3",
+        "archive": "docs/verification/2026-11-16-browser-sessions/README.md"
+      }
+    },
+    {
+      "id": "RC-01",
+      "epic": "RECOVERY",
+      "priority": "P0",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "按采集阶段区分故障",
+        "en": "Phase-aware fault classification"
+      },
+      "gap": {
+        "zh-CN": "现有错误隔离/恢复已实现，但没有完整的跳过与补偿诊断入口。",
+        "en": "Error isolation/resume exists without complete skip/compensation diagnostics."
+      },
+      "acceptance": {
+        "zh-CN": "分别展示源连接/读取、解码、DDL/规范化、目标应用、确认及日志存储错误；UI给出该阶段可用的重试、补偿、事务跳过或缺口恢复路径，不能把所有binlog故障当目标SQL错误。",
+        "en": "Distinguish source/read,decode,DDL/normalization,apply,ack and journal failures;UI offers only valid retry/compensation/skip/gap-recovery actions for that stage."
+      },
+      "dependsOn": [],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
+        "sync-app/src/main/java/io/rivomesh/cdc/FanoutDispatcher.java"
+      ]
+    },
+    {
+      "id": "RC-02",
+      "epic": "RECOVERY",
+      "priority": "P0",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "失败事务检查与原始证据留存",
+        "en": "Failed-transaction inspection and evidence retention"
+      },
+      "gap": {
+        "zh-CN": "已有日志及历史校验行详情，但没有失败队列的完整事务审阅工作流。",
+        "en": "Journal/history details exist but not a full failed-queue transaction review."
+      },
+      "acceptance": {
+        "zh-CN": "显示源身份、完整事务ID、事件范围、表/目标、原始及规范化摘要、前后镜像可用性和当前断点；原始值仅授权角色可读并分页限额；执行前保留可恢复证据。",
+        "en": "Show source/transaction identity,event range,affected objects/destinations,raw/normalized hashes,before/after-image availability and checkpoints;bounded raw access is authorized and evidence is retained before action."
+      },
+      "dependsOn": [
+        "RC-01",
+        "CP-05"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
+        "docs/zh-CN/managed-validation.md"
+      ]
+    },
+    {
+      "id": "RC-03",
+      "epic": "RECOVERY",
+      "priority": "P0",
+      "status": "NEW",
+      "title": {
+        "zh-CN": "目标应用阶段按完整事务跳过",
+        "en": "Skip a complete destination transaction"
+      },
+      "gap": {
+        "zh-CN": "当前恢复只会重试原事务，没有人工跳过实现。",
+        "en": "Resume retries the original transaction;manual skipping is absent."
+      },
+      "acceptance": {
+        "zh-CN": "对已知边界的下一失败事务，管理员选择目标、原因并审阅后跳过；同一源事务跨表事件不可拆半；目标原生SKIP凭据与安全进度同本地事务，崩溃重放不重复/误跳其他事务。",
+        "en": "For a known next failed transaction,ADMIN reviews destination scope/reason;cross-table events are not split;native SKIP receipt and safe progress commit locally and crash replay never skips another transaction."
+      },
+      "dependsOn": [
+        "RC-02",
+        "RC-05",
+        "RC-08"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
+        "sync-app/src/main/java/io/rivomesh/cdc/JdbcSink.java"
+      ]
+    },
+    {
+      "id": "RC-04",
+      "epic": "RECOVERY",
+      "priority": "P0",
+      "status": "NEW",
+      "title": {
+        "zh-CN": "采集/解码阶段的受控缺口恢复",
+        "en": "Controlled capture/decode gap recovery"
+      },
+      "gap": {
+        "zh-CN": "目标跳过不能修复尚未形成完整事件的源读取或解析故障。",
+        "en": "Destination skipping cannot fix failures before complete events exist."
+      },
+      "acceptance": {
+        "zh-CN": "单独设计已验证事务/源范围的隔离与排除计划，列出所有受影响订阅并保留原日志；边界或内容无法证明时拒绝执行，提供恢复日志、切换合格源或新基线方案；不能伪造普通应用成功。",
+        "en": "Provide a separate verified transaction/source-range quarantine/exclusion plan affecting all relevant subscriptions with original logs retained;unprovable boundaries are refused with log recovery,valid source or rebaseline alternatives;never fabricate successful application."
+      },
+      "dependsOn": [
+        "RC-01",
+        "RC-02",
+        "RC-08",
+        "SO-01"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
+        "docs/zh-CN/reconciliation-workflow.md"
+      ]
+    },
+    {
+      "id": "RC-05",
+      "epic": "RECOVERY",
+      "priority": "P0",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "不确定提交与断点核对",
+        "en": "Uncertain commit and checkpoint reconciliation"
+      },
+      "gap": {
+        "zh-CN": "自动应用已能识别提交领先ACK，人工跳过/补偿尚未复用此保护。",
+        "en": "Automatic apply reconciles commits leading ACK;manual recovery has not reused it."
+      },
+      "acceptance": {
+        "zh-CN": "若目标已提交但ACK未落盘，先验证事务内容并恢复确认，禁止再次补偿/伪记为未应用跳过；来源、世代、epoch、错误版本、配置、原事务摘要或断点不符必须拒绝。",
+        "en": "If commit leads ACK,verify content and recover acknowledgment instead of compensating or declaring an unapplied skip;identity,generation,epoch,error/config/hash/checkpoint mismatches refuse action."
+      },
+      "dependsOn": [
+        "RC-02"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
+        "sync-app/src/main/java/io/rivomesh/cdc/FanoutDispatcher.java",
+        "docs/verification/2026-11-16-managed-repair/README.md"
+      ]
+    },
+    {
+      "id": "RC-06",
+      "epic": "RECOVERY",
+      "priority": "P0",
+      "status": "NEW",
+      "title": {
+        "zh-CN": "失败事务前镜像补偿",
+        "en": "Failed-transaction before-image compensation"
+      },
+      "gap": {
+        "zh-CN": "已有共同校验点修复，尚不能让落后的失败目标回到原事务可重放状态。",
+        "en": "COMMON_CUT repair exists but does not reconstruct the failed transaction pre-state."
+      },
+      "acceptance": {
+        "zh-CN": "重建首个受影响身份的事务前状态，正确处理同键多次变更、主键移动、插入后删除、无主键重复行/ROW_ID、JSON与生成值；只修补审阅范围；数据与补偿凭据原子提交，原事务和GTID不改写。",
+        "en": "Reconstruct initial affected identity state across repeated keys,PK moves,insert/delete chains,keyless occurrences,JSON/generated values;modify only reviewed scope;commit compensation/receipt atomically without rewriting the source transaction/GTID."
+      },
+      "dependsOn": [
+        "RC-02",
+        "RC-05"
+      ],
+      "evidence": [
+        "docs/verification/2026-11-16-managed-repair/README.md",
+        "docs/zh-CN/common-cut-repair.md"
+      ]
+    },
+    {
+      "id": "RC-07",
+      "epic": "RECOVERY",
+      "priority": "P0",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "界面手工补数据与修正",
+        "en": "Guided manual corrective data entry"
+      },
+      "gap": {
+        "zh-CN": "已有报告驱动修复，不支持独立的失败事务数据补充或用户补丁。",
+        "en": "Report-driven repair exists without independent failed-transaction/manual patches."
+      },
+      "acceptance": {
+        "zh-CN": "界面提供类型化新增/修改/删除和导入预览；校验精度、NULL、键和内部行身份，禁止无主键误批量修改；计划显示前后值、范围和行数，目标漂移拒绝；不自动修改源库，不绕过外键/触发器保护。",
+        "en": "UI offers typed insert/update/delete and import preview;precision,NULL,keys and occurrence IDs are validated;review before/after scope/counts;refuse drift and unsafe keyless bulk edits;no implicit source writes or dependency bypass."
+      },
+      "dependsOn": [
+        "RC-02",
+        "RC-05",
+        "RC-06"
+      ],
+      "evidence": [
+        "docs/verification/2026-11-16-managed-repair/README.md",
+        "sync-app/src/main/java/io/rivomesh/platform/RepairRequest.java"
+      ]
+    },
+    {
+      "id": "RC-08",
+      "epic": "RECOVERY",
+      "priority": "P0",
+      "status": "NEW",
+      "title": {
+        "zh-CN": "一致性缺口台账与真实水位",
+        "en": "Consistency-gap ledger and honest watermarks"
+      },
+      "gap": {
+        "zh-CN": "现有断点没有已应用与主动跳过的持久区别和缺口生命周期。",
+        "en": "No durable distinction between applied/skipped history or gap lifecycle."
+      },
+      "acceptance": {
+        "zh-CN": "记录每次跳过的事务/范围、目标、原因、操作者、摘要和原事件位置；界面/API区分已应用、安全覆盖及有缺口继续运行；对账/补偿证据才可验证关闭缺口，接受丢失不能伪装成数据一致。",
+        "en": "Track skipped transactions/ranges,destinations,reason,actor,hashes and original evidence;separate applied progress,safe coverage and running-with-gaps;only verification evidence closes a gap and accepted loss is not equality."
+      },
+      "dependsOn": [
+        "RC-02"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
+        "docs/zh-CN/reconciliation-workflow.md"
+      ]
+    },
+    {
+      "id": "RC-09",
+      "epic": "RECOVERY",
+      "priority": "P0",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "补偿作业的跨节点持久化和恢复",
+        "en": "Durable distributed recovery jobs"
+      },
+      "gap": {
+        "zh-CN": "共同点修复已有本地持久操作与凭据，跨节点及新模式还缺实现。",
+        "en": "COMMON_CUT has local durable operations/receipts;distributed/new modes do not."
+      },
+      "acceptance": {
+        "zh-CN": "远端目标的计划、批准、取消、凭据和原始数据位置可追踪；控制/执行节点强杀后以同一请求恢复；已提交不重复、未提交回滚；跳过后不自动宣称业务接管完成。",
+        "en": "Remote plans,approval,cancellation,receipts and evidence locations are traceable;controller/agent kill recovers the same request with idempotent commits/rollback;skip is not cutover approval."
+      },
+      "dependsOn": [
+        "CP-03",
+        "RC-03",
+        "RC-06",
+        "RC-07"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
+        "docs/verification/2026-11-16-managed-repair/README.md"
+      ]
+    },
+    {
+      "id": "RC-10",
+      "epic": "RECOVERY",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "多目标恢复语义和回收保护",
+        "en": "Destination-specific recovery and retention"
+      },
+      "gap": {
+        "zh-CN": "SQL、分析库、消息队列一致性协议不同，不能复用一个伪事务实现。",
+        "en": "SQL,analytical and queue consistency protocols differ."
+      },
+      "acceptance": {
+        "zh-CN": "为每个目标声明跳过/补偿能力；SQL用本地事务，分析/消息目标用可验证回执/缺口通知；其他目标不被隐式跳过；未修复缺口与待审原事件不被静默GC，配额满时背压告警。",
+        "en": "Declare recovery capability per adapter;SQL uses local transactions,analytical/queue adapters verified receipts/gap notifications;other subscriptions are not silently skipped and unresolved evidence is retained with backpressure/alerts."
+      },
+      "dependsOn": [
+        "RC-08",
+        "LG-03",
+        "LG-04"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
+        "docs/zh-CN/messaging-v3.md"
+      ]
+    },
+    {
+      "id": "SO-01",
+      "epic": "SOURCE",
+      "priority": "P0",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "多源协议与能力配置",
+        "en": "Source protocol and capability configuration"
+      },
+      "gap": {
+        "zh-CN": "事件/位置SPI已有，真实源工厂与向导仍以MySQL为主。",
+        "en": "Neutral events/positions exist but factories/UI remain MySQL-oriented."
+      },
+      "acceptance": {
+        "zh-CN": "每任务显式source.type、逻辑源身份、命名空间和版本配置；MySQL GTID、PG LSN、Oracle SCN不能互相比较；向导/预检按实际能力启用，未支持配置明确拒绝。",
+        "en": "Each task declares source type,identity,namespace and version;GTID,LSN and SCN are not interchangeable;UI/preflight follow real capabilities and reject unsupported profiles."
+      },
+      "dependsOn": [],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/platform/AdapterCatalog.java",
+        "sync-app/src/main/java/io/rivomesh/cdc/SourceAdapter.java"
+      ]
+    },
+    {
+      "id": "SO-02",
+      "epic": "SOURCE",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "MySQL 5.7 完整支持档案",
+        "en": "MySQL5.7 supported profile"
+      },
+      "gap": {
+        "zh-CN": "有5.7.44基础链路记录，未覆盖当前平台全部必要对象、恢复和运行时组合。",
+        "en": "5.7.44 basic evidence does not cover the required current-platform object/recovery/runtime matrix."
+      },
+      "acceptance": {
+        "zh-CN": "固定补丁、驱动、日志配置后验证全量转增量、JSON/无主键/生成列能力、重启/切主/日志缺失、所支持DDL和恢复；不支持项预检拒绝并形成独立证据。",
+        "en": "Pin patch/driver/log settings and verify snapshot-to-CDC,object capabilities,restart/promotion/log loss,supported DDL/recovery with explicit negative cases and independent evidence."
+      },
+      "dependsOn": [
+        "SO-01"
+      ],
+      "evidence": [
+        "docs/validation.md",
+        "tests/mysql57-run.sh"
+      ]
+    },
+    {
+      "id": "SO-03",
+      "epic": "SOURCE",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "MySQL 8.0 当前V3能力补验",
+        "en": "MySQL8.0 current V3 acceptance"
+      },
+      "gap": {
+        "zh-CN": "有8.0.46历史V2/HA记录，不能直接作为当前V3全功能验收。",
+        "en": "Historical8.0.46 V2/HA evidence is not current full V3 acceptance."
+      },
+      "acceptance": {
+        "zh-CN": "对本次发布包补验多库多目标、类型/生成列、事务、主备/MGR、失败恢复与人工操作；按拓扑和小版本注明范围。",
+        "en": "Reverify current-release multi-database fan-out,types/generated columns,transactions,ASYNC/MGR,recovery/manual operations with explicit patch/topology scope."
+      },
+      "dependsOn": [
+        "SO-01"
+      ],
+      "evidence": [
+        "docs/validation.md",
+        "tests/matrix.sh"
+      ]
+    },
+    {
+      "id": "SO-04",
+      "epic": "SOURCE",
+      "priority": "P1",
+      "status": "NEW",
+      "title": {
+        "zh-CN": "MySQL 8.2 新增兼容与验收",
+        "en": "MySQL8.2 compatibility and acceptance"
+      },
+      "gap": {
+        "zh-CN": "未发现8.2专用完整真实验收记录，不能用8.0/8.4代替。",
+        "en": "No dedicated complete8.2 native evidence found;8.0/8.4 cannot substitute."
+      },
+      "acceptance": {
+        "zh-CN": "提供可复现8.2夹具/真实环境、版本探测、连接认证、状态命令、binlog事件和首个完整同步/恢复矩阵；不能只增加版本字符串或通过JDBC连接。",
+        "en": "Provide reproducible8.2 environment,version/auth/status/binlog handling and a complete first sync/recovery matrix;string matching/JDBC connectivity alone is insufficient."
+      },
+      "dependsOn": [
+        "SO-01"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/platform/AdapterCatalog.java",
+        "tests/matrix.sh"
+      ]
+    },
+    {
+      "id": "SO-05",
+      "epic": "SOURCE",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "MySQL 8.4 扩展兼容与回归",
+        "en": "MySQL8.4 expanded compatibility"
+      },
+      "gap": {
+        "zh-CN": "8.4已有代表性V3/恢复证据，但不是所有日志特性、认证、拓扑和目标组合。",
+        "en": "Representative8.4 V3/recovery evidence is not every log/auth/topology/destination combination."
+      },
+      "acceptance": {
+        "zh-CN": "在当前发布包复验已支持档案，列明未标记/带标记GTID、匿名事务、行镜像、压缩/部分JSON等能力支持或拒绝，不把版本名称等同所有特性完成。",
+        "en": "Reverify supported current-release profiles and declare tagged/untagged GTID,anonymous events,row images,compression/partial-JSON capabilities or refusal;version labels are not blanket feature acceptance."
+      },
+      "dependsOn": [
+        "SO-01"
+      ],
+      "evidence": [
+        "docs/validation.md",
+        "docs/zh-CN/pipeline-v3.md"
+      ]
+    },
+    {
+      "id": "SO-06",
+      "epic": "SOURCE",
+      "priority": "P1",
+      "status": "NEW",
+      "title": {
+        "zh-CN": "PostgreSQL 源适配器",
+        "en": "PostgreSQL source adapter"
+      },
+      "gap": {
+        "zh-CN": "能力目录仅PLANNED，PG目标驱动不等于PG源。",
+        "en": "Catalog says PLANNED;a PG sink driver is not a PG source."
+      },
+      "acceptance": {
+        "zh-CN": "完成一致性快照与LSN衔接、逻辑复制槽/发布、事务顺序/重复去重、Replica Identity前镜像、类型/DDL及故障恢复；槽/WAL丢失和切主按确切版本验证；GUI/CLI/文档可用。",
+        "en": "Implement consistent snapshot/LSN handoff,slots/publications,ordering/replay,replica identity,types/DDL and recovery;verify WAL/slot loss/promotion per version;expose GUI/CLI/docs."
+      },
+      "dependsOn": [
+        "SO-01"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/platform/AdapterCatalog.java",
+        "sync-app/src/main/java/io/rivomesh/cdc/SourceAdapter.java"
+      ]
+    },
+    {
+      "id": "SO-07",
+      "epic": "SOURCE",
+      "priority": "P1",
+      "status": "NEW",
+      "title": {
+        "zh-CN": "Oracle 源适配器",
+        "en": "Oracle source adapter"
+      },
+      "gap": {
+        "zh-CN": "能力目录仅PLANNED，尚无原生全量/增量实现。",
+        "en": "Catalog says PLANNED;no native snapshot/CDC implementation."
+      },
+      "acceptance": {
+        "zh-CN": "确定并记录LogMiner/XStream等路线、版本/权限/驱动分发条件；实现SCN一致性快照、提交/回滚、redo/归档、DBID/incarnation识别、断点与重复恢复，逐项验证LOB、字符集、PDB/RAC等范围。",
+        "en": "Specify capture route,versions,privileges and driver distribution conditions;implement SCN snapshot,commit/rollback,redo/archive,DB identity/incarnation,checkpoint/replay;verify LOB,charset,PDB/RAC scope explicitly."
+      },
+      "dependsOn": [
+        "SO-01"
+      ],
+      "evidence": [
+        "sync-app/src/main/java/io/rivomesh/platform/AdapterCatalog.java"
+      ]
+    },
+    {
+      "id": "JV-01",
+      "epic": "JAVA",
+      "priority": "P0",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "Java 8/11/17/21/25 可运行发布",
+        "en": "Java8/11/17/21/25 runnable releases"
+      },
+      "gap": {
+        "zh-CN": "主代码Java8兼容且有旧包10项SQL矩阵，当前全功能发布未覆盖。",
+        "en": "Java8 baseline and an older ten-profile SQL matrix exist;current full release is not covered."
+      },
+      "acceptance": {
+        "zh-CN": "同一候选版本的控制器/Agent/Worker分别在五个JDK实际启动，报告真实JVM版本、包SHA、架构与所用依赖；Java8代码级别和驱动运行要求可核验。",
+        "en": "The candidate controller/agent/worker actually starts on all five JDKs with real JVM version,artifact hash,architecture and dependencies recorded;Java8 class/driver requirements are verified."
+      },
+      "dependsOn": [],
+      "evidence": [
+        "docs/zh-CN/performance.md",
+        "docs/benchmarks/2026-11-15-runtime/matrix.json"
+      ]
+    },
+    {
+      "id": "JV-02",
+      "epic": "JAVA",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "源/目标/恢复跨JDK矩阵",
+        "en": "Cross-JDK source/sink/recovery matrix"
+      },
+      "gap": {
+        "zh-CN": "已有十项只覆盖单主键ASCII表和PG目标，不覆盖全部连接器。",
+        "en": "Ten profiles cover one keyed ASCII table/PG sink,not all adapters."
+      },
+      "acceptance": {
+        "zh-CN": "每个批准的源档案与五JDK至少验证全量、增量、重启和内容一致；目标驱动、消息SDK、TLS、JSON/无主键、集群、修复/跳过单独登记，未跑不得标记通过。",
+        "en": "Each approved source profile crosses five JDKs for snapshot,CDC,restart and equality;record separate adapter/SDK/TLS/object/cluster/recovery gates and never label unrun combinations passed."
+      },
+      "dependsOn": [
+        "JV-01",
+        "SO-02",
+        "SO-03",
+        "SO-04",
+        "SO-05",
+        "SO-06",
+        "SO-07"
+      ],
+      "evidence": [
+        "docs/zh-CN/performance.md"
+      ]
+    },
+    {
+      "id": "JV-03",
+      "epic": "JAVA",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "驱动隔离、依赖与安全协议兼容",
+        "en": "Driver isolation,dependencies and TLS compatibility"
+      },
+      "gap": {
+        "zh-CN": "已有厂商SDK隔离和完整包检查，缺全部JDK组合验证。",
+        "en": "Vendor isolation/artifact checks exist without all-JDK coverage."
+      },
+      "acceptance": {
+        "zh-CN": "验证服务加载、反射/模块限制、认证/TLS/证书、连接重建、精度和厂商驱动最低JDK；不可兼容组合在预检和矩阵明确拒绝，不能只靠编译通过。",
+        "en": "Verify service loading,reflection/modules,auth/TLS/certificates,reconnect,precision and vendor minimum JDK;incompatible combinations are explicitly refused,not inferred from compilation."
+      },
+      "dependsOn": [
+        "JV-01"
+      ],
+      "evidence": [
+        "tests/verify-artifact.py",
+        "docs/zh-CN/performance.md"
+      ]
+    },
+    {
+      "id": "JV-04",
+      "epic": "JAVA",
+      "priority": "P1",
+      "status": "NEW",
+      "title": {
+        "zh-CN": "多JDK部署及混合版本升级",
+        "en": "Multi-JDK deployment and mixed-version upgrades"
+      },
+      "gap": {
+        "zh-CN": "现有基准可选JRE，生产发布/集群升级策略未完整验收。",
+        "en": "Benchmarks select JREs;production/mixed-cluster upgrade policies are not accepted."
+      },
+      "acceptance": {
+        "zh-CN": "提供五JDK部署档案和能力调度限制，验证混合节点间命令/事件/状态兼容与滚动升级；不支持回退时明确拒绝并保留恢复路径。",
+        "en": "Provide five-JDK deployment profiles/placement constraints and verify command,event,state and rolling-upgrade compatibility;unsupported downgrade is refused with recovery guidance."
+      },
+      "dependsOn": [
+        "CP-04",
+        "JV-02",
+        "JV-03",
+        "LG-08"
+      ],
+      "evidence": [
+        "docs/zh-CN/performance.md",
+        "deploy/helm/rivomesh/values.yaml"
+      ]
+    },
+    {
+      "id": "DO-01",
+      "epic": "DOCS",
+      "priority": "P0",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "双语SDD基线与范围可追踪",
+        "en": "Bilingual traceable SDD baseline"
+      },
+      "gap": {
+        "zh-CN": "本轮建立v0.1基线；详细模块设计、规格变更管理和实现证据闭环仍需完成。",
+        "en": "This change creates the v0.1 inventory;module designs,spec change control and implementation evidence closure remain open."
+      },
+      "acceptance": {
+        "zh-CN": "每项需求有稳定ID、现状、未完成点、依赖、优先级、验收和任务；中英文ID一致；规格变化有记录，旧验收不可冒充新范围通过。",
+        "en": "Each requirement has stable ID,status,gap,dependencies,priority,acceptance and task;ZH/EN IDs match and changes preserve evidence scope."
+      },
+      "dependsOn": [],
+      "evidence": [
+        "docs/zh-CN/requirements-and-decisions.md",
+        "docs/zh-CN/implementation-status.md"
+      ]
+    },
+    {
+      "id": "DO-02",
+      "epic": "DOCS",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "四类部署与多节点运维文档",
+        "en": "Deployment and cluster operations docs"
+      },
+      "gap": {
+        "zh-CN": "现有Linux/Docker/Helm/原生K8s文件未覆盖新集群控制与会话模型。",
+        "en": "Existing deployment artifacts do not cover new cluster control/session models."
+      },
+      "acceptance": {
+        "zh-CN": "提供单机及多节点四类可运行示例，说明控制/日志/会话/报告存储、Secret/TLS、节点注册排空、备份恢复升级和无独立存储边界；K8s实机另有证据。",
+        "en": "Provide runnable standalone/cluster examples for four deployment paths with stores,secrets/TLS,enrollment/drain,backup/restore/upgrades and local-storage boundaries;live K8s requires separate evidence."
+      },
+      "dependsOn": [
+        "CP-07",
+        "SE-04",
+        "JV-04",
+        "LG-05",
+        "LG-06"
+      ],
+      "evidence": [
+        "deploy/helm/rivomesh",
+        "deploy/kubernetes",
+        "docs/zh-CN/console-and-deployment.md"
+      ]
+    },
+    {
+      "id": "DO-03",
+      "epic": "DOCS",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "恢复场景和FAQ完整手册",
+        "en": "Recovery scenarios and FAQ"
+      },
+      "gap": {
+        "zh-CN": "现有校验/共同点修复FAQ不能覆盖新跳过、补数据与跨节点故障。",
+        "en": "Existing reconciliation FAQ does not cover new skip,patch and distributed faults."
+      },
+      "acceptance": {
+        "zh-CN": "逐场景描述现象、原因、界面/API操作、执行前后断点、缺口、幂等/撤销边界；覆盖源切主、日志丢失、SQL错误、确认丢失、节点/存储故障、会话撤销和人工恢复。",
+        "en": "Each scenario states symptoms,cause,UI/API steps,positions,gaps,idempotency/undo limits across promotion,log loss,SQL/ack,node/storage,session and manual recovery."
+      },
+      "dependsOn": [
+        "RC-09",
+        "RC-10",
+        "SE-05"
+      ],
+      "evidence": [
+        "docs/zh-CN/managed-repair.md",
+        "docs/recovery.md"
+      ]
+    },
+    {
+      "id": "DO-04",
+      "epic": "DOCS",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "配置/API/兼容性与升级文档",
+        "en": "Configuration/API/compatibility and upgrade docs"
+      },
+      "gap": {
+        "zh-CN": "已有部分手册，缺新接口与统一源/目标/JDK档案索引。",
+        "en": "Partial handbooks lack new APIs and a unified profile index."
+      },
+      "acceptance": {
+        "zh-CN": "配置字段、权限、状态码、请求/命令/计划版本、Source坐标、目标一致性及源×目标×JDK矩阵都有对应样例和实测状态；增加或改字段同时更新双语文档。",
+        "en": "Document configuration,grants,codes,request/command/plan versions,source coordinates,consistency and source/sink/JDK profiles with examples/evidence;schema changes update both languages."
+      },
+      "dependsOn": [
+        "SO-01",
+        "JV-02",
+        "CP-03"
+      ],
+      "evidence": [
+        "docs/zh-CN/pipeline-v3.md",
+        "docs/en/validation.md"
+      ]
+    },
+    {
+      "id": "DO-05",
+      "epic": "DOCS",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "文档和证据发布门禁",
+        "en": "Documentation and evidence release gates"
+      },
+      "gap": {
+        "zh-CN": "已有验收归档/哈希及预览检查，缺覆盖所有需求的统一门禁。",
+        "en": "Archives/hash/preview checks exist without a complete requirement release gate."
+      },
+      "acceptance": {
+        "zh-CN": "链接/配置示例/API/中英文覆盖检查通过；每个完成项关联候选包SHA及真实环境证据；DOM不代替视觉，静态YAML不代替实机，构建通过不代替适配器验收。",
+        "en": "Check links,examples,APIs and bilingual coverage;completion links candidate hash/native evidence;DOM is not visual,static YAML is not live deployment,and builds are not adapter acceptance."
+      },
+      "dependsOn": [
+        "DO-01",
+        "DO-02",
+        "DO-03",
+        "DO-04",
+        "LG-09"
+      ],
+      "evidence": [
+        "tests/verify-artifact.py",
+        "docs/verification/2026-11-16-managed-repair/README.md"
+      ]
+    },
+    {
+      "id": "LG-01",
+      "epic": "CARRYOVER",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "国产事务库兼容矩阵",
+        "en": "Domestic transactional database matrix"
+      },
+      "gap": {
+        "zh-CN": "openGauss/达梦/金仓/GBase8c为首批档案；分布式GaussDB、OceanBase完整恢复及GBase8a/8s等未完成。",
+        "en": "Initial openGauss/DM/Kingbase/GBase8c profiles exist;distributed GaussDB,complete OceanBase recovery and GBase8a/8s remain open."
+      },
+      "acceptance": {
+        "zh-CN": "按产品/版本/模式/分布键/索引/驱动/JDK记录完整同步恢复及补偿/跳过能力；商业分布式实机单独验收，不能以PG协议连通替代。",
+        "en": "Record sync/recovery/manual capabilities by product,version,mode,distribution/index/driver/JDK;commercial distributed hardware is separately accepted,not inferred from PG protocol connectivity."
+      },
+      "dependsOn": [
+        "JV-01"
+      ],
+      "evidence": [
+        "docs/zh-CN/implementation-status.md",
+        "docs/zh-CN/gaussdb-index-policy.md"
+      ]
+    },
+    {
+      "id": "LG-02",
+      "epic": "CARRYOVER",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "非空接管、约束恢复、切换回切",
+        "en": "Nonempty adoption,constraints,cutover/failback"
+      },
+      "gap": {
+        "zh-CN": "当前首用目标要求为空，修复成功也不是业务切换完成。",
+        "en": "Initial destinations must be empty;repair completion is not cutover."
+      },
+      "acceptance": {
+        "zh-CN": "实现非空目标差异计划/校验、UNIQUE等约束重建、最终源屏障、业务写入交接及回切条件；双写/双向复制单独定义，不隐含承诺无冲突。",
+        "en": "Implement adoption/difference planning,constraint restoration,final source cut,write handoff and failback conditions;dual-write/bidirectional conflict policy is separately specified."
+      },
+      "dependsOn": [
+        "RC-09",
+        "SO-01"
+      ],
+      "evidence": [
+        "docs/zh-CN/platform-design.md",
+        "docs/zh-CN/gaussdb-index-policy.md"
+      ]
+    },
+    {
+      "id": "LG-03",
+      "epic": "CARRYOVER",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "ClickHouse/Doris/Hive生产档案",
+        "en": "ClickHouse/Doris/Hive production profiles"
+      },
+      "gap": {
+        "zh-CN": "首批物化/恢复已有证据，集群/TLS/权限/容量/全部JDK和新恢复语义未完成。",
+        "en": "Initial materialization/recovery exists;cluster/security/capacity/JDK/new recovery profiles remain open."
+      },
+      "acceptance": {
+        "zh-CN": "各产品按真实可见水位、去重/批次回执验证重启、旧备份、集群故障和缺口；不能承诺普通SQL跨表事务语义。",
+        "en": "Verify visibility,dedup/batch receipts,restart,old-backup,cluster and gaps per product without claiming ordinary SQL cross-table atomicity."
+      },
+      "dependsOn": [
+        "JV-01"
+      ],
+      "evidence": [
+        "docs/zh-CN/clickhouse-v3.md",
+        "docs/zh-CN/doris-v3.md",
+        "docs/zh-CN/hive-v3.md"
+      ]
+    },
+    {
+      "id": "LG-04",
+      "epic": "CARRYOVER",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "全部消息目标的集群与恢复协议",
+        "en": "Queue cluster and recovery profiles"
+      },
+      "gap": {
+        "zh-CN": "Kafka/Pulsar/RabbitMQ/RocketMQ/Classic/Artemis/Redis Streams/NATS JetStream已有首批传输，完整集群/TLS/容量仍缺。",
+        "en": "Initial transports exist for all confirmed queues;complete cluster/TLS/capacity coverage is open."
+      },
+      "acceptance": {
+        "zh-CN": "每个目标验证确认丢失、Broker选主、持久回执、资源丢失、消费者去重/积压以及新跳过缺口协议，明确至少一次及消费完成边界。",
+        "en": "Each queue verifies lost confirmations,election,durable receipts,resource loss,consumer dedup/backlog and skip-gap protocol with honest delivery/consumption boundaries."
+      },
+      "dependsOn": [
+        "JV-01"
+      ],
+      "evidence": [
+        "docs/zh-CN/messaging-v3.md",
+        "docs/zh-CN/classic-v3.md"
+      ]
+    },
+    {
+      "id": "LG-05",
+      "epic": "CARRYOVER",
+      "priority": "P0",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "可选存储和跨节点数据可达性",
+        "en": "Optional storage and cross-node reachability"
+      },
+      "gap": {
+        "zh-CN": "已有本地/外部日志，但本地权威文件、报告、会话、控制元数据的迁移/HA边界不统一。",
+        "en": "Local/external journals exist;authority/reports/sessions/control-store relocation and HA boundaries are not unified."
+      },
+      "acceptance": {
+        "zh-CN": "无独立存储时明确持久卷/节点绑定与磁盘丢失边界；外部/共享存储按能力验收；跨节点迁移前验证日志、原事件、报告和密钥可达，不可只搬游标；不强制所有部署新增独立日志服务。",
+        "en": "Local mode documents durable volume/pinning/disk-loss limits;external/shared modes are accepted per capability;move verifies logs,evidence,reports and secrets,not just cursors;independent journal infrastructure is not mandatory for every deployment."
+      },
+      "dependsOn": [
+        "CP-02"
+      ],
+      "evidence": [
+        "docs/zh-CN/pipeline-v3.md",
+        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java"
+      ]
+    },
+    {
+      "id": "LG-06",
+      "epic": "CARRYOVER",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "真实K8s/CSI与节点故障验收",
+        "en": "Live K8s/CSI and node-fault acceptance"
+      },
+      "gap": {
+        "zh-CN": "Helm/原生清单通过静态检查，不能证明真实集群安全。",
+        "en": "Helm/native static checks do not establish live-cluster safety."
+      },
+      "acceptance": {
+        "zh-CN": "在真实集群验证升级、扩缩、Pod/节点故障、RWO/CSI挂载重连、Secret轮换及旧owner隔离，发布实际配置和证据。",
+        "en": "Verify upgrade/scale,pod/node failure,RWO/CSI remount,secret rotation and stale-owner fencing on a real cluster with published configuration/evidence."
+      },
+      "dependsOn": [
+        "CP-04",
+        "CP-07",
+        "LG-05"
+      ],
+      "evidence": [
+        "deploy/helm/rivomesh",
+        "deploy/kubernetes"
+      ]
+    },
+    {
+      "id": "LG-07",
+      "epic": "CARRYOVER",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "海量对象、大事务和硬件性能标准",
+        "en": "Large catalogs,transactions and hardware standards"
+      },
+      "gap": {
+        "zh-CN": "有小规模基准工具，超大事务分片、目录分页、有界缓存与容量标准未完整完成。",
+        "en": "Small benchmark tools exist;large-transaction/catalog/cache/capacity standards remain incomplete."
+      },
+      "acceptance": {
+        "zh-CN": "限制内存/磁盘并处理大事务、海量表和慢目标；记录CPU/内存/磁盘/网络/负载与多轮结果，不线性外推，不以行数一致替代数据一致。",
+        "en": "Bound memory/disk for large transactions/catalogs/slow sinks and publish multi-run hardware/workload results without linear extrapolation or count-only correctness."
+      },
+      "dependsOn": [
+        "JV-02",
+        "LG-05"
+      ],
+      "evidence": [
+        "docs/zh-CN/performance.md",
+        "tests/benchmark.py"
+      ]
+    },
+    {
+      "id": "LG-08",
+      "epic": "CARRYOVER",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "历史DDL、类型、索引与状态迁移",
+        "en": "Historical DDL,types,indexes and state migration"
+      },
+      "gap": {
+        "zh-CN": "已有白名单对象、UNIQUE/GSI转换和v2兼容；完整动态DDL、复杂类型及显式迁移/回退仍缺。",
+        "en": "Supported objects/index conversion and v2 compatibility exist;full dynamic DDL,types and explicit migration/rollback remain open."
+      },
+      "acceptance": {
+        "zh-CN": "对象变化有历史schema和计划，身份键不降级；发布v2/v3/新控制与缺口状态迁移、备份/回退或安全拒绝方案；各产品不支持项明确。",
+        "en": "Preserve schema history/plans and identity keys;publish v2/v3/new control-gap schema migrations,backup/rollback or safe refusal with product-specific limits."
+      },
+      "dependsOn": [
+        "SO-01"
+      ],
+      "evidence": [
+        "docs/zh-CN/pipeline-v3.md",
+        "docs/zh-CN/rename-migration.md"
+      ]
+    },
+    {
+      "id": "LG-09",
+      "epic": "CARRYOVER",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "报告目录、保留清理与真实浏览器验收",
+        "en": "Report retention and real-browser acceptance"
+      },
+      "gap": {
+        "zh-CN": "已有摘要/详情和DOM/HTTP，缺完整目录、scratch清理、视觉与可访问性证据。",
+        "en": "Summaries/details/DOM/HTTP exist;full catalogs,cleanup,visual/accessibility evidence do not."
+      },
+      "acceptance": {
+        "zh-CN": "提供授权报告/凭据检索、保留与活动文件保护；真实浏览器验证跨节点、刷新登录、计划确认、错误恢复和大表分页，补齐可访问性检查。",
+        "en": "Provide authorized report/receipt search,retention and active-file protection;real browsers verify cluster/session/confirmation/recovery/pagination and accessibility."
+      },
+      "dependsOn": [
+        "CP-06",
+        "SE-05",
+        "RC-09"
+      ],
+      "evidence": [
+        "docs/verification/2026-11-16-managed-repair/README.md",
+        "docs/zh-CN/managed-validation.md"
+      ]
+    },
+    {
+      "id": "LG-10",
+      "epic": "CARRYOVER",
+      "priority": "P2",
+      "status": "PARTIAL",
+      "title": {
+        "zh-CN": "外部身份、不可变审计与Apache准备",
+        "en": "External identity,immutable audit and Apache preparation"
+      },
+      "gap": {
+        "zh-CN": "本地账号及链式审计已有；OIDC/目录、外部审计锚点、许可证/NOTICE/SBOM/贡献流程仍缺。",
+        "en": "Local accounts/hash-chained audit exist;external identity/anchors,licenses/NOTICE/SBOM/contribution workflows remain open."
+      },
+      "acceptance": {
+        "zh-CN": "核验外部身份映射/撤销、外部审计留存和依赖分发条件，补齐许可证NOTICE/SBOM/贡献文档；Rivomesh不自称已获Apache身份或商标权。",
+        "en": "Verify external identity/revocation,external audit and distribution conditions;complete license/NOTICE/SBOM/contribution docs without claiming Apache affiliation or trademark rights."
+      },
+      "dependsOn": [
+        "CP-05",
+        "SE-05"
+      ],
+      "evidence": [
+        "docs/zh-CN/account-management.md",
+        "docs/zh-CN/security-audit.md"
+      ]
+    }
+  ],
+  "candidateVerification": {
+    "artifactSha256": "e42cd685bcc9fb38a1e0e82819230ac58869a54f40c4417d39cd596337b91d11",
+    "rootTests": 223,
+    "releaseFirstAppTests": 221,
+    "domTests": 63,
+    "sessionRuntimeProfiles": 5,
+    "sessionRuntimeTestsPerProfile": 8,
+    "tlsProxy": true,
+    "registryProducts": [
+      "POSTGRESQL17",
+      "MYSQL8.4"
+    ],
+    "evidence": "docs/verification/2026-11-16-node-registry/README.md"
+  }
+}

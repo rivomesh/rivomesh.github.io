@@ -1,4 +1,4 @@
-name: Deploy documentation to GitHub Pages
+name: Build and publish RivoMesh website
 on:
   push:
     branches: [main]
@@ -6,7 +6,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: pages
+  group: github-pages
   cancel-in-progress: true
 jobs:
   build:
@@ -19,13 +19,13 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+      - run: npm test
       - run: npm run build
-      - run: npm run check:build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site/.vitepress/dist
-  deploy:
+          path: website/.vitepress/dist
+  publish:
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -33,8 +33,7 @@ jobs:
       id-token: write
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.publish.outputs.page_url }}
     steps:
-      - name: Deploy
-        id: deployment
+      - id: publish
         uses: actions/deploy-pages@v4

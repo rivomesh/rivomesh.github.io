@@ -1,23 +1,25 @@
 {
-  "name": "rivomesh-website",
+  "name": "rivomesh-docs",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": {
-    "node": ">=22"
-  },
+  "engines": {"node": ">=22"},
   "scripts": {
-    "dev": "vitepress dev site --host 127.0.0.1",
-    "build": "vitepress build site",
-    "preview": "vitepress preview site --host 127.0.0.1",
-    "docs:sync": "node scripts/sync-docs.mjs",
-    "check": "node scripts/check-content.mjs",
-    "check:build": "node scripts/check-build.mjs",
-    "media:generate": "node scripts/generate-media.mjs"
+    "dev": "vitepress dev website --host 127.0.0.1",
+    "docs:sync": "node tooling/import-source.mjs",
+    "build": "vitepress build website && node tooling/redirects.mjs && node tooling/verify-build.mjs",
+    "preview": "vitepress preview website --host 127.0.0.1",
+    "check": "node tooling/verify-content.mjs",
+    "test": "vitest run",
+    "media:generate": "node tooling/make-media.mjs"
   },
   "devDependencies": {
-    "sharp": "^0.35.5",
+    "@vitejs/plugin-vue": "5.2.4",
+    "@vue/test-utils": "2.4.6",
+    "jsdom": "26.1.0",
+    "sharp": "0.35.5",
     "vitepress": "1.6.4",
-    "vue": "^3.5.45"
+    "vitest": "2.1.9",
+    "vue": "3.5.45"
   }
 }
