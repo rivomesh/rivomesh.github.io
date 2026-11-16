@@ -12,11 +12,17 @@ RivoMesh 正在准备首次公开发布。欢迎从文档、可复现问题、�
 | 开发 | 按需求 ID 提交设计、实现和正反向/故障恢复验证 |
 | 视觉与体验 | 改善官网、图标、控制台可访问性和首次使用流程 |
 
-## 在哪里参与
+## 项目开发与反馈
 
-[网站 GitHub 仓库](https://github.com/rivomesh/rivomesh.github.io) · [网站问题反馈](https://github.com/rivomesh/rivomesh.github.io/issues) · [网站 Pull Requests](https://github.com/rivomesh/rivomesh.github.io/pulls)
+[GitHub 仓库](https://github.com/rivomesh/rivomesh) · [问题反馈](https://github.com/rivomesh/rivomesh/issues) · [Pull Requests](https://github.com/rivomesh/rivomesh/pulls)
 
-核心项目源码准备公开到 `zhangjiayin/rivomesh`。产品实现与连接器问题应在核心仓库公开后提交到对应入口；网站仓库用于网站与文档反馈。
+核心源码位于 `rivomesh/rivomesh`。同步功能、数据库连接器、配置与运行问题，请在核心仓库提交；建议先搜索已有问题并附上可复现步骤。
+
+## 官网与文档贡献
+
+[网站源码](https://github.com/rivomesh/rivomesh.github.io) · [网站与文档问题](https://github.com/rivomesh/rivomesh.github.io/issues) · [网站 Pull Requests](https://github.com/rivomesh/rivomesh.github.io/pulls)
+
+官网页面、导航、站内链接与文案反馈在网站仓库跟踪；从核心项目同步的运行手册应先在核心仓库修改，再同步到网站。
 
 ## 提交问题时提供什么
 

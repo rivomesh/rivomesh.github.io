@@ -6,7 +6,7 @@ sourcePath: docs/zh-CN/requirements-and-decisions.md
 
 更新日期：2026-11-16。English: [Requirements and decisions](/reference/en/requirements-and-decisions.html)。
 
-本文记录产品范围与实现状态。**已确认需求不等于当前版本已经支持**；运行方式以 [README](https://github.com/zhangjiayin/rivomesh/blob/main/README.md) 为准。平台设计、目标能力和场景扩展见[平台设计](/reference/zh-CN/platform-design.html)。
+本文记录产品范围与实现状态。**已确认需求不等于当前版本已经支持**；运行方式以 [README](https://github.com/rivomesh/rivomesh/blob/main/README.md) 为准。平台设计、目标能力和场景扩展见[平台设计](/reference/zh-CN/platform-design.html)。
 
 本次新增/明确范围及未完成事项采用[SDD基线 RM-SDD-001](/reference/sdd/001-control-recovery-compatibility/spec.html)：48项需求、任务及验收逐项追踪。当前代码事实以[实施状态](/reference/zh-CN/implementation-status.html)和证据为准。
 

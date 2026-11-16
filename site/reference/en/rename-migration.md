@@ -35,4 +35,4 @@ Moving the root does not update external file contents. Check relative paths aga
 
 The rename introduces no multi-source/multi-target/new-journal state format. Those changes require separate migrations, compatibility checks, and rollback plans; package changes alone cannot make incompatible checkpoints reusable.
 
-See [README](https://github.com/zhangjiayin/rivomesh/blob/main/README.md) and [validation](/reference/en/validation.html) for current operation, and [platform design](/reference/en/platform-design.html) for planned capabilities.
+See [README](https://github.com/rivomesh/rivomesh/blob/main/README.md) and [validation](/reference/en/validation.html) for current operation, and [platform design](/reference/en/platform-design.html) for planned capabilities.

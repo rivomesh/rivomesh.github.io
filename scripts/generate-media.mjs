@@ -18,7 +18,7 @@ const text=(x,y,t,size=28,color='#fff',weight=400)=>`<text x="${x}" y="${y}" fon
 const title=(k,t,sub)=>text(70,60,'RivoMesh  /  PRODUCT TOUR',15,'#82c7cb',600)+text(70,134,k+'  '+t,40,'#fff',650)+text(70,180,sub,20,'#add0d9')
 const footer=text(70,677,'0.1.0-SNAPSHOT · 发布前产品导览 · 截图来自本地开发预览',14,'#8fb8c5')
 const stages=[
- {title:'认识 RivoMesh',subtitle:'让业务数据，流向需要它的地方。',voice:'欢迎认识 RivoMesh。它是一个基于 Java 的数据同步项目，从 MySQL 出发，将已有数据和后续变化送到数据库、分析系统或消息系统。下面用五个步骤，了解怎样开始使用。',type:'flow'},
+ {title:'认识 RivoMesh',subtitle:'数据库全量同步与 CDC 增量同步',voice:'欢迎认识 RivoMesh。它是一个基于 Java 的数据同步项目，从 MySQL 出发，将已有数据和后续变化送到数据库、分析系统或消息系统。下面用五个步骤，了解怎样开始使用。',type:'flow'},
  {title:'准备连接与配置',subtitle:'准备测试源、独立空目标，并核对数据库日志与权限。',voice:'首先，准备 MySQL 测试源和一个独立的空目标。启动控制台后，通过任务向导填写源地址、数据库、目标映射和日志。源库需要满足 GTID 和完整行镜像要求，具体权限请由数据库管理员核对。',image:'task-wizard'},
  {title:'创建任务，观察进度',subtitle:'先检查，再启动；关注全量、积压与各目标确认状态。',voice:'保存配置后，先执行检查，再启动任务。控制台展示同步阶段、积压和目标状态。请在测试库验证新增、修改、删除与重启续传。这里展示的是真实开发预览，停止状态和数字不是运行效果的承诺。',image:'console-overview'},
  {title:'校验数据，按计划恢复',subtitle:'先核对差异，管理员审阅修复计划，再显式恢复。',voice:'遇到目标错误，先修复原因，再重试原事务。受支持的 MySQL 和 PostgreSQL 目标，还可以在共同校验点比较数据，由管理员审阅修复计划后执行。修复不会自动恢复同步，也不表示业务切换已经完成。',type:'repair'},

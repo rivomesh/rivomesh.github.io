@@ -131,7 +131,7 @@ This change inventories requirements,gaps,tasks and acceptance;it does not imple
 | JV-03 | [verify-artifact.py](/reference-files/tests/verify-artifact.py.txt) / [performance.md](/reference/zh-CN/performance.html) |
 | JV-04 | [performance.md](/reference/zh-CN/performance.html) / [values.yaml](/reference-files/deploy/helm/rivomesh/values.yaml) |
 | DO-01 | [requirements-and-decisions.md](/reference/zh-CN/requirements-and-decisions.html) / [implementation-status.md](/reference/zh-CN/implementation-status.html) |
-| DO-02 | [rivomesh](https://github.com/zhangjiayin/rivomesh/tree/main/deploy/helm/rivomesh) / [kubernetes](https://github.com/zhangjiayin/rivomesh/tree/main/deploy/kubernetes) / [console-and-deployment.md](/reference/zh-CN/console-and-deployment.html) |
+| DO-02 | [rivomesh](https://github.com/rivomesh/rivomesh/tree/main/deploy/helm/rivomesh) / [kubernetes](https://github.com/rivomesh/rivomesh/tree/main/deploy/kubernetes) / [console-and-deployment.md](/reference/zh-CN/console-and-deployment.html) |
 | DO-03 | [managed-repair.md](/reference/zh-CN/managed-repair.html) / [recovery.md](/reference/recovery.html) |
 | DO-04 | [pipeline-v3.md](/reference/zh-CN/pipeline-v3.html) / [validation.md](/reference/en/validation.html) |
 | DO-05 | [verify-artifact.py](/reference-files/tests/verify-artifact.py.txt) / [README.md](/reference/verification/2026-11-16-managed-repair/README.html) |
@@ -140,7 +140,7 @@ This change inventories requirements,gaps,tasks and acceptance;it does not imple
 | LG-03 | [clickhouse-v3.md](/reference/zh-CN/clickhouse-v3.html) / [doris-v3.md](/reference/zh-CN/doris-v3.html) / [hive-v3.md](/reference/zh-CN/hive-v3.html) |
 | LG-04 | [messaging-v3.md](/reference/zh-CN/messaging-v3.html) / [classic-v3.md](/reference/zh-CN/classic-v3.html) |
 | LG-05 | [pipeline-v3.md](/reference/zh-CN/pipeline-v3.html) / [JdbcJournal.java](/reference-files/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java.txt) |
-| LG-06 | [rivomesh](https://github.com/zhangjiayin/rivomesh/tree/main/deploy/helm/rivomesh) / [kubernetes](https://github.com/zhangjiayin/rivomesh/tree/main/deploy/kubernetes) |
+| LG-06 | [rivomesh](https://github.com/rivomesh/rivomesh/tree/main/deploy/helm/rivomesh) / [kubernetes](https://github.com/rivomesh/rivomesh/tree/main/deploy/kubernetes) |
 | LG-07 | [performance.md](/reference/zh-CN/performance.html) / [benchmark.py](/reference-files/tests/benchmark.py.txt) |
 | LG-08 | [pipeline-v3.md](/reference/zh-CN/pipeline-v3.html) / [rename-migration.md](/reference/zh-CN/rename-migration.html) |
 | LG-09 | [README.md](/reference/verification/2026-11-16-managed-repair/README.html) / [managed-validation.md](/reference/zh-CN/managed-validation.html) |

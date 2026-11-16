@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto'
 const source = path.resolve(process.argv[2] || '../rivomesh')
 const destination = path.resolve('site/reference')
 const publicDir = path.resolve('site/public/reference-files')
-const sourceRepo = 'https://github.com/zhangjiayin/rivomesh/blob/main/'
+const sourceRepo = 'https://github.com/rivomesh/rivomesh/blob/main/'
 async function walk(dir) {
   const result = []
   for (const e of await fs.readdir(dir, { withFileTypes: true })) {

@@ -6,7 +6,7 @@ sourcePath: docs/en/requirements-and-decisions.md
 
 Updated: 2026-11-16. 中文：[需求与决策](/reference/zh-CN/requirements-and-decisions.html).
 
-This document records scope and implementation status. **Accepted requirements are not released features.** See the [README](https://github.com/zhangjiayin/rivomesh/blob/main/README.md) for current operation and [platform design](/reference/en/platform-design.html) for capabilities and scenarios.
+This document records scope and implementation status. **Accepted requirements are not released features.** See the [README](https://github.com/rivomesh/rivomesh/blob/main/README.md) for current operation and [platform design](/reference/en/platform-design.html) for capabilities and scenarios.
 
 New/clarified scope and gaps use [SDD baseline RM-SDD-001](/reference/sdd/001-control-recovery-compatibility/spec.en.html):48traceable requirements,tasks and acceptance contracts. Current behavior remains governed by [implementation status](/reference/en/implementation-status.html) and evidence.
 

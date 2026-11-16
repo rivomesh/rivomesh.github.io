@@ -2,6 +2,8 @@
 
 RivoMesh is a Java-based data synchronization project with resumable snapshots, MySQL CDC, multi-target delivery and a web console. The current version is **0.1.0-SNAPSHOT, a pre-release preview**.
 
+The source is available at [rivomesh/rivomesh](https://github.com/rivomesh/rivomesh).
+
 MySQL is the implemented source. PostgreSQL and Oracle source adapters remain planned. Target availability depends on the exact product, version and deployment profile; do not interpret a catalog entry as complete production certification.
 
 ## Operating manuals

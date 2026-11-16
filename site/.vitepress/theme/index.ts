@@ -7,6 +7,7 @@ import Roadmap from './components/Roadmap.vue'
 import DemoPlayer from './components/DemoPlayer.vue'
 import SourceNotice from './components/SourceNotice.vue'
 import './style.css'
+import './home-content.css'
 export default {
   extends:DefaultTheme,
   Layout:()=>h(DefaultTheme.Layout,null,{'doc-before':()=>h(SourceNotice)}),

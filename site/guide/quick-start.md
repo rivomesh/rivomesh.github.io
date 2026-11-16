@@ -4,7 +4,7 @@
 
 ## 1. 准备环境
 
-- 已取得 RivoMesh 源码；项目正在准备公开发布，源码发布入口见[获取与构建](/download)。
+- 从 [rivomesh/rivomesh](https://github.com/rivomesh/rivomesh) 取得源码，构建步骤见[获取与构建](/download)。
 - 已安装 JDK 8 和 Maven，执行构建的机器可访问 Maven 仓库。其他 JDK 档案见[兼容性说明](compatibility)。
 - 准备一个可访问的 MySQL 测试源和独立的 PostgreSQL / openGauss 测试目标。
 - 目标使用空业务表或允许建表的空 schema，管理 schema 与业务 schema 分开；目标表由同步服务独占写入。

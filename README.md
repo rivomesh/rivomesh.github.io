@@ -2,9 +2,11 @@
 
 RivoMesh 发布前官网，源码仓库目标为 <https://github.com/rivomesh/rivomesh.github.io>。
 
+首页以“RivoMesh · 数据库实时同步平台”说明产品定位，按核心功能、同步架构、应用场景、文档与获取、社区和路线图组织内容。核心源码与反馈入口为 <https://github.com/rivomesh/rivomesh>，官网与文档站的维护入口为本仓库。
+
 基于 VitePress 1.6，包含原创首页、连接器目录、SDD 交互路线图、中英文文档、站内本地检索、真实控制台截图、Logo / favicon，以及 100 秒中文配音产品视频。结构参考 [ShardingSphere](https://shardingsphere.apache.org/index_zh.html) 与 [SeaTunnel](https://seatunnel.apache.org/zh-CN/)，文案依据本地 RivoMesh 源码与 SDD，未使用第三方品牌图形或虚构用户数据。
 
-[首页预览截图](preview/homepage-desktop.png) · [网站验证记录](preview/verification.md)
+[初版首页截图（历史记录）](preview/homepage-desktop.png) · [网站验证记录](preview/verification.md)
 
 ## 本地运行
 

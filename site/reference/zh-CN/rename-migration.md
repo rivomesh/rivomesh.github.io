@@ -35,4 +35,4 @@ sourcePath: docs/zh-CN/rename-migration.md
 
 本次更名没有引入多目标/多源/新日志状态格式。未来引入这些能力必须单独设计状态迁移、兼容检查与回退，不能只改包名后复用新旧不同语义的断点。
 
-当前运行和真实数据库验证见 [README](https://github.com/zhangjiayin/rivomesh/blob/main/README.md) 与[验证记录](/reference/validation.html)。规划中的新功能见[完整方案](/reference/zh-CN/platform-design.html)。
+当前运行和真实数据库验证见 [README](https://github.com/rivomesh/rivomesh/blob/main/README.md) 与[验证记录](/reference/validation.html)。规划中的新功能见[完整方案](/reference/zh-CN/platform-design.html)。

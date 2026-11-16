@@ -6,9 +6,10 @@
 
 ## 从源码构建
 
-项目源码计划发布到 `zhangjiayin/rivomesh`。源码公开后，可从该仓库取得对应版本；当前已有本地源码的开发者可直接构建：
+项目源码位于 [rivomesh/rivomesh](https://github.com/rivomesh/rivomesh)。取得源码后，可在源码根目录构建：
 
 ```bash
+git clone https://github.com/rivomesh/rivomesh.git
 cd rivomesh
 mvn -s build/settings.xml verify
 ```
