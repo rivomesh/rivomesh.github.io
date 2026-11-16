@@ -34,8 +34,9 @@ async function fileLink(full) {
 }
 for (const [file,dest] of map) {
   const raw = await fs.readFile(file, 'utf8')
-  const links = [...raw.matchAll(/(!?\[[^\]\n]*\]\()([^\s)]+)(\))/g)]
-  let text = raw
+  const content = raw.replaceAll('zhangjiayin/rivomesh', 'rivomesh/rivomesh')
+  const links = [...content.matchAll(/(!?\[[^\]\n]*\]\()([^\s)]+)(\))/g)]
+  let text = content
   for (const m of links.reverse()) {
     const href=m[2]
     if (/^(?:https?:|mailto:|#|data:|\/)/.test(href)) continue
