@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-17T01:07:27.102Z",
+  "capturedAt": "2026-11-17T04:25:39.364Z",
   "version": "0.1.0-SNAPSHOT",
   "sourceRepository": "https://github.com/rivomesh/rivomesh",
   "documents": [
@@ -33,7 +33,7 @@
     },
     {
       "path": "docs/en/console-and-deployment.md",
-      "sha256": "aaa97c96202f667b4c859df2ca59e60a6fab903e72571b91ec4b3fca29669f58"
+      "sha256": "1d29d10dfa16a85dbd6dee88777df6d65bdbd2c85d2cfa00be107ffc66e806be"
     },
     {
       "path": "docs/en/development-preview.md",
@@ -48,6 +48,10 @@
       "sha256": "d9e5b11c80aab3f9d6b8ef5312bcfb0ee41a6dcac358b226b871534f9bc16587"
     },
     {
+      "path": "docs/en/execution-lifecycle.md",
+      "sha256": "52bd75c528e1439b4d8fd16485ee28e92c927de8bce6049ccf78406b23312185"
+    },
+    {
       "path": "docs/en/gaussdb-index-policy.md",
       "sha256": "b773404456447ce1b6f061e61fe019f5e06e2b134cee541464f7865116856eaa"
     },
@@ -57,7 +61,7 @@
     },
     {
       "path": "docs/en/global-control.md",
-      "sha256": "3f48e5ad0b1b5ae10f5bfd263877229773f18521cb721e5c26d7209d2d53df8d"
+      "sha256": "64894a1eadad85c8fd14cf803fa2538521b348cbc8073dadb1a38fcb5e7cbe4b"
     },
     {
       "path": "docs/en/hive-v3.md",
@@ -65,7 +69,7 @@
     },
     {
       "path": "docs/en/implementation-status.md",
-      "sha256": "005059a960b3cbc53195dccbeb73f358202380c33ecaf3a599c35d780f44b08d"
+      "sha256": "04204d3264ea3e226a001963bf1119967cb9091d9466e7d588688c72e447f6be"
     },
     {
       "path": "docs/en/kingbase-v3.md",
@@ -77,7 +81,7 @@
     },
     {
       "path": "docs/en/managed-validation.md",
-      "sha256": "3f86fec70e93dfedc7de01b0811b6ab8304cc335c2839df5a0261a1f1c50f07f"
+      "sha256": "2e15e05d2bd9882865aac3ea744d8d29aa88b1295cff980e5c38f668047566f7"
     },
     {
       "path": "docs/en/messaging-v3.md",
@@ -141,11 +145,11 @@
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/acceptance.en.md",
-      "sha256": "c4dcced8e13419346a3b3b867217842cff9e052215345a0bbe7baae53c59fb09"
+      "sha256": "6fa050af4b54b61591090368e2a01ca771029b01809a92d55719c46dc5b3e7a8"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/acceptance.md",
-      "sha256": "c0f52154480862b436f33e88ea208193b377ac3166cecfa7242ee18d0299304d"
+      "sha256": "5e31c7d5c7e50263a9b09bad59f1eae297452c1a4ff24be1459946035f955017"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/design-control-store.en.md",
@@ -156,12 +160,20 @@
       "sha256": "56fc18bb948f2ac9a0e702ae391dde5f685211da12cff56a7485b1d42f0853a3"
     },
     {
+      "path": "docs/sdd/001-control-recovery-compatibility/design-execution-lifecycle.en.md",
+      "sha256": "90c35519df2605c077bae2164eca3d9926f6558b23ff6f0e032bcebdddec5cc6"
+    },
+    {
+      "path": "docs/sdd/001-control-recovery-compatibility/design-execution-lifecycle.md",
+      "sha256": "2e8a523b3e2b6204feee7c9beb9b3eca50d8c63f585ce5ef36c9f1cf081273c5"
+    },
+    {
       "path": "docs/sdd/001-control-recovery-compatibility/design-global-control.en.md",
-      "sha256": "f7ff4693f4636d43e160d84b8cb2677c1cf8a5bf17dce8dcb275a556e6fc72a1"
+      "sha256": "f2a39ddd46f5435bfcc2feb2d7ed794aa73c29e11a853c362db98b81bb0db079"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/design-global-control.md",
-      "sha256": "67d0abca505f3fb6c96ae68c380db679a6ebd94c8d4df807e943e8aac7be4d44"
+      "sha256": "ec37258afd1f518acec1b71c0a11cf596e8831eea8682b2e2468b6d2863b0f06"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/design-sessions.en.md",
@@ -189,19 +201,19 @@
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/spec.en.md",
-      "sha256": "6656c14542996d33ee4369ab4ecefa390ad8c048b190350b0906a4dded17a8e7"
+      "sha256": "8e25ae6cdadc67d714a8198913f6185ba2f0492967014c73d5d45bf4f36f7a34"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/spec.md",
-      "sha256": "84ed763ffede1cd4b8e41e138b926f68203ede2c6f8834f3bfdb4b14ee0eaa7d"
+      "sha256": "4380bd01a2b46120780c01b834797857470316dfd82a16b355f19fb4da64ee67"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/tasks.en.md",
-      "sha256": "1d4ecf14d11d5fc2331a6b626773eee9dcd2c51ef2517c1b0dac40008d1471e3"
+      "sha256": "762a29fcceeef6d0fc559c9c1ffc3dfd85b01a3145fdcb5692d098cf2c6da44f"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/tasks.md",
-      "sha256": "3d197fe706b35b4a526c8b758781b1df3b929616570a1b15616fdaa43f3117e1"
+      "sha256": "e6ebee1bb55d8ba8f3140302bf333e7d5b16af0f9185106f2fe9687b20c8166b"
     },
     {
       "path": "docs/sdd/README.md",
@@ -308,8 +320,36 @@
       "sha256": "ca12ef593ffdb82b0e7e74c2843d7828b316b247af003dcf6edf64a09fbf62e7"
     },
     {
+      "path": "docs/verification/2026-11-17-execution-lifecycle/README.md",
+      "sha256": "735cf0a35fea2cc45e3110b0cf3ddd26c6274b0f24284b08c8ed77cd5f9dd9dd"
+    },
+    {
+      "path": "docs/verification/2026-11-17-execution-lifecycle/attempt-aae/README.md",
+      "sha256": "8460f5158edf7b1ca75b6367157b9405cee83df1a7efc6941bfa8a1bef4d7e83"
+    },
+    {
+      "path": "docs/verification/2026-11-17-execution-lifecycle/attempt-nonroot/README.md",
+      "sha256": "685fefa667b9823f42f7b9cc83336db2ebcd6a186b14fc2c31b79e0d256c51ba"
+    },
+    {
+      "path": "docs/verification/2026-11-17-global-configuration/README.md",
+      "sha256": "b80152198fb5565f475f4e84ce8e2de1ef16bc2b11470892fdb216456017e180"
+    },
+    {
       "path": "docs/verification/2026-11-17-global-control-foundations/README.md",
       "sha256": "bbe064915f153cbedbf30c67e29805706ca5bc5cbc19f4e6ebfd775c59418caa"
+    },
+    {
+      "path": "docs/verification/2026-11-17-global-maintenance/README.md",
+      "sha256": "8964326b9307cda51a2bd99eef49a5f0b049771202e8633d0cc535f9405964f1"
+    },
+    {
+      "path": "docs/verification/2026-11-17-global-routing/README.md",
+      "sha256": "f92faea2bf374dd1cb0c1aec37f5ad3fd22f2881a2bf9672338b79da2124f707"
+    },
+    {
+      "path": "docs/verification/2026-11-17-global-routing/attempt-4639/README.md",
+      "sha256": "7494998a789b852915a26b17e66b99c74cda5dd3c49c9d8d42ed9bbae041b2df"
     },
     {
       "path": "docs/zh-CN/account-management.md",
@@ -337,7 +377,7 @@
     },
     {
       "path": "docs/zh-CN/console-and-deployment.md",
-      "sha256": "7f32c2b407dde6570145af4ed3f88c99f4b554016d1465aebcff7887a6f1cca2"
+      "sha256": "bb08beb435e7ee6f8d17150a3cc49ac287032162a98cf0ff6795abdebf85ec3e"
     },
     {
       "path": "docs/zh-CN/development-preview.md",
@@ -352,6 +392,10 @@
       "sha256": "9e29bd64b2f78dd27407b763d4b95e696f6eaeb1cd2ff6e6733707839d59238d"
     },
     {
+      "path": "docs/zh-CN/execution-lifecycle.md",
+      "sha256": "797adc4b9367e4341b5d50f7b55ee0231a10b1a7e7e248132358f4d2721e5242"
+    },
+    {
       "path": "docs/zh-CN/gaussdb-index-policy.md",
       "sha256": "ddef38cb527146c68b19d4e4d4ad279cb5adc1844e6cd62cf8ff862292604b88"
     },
@@ -361,7 +405,7 @@
     },
     {
       "path": "docs/zh-CN/global-control.md",
-      "sha256": "7408ab3fdc5a5de38aac96ea2e3c673f6990656965036d38545d7cf513bfc288"
+      "sha256": "25254b0dda1d3ce6e5963ec240459463582d6ae03f92e7683a8b746eb156b883"
     },
     {
       "path": "docs/zh-CN/hive-v3.md",
@@ -369,7 +413,7 @@
     },
     {
       "path": "docs/zh-CN/implementation-status.md",
-      "sha256": "98b4699c2f71c0b8bb1c2ac7a5f262248495078a051e6ee76e835b1e4b3d9cb0"
+      "sha256": "21004dcb2c994599369efe999db119ddee51a6ddc75f85e09787efb2bdefa5dd"
     },
     {
       "path": "docs/zh-CN/kingbase-v3.md",
@@ -381,7 +425,7 @@
     },
     {
       "path": "docs/zh-CN/managed-validation.md",
-      "sha256": "10e40ab439e999527aa6ccaa165c14942568ad75547c365db466cfb539cb20c5"
+      "sha256": "7a1672bde38e3dda7ced560d7a54a452bbaf0cb0c6d0bdae3b647b5c6f97dd1d"
     },
     {
       "path": "docs/zh-CN/messaging-v3.md",
@@ -441,7 +485,16 @@
     "config/platform-rbac.yml",
     "config/dm-v3.yml",
     "config/doris-v3.yml",
+    "deploy/kubernetes/rivomesh-agent-a.yaml",
+    "deploy/kubernetes/rivomesh-controller-b.yaml",
+    "deploy/kubernetes/rivomesh-controller-a.yaml",
+    "config/platform-agent.example.yml",
+    "config/platform-controller.example.yml",
     "config/gbase8c-v3.yml",
+    "deploy/kubernetes/rivomesh-global-b.yaml",
+    "deploy/kubernetes/rivomesh-global-a.yaml",
+    "deploy/helm/rivomesh/values-global-control.yaml",
+    "config/platform-global.example.yml",
     "config/hive-v3.yml",
     "config/kingbase-v3.yml",
     "tests/artemis-broker.xml",
@@ -466,19 +519,35 @@
     "docs/verification/2026-11-16-shared-access/sdk-cache-manifest.json",
     "docs/verification/2026-11-16-shared-access/candidate-manifest.json",
     "docs/verification/2026-11-16-shared-access/attempt-b7/cdc-retained-progress.json",
+    "docs/verification/2026-11-17-execution-lifecycle/image-manifest.json",
+    "docs/verification/2026-11-17-execution-lifecycle/mysql-lifecycle-manifest.json",
+    "docs/verification/2026-11-17-execution-lifecycle/nonroot-lifecycle-manifest.json",
+    "docs/verification/2026-11-17-execution-lifecycle/runtime-manifest.json",
+    "docs/verification/2026-11-17-execution-lifecycle/candidate-manifest.json",
+    "docs/verification/2026-11-17-global-configuration/runtime-manifest.json",
+    "docs/verification/2026-11-17-global-configuration/candidate-manifest.json",
     "docs/verification/2026-11-17-global-control-foundations/sdk-cache-manifest.json",
     "docs/verification/2026-11-17-global-control-foundations/candidate-manifest.json",
+    "docs/verification/2026-11-17-global-maintenance/image-manifest.json",
+    "docs/verification/2026-11-17-global-maintenance/upgrade-manifest.json",
+    "docs/verification/2026-11-17-global-maintenance/cdc-manifest.json",
+    "docs/verification/2026-11-17-global-maintenance/runtime-manifest.json",
+    "docs/verification/2026-11-17-global-maintenance/candidate-manifest.json",
+    "docs/verification/2026-11-17-global-routing/cdc-manifest.json",
+    "docs/verification/2026-11-17-global-routing/runtime-manifest.json",
+    "docs/verification/2026-11-17-global-routing/candidate-manifest.json",
+    "docs/verification/2026-11-17-global-routing/attempt-4639/failure-details.json",
     "config/platform.yml"
   ],
   "sourceCatalogSha256": "f49440e30a6ed758d135d18943a95edd704e7b93c38479ed3f00a25188a99942",
   "sdd": {
-    "version": "0.5",
-    "date": "2026-11-16",
+    "version": "0.6",
+    "date": "2026-11-17",
     "state": "IMPLEMENTING",
     "counts": {
-      "DONE": 6,
+      "DONE": 7,
       "PARTIAL": 33,
-      "NEW": 9
+      "NEW": 8
     }
   }
 }

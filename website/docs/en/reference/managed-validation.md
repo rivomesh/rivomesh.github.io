@@ -7,7 +7,7 @@ sourcePath: docs/en/managed-validation.md
 
 # Managed data validation
 
-The first management workflow supports SQL destination selection, time/staging budgets, durable background jobs, cancellation, sealed-source target retries and per-table summaries. **It does not implement business repair, manual skip, constraint rebuilding or cutover.** Managed HTTP/database acceptance is separate; earlier CLI/barrier acceptance cannot establish it.
+The first management workflow supports SQL destination selection, time/staging budgets, durable background jobs, cancellation, sealed-source target retries and per-table summaries. Validation does not change business rows; see [managed repair](/docs/en/reference/managed-repair.html) for the subsequent reviewed workflow. Manual skip, constraint rebuilding and cutover remain open. Managed HTTP/database acceptance is separate; earlier CLI/barrier acceptance cannot establish it.
 
 ## Use the console
 

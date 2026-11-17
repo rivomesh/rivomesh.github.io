@@ -1,0 +1,55 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.332
+RivoMesh is a Java-based database replication platform.
+
+00:00:05.332 --> 00:00:12.384
+It reads existing MySQL data and later changes, delivering them to databases, analytics systems or message brokers.
+
+00:00:12.384 --> 00:00:17.028
+Snapshots, incremental changes, durable journals and target acknowledgements form one pipeline.
+
+00:00:19.000 --> 00:00:24.956
+For your first run, prepare a small MySQL test source and an independent empty target.
+
+00:00:24.956 --> 00:00:31.117
+Build and start the console from source, then configure connections, database mappings and a journal in the wizard.
+
+00:00:31.117 --> 00:00:37.689
+Your database administrator should check GTID, full row images, replication and snapshot privileges.
+
+00:00:39.000 --> 00:00:42.177
+After saving the configuration, check it before starting.
+
+00:00:42.177 --> 00:00:46.625
+The console provides task, phase, backlog and target error views.
+
+00:00:46.625 --> 00:00:50.861
+Verify inserts, updates, deletes and restart recovery using your test database.
+
+00:00:50.861 --> 00:00:57.638
+These are original development preview screenshots. Their numbers are not performance or live synchronization evidence.
+
+00:00:59.000 --> 00:01:02.890
+When a target fails, fix the cause and retry the original transaction.
+
+00:01:02.890 --> 00:01:12.809
+Supported MySQL and PostgreSQL targets can compare data at a common checkpoint, then apply an administrator-reviewed repair plan.
+
+00:01:12.809 --> 00:01:17.477
+After repair, inspect the results and explicitly resume. Business cutover requires a separate plan.
+
+00:01:19.000 --> 00:01:21.503
+The user guide follows the operations you need to perform.
+
+00:01:21.503 --> 00:01:29.011
+Start with installation and sign-in, create a task, then learn to inspect progress, handle errors and validate data.
+
+00:01:29.011 --> 00:01:32.139
+Local search helps you find the next step.
+
+00:01:32.139 --> 00:01:35.894
+Check the connector profile before connecting a different database.
+
+00:01:35.894 --> 00:01:40.273
+Complete a small evaluation before expanding your scope.

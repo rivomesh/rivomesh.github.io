@@ -1,0 +1,10 @@
+{
+  "Id": "sha256:82f6319042eae518968c30a2bd1dbb3b97181bf8a11eda74d0faf167dc78c04f",
+  "Architecture": "arm64",
+  "Os": "linux",
+  "RepoTags": [
+    "rivomesh:execution-admission-aa17cf5b6d9c"
+  ],
+  "artifactSha256": "aa17cf5b6d9c21e302af818c5f48ff7c46bbb32d3a532ab1fa0491abe43403bf",
+  "user": "10001:10001"
+}

@@ -7,15 +7,15 @@ sourcePath: docs/en/node-registry.md
 
 # Shared node registry and heartbeat
 
-For current deployment, see the [multi-node guide](/docs/en/start/multi-node.html). Accounts, sessions and audit can now be shared by explicitly enabling [shared access](/docs/en/reference/shared-access.html). Registry-only installations keep them local. Public task operations remain local; global task routing and control-plane HA are still being integrated.
+For current deployment, see the [multi-node guide](/docs/en/start/multi-node.html). Accounts, sessions and audit can now be shared by explicitly enabling [shared access](/docs/en/reference/shared-access.html). Registry-only installations keep them local. Task operations are local by default. Optional fixed-owner [global control](/docs/en/reference/global-control.html) is integrated; explicit controller/Agent separation has initial acceptance, while automatic relocation and the full HA matrix remain open.
 
-中文：[节点目录](/docs/zh/reference/node-registry.html). Contract: [CP-01](/docs/en/sdd/design-control-store.html). This feature shares node observations. Accounts, sessions and audit can be shared by explicitly enabling [shared access](/docs/en/reference/shared-access.html); public task/configuration operations remain local. Global remote control and control-plane failover are unfinished.
+中文：[节点目录](/docs/zh/reference/node-registry.html). Contract: [CP-01](/docs/en/sdd/design-control-store.html). This feature shares node observations. Accounts, sessions and audit can be shared by explicitly enabling [shared access](/docs/en/reference/shared-access.html); task/configuration operations are local by default. Optional fixed-owner [global control](/docs/en/reference/global-control.html) is integrated; explicit controller/Agent separation has initial acceptance, while automatic relocation and additional failover profiles remain open.
 
 ADMIN opens **Node registry**. Standalone mode shows one node with an ID retained in private `node-id`. With a shared control database, all endpoints in the same clusterId read the same directory. VIEWER/OPERATOR retain existing task grants without global registry access.
 
 Cards show release SHA/version, real JVM/architecture/CPU/heap, configured task/running capacities, registration epoch, database observation time, heartbeat/expiry and task IDs/Worker state/observation time. HEALTHY means a valid heartbeat lease, not healthy data destinations. STALE means expiry; STOPPED means graceful deregistration committed. Query failure clears old healthy cards instead of presenting cached success.
 
-Task lists are observations, not global configuration/scheduling authority. Task pages/actions remain local. Do not copy/start configurations elsewhere merely because a node is STALE. CDC/target leases still govern execution; registry leases cannot authorize Worker takeover. Remote commands, data/secret/report reachability, shared permissions/audit and controller HA require later acceptance.
+Task lists are observations, not global configuration/scheduling authority. Task pages/actions are local by default; optional fixed-owner routing is described in [global control](/docs/en/reference/global-control.html). Do not copy/start configurations elsewhere merely because a node is STALE. CDC/target leases still govern execution; registry leases cannot authorize Worker takeover. Shared access, global commands and explicit separated execution have distinct profiles; see [global control](/docs/en/reference/global-control.html) and [execution lifecycle](/docs/en/reference/execution-lifecycle.html) for current acceptance.
 
 ## Linux and Docker
 

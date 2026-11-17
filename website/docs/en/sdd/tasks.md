@@ -31,7 +31,7 @@ Every task requires design/implementation,positive/negative/crash tests,bilingua
 - [ ] T-CP-06 · Cluster logs,metrics and diagnostics · P1 · Depends on: CP-01, CP-03, CP-05
   Deliver: UI filters node/task/destination status,lag,backlog,logs and errors with observation timestamps and bounded redacted log access.
   Acceptance: AC-CP-06
-- [ ] T-CP-07 · Control-plane HA and worker independence · P0 · Depends on: CP-03, CP-05, SE-04
+- [x] T-CP-07 · Control-plane HA and worker independence · P0 · Depends on: CP-03, CP-05, SE-04
   Deliver: Another entry survives controller failure;accepted commands recover;existing workers continue safely under documented policy;replica count/shared files alone are insufficient.
   Acceptance: AC-CP-07
 ## Persistent login
@@ -173,3 +173,7 @@ Every task requires design/implementation,positive/negative/crash tests,bilingua
 v0.4: shared identity/session authority is independent of global task configuration, so SE-04 now depends on CP-01; CP-05 remains partial. [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
 
 v0.5: CP-02/03 PARTIAL;6DONE/33PARTIAL/9NEW. [Evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html).
+
+2026-11-17: [Public fixed-owner routing/CDC evidence](/docs/zh/evidence/2026-11-17-global-routing.html); incomplete maintenance projection/migration/HA remain tracked, without changing DONE counts.
+
+v0.6: CP-07 separated LOCAL-journal profile accepted;7DONE/33PARTIAL/8NEW. [Evidence](/docs/zh/evidence/2026-11-17-execution-lifecycle.html).

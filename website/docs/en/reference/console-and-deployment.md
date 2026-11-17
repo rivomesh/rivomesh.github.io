@@ -7,13 +7,15 @@ sourcePath: docs/en/console-and-deployment.md
 
 # Console, multiple tasks, and deployment
 
-Updated: 2026-11-15. 中文：[控制台与部署](/docs/zh/reference/console-and-deployment.html). This page describes implemented behavior; see [platform design](/docs/en/reference/platform-design.html) for the full roadmap.
+Updated: 2026-11-17. 中文：[控制台与部署](/docs/zh/reference/console-and-deployment.html). This page describes implemented behavior; see [platform design](/docs/en/reference/platform-design.html) for the full roadmap.
 
 ## Runtime scope
 
 Load independent MySQL task configurations into isolated JVMs with bounded heap/concurrency. V3 supports explicit databases/mappings, SQL/message fan-out, keyless/JSON/supported generated columns and LOCAL/EXTERNAL journals. The wizard supports Gauss/PostgreSQL/MySQL, the eight implemented message products plus ClickHouse and Doris; v2 single-target tasks remain supported. See the [V3 manual](/docs/en/reference/pipeline-v3.html) and [messaging contract](/docs/en/reference/messaging-v3.html). Capability entries distinguish remaining adapters.
 
-The bilingual workbench provides creation, connection/source-object checks, start/stop, shared pause/resume, progress/backlog, and operation history. Independent VIEWER/OPERATOR/ADMIN tokens enforce access. ADMIN can edit configuration, rotate credentials and restore revisions. Mapping migration, data validation and cutover workflows remain unfinished.
+The bilingual workbench provides creation, connection/source-object checks, start/stop, shared pause/resume, progress/backlog, and operation history. Independent VIEWER/OPERATOR/ADMIN tokens enforce access. ADMIN can edit configuration, rotate credentials and restore revisions. Row validation and reviewed repairs at a common paused cut are available; failed-transaction patches/skips, mapping migration and business cutover remain open. See [validation](/docs/en/reference/managed-validation.html) and [repair](/docs/en/reference/managed-repair.html).
+
+Local task control is the default. Opt in with `cluster.sharedAccess=true` and `cluster.sharedTasks=true` for fixed-owner global tasks. Any entry manages authorized remote tasks while distinguishing durable admission, actual outcomes and uncertainty. See [global control](/docs/en/reference/global-control.html) for private directories/keys, upgrade refusal, Helm and native two-node deployment. Automatic execution takeover remains open.
 
 ## Local startup
 

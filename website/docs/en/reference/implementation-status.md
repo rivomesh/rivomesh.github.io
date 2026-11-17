@@ -8,11 +8,11 @@ sourcePath: docs/en/implementation-status.md
 # Implementation status and next work
 
 Development preview is on demand, with no permanent instance. Its containers were removed at the user’s request on2026-11-16; historical preview URLs are currently inactive.
-Updated: 2026-11-16. 中文：[实施状态](/docs/zh/reference/implementation-status.html). See [design](/docs/en/reference/platform-design.html) and [console manual](/docs/en/reference/console-and-deployment.html).
+Updated: 2026-11-17. 中文：[实施状态](/docs/zh/reference/implementation-status.html). See [design](/docs/en/reference/platform-design.html) and [console manual](/docs/en/reference/console-and-deployment.html).
 
-Latest: shared accounts/grants/sessions/audit passed native PostgreSQL17/MySQL8.4 two-controller HTTPS, revocation, kill/reopen and store-outage recovery.273app-build,273actual-JAR-first app,2SDK,68DOM and5x68control checks pass. Task execution remains LOCAL; global authority/dispatch remains in development. [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
+The protocol4 separated profile passes348app/actual-JAR tests,76DOM and5x152controls,PG/MySQL stores,actual multi-database/two-target CDC,all-controller loss,store outage,pending accepting-entry recovery,nonroot processes and SQL role races.Automatic Agent takeover and complete journal/adapter/JDK matrices remain open. [Evidence](/docs/zh/evidence/2026-11-17-execution-lifecycle.html).
 
-SDD tracking:48requirements,6DONE,42open (9NEW,33PARTIAL). CP-01 and five session tasks accepted;CP-05partial;CP-02/03 global tasks/commands and control HA remain open. [Backlog](/docs/en/sdd/tasks.html).
+SDD tracking:48requirements,7DONE,41open (8NEW,33PARTIAL). CP-01 and five session tasks accepted;CP-05partial;CP-02/03 global tasks/commands and control HA remain open. [Backlog](/docs/en/sdd/tasks.html).
 
 ## Implemented in this increment
 
@@ -74,4 +74,6 @@ The first SQL row-comparison/CLI native acceptance now passes all four journal p
 
 2026-11-16 latest: shared identity/session/audit native acceptance passed; SDD v0.4 has6DONE/33PARTIAL/9NEW.273application,273actual-JAR-first,2SDK,68DOM and5x68control checks passed. Global task execution remains LOCAL. Persistent preview removed at user request; temporary fixtures/images cleaned. [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
 
-2026-11-17: CP-02/03 now PARTIAL: internal global task/control foundations passed307actual-JAR-first tests and native PostgreSQL/MySQL control fixtures. Public task control remains LOCAL. Configuration/history workflows are newer development work. [Evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html).
+2026-11-17: CP-02/03 now PARTIAL: internal global task/control foundations passed307actual-JAR-first tests and native PostgreSQL/MySQL control fixtures. Historical 1e47 candidate used LOCAL public control; later candidates add the opt-in global profile. [Evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html).
+
+2026-11-17 development increment: opt-in sharedTasks fixed-owner global HTTP/UI,configuration/history,durable commands and remote reads are wired. Startup STOP/PAUSE barriers and recovery beyond50commands have regression coverage. The new candidate passes336application build tests; native cross-node business CDC and its five-JDK acceptance are ongoing. CP-02/03 remain PARTIAL; legacy import and automatic takeover are open. [Operations](/docs/en/reference/global-control.html).

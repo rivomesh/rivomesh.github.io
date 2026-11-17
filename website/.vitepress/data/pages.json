@@ -89,6 +89,14 @@
   },
   {
     "locale": "en",
+    "route": "/docs/en/reference/execution-lifecycle.html",
+    "title": "Controller and Agent lifecycle",
+    "group": "reference",
+    "rank": 1,
+    "sourcePath": "docs/en/execution-lifecycle.md"
+  },
+  {
+    "locale": "en",
     "route": "/docs/en/reference/gaussdb-index-policy.html",
     "title": "GaussDB index policy",
     "group": "connectors",
@@ -106,7 +114,7 @@
   {
     "locale": "en",
     "route": "/docs/en/reference/global-control.html",
-    "title": "Global task control progress",
+    "title": "Global task control",
     "group": "architecture",
     "rank": 1,
     "sourcePath": "docs/en/global-control.md"
@@ -302,6 +310,22 @@
     "group": "sdd",
     "rank": 5,
     "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-control-store.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/sdd/design-execution-lifecycle.html",
+    "title": "CP-07: management and execution lifecycle separation (separated profile accepted)",
+    "group": "sdd",
+    "rank": -1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-execution-lifecycle.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/design-execution-lifecycle.html",
+    "title": "CP-07：管理入口与执行生命周期分离（分离档案已验收）",
+    "group": "sdd",
+    "rank": -1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-execution-lifecycle.md"
   },
   {
     "locale": "en",
@@ -609,11 +633,67 @@
   },
   {
     "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-17-execution-lifecycle.html",
+    "title": "11-17-execution-lifecycle · Independent execution lifecycle / 独立执行生命周期",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-17-execution-lifecycle/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-17-execution-lifecycle-attempt-aae.html",
+    "title": "11-17-execution-lifecycle · Intermediate role candidate with known admission races",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-17-execution-lifecycle/attempt-aae/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-17-execution-lifecycle-attempt-nonroot.html",
+    "title": "11-17-execution-lifecycle · Preserved nonroot fixture failures",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-17-execution-lifecycle/attempt-nonroot/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-17-global-configuration.html",
+    "title": "11-17-global-configuration · Global configuration/history workflows / 全局配置工作流",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-17-global-configuration/README.md"
+  },
+  {
+    "locale": "zh",
     "route": "/docs/zh/evidence/2026-11-17-global-control-foundations.html",
     "title": "11-17-global-control-foundations · Global task/control foundations / 全局控制基础验收",
     "group": "evidence",
     "rank": 1,
     "sourcePath": "docs/verification/2026-11-17-global-control-foundations/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-17-global-maintenance.html",
+    "title": "11-17-global-maintenance · Global maintenance and recovery / 全局维护与恢复",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-17-global-maintenance/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-17-global-routing.html",
+    "title": "11-17-global-routing · Public global routing / 公开全局控制增量",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-17-global-routing/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-17-global-routing-attempt-4639.html",
+    "title": "11-17-global-routing · Intermediate maintenance candidate: native failure retained",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-17-global-routing/attempt-4639/README.md"
   },
   {
     "locale": "zh",
@@ -697,6 +777,14 @@
   },
   {
     "locale": "zh",
+    "route": "/docs/zh/reference/execution-lifecycle.html",
+    "title": "管理与执行 Agent 分离",
+    "group": "reference",
+    "rank": 1,
+    "sourcePath": "docs/zh-CN/execution-lifecycle.md"
+  },
+  {
+    "locale": "zh",
     "route": "/docs/zh/reference/gaussdb-index-policy.html",
     "title": "GaussDB 索引策略",
     "group": "connectors",
@@ -714,7 +802,7 @@
   {
     "locale": "zh",
     "route": "/docs/zh/reference/global-control.html",
-    "title": "跨节点任务控制进展",
+    "title": "跨节点任务控制",
     "group": "architecture",
     "rank": 1,
     "sourcePath": "docs/zh-CN/global-control.md"
@@ -973,6 +1061,69 @@
     "title": "项目路线图",
     "rank": -1,
     "group": "sdd"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/install.html",
+    "title": "Installation and sign-in",
+    "rank": 0,
+    "group": "sync"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/create-task.html",
+    "title": "Create a synchronization task",
+    "rank": 1,
+    "group": "sync"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/monitoring.html",
+    "title": "Progress and daily operations",
+    "rank": 2,
+    "group": "sync"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/troubleshooting.html",
+    "title": "Troubleshooting",
+    "rank": 0,
+    "group": "operations"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/data-validation.html",
+    "title": "Validate data and review repairs",
+    "rank": 1,
+    "group": "operations"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/backup.html",
+    "title": "Backup and recovery",
+    "rank": 2,
+    "group": "operations"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/access.html",
+    "title": "Accounts and permissions",
+    "rank": 0,
+    "group": "security"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/scenarios.html",
+    "title": "Use cases and evaluation",
+    "rank": 4,
+    "group": "start"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/faq.html",
+    "title": "Frequently asked questions",
+    "rank": 5,
+    "group": "start"
   },
   {
     "locale": "en",

@@ -19,7 +19,7 @@ RM-SDD-001 · 2026-11-16
 | AC-CP-04 | CP-04 | 节点断电/网络分区/旧节点恢复时同一任务无双写；未确认停机可标记未知并隔离；按JDK、连接器、存储可达性和配额调度；排空迁移保留断点。 | 待验收 |
 | AC-CP-05 | CP-05 | 从A撤销权限后B拒绝新命令；同一远端操作可按请求ID/任务/节点/计划追踪；界面不返回密钥，节点仅获得授权任务必需的密钥引用。 | PARTIAL · [shared-access](/docs/zh/evidence/2026-11-16-shared-access.html) |
 | AC-CP-06 | CP-06 | 界面按节点/任务/目标过滤状态、延迟、积压、日志和错误；注明采集时间及失联范围；远端日志分页/限流且不泄露业务值或凭据。 | 待验收 |
-| AC-CP-07 | CP-07 | 管理实例故障后其他入口可继续查询/控制；接收但未完成的命令可恢复；按明确策略已有Worker可继续安全同步；仅部署多个replica或共享目录不能算通过。 | 待验收 |
+| AC-CP-07 | CP-07 | 管理实例故障后其他入口可继续查询/控制；接收但未完成的命令可恢复；按明确策略已有Worker可继续安全同步；仅部署多个replica或共享目录不能算通过。 | DONE · [separated profile](/docs/zh/evidence/2026-11-17-execution-lifecycle.html) |
 | AC-SE-01 | SE-01 | 登录后刷新、重新打开同一站点页面可恢复未过期会话和原权限，不需再次输入令牌；过期则回到登录页且不误发操作。 | [通过：单控制器](/docs/zh/evidence/2026-11-16-browser-sessions.html) |
 | AC-SE-02 | SE-02 | 可配置空闲/绝对有效期；退出、账号停用、令牌轮换或权限撤销按策略失效；多标签页一致；浏览器关闭后的持久记住登录为单独可配置策略。 | [通过：单控制器](/docs/zh/evidence/2026-11-16-browser-sessions.html) |
 | AC-SE-03 | SE-03 | 浏览器端不保存可读的长期认证令牌；会话标识采用受保护cookie/等效方案，生产HTTPS及HttpOnly/SameSite策略可验证；cookie鉴权写操作具备CSRF/Origin检查；会话不进URL或日志。 | [通过：单控制器](/docs/zh/evidence/2026-11-16-browser-sessions.html) |
@@ -90,3 +90,7 @@ RM-SDD-001 · 2026-11-16
 ### 发布证据模板
 
 需求ID、任务ID、用例ID、候选包SHA、节点/Agent协议、真实产品/版本/模式、JVM及架构、驱动、存储/持久性、源/目标范围、工作负载、操作前后坐标、回执/缺口ID、正常/错误/重复/中断结果、原始日志位置、脱敏方式、文档入口、遗留边界。状态至少区分NOT_RUN、PASSED、FAILED、EXPERIMENTAL、UNSUPPORTED；单纯存在脚本不能标PASSED。
+
+2026-11-17: [Public fixed-owner routing/CDC evidence](/docs/zh/evidence/2026-11-17-global-routing.html); incomplete maintenance projection/migration/HA remain tracked, without changing DONE counts.
+
+v0.6: CP-07 acceptance is limited to the explicit profile recorded in evidence;automatic Agent relocation and the complete matrix remain separate.

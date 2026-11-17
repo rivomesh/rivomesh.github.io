@@ -1,0 +1,28 @@
+{
+  "artifactSha256": "aa17cf5b6d9c21e302af818c5f48ff7c46bbb32d3a532ab1fa0491abe43403bf",
+  "status": "PASS",
+  "checks": [
+    "Agent command opens probes only; management roles are visible through controller sessions",
+    "Controllers create Agent-owned task and share revision",
+    "Two source databases to two targets; snapshot keyed/keyless/JSON/generated values",
+    "Cross-database transaction insert/update/delete and keyless multiplicity",
+    "The surviving management entry executes an authenticated remote command after the first entry dies",
+    "Actual Agent/Worker CDC continues after SIGKILL of one and then every management container",
+    "Management rejoin observes the original Agent and committed rows without moving owner identity",
+    "LOCAL journal CDC retains the same Worker during control-store outage; management refuses control and recovers after lease expiry",
+    "Native SQL constraint error pauses target; explicit generation-bound replay catches up",
+    "Offline STOP survives SIGKILL/reopen and prevents restoring old RUNNING intent",
+    "A durably accepted STOP completes under the original request while its accepting management entry is dead",
+    "Original private journal resumes after owner restart; missed binlog data catches up",
+    "Masked configuration references, remote preview/edit and shared history across entries",
+    "Reviewed configuration history restores as a new globally active version",
+    "Remote validation pauses CDC and exposes shared report identities, differences and authorized row values",
+    "Cross-entry reviewed repair approval restores both targets and leaves replication paused",
+    "Explicit resume after reviewed repair continues original binlog progress"
+  ],
+  "harnessSourceSha256": "d53b3f1742130d04707ff34e9b1efe195e1c12ca6c9b42b3ccfd41979c44dc95",
+  "executionProfile": "SEPARATE_AGENT",
+  "controlProduct": "MYSQL",
+  "notCovered": "Automatic owner relocation, live Kubernetes/CSI, source promotion and full connector matrix",
+  "cleanupExitCode": 0
+}

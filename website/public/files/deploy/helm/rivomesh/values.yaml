@@ -32,10 +32,16 @@ sessions:
   absoluteSeconds: 28800
   maximum: 1000
   publicOrigin: "" # Set https://console.example when TLS terminates upstream.
-# Registry only: use separate Helm releases/PVCs per node. Global task routing is pending.
+# Use separate Helm releases/PVCs per node; sharedTasks opts into fixed-owner global control.
 cluster:
   enabled: false
   sharedAccess: false # Shared accounts/sessions/audit; task routing remains separate.
+  sharedTasks: false # Opt-in fixed-owner global task control; start with empty task directories.
+  separateExecution: false # Protocol4: roles are enforced; old members must stop before upgrade.
+  role: COMBINED # COMBINED, CONTROLLER (no Workers), or AGENT (probes only).
+  taskKeyKey: task-key # Canonical base64-encoded 32-byte key in existingSecret, shared by all members.
+  maximumTasks: 10000
+  maximumCommands: 1000
   id: rivomesh
   nodeId: "" # Defaults to the release name, stable across pod recreation.
   driver: org.postgresql.Driver

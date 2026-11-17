@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/node-registry.md
 
 # 共享节点目录与心跳
 
-English：[Node registry](/docs/en/reference/node-registry.html)。设计合同：[CP-01](/docs/zh/sdd/design-control-store.html)。本页描述共享节点观察。账号、会话与审计可显式启用[共享访问](/docs/zh/reference/shared-access.html)；任务页和操作仍针对本机，全局远端控制及控制面接管尚未完成。
+English：[Node registry](/docs/en/reference/node-registry.html)。设计合同：[CP-01](/docs/zh/sdd/design-control-store.html)。本页描述共享节点观察。账号、会话与审计可显式启用[共享访问](/docs/zh/reference/shared-access.html)；默认任务页和操作针对本机；可选固定执行节点的[全局模式](/docs/zh/reference/global-control.html)已接入 HTTP 与管理界面，显式管理与 Agent 分离已有首批验收，自动跨 Agent 接管及其他高可用档案需另验。
 
 ## 使用界面
 
@@ -15,7 +15,7 @@ ADMIN 登录后打开“节点目录”。默认单机模式只显示当前节�
 
 界面显示版本和运行包SHA256、真实JVM/架构/CPU/堆、任务/并发容量、注册代次、数据库观察时间、最近心跳和租约期限，以及各节点发布的任务ID、Worker状态与最后观察时间。HEALTHY只表示心跳租约有效，不代表每个源/目标健康；STALE表示期限已过，STOPPED表示本代进程已正常注销。目录查询失败会清除旧健康卡片并显示错误，不用缓存冒充当前状态。
 
-节点任务列表是观察数据，不是全局配置或调度权威；目前任务页和所有操作仍是本机。不要因为某节点STALE就在另一个节点复制配置并启动同名任务。同步执行仍使用原有CDC/目标租约协议，节点注册租约不是Worker接管凭证。跨节点命令、配置/密钥/报告可达性、全局权限/审计与控制器HA另行验收。
+节点任务列表是观察数据，不是全局配置或调度权威；默认任务页和操作针对本机；可选固定执行节点全局模式见[全局控制手册](/docs/zh/reference/global-control.html)。不要因为某节点STALE就在另一个节点复制配置并启动同名任务。同步执行仍使用原有CDC/目标租约协议，节点注册租约不是Worker接管凭证。跨节点命令与共享资源的当前边界见[全局控制](/docs/zh/reference/global-control.html)，显式管理/执行分离见[独立执行生命周期](/docs/zh/reference/execution-lifecycle.html)。
 
 ## Linux/Docker 配置
 

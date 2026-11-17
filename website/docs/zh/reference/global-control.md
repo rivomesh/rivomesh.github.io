@@ -1,54 +1,79 @@
 ---
 kind: docs
 locale: zh
-title: "跨节点任务控制进展"
+title: "跨节点任务控制"
 sourcePath: docs/zh-CN/global-control.md
 ---
 
-# 全局任务控制：实现状态与恢复边界
+# 全局任务控制：启用、恢复与边界
 
 [English](/docs/en/reference/global-control.html) · [SDD设计](/docs/zh/sdd/design-global-control.html)
 
-2026-11-17：当前公开控制台仍使用本机任务控制。以下全局任务、执行和查询组件已经实现并通过专项测试，正在接入运行时、升级与界面，不能据此声明CP-02/03全部完成。没有新增可启用完整全局控制的部署参数；不要通过共享controller.json或增加replica绕过接入工作。
+2026-11-17：已接入可选的固定 owner 全局模式，包括公开 HTTP、管理界面、共享配置、持久命令和远程只读查询。默认仍为本机模式。CP-02/03 保持 PARTIAL：旧任务导入、完整业务工作流、容量和故障矩阵尚未全部验收；这不是自动跨节点接管。
 
-| 组件 | 已有行为 | 仍缺内容 |
-|---|---|---|
-| GlobalTaskStore | 全局唯一任务、配置密文、修订、授权分页、幂等请求；配置历史/恢复及目标/有效版本已补入专项验证 | 公开运行时接线、升级迁移和完整业务验收 |
-| AgentDirectory | 节点租约、进程代次和私有目录绑定；缺失/替换状态拒绝重新初始化 | 正式Agent生命周期、迁移与自动接管 |
-| DurableCommands / OwnerExecution | 持久接受、原本机请求固定、实际TaskService执行、回执恢复、取消、等待忙碌任务 | 所有公开入口接线、恢复前回执保护、执行面独立生命周期 |
-| GlobalTaskViews | 认证加密的任务观察；全局修订和owner修订分开；失联/过期显示UNKNOWN | 完整日志/指标、过滤和界面呈现 |
-| OwnerQueries | 固定只读操作、加密请求/结果、有效期、权限重验、大小和容量限制 | 管理入口与查询线程池接入、完整配置预览转换 |
+## 启用条件
 
-## 接受、执行和未知结果
+所有节点使用相同的控制库、cluster.id、namespace、sharedAccess=true、sharedTasks=true 和 taskKey；各节点使用不同且稳定的 nodeId，以及独立持久化的任务/数据目录。taskKey 必须是规范 Base64 编码的 32 字节随机密钥，通过受保护环境变量提供。不要放入任务 YAML，不要共用 controller.json。首次启用必须使用没有既有任务的目录；已有本机任务或 YAML 会以 GLOBAL_TASK_IMPORT_REQUIRED 拒绝，目前没有自动导入工具。
 
-PENDING表示命令已经进入共享存储。DISPATCHED表示正在交给固定owner；首次调用前会保存精确的本机请求及修订号。ACCEPTED表示本机已持久接受，异步业务操作仍可能失败。SUCCEEDED/FAILED来自实际本机操作回执。UNKNOWN表示缺少可靠证据，不能改成成功，也不能换一个新修订重新执行。
+[平台示例](/files/config/platform-global.example.yml)给出 Linux 启动配置。先备份控制库、私有目录及密钥。旧成员必须正常停止并登记 STOPPED 后才升级共享协议；失联或租约过期不等于停止。协议升级后，本机/仅共享登录模式的旧成员会被拒绝。禁用 sharedTasks、换节点 ID、丢失目录身份或错误密钥也不会回退到本机任务权威。
 
-回复丢失后先查原请求回执。控制器重开仍复用原请求；账号权限已变化时，可以由服务登记此前已经提交的真实结果，但不能以旧身份开始新操作。没有本机回执且修订已经变化时保持UNKNOWN，后续人工恢复流程仍待接入。
+```sh
+java -jar rivomesh-app-0.1.0-SNAPSHOT.jar serve config/platform-global.example.yml
+```
 
-暂时TASK_BUSY/OPERATION_PENDING保留派发状态等待重试。未确认的本机请求回执不应按普通500条窗口删除；正式启动顺序还必须在开放API前恢复所有活动请求保护。
+数据库账号、令牌、密钥与 nodeId 对应的环境变量由部署环境提供。示例启用 Secure Cookie，浏览器应通过 HTTPS 反向代理访问并配置正确的 publicOrigin。
 
-## 取消与失联
+## Helm 和原生 Kubernetes
 
-取消拥有父请求和预留容量。原操作尚未派发时原子取消；原操作已派发但回复不明时，先恢复原回执；本机已经接受后才执行实际取消。取消请求成功不等于所有目标已经回滚，仍以原操作及数据库凭据为准。
+[Helm 全局配置](/files/deploy/helm/rivomesh/values-global-control.yaml)引用已有 Secret：rivomesh-auth 的 token，以及 rivomesh-control-store 的 username、password、task-key。task-key 是上述 Base64 密钥文本，所有节点一致。为不同入口部署两个 release，每个保留自己的 PVC 和 nodeId：
 
-owner失联时，任务执行状态显示UNKNOWN；发送STOP只会记录等待命令，不会宣称远端进程已经停止。节点心跳恢复不代表其旧Worker已被安全接管。固定nodeId换一个空目录启动会被拒绝；应恢复原目录/卷，自动迁移和接管需另行完成CP-04/07。
+```sh
+helm upgrade --install rivomesh-global-a deploy/helm/rivomesh --namespace rivomesh -f deploy/helm/rivomesh/values-global-control.yaml
+helm upgrade --install rivomesh-global-b deploy/helm/rivomesh --namespace rivomesh -f deploy/helm/rivomesh/values-global-control.yaml
+```
 
-## 查询与保密
+也可按环境修改后使用原生清单 [A](/files/deploy/kubernetes/rivomesh-global-a.yaml)、[B](/files/deploy/kubernetes/rivomesh-global-b.yaml)，通过 kubectl apply -f 分别部署。不要把两个独立控制器绑定到同一份私有目录。Helm/清单已有静态一致性和非法配置检查；真实 K8s/CSI、节点故障和滚动升级验收仍待完成。Docker 挂载同样遵守每节点独立持久目录及密钥配置；临时验收脚本不会保留页面。
 
-查询通道禁止任务修改。请求和结果绑定任务、固定owner、目录、节点代次及当前共享账号修订，并认证加密。执行前和结果发布/读取时重验权限。源行、报告等结果不进入节点URL。请求上限512KiB，结果上限1MiB，保留容量有界，有效期1至60秒；这些是当前组件边界，不是硬件吞吐承诺。
+## 管理界面与配置
 
-任务状态观察与源/目标指标时间分别保留：ownerObservedAt是观察发布时刻，observedAt仍为本机状态原采集时刻。过期观察不能被重新包装成刚采集的数据。
+登录响应的 taskControlScope=GLOBAL 表示全局模式。任一入口可分页读取授权任务，展示 owner、节点状态、全局修订、Worker 状态、目标/有效配置和命令结果。创建/导入表单选择实际执行节点；导入表单表示新建任务，不是旧断点迁移工具。节点不可用时状态为 UNKNOWN，不能认为同步进程已停止。
 
-## FAQ
+创建、编辑、恢复和动作返回 202，只表示共享存储已接受。配置历史区分 desired/active，只有 owner 成功应用才更新有效版本；失败提案保留，旧有效配置继续有效。配置编辑、历史和保密字段引用可跨入口使用。连接预览、原始差异和修复计划等只读操作通过有期限的 owner 查询通道执行，owner 离线时不能完成。完整过滤、全量日志聚合、真实浏览器视觉/可访问性验收仍开放。
 
-**共享登录已经可用，为什么任务控制还未全部跨节点？** 身份、会话、任务配置和执行归属是不同权威。SE-04已验收；CP-02/03仍在接入。
+全局 maximumTasks/maximumCommands 与每节点 maxTasks/maxRunningTasks 是不同预算。当前默认全局任务上限 10000、活动命令上限 1000，配置范围见示例/Schema；这只是资源保护参数，不是硬件吞吐承诺。查询请求最多 512KiB、响应 1MiB，有效期 1–60 秒；线程池和保留容量均有界。
 
-**可以手动修改数据库里的owner或目录来接管吗？** 不可以。元数据带认证校验，替换将被拒绝；仅移动游标也不能恢复原事件、报告、密钥和Worker隔离。
+## 接受、执行和恢复
 
-**共享控制库中断后会使用本机账号继续控制吗？** 不会回退。已有数据同步进程的后续行为依照具体日志/隔离协议；管理端不能把不可访问的共享权威当作正常可用。
+PENDING 表示持久排队；DISPATCHED 表示交给固定 owner，调用前保存原本机请求与原修订；ACCEPTED 表示本机已持久接受；SUCCEEDED/FAILED 来自实际操作回执。UNKNOWN 表示证据不足，不能伪装成功，也不能换新修订重新执行。重启先恢复原回执保护及配置权威校验，再允许本机调度。
 
-**原生控制库验证是否等于完整集群验收？** 不等于。`tests/owner-control-native.py`在真实PostgreSQL/MySQL上执行实际TaskService及加密存储，但使用夹具Worker，不能替代两个独立JVM的HTTP、真实业务CDC、K8s/CSI、自动接管或容量验收。
+新启动恢复修正：先按游标读取全部活动命令，包括尚未派发的 STOP/PAUSE。它们在本机持久接受前阻止对应 Worker 恢复旧 RUNNING 意图；旧操作仍可结束，停止命令会优先重试。权限变化导致拒绝后解除阻止；结果不明时继续保留。该修正已通过专项测试和应用构建，真实业务验收结果以候选包归档为准，不追溯覆盖此前候选。
 
-**本轮为什么没有常驻页面？** 用户已明确不需要保留预览。使用临时环境验证并清理自己的容器、卷和临时镜像，其他项目资源不受影响。
+TASK_BUSY/OPERATION_PENDING 保持原请求等待。未确认的本机回执不会按普通 500 条窗口回收。取消有父请求和预留容量：未派发时原子取消，派发不明时先恢复证据，本机接受后才实际取消。取消成功不等于所有目标回滚。
 
-2026-11-17配置增量：跨入口保密字段引用、远程预览、历史父链分页、版本恢复、提案拒绝保留旧有效配置及全局请求ID冲突保护已通过56项专项回归。该增量晚于基础候选1e474ad1，发布包与原生专项验收另行记录。当前SDD为6DONE/33PARTIAL/9NEW。
+owner 失联期间 STOP 保持等待。必须恢复原节点的私有目录/卷和密钥；空目录不能冒充原 owner。默认组合模式的控制器退出仍会停止本机 Worker。显式管理/Agent 分离的已验收范围见[独立执行生命周期](/docs/zh/reference/execution-lifecycle.html)；自动迁移、排空、调度和跨 Agent 隔离仍单独推进。源 MySQL 主库切换续传与控制节点接管是不同故障场景，需要分别验收。
+
+## 运维 FAQ
+
+**如何判断已接受还是已执行？** 查看同一请求 ID 的 deliveryStatus、status、code 和实际 Worker/目标水位。不要把 HTTP 202 当作落库成功。
+
+**刷新页面或更换入口需要重新登录吗？** 共享登录模式通过共享会话恢复身份，仍受 Cookie 的域、Secure、SameSite、有效期和权限撤销规则约束。不同域名需要正确的反向代理和会话配置。
+
+**离线节点能否在 A 上停止？** 可以提交持久 STOP；显示等待/未知，直到原 owner 恢复并提供真实回执。不能仅凭心跳过期宣称已停止。
+
+**直接改共享库的 owner、删除根表或换空目录可以恢复吗？** 不可以。认证元数据、计数、私有目录身份、回执和配置投影均会校验；缺失或篡改拒绝重新初始化。
+
+**控制库中断时可以回退到本机账号吗？** 不会回退；管理面拒绝缺少共享权威的控制。已有数据进程行为依赖其日志/租约/目标协议，不能把管理可用性当作完整数据面隔离证明。
+
+**备份需要包含什么？** 控制库、每节点私有目录、日志/报告/本地 journal、外部 journal（如选用）和原密钥需协调保存。仅恢复游标或旧控制库快照不足以证明一致；自动备份协调及旧备份检测矩阵仍未完成。
+
+**哪些证据已经具备？** 先前候选已有真实 PostgreSQL/MySQL 控制库、两个独立 JVM、HTTPS 共享登录、A 创建 B 任务和离线命令测试；配置专项还有实际 TaskService 加夹具 Worker 验证。新启动修正和真实跨节点业务 CDC 正在补验，不能把这些测试当作全部集群、连接器和硬件性能验收。
+
+**为什么没有常驻预览？** 按用户要求，验收仅启动临时资源并清理自己的容器/卷；其他项目资源不受影响。
+
+## 多目标维护回执与升级恢复
+
+中间候选463994bca812在真实双目标校验中暴露集合归一化差异：校验已完成、任务保持PAUSED，但恢复请求签名不一致而记录UNKNOWN/OWNER_RECEIPT_MISMATCH。修正统一使用本机接受时的输入校验和集合排序规则，保留原请求、修订、操作者及报告身份，不改写结果为猜测成功。多个目标及重试显式null目标范围已有专项回归。候选b2b9a078已通过339项发布包优先测试、五JDK各143项专项、真实双目标校验/修复和旧UNKNOWN原报告升级恢复，见[证据](/docs/zh/evidence/2026-11-17-global-maintenance.html)。不要手工修改共享表状态或重新发起另一份校验来掩盖未知结果。
+
+显式管理/Agent 分离的指定档案已经验收，见[独立执行生命周期](/docs/zh/reference/execution-lifecycle.html)。默认组合模式仍耦合，不能将分离档案的结果套用到全部部署。
+
+2026-11-17: explicit protocol4 controller/Agent separation is accepted for the declared profile;default combined mode remains coupled. [Operations](/docs/zh/reference/execution-lifecycle.html) · [Evidence](/docs/zh/evidence/2026-11-17-execution-lifecycle.html).

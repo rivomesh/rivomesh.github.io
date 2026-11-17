@@ -41,3 +41,9 @@ title: 社区与贡献
 官网布局、导航、搜索与文字在网站仓库维护。源码同步来的手册应先在核心仓库修改，再通过文档导入流程生成本站快照。
 
 [品牌与媒体素材](/brand.html) · [产品导览](/tour.html)
+
+## 许可证与发布状态
+
+当前核对的核心源码和仓库元数据尚未提供明确的项目 LICENSE。不能根据同类项目或依赖库许可证推断本项目采用 Apache 等协议；使用和再分发前请核对[核心仓库](https://github.com/rivomesh/rivomesh)后续提供的许可条款。
+
+当前尚无正式 Release，请按[源码构建说明](/download.html)试用。项目使用 GitHub Issues 和 Pull Requests 协作，未配置的 Discussions 不作为网站入口。

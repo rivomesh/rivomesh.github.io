@@ -39,6 +39,6 @@ openGauss、达梦、金仓、GBase 8c 与 OceanBase 作为目标的版本、模
 
 ## 控制器与多节点
 
-节点目录已提供共享心跳与任务观察；启用共享访问后，可统一账号、跨节点会话与审计。跨主机同步恢复需要外部日志与有效执行租约；公开任务操作仍针对本机，全局任务与远端命令正在接入。部署步骤见[多节点部署与恢复](multi-node)。最新说明见[节点目录](../reference/node-registry)、[共享账号、会话与审计](../reference/shared-access)及[实施状态](../reference/implementation-status)。
+节点目录已提供共享心跳与任务观察；启用共享访问后，可统一账号、跨节点会话与审计。跨主机同步恢复需要外部日志与有效执行租约；默认任务操作针对本机；可选固定执行节点的全局模式已接入 HTTP、管理界面和跨入口维护，管理与 Agent 分离已有指定档案验收，完整迁移与自动跨 Agent 接管仍待完成。部署步骤见[多节点部署与恢复](multi-node)。最新说明见[节点目录](../reference/node-registry)、[共享账号、会话与审计](../reference/shared-access)及[实施状态](../reference/implementation-status)。
 
 Linux、Docker、Helm 和 Kubernetes 文件已经提供。静态清单检查与真实 K8s/CSI、集群安全、容量和控制面 HA 是不同验收范围。

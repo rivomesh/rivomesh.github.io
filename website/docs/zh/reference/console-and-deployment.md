@@ -7,13 +7,15 @@ sourcePath: docs/zh-CN/console-and-deployment.md
 
 # 控制台、多任务与部署
 
-更新：2026-11-15。English: [Console and deployment](/docs/en/reference/console-and-deployment.html)。本页描述已实现功能；完整规划见[平台方案](/docs/zh/reference/platform-design.html)。
+更新：2026-11-17。English: [Console and deployment](/docs/en/reference/console-and-deployment.html)。本页描述已实现功能；完整规划见[平台方案](/docs/zh/reference/platform-design.html)。
 
 ## 运行边界
 
 平台可以加载多份独立 MySQL 任务配置，每份任务运行在独立 JVM 中，限制堆大小和同时运行数量。V3 已接通多库显式映射、SQL/消息多目标、无主键/JSON/受支持生成列及可选日志；向导提供 Gauss/PostgreSQL/MySQL、已实现的八种消息目标、ClickHouse 和 Doris。V2 单库任务继续保留，剩余连接器在能力页单独标记。详见 [V3 手册](/docs/zh/reference/pipeline-v3.html) 和[消息投递协议](/docs/zh/reference/messaging-v3.html)。
 
-Web 工作台支持中英文切换、创建向导、连接/源对象检查、启停、共享暂停/恢复、运行/全量/积压状态及操作记录。已提供独立 VIEWER/OPERATOR/ADMIN 令牌身份；ADMIN 可编辑配置、轮换凭据及恢复版本。映射迁移、数据校验和切换向导仍未完成。
+Web 工作台支持中英文切换、创建向导、连接/源对象检查、启停、共享暂停/恢复、运行/全量/积压状态及操作记录。已提供独立 VIEWER/OPERATOR/ADMIN 令牌身份；ADMIN 可编辑配置、轮换凭据及恢复版本。已提供逐行校验和共同暂停点的审阅修复；失败事务手工补丁/跳过、映射迁移和业务切换向导仍未完成。详见[校验](/docs/zh/reference/managed-validation.html)、[修复](/docs/zh/reference/managed-repair.html)。
+
+默认控制范围为本机；可选 `cluster.sharedAccess=true`、`cluster.sharedTasks=true` 启用固定owner全局任务控制。任一入口可管理授权的远程任务，并区分持久接受、实际结果和未知状态。启用、独立目录/密钥、升级拒绝及Helm/原生双节点配置见[全局控制手册](/docs/zh/reference/global-control.html)。自动跨节点执行接管仍未完成。
 
 ## 本机启动
 

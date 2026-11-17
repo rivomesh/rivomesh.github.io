@@ -89,3 +89,17 @@ npm run media:generate
 部署目标是组织根站点 `https://rivomesh.github.io/`。`base` 固定为 `/`；没有 CNAME 或个人域名继承配置。媒体、favicon、站内搜索和文档链接均使用根路径。
 
 参照的信息结构：[ShardingSphere](https://shardingsphere.apache.org/index_zh.html) 与 [SeaTunnel](https://seatunnel.apache.org/zh-CN/)。具体产品定位、能力与计划来自 RivoMesh 源码，网站使用自有品牌。
+
+## 2026-11 产品展示与国际化
+
+沿用 VitePress、自有 Vue 主题、固定侧栏、静态搜索和 GitHub Pages 部署。中文首页位于 `/`，英文首页位于 `/en/`；下载、社区、项目资料、产品导览和品牌页面保留中文旧地址，并在 `/en/` 提供英文对应页。
+
+- `theme/data/home-copy.mjs`：分别维护中文产品价值与英文 replication / CDC 文案。
+- `theme/data/connectors.mjs`：共用源码导入的连接能力登记，按产品合并展示，源端和目标端状态单独保留。
+- `site-routes.mjs`：统一非文档语言对应关系；导航、语言切换、canonical 和 hreflang 共用。没有翻译的原始验收档案不生成虚假的语言对应页。
+- `ScreenshotPreview`、`ProductGallery`：复用三张原始截图，支持原图弹窗、Escape 关闭与焦点恢复。缺少的校验/诊断截图以文档说明。
+- `QuickStart`：源码 Java 与 Docker Compose 命令切换及复制；命令来自核心源码部署文件，不承诺公共镜像。
+- `npm run media:optimize`：从原始 PNG 生成 900 / 1800 宽 WebP，不裁剪、不伪造产品内容。原图保留供下载/放大。
+- `npm run build`：除原链接与导航检查外，校验主要双语页面及全部文档的唯一 SEO 标签、canonical、hreflang、HTML lang 和双语 sitemap。
+
+本轮保留源码项目的实际许可证和发布状态：未提供独立 LICENSE、未提供正式 Release 时，不在网站补造协议或发行包。视频保留中文旁白，新增英文字幕与文字稿；更新原视频时需要同步审阅两种字幕。工程与视觉验收范围见 [设计验收记录](quality/design-review-2026-11-17.md)。

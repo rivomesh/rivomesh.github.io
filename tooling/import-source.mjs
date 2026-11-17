@@ -17,7 +17,8 @@ const manualNames={
  'pipeline-v3':['多库、多目标同步配置','Multi-database pipelines'], 'console-and-deployment':['控制台与部署','Console & deployment'],
  'configuration-editor':['配置编辑与版本恢复','Configuration revisions'], 'development-preview':['开发预览','Development preview'],
  'account-management':['账号管理','Account management'], 'browser-sessions':['浏览器会话','Browser sessions'],
- 'global-control':['跨节点任务控制进展','Global task control progress'],
+ 'execution-lifecycle':['管理与执行 Agent 分离','Controller and Agent lifecycle'],
+ 'global-control':['跨节点任务控制','Global task control'],
  'shared-access':['共享账号、会话与审计','Shared access'], 'node-registry':['共享节点目录','Node registry'],
  'task-authorization':['按任务授权','Task authorization'], 'security-audit':['安全审计','Security audit'],
  'reconciliation-workflow':['校验与修复流程','Reconciliation workflow'], 'managed-validation':['管理界面数据校验','Managed validation'],
@@ -41,7 +42,7 @@ const assignments={
  security:['account-management','browser-sessions','shared-access','task-authorization','security-audit'],
  operations:['reconciliation-workflow','managed-validation','common-cut-repair','managed-repair','recovery','performance','rename-migration'],
  architecture:['platform-design','global-control','requirements-and-decisions','implementation-status'],
- reference:['node-registry']
+ reference:['node-registry','execution-lifecycle']
 }
 const titleFrom=(raw)=>raw.match(/^#\s+(.+)$/m)?.[1]||'Reference'
 const map=new Map(), records=[]
@@ -107,6 +108,8 @@ const authored={
  'zh/start/troubleshooting':{title:'常见故障处理',group:'operations',rank:0},'zh/start/data-validation':{title:'核对数据与修复差异',group:'operations',rank:1},'zh/start/backup':{title:'备份与故障恢复',group:'operations',rank:2},'zh/start/access':{title:'账号与使用权限',group:'security',rank:0},
  'zh/start/multi-node':{title:'多节点部署与恢复',group:'sync',rank:3},'zh/start/xinchuang':{title:'信创数据库适配与改造',group:'start',rank:4},
  'zh/start/index':{title:'使用指南',rank:0},'zh/start/introduction':{title:'项目介绍',rank:1},'zh/start/quick-start':{title:'快速开始',rank:2},'zh/start/compatibility':{title:'兼容性与能力边界',rank:3},'zh/start/scenarios':{title:'场景与试点指南',rank:4},'zh/start/faq':{title:'常见问题',rank:5},'zh/start/connectors':{title:'连接器目录',rank:-1,group:'connectors'},'zh/start/roadmap':{title:'项目路线图',rank:-1,group:'sdd'},
+ 'en/start/install':{title:'Installation and sign-in',group:'sync',rank:0},'en/start/create-task':{title:'Create a synchronization task',group:'sync',rank:1},'en/start/monitoring':{title:'Progress and daily operations',group:'sync',rank:2},
+ 'en/start/troubleshooting':{title:'Troubleshooting',group:'operations',rank:0},'en/start/data-validation':{title:'Validate data and review repairs',group:'operations',rank:1},'en/start/backup':{title:'Backup and recovery',group:'operations',rank:2},'en/start/access':{title:'Accounts and permissions',group:'security',rank:0},'en/start/scenarios':{title:'Use cases and evaluation',rank:4},'en/start/faq':{title:'Frequently asked questions',rank:5},
  'en/start/multi-node':{title:'Multi-node deployment',group:'sync',rank:3},'en/start/xinchuang':{title:'Domestic database adaptation',group:'start',rank:4},
  'en/start/index':{title:'User guide',rank:0},'en/start/introduction':{title:'Introduction',rank:1},'en/start/quick-start':{title:'Quick start',rank:2},'en/start/compatibility':{title:'Compatibility',rank:3},'en/start/connectors':{title:'Connector catalog',rank:-1,group:'connectors'},'en/start/roadmap':{title:'Roadmap',rank:-1,group:'sdd'}
 }
@@ -126,7 +129,7 @@ await write(path.join(root,'.vitepress/data/connectors.json'),JSON.stringify(con
 await write(path.join(root,'public/search-index.json'),JSON.stringify(search)+'\n')
 await write(path.join(root,'public/source-snapshot.json'),JSON.stringify(snapshot,null,2)+'\n')
 const redirects=Object.fromEntries([...map.entries()].map(([file,r])=>['/reference/'+path.relative(path.join(source,'docs'),file).replace(/\.md$/,'.html').split(path.sep).join('/'),r.route]))
-Object.assign(redirects,{'/guide/':'/docs/zh/start/index.html','/guide/introduction.html':'/docs/zh/start/introduction.html','/guide/quick-start.html':'/docs/zh/start/quick-start.html','/guide/compatibility.html':'/docs/zh/start/compatibility.html','/guide/faq.html':'/docs/zh/start/faq.html','/guide/scenarios.html':'/docs/zh/start/scenarios.html','/roadmap.html':'/docs/zh/start/roadmap.html','/ecosystem/':'/docs/zh/start/connectors.html','/en/':'/docs/en/start/index.html','/community/':'/community.html','/community/brand.html':'/brand.html'})
+Object.assign(redirects,{'/guide/':'/docs/zh/start/index.html','/guide/introduction.html':'/docs/zh/start/introduction.html','/guide/quick-start.html':'/docs/zh/start/quick-start.html','/guide/compatibility.html':'/docs/zh/start/compatibility.html','/guide/faq.html':'/docs/zh/start/faq.html','/guide/scenarios.html':'/docs/zh/start/scenarios.html','/roadmap.html':'/docs/zh/start/roadmap.html','/ecosystem/':'/docs/zh/start/connectors.html','/community/':'/community.html','/community/brand.html':'/brand.html'})
 await write(path.join(root,'.vitepress/data/redirects.json'),JSON.stringify(redirects,null,2)+'\n')
 console.log(`Imported ${hashes.length} source documents; registered ${records.length} docs in one navigation tree per language; ${connectors.length} catalog entries; ${requirements.requirements.length} SDD requirements.`)
 if(warnings.length)console.log(`Source references not present in checkout: ${[...new Set(warnings)].length} (linked to the public source repository).`)

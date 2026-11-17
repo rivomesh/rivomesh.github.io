@@ -1,0 +1,19 @@
+{
+  "artifactSha256": "b2b9a078beff8ba845704a2393a3cc5e870f7b9c3c975367693f78c3bf66c238",
+  "status": "PASS",
+  "checks": [
+    "A creates B-owned task; both JVMs share task revision",
+    "Two source databases to two targets; snapshot keyed/keyless/JSON/generated values",
+    "Cross-database transaction insert/update/delete and keyless multiplicity",
+    "Native SQL constraint error pauses target; explicit generation-bound replay catches up",
+    "Offline STOP survives SIGKILL/reopen and prevents restoring old RUNNING intent",
+    "Original private journal resumes after owner restart; missed binlog data catches up",
+    "Masked configuration references, remote preview/edit and shared history across entries",
+    "Reviewed configuration history restores as a new globally active version",
+    "Remote validation pauses CDC and exposes shared report identities, differences and authorized row values",
+    "Cross-entry reviewed repair approval restores both targets and leaves replication paused",
+    "Explicit resume after reviewed repair continues original binlog progress"
+  ],
+  "notCovered": "Automatic owner relocation, live Kubernetes/CSI, source promotion and full connector matrix",
+  "cleanupExitCode": 0
+}

@@ -16,13 +16,13 @@ RivoMesh is a Java-based database synchronization platform. It reads existing My
 
 | Goal | Read |
 | --- | --- |
-| Install and sign in | [Quick start](quick-start) and [deployment reference](../reference/console-and-deployment) |
-| Create a synchronization pipeline | [Pipeline configuration](../reference/pipeline-v3) |
-| Check progress or recover after an error | [Recovery](../reference/recovery) |
-| Compare data and review a repair | [Managed validation](../reference/managed-validation) and [managed repair](../reference/managed-repair) |
+| Install and sign in | [Installation](install) and [quick start](quick-start) |
+| Create a synchronization pipeline | [Create a task](create-task) |
+| Check progress or recover after an error | [Monitoring](monitoring), [troubleshooting](troubleshooting) and [backup](backup) |
+| Compare data and review a repair | [Validation and reviewed repair](data-validation) |
 | Evaluate domestic database targets | [Database adaptation](xinchuang) |
 | Deploy multiple nodes and shared access | [Multi-node deployment](multi-node) |
-| Manage user access | [Accounts](../reference/account-management) and [task authorization](../reference/task-authorization) |
+| Manage user access | [Accounts and permissions](access) |
 
 Start with a small test source and an empty, dedicated target. Check inserts, updates, deletes and restart behavior before expanding the scope.
 

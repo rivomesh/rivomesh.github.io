@@ -24,13 +24,13 @@ onBeforeUnmount(()=>{if(scheduled)cancelAnimationFrame(scheduled);persist()})
     <button class="locate-document" @click="locate" :title="activeTitle"><span>◎</span>{{locale==='zh'?'定位当前文档':'Locate current page'}}</button>
     <nav ref="panel" class="sidebar-scroll" data-sidebar-scroll :aria-label="locale==='zh'?'完整文档目录':'Complete documentation navigation'" @scroll.passive="onScroll">
       <template v-for="(group,g) in groups" :key="group.id">
-      <div v-if="group.audience==='project'&&groups[g-1]?.audience!=='project'" class="project-nav-divider"><button @click="toggleProject" :aria-expanded="projectOpen">{{locale==='zh'?'项目资料':'Project resources'}} <span>{{projectOpen?'−':'+'}}</span></button><a href="/project.html">{{locale==='zh'?'路线图、架构与贡献资料 ↗':'Roadmap, architecture & contribution ↗'}}</a></div>
+      <div v-if="group.audience==='project'&&groups[g-1]?.audience!=='project'" class="project-nav-divider"><button @click="toggleProject" :aria-expanded="projectOpen">{{locale==='zh'?'项目资料':'Project resources'}} <span>{{projectOpen?'−':'+'}}</span></button><a :href="locale==='en'?'/en/project.html':'/project.html'">{{locale==='zh'?'路线图、架构与贡献资料 ↗':'Roadmap, architecture & contribution ↗'}}</a></div>
       <section v-show="group.audience!=='project'||projectOpen" class="sidebar-group" :data-group="group.id">
         <button class="sidebar-group-heading" :aria-expanded="!closed.includes(group.id)" :aria-controls="'nav-'+group.id" @click="toggle(group.id)"><span>{{group.title}}</span><span class="chevron" :class="{folded:closed.includes(group.id)}">⌄</span></button>
         <ul v-show="!closed.includes(group.id)" :id="'nav-'+group.id"><li v-for="item in group.items" :key="item.route"><a :href="item.route" :aria-current="active===item.route?'page':undefined" :class="{active:active===item.route}" @click="emit('navigate',item.route)">{{item.title}}</a></li></ul>
       </section>
       </template>
     </nav>
-    <div class="sidebar-bottom"><a href="https://github.com/rivomesh/rivomesh" target="_blank" rel="noreferrer">GitHub <span>↗</span></a><a href="/project.html">{{locale==='zh'?'项目资料':'Project'}} <span>→</span></a></div>
+    <div class="sidebar-bottom"><a href="https://github.com/rivomesh/rivomesh" target="_blank" rel="noreferrer">GitHub <span>↗</span></a><a :href="locale==='en'?'/en/project.html':'/project.html'">{{locale==='zh'?'项目资料':'Project'}} <span>→</span></a></div>
   </div>
 </template>

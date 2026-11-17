@@ -10,11 +10,11 @@ title: 下载与构建
 
 当前版本为 **0.1.0-SNAPSHOT · 发布前预览**。源码与操作文档已经公开；正式发行包、签名、校验和与公共镜像按实际发布进展提供。
 
-<div class="download-tiles">
-  <section class="download-tile"><span>01 / SOURCE</span><h2>核心源码</h2><p>Java 同步服务、控制台、连接器、部署文件与测试。</p><a href="https://github.com/rivomesh/rivomesh">打开 GitHub 仓库 ↗</a></section>
-  <section class="download-tile"><span>02 / BUILD</span><h2>从源码构建</h2><p>准备 Java 8 与 Maven，构建可执行 JAR 和本地镜像。</p><a href="/docs/zh/start/quick-start.html">阅读快速开始 →</a></section>
-  <section class="download-tile"><span>03 / DEPLOY</span><h2>选择部署方式</h2><p>Linux、Docker、Helm 与原生 Kubernetes 配置及边界。</p><a href="/docs/zh/reference/console-and-deployment.html">阅读部署手册 →</a></section>
-</div>
+## 选择部署方式
+
+<QuickStart />
+
+Docker Compose 需要 Git、Docker 与 openssl，从源码构建本地镜像。Java 服务需要 Git、Java 8、Maven 与 openssl。
 
 ## 源码构建
 
@@ -30,11 +30,11 @@ mvn -s build/settings.xml verify
 
 ## 配置与启动
 
-控制台示例：[platform.yml](/files/config/platform.yml)。V3 多库、多目标示例：[pipeline-v3.yml](/files/config/pipeline-v3.yml)。使用前替换网络地址，通过环境变量提供自己的凭据。
+控制台示例：[platform.yml](/files/config/platform.yml)。多库、多目标配置示例：[pipeline-v3.yml](/files/config/pipeline-v3.yml)。使用前替换网络地址，通过环境变量提供自己的凭据。
 
 ```bash
 export RIVOMESH_TOKEN="$(openssl rand -hex 32)"
-java -Xmx128m -jar sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar serve config/platform.yml
+java -Xmx512m -jar sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar serve config/platform.yml
 ```
 
 首次任务使用独立测试源和空目标，完整权限与数据库前提见[快速开始](/docs/zh/start/quick-start.html)。
@@ -44,3 +44,7 @@ java -Xmx128m -jar sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar serve config/
 [当前实施状态](/docs/zh/reference/implementation-status.html) · [兼容性说明](/docs/zh/start/compatibility.html) · [产品路线图](/docs/zh/start/roadmap.html)
 
 正式发行包、公共镜像及升级说明将在发布时提供。当前请使用上方的构建步骤。
+
+[GitHub Releases](https://github.com/rivomesh/rivomesh/releases) · [许可证状态](/community.html#许可证与发布状态)
+
+当前核对的仓库尚无正式 Release；发布入口不代表已经提供可下载发行包。

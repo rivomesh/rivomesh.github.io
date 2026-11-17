@@ -31,7 +31,7 @@ RM-SDD-001 · 2026-11-16
 - [ ] T-CP-06 · 全局日志、指标与诊断界面 · P1 · 依赖：CP-01, CP-03, CP-05
   交付：界面按节点/任务/目标过滤状态、延迟、积压、日志和错误；注明采集时间及失联范围；远端日志分页/限流且不泄露业务值或凭据。
   验收：AC-CP-06
-- [ ] T-CP-07 · 控制面HA及控制/数据面解耦 · P0 · 依赖：CP-03, CP-05, SE-04
+- [x] T-CP-07 · 控制面HA及控制/数据面解耦 · P0 · 依赖：CP-03, CP-05, SE-04
   交付：管理实例故障后其他入口可继续查询/控制；接收但未完成的命令可恢复；按明确策略已有Worker可继续安全同步；仅部署多个replica或共享目录不能算通过。
   验收：AC-CP-07
 ## 登录状态保持
@@ -173,3 +173,7 @@ RM-SDD-001 · 2026-11-16
 v0.4：共享身份/会话独立于全局任务配置权威，因此SE-04依赖调整为CP-01；CP-05仅部分完成。 [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
 
 v0.5: CP-02/03 PARTIAL;6DONE/33PARTIAL/9NEW. [Evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html).
+
+2026-11-17: [Public fixed-owner routing/CDC evidence](/docs/zh/evidence/2026-11-17-global-routing.html); incomplete maintenance projection/migration/HA remain tracked, without changing DONE counts.
+
+v0.6: CP-07 separated LOCAL-journal profile accepted;7DONE/33PARTIAL/8NEW. [Evidence](/docs/zh/evidence/2026-11-17-execution-lifecycle.html).

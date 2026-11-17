@@ -10,9 +10,9 @@ sourcePath: docs/zh-CN/implementation-status.md
 开发预览按需启动，默认不常驻。2026-11-16已按用户要求清理预览容器；历史记录中的预览地址当前未启动。
 更新：2026-11-16。English: [Implementation status](/docs/en/reference/implementation-status.html)。完整需求见[平台方案](/docs/zh/reference/platform-design.html)，操作方式见[控制台手册](/docs/zh/reference/console-and-deployment.html)。
 
-最新进展：共享账号、权限、会话及链式审计已通过PostgreSQL17/MySQL8.4双节点、跨节点撤销、HTTPS及kill/重开/控制库中断恢复。273项应用构建、273项发布包优先应用测试、2项SDK、68项DOM和五JDK各68项控制专项通过。全局任务与远端命令执行仍在实现。[证据](/docs/zh/evidence/2026-11-16-shared-access.html)。
+协议4分离档案已通过348项应用构建/发布包优先测试、76项DOM及五JDK各152项专项；PG/MySQL控制库、真实多库双目标、管理全停、控制库中断、接收入口死亡后原命令恢复、非root三进程和SQL并发角色切换均已验收。自动跨Agent接管、完整日志/适配器/JDK矩阵仍待完成。 [Evidence](/docs/zh/evidence/2026-11-17-execution-lifecycle.html).
 
-SDD跟踪：48项中6项DONE，余42项（9NEW、33PARTIAL）。CP-01和5项会话已关闭，CP-05部分完成；CP-02/03全局任务/命令与控制面HA仍未完成。[清单](/docs/zh/sdd/tasks.html)。
+SDD跟踪：48项中7项DONE，余41项（8NEW、33PARTIAL）。CP-01和5项会话已关闭，CP-05部分完成；CP-02/03全局任务/命令与控制面HA仍未完成。[清单](/docs/zh/sdd/tasks.html)。
 
 ## 本批已实现
 
@@ -70,4 +70,6 @@ SQL逐行校验及CLI首批真实验收现已通过上述四种日志配置，�
 
 2026-11-16：管理端修复首版已验收：显式选表、预定计划ID持久化、认证管理员审阅/摘要确认、修订号/请求去重、取消与重试、提交凭据和审计。MySQL/PostgreSQL目标上的触发器、外键与元数据权限拒绝已有实测；完整依赖规划、预算编辑、独立凭据目录、失败事务补偿/跳过、接管切换、其他厂商及完整HA/容量矩阵仍待完成。见[管理端修复](/docs/zh/reference/managed-repair.html)。
 
-2026-11-17: CP-02/03 now PARTIAL: internal global task/control foundations passed307actual-JAR-first tests and native PostgreSQL/MySQL control fixtures. Public task control remains LOCAL. Configuration/history workflows are newer development work. [Evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html).
+2026-11-17: CP-02/03 now PARTIAL: internal global task/control foundations passed307actual-JAR-first tests and native PostgreSQL/MySQL control fixtures. Historical 1e47 candidate used LOCAL public control; later candidates add the opt-in global profile. [Evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html).
+
+2026-11-17 开发增量：可选 sharedTasks 固定owner全局HTTP/界面、共享配置/历史、持久命令及远程查询已接入。重启前STOP/PAUSE屏障及超过50条命令分页回归已补入；新候选应用构建336项通过，真实跨节点业务CDC和新包五JDK验收进行中。CP-02/03仍PARTIAL，旧任务导入和自动接管未完成。 [Operations](/docs/zh/reference/global-control.html).

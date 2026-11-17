@@ -1,54 +1,79 @@
 ---
 kind: docs
 locale: en
-title: "Global task control progress"
+title: "Global task control"
 sourcePath: docs/en/global-control.md
 ---
 
-# Global task control: implementation and recovery limits
+# Global task control: activation, recovery and limits
 
 [中文](/docs/zh/reference/global-control.html) · [SDD design](/docs/en/sdd/design-global-control.html)
 
-2026-11-17: the public console still uses local task control. The components below are implemented and have focused tests; runtime, migration and UI integration are ongoing. CP-02/03 are not complete. There is no deployment flag enabling complete global control yet. Sharing controller.json or increasing replica count does not complete that work.
+2026-11-17: an optional fixed-owner global profile now wires public HTTP, UI, shared configuration, durable commands and remote reads. Local control remains the default. CP-02/03 remain PARTIAL: legacy task import, complete business workflows, capacity and fault matrices are not fully accepted. Automatic owner relocation is separate.
 
-| Component | Implemented | Open |
-|---|---|---|
-| GlobalTaskStore | Globally unique IDs, encrypted configurations, revisions, authorized SQL pagination, request replay | Public runtime wiring, migration and complete business acceptance; configuration/history/restore and desired/active version workflows now have focused development tests |
-| AgentDirectory | Registry lease/incarnation/private directory binding; missing or replaced authority refuses reseeding | Formal agent lifecycle, relocation and failover |
-| DurableCommands / OwnerExecution | Durable admission, immutable original local request/revision, real TaskService invocation, receipt recovery, cancellation and local-busy retry | Public routing, startup receipt protection and independent execution lifecycle |
-| GlobalTaskViews | Authenticated encrypted observations, separate global/owner revisions, UNKNOWN for stale/offline owners | Complete logs/metrics/filtering/UI |
-| OwnerQueries | Typed read-only requests, encrypted results, expiry, fresh authorization and size/capacity limits | Entry/reader-pool integration and configuration preview translation |
+## Activation
 
-## Admission, execution and unknown outcomes
+Members share the control database, cluster.id, namespace, sharedAccess=true, sharedTasks=true and taskKey. Each has a distinct stable nodeId and private persistent task/data directories. taskKey is canonical Base64 text encoding 32 random bytes, supplied through protected environment configuration. Keep it out of task YAML. Never share controller.json. First activation requires empty task directories; existing registered tasks or YAML fail with GLOBAL_TASK_IMPORT_REQUIRED. There is no automatic legacy import tool yet.
 
-PENDING means durable admission. DISPATCHED means delivery to the fixed owner; the exact original local request/revision is persisted before invocation. ACCEPTED means local durable acceptance, not asynchronous business success. SUCCEEDED/FAILED follow actual local receipts. UNKNOWN means evidence is insufficient: never claim success or issue the operation again under a new revision.
+The [platform example](/files/config/platform-global.example.yml) supports Linux. Back up the control database, private directories and keys first. Old members must stop normally and register STOPPED before the shared protocol upgrade; expiry or loss of contact does not establish that they stopped. After upgrade, old local/registry-only members refuse admission. Disabling sharedTasks, changing nodeId, losing directory identity or using the wrong key does not fall back to local authority.
 
-Lost replies reconcile the original receipt. Reopening reuses the original request. A service can record an already committed outcome after actor authorization changes, while new execution rechecks current identity. Missing receipts plus a changed local revision remain UNKNOWN; the complete operator reconciliation workflow is still open.
+```sh
+java -jar rivomesh-app-0.1.0-SNAPSHOT.jar serve config/platform-global.example.yml
+```
 
-TASK_BUSY/OPERATION_PENDING wait without changing the request/revision. Outstanding local receipts are protected from ordinary500-entry pruning while active. Formal global startup must restore all outstanding protections before mutation APIs become available.
+Supply database credentials, token, key and node ID through the deployment environment. The example enables Secure cookies: expose HTTPS and configure the correct publicOrigin at the proxy.
 
-## Cancellation and offline owners
+## Helm and native Kubernetes
 
-Cancellation has a parent and reserved admission capacity. An undispatched parent can be atomically cancelled. A dispatched parent with an uncertain reply is reconciled first; actual cancellation follows local acceptance. A successful cancellation request does not prove all targets rolled back: inspect the original operation and native receipts.
+The [global Helm values](/files/deploy/helm/rivomesh/values-global-control.yaml) reference existing Secrets: token in rivomesh-auth, and username/password/task-key in rivomesh-control-store. task-key contains the same Base64 key text on all members. Use separate releases, private PVCs and stable node IDs:
 
-Offline owner execution is UNKNOWN. STOP remains pending rather than claiming that a remote process stopped. Renewed heartbeats do not establish safe takeover of old Workers. Reusing nodeId with an empty replacement directory is refused; restore the original directory/volume. Automatic migration/failover remains CP-04/07.
+```sh
+helm upgrade --install rivomesh-global-a deploy/helm/rivomesh --namespace rivomesh -f deploy/helm/rivomesh/values-global-control.yaml
+helm upgrade --install rivomesh-global-b deploy/helm/rivomesh --namespace rivomesh -f deploy/helm/rivomesh/values-global-control.yaml
+```
 
-## Queries and confidentiality
+Alternatively adapt and apply the native manifests [A](/files/deploy/kubernetes/rivomesh-global-a.yaml) and [B](/files/deploy/kubernetes/rivomesh-global-b.yaml) with kubectl apply -f. Independent controllers must not share a private directory. Static Helm/native parity and invalid-configuration checks exist; live Kubernetes/CSI, node-fault and rolling-upgrade acceptance remain open. Docker uses the same independent persistent-directory and key requirements. Acceptance fixtures leave no persistent preview.
 
-The query channel rejects mutations. Requests/results bind the task, owner, directory, node epoch and shared account revision and use authenticated encryption. Authorization is rechecked before execution, result publication and delivery. Row/report values are not placed in node URLs. Current component limits are512KiB requests,1MiB results, bounded retained capacity and1–60second expiry; these are not hardware throughput promises.
+## UI and configuration
 
-ownerObservedAt is observation publication time; observedAt retains the original local status sampling time. Republishing an observation must not make old source/destination metrics look newly sampled.
+The session field taskControlScope=GLOBAL identifies this profile. Any entry lists authorized tasks with cursor pagination, owner/node state, global revision, Worker state, desired/active configuration and command results. Creation/import forms select the execution node; form import creates a new task and does not migrate old checkpoints. Unavailable owner execution is UNKNOWN, not stopped.
 
-## FAQ
+Create/edit/restore/actions return 202 for durable admission only. Configuration history separates desired/active; the active pointer advances after successful owner application. Failed proposals preserve the old active configuration. Masked secret references work across entries. Connection previews, raw differences and repair-plan reads use expiring owner queries and cannot complete while the owner is offline. Complete filtering, log aggregation and real-browser visual/accessibility acceptance remain open.
 
-**Why can shared login work before global tasks?** Identity, sessions, configuration and execution ownership are separate authorities. SE-04 is accepted; CP-02/03 integration remains open.
+Global maximumTasks/maximumCommands differ from per-node maxTasks/maxRunningTasks. Defaults are 10000 global tasks and 1000 active commands; configuration ranges are resource guards, not hardware throughput promises. Queries are limited to 512KiB requests, 1MiB responses, 1–60 second lifetime, bounded readers and retained capacity.
 
-**Can database owner/directory fields be edited manually to force takeover?** No. Authenticated records refuse substitution. Moving only a cursor also does not restore events, reports, keys or Worker fencing.
+## Admission and recovery
 
-**Does a control-store outage fall back to local identities?** No. Existing data-process behavior follows the selected journal/fencing profile; the management plane cannot treat unavailable shared authority as healthy.
+PENDING is durable queueing. DISPATCHED saves the exact original local request/revision before invocation. ACCEPTED is local durable admission. SUCCEEDED/FAILED come from actual operation receipts. UNKNOWN requires reconciliation, not a success claim or reissue under a new revision. Startup restores receipt protection and validates local configuration against shared authority before scheduling.
 
-**Does native SQL acceptance establish full cluster safety?** No. `tests/owner-control-native.py` exercises real PostgreSQL/MySQL and TaskService with fixture Workers. It does not establish two-JVM HTTP, actual business CDC, liveK8s/CSI, automatic failover or capacity acceptance.
+The latest startup fix scans all outstanding command pages, including undispatched STOP/PAUSE. Corresponding Workers cannot restore old RUNNING intent before local durable admission; older local operations may finish and stop commands receive priority retries. Rejection after authorization changes releases the block; uncertainty retains it. Focused tests and the application build pass; native business acceptance remains candidate-specific and does not retroactively change earlier evidence.
 
-**Why is no persistent preview running?** The user explicitly requested none. Temporary fixtures remove their own containers/volumes/images and leave unrelated projects untouched.
+TASK_BUSY/OPERATION_PENDING retain the original request. Outstanding receipts bypass ordinary 500-entry pruning. Cancellation has a parent and reserved capacity: cancel undispatched work atomically, reconcile uncertain delivery first, and perform actual cancellation after local admission. Success does not imply all targets rolled back.
 
-2026-11-17 configuration increment: cross-entry secret references, remote previews, authenticated parent-chain history/pagination, restore, rejection preserving active configuration and global request-ID collision guards passed56focused cases. This work is newer than1e474ad1; package/native acceptance is tracked separately. Current SDD:6DONE/33PARTIAL/9NEW.
+Offline STOP waits for the original owner. Restore its private directory/volume and keys; an empty directory cannot impersonate it. Default combined controllers stop their local Workers on exit. The explicit separated profile is covered by [execution lifecycle](/docs/en/reference/execution-lifecycle.html); relocation, drain, scheduling and cross-Agent fencing remain separate work. Source MySQL primary promotion is a separate fault scenario from controller-owner takeover.
+
+## Operations FAQ
+
+**How do I distinguish accepted from executed?** Inspect deliveryStatus, status, code and actual Worker/target checkpoints for the same request ID. HTTP 202 is not business commit evidence.
+
+**Does refresh or another entry preserve login?** Shared sessions restore identity subject to cookie domain, Secure, SameSite, expiry and revocation. Different domains require correct proxy/session configuration.
+
+**Can A stop an offline owner?** A durably queues STOP. It stays pending/unknown until the original owner supplies an actual receipt. Heartbeat expiry does not prove process termination.
+
+**Can I edit owner fields, delete root tables or use an empty directory?** No. Authenticated metadata, counts, private-directory identity, receipts and configuration projections reject missing/substituted authority.
+
+**Does control-store failure fall back to local accounts?** No. Management refuses control without shared authority. Existing data-process behavior follows its journal/lease/target protocol; management availability does not establish complete data-plane fencing.
+
+**What belongs in backups?** Coordinate the control database, every private directory, logs/reports/local journal, external journal if selected, and original keys. Restoring just a cursor or old control snapshot is insufficient; automated coordination and old-backup fault matrices remain open.
+
+**What is already evidenced?** Earlier candidates cover real PostgreSQL/MySQL control stores, two independent JVMs, HTTPS/shared login, A creating B-owned tasks and offline commands. Configuration fixtures also invoke real TaskService with fixture Workers. The startup fix and real cross-node business CDC are under additional acceptance. These do not establish all cluster, adapter or hardware profiles.
+
+**Why is no persistent preview running?** The user requested temporary fixtures only. They remove their own containers/volumes and leave unrelated resources untouched.
+
+## Multi-target maintenance receipts and upgrade recovery
+
+Intermediate candidate463994bca812 exposed inconsistent Set normalization during real two-target validation: comparison completed and remained PAUSED, while receipt inspection recorded UNKNOWN/OWNER_RECEIPT_MISMATCH. The fix applies the same input validation/sorting as local admission and retains the original request,revision,actor and report identity. Candidateb2b9a078 passes339actual-JAR-first tests,5x143maintenance controls,actual two-target validation/repair and original-report recovery from old UNKNOWN; see [evidence](/docs/zh/evidence/2026-11-17-global-maintenance.html). Never edit shared phases or issue another validation to hide uncertainty.
+
+The explicit controller/Agent profile now has scoped acceptance; see [execution lifecycle](/docs/en/reference/execution-lifecycle.html). Default combined deployment remains coupled, and additional profiles need independent verification.
+
+2026-11-17: explicit protocol4 controller/Agent separation is accepted for the declared profile;default combined mode remains coupled. [Operations](/docs/en/reference/execution-lifecycle.html) · [Evidence](/docs/zh/evidence/2026-11-17-execution-lifecycle.html).

@@ -1,0 +1,10 @@
+# Fixed-owner global control. Each release owns a separate persistent directory.
+# Use empty task directories for first activation; existing local tasks need reviewed import.
+cluster:
+  enabled: true
+  sharedAccess: true
+  sharedTasks: true
+  id: migration-control
+  url: jdbc:postgresql://control-db:5432/rivomesh_control
+  existingSecret: rivomesh-control-store
+  taskKeyKey: task-key

@@ -19,7 +19,7 @@ These contracts track implementation acceptance. CP-01 and SE-01/02/03/04/05 acc
 | AC-CP-04 | CP-04 | Power loss,partition and stale-node return never permit dual writers;unconfirmed stops remain unknown/fenced;placement respects JDK,adapter,storage reachability and quotas;drain/move preserves progress. | NOT_RUN |
 | AC-CP-05 | CP-05 | Revocation at A is enforced at B;remote actions correlate by request/task/node/plan;secrets are not returned to UI and agents receive only authorized task references. | PARTIAL · [shared-access](/docs/zh/evidence/2026-11-16-shared-access.html) |
 | AC-CP-06 | CP-06 | UI filters node/task/destination status,lag,backlog,logs and errors with observation timestamps and bounded redacted log access. | NOT_RUN |
-| AC-CP-07 | CP-07 | Another entry survives controller failure;accepted commands recover;existing workers continue safely under documented policy;replica count/shared files alone are insufficient. | NOT_RUN |
+| AC-CP-07 | CP-07 | Another entry survives controller failure;accepted commands recover;existing workers continue safely under documented policy;replica count/shared files alone are insufficient. | DONE · [separated profile](/docs/zh/evidence/2026-11-17-execution-lifecycle.html) |
 | AC-SE-01 | SE-01 | Reload/reopening the site restores an unexpired session and permissions without reentering the token;expired sessions return to login without unintended actions. | [PASS, single controller](/docs/zh/evidence/2026-11-16-browser-sessions.html) |
 | AC-SE-02 | SE-02 | Idle/absolute expiry is configurable;logout,disable,rotation and revocation invalidate sessions as specified;tabs agree;remembering across browser closure is a separate configurable policy. | [PASS, single controller](/docs/zh/evidence/2026-11-16-browser-sessions.html) |
 | AC-SE-03 | SE-03 | No readable long-lived browser credential;protected cookie/equivalent transport,HTTPS and HttpOnly/SameSite policy are verified;cookie-authenticated mutations enforce CSRF/Origin checks;session IDs never enter URLs/logs. | [PASS, single controller](/docs/zh/evidence/2026-11-16-browser-sessions.html) |
@@ -90,3 +90,7 @@ Each approved profile crosses five JDKs;targets,auth/TLS,types,journals,topology
 ### Release evidence fields
 
 Requirement/task/case IDs,candidate SHA,node/agent protocol,actual product/version/mode,JVM/architecture,driver,storage/durability,scope/workload,before/after coordinates,receipt/gap IDs,positive/refusal/duplicate/interruption outcomes,raw-log location,redaction,manual links and residual limits. Distinguish NOT_RUN,PASSED,FAILED,EXPERIMENTAL,UNSUPPORTED;having a script is not PASSED.
+
+2026-11-17: [Public fixed-owner routing/CDC evidence](/docs/zh/evidence/2026-11-17-global-routing.html); incomplete maintenance projection/migration/HA remain tracked, without changing DONE counts.
+
+v0.6: CP-07 acceptance is limited to the explicit profile recorded in evidence;automatic Agent relocation and the complete matrix remain separate.

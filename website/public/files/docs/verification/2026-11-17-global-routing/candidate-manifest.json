@@ -1,0 +1,13 @@
+{
+  "artifact": "target/release-evidence/global-startup-final.jar",
+  "artifactSha256": "a6eaffa9fd4d3298ecb6dc988dc6b11ddf11be1fe68e3f1c0847f249fb5c0876",
+  "bytes": 187921751,
+  "testClasses": "target/release-evidence/global-startup-tests-a6eaffa9fd4d",
+  "testClassesSha256": "9a5749f645475661948174fc4140d7b4832ccd0b60f6e33d4c4aab00a80d7ac2",
+  "sourceManifest": "target/release-evidence/global-startup-sources.json",
+  "sourceManifestSha256": "f496aea52ef59e0e80e2f1035a7f2d9b947644de3cfb1e3aaf0186d84d782195",
+  "appTests": 336,
+  "domTests": 73,
+  "sdkReuseManifest": "target/sdk-cache-manifest.json",
+  "scope": "Opt-in fixed-owner global control with startup STOP/PAUSE barrier; native business acceptance pending"
+}

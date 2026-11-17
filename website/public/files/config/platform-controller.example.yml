@@ -1,0 +1,31 @@
+# Development profile; use HTTPS and configure publicOrigin at the reverse proxy as needed.
+bind: 127.0.0.1
+port: 8080
+authToken: ${RIVOMESH_TOKEN}
+tasksDirectory: tasks-controller
+dataDirectory: ../data/platform-controller
+maxTasks: 20
+maxRunningTasks: 2
+workerHeapMiB: 256
+pollMillis: 1000
+autoStart: false
+sessions:
+  secureCookie: true
+cluster:
+  id: migration-control
+  nodeId: ${RIVOMESH_NODE_ID}
+  sharedAccess: true
+  sharedTasks: true
+  separateExecution: true
+  role: CONTROLLER
+  taskKey: ${RIVOMESH_TASK_KEY}
+  maximumTasks: 10000
+  maximumCommands: 1000
+  driver: org.postgresql.Driver
+  url: jdbc:postgresql://127.0.0.1:5432/rivomesh_control
+  namespace: rivomesh_control
+  username: ${RIVOMESH_CONTROL_USERNAME}
+  password: ${RIVOMESH_CONTROL_PASSWORD}
+  heartbeatMillis: 2000
+  leaseMillis: 15000
+  maximumNodes: 1000
