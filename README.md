@@ -82,7 +82,20 @@ npm run brand:generate
 
 此命令仅依赖 Node.js 与已安装的 Sharp，不调用 FFmpeg 或 macOS `say`，也不修改截图、字幕、旁白和视频。生成结果直接提交到仓库；`npm run check` 检查品牌文件格式与尺寸。
 
-只有需要重制既有产品讲解时才运行 `npm run video:generate`，该命令需要 macOS `say` 的 Tingting 语音与 FFmpeg，并复用已提交的真实截图。`npm run media:optimize` 独立生成截图 WebP。`npm run media:generate` 是上述三个步骤的完整媒体重建入口，普通网站构建与 CI 均不运行它。
+产品旁白使用 OpenAI Realtime API，默认 `gpt-realtime-2.1` / `marin`。离线工具读取项目根目录已忽略的 `.env.local` 中的 `OPENAI_API_KEY`，或同名环境变量；不要提交密钥。可选 `RIVOMESH_VOICE`、`RIVOMESH_VOICE_MODEL` 调整音色和模型，`HTTPS_PROXY` / `https_proxy` 支持本机代理。
+
+```bash
+npm run voice:plan       # 仅查看讲稿与生成计划，不调用 API
+npm run voice:sample     # 生成第一章试听
+npm run video:preview    # 生成全部旁白与视频预览，不替换站点文件
+npm run video:generate   # 生成并应用视频、字幕、章节与来源记录
+```
+
+语音缓存、原视频备份和预览保存在 `.rivomesh-voice.local/`（Git 忽略），相同讲稿、音色、模型和指令会复用音频。显式 `--force` 才重生成相同片段。片段失败不会自动产生重复的付费请求。工具从已有视频提取原始静态画面，保持讲稿与展示内容，按新语音长度安排章节，不加速压缩旁白；随后统一音量并输出 H.264/AAC MP4。
+
+字幕对齐使用 OpenAI 的词级时间戳，保留原有中英文文字；目前该专门能力使用 `whisper-1`，该模型已公告将于 2027-02-26 关闭，需要在此之前更新离线对齐工具。语音生成使用当前 Realtime 流程，不依赖已弃用的 Speech API。每次应用前验证朗读文本、字幕顺序、时长与单一音轨；重制后仍应人工试听技术名称和查看字幕。
+
+视频重制需要 FFmpeg / FFprobe 和可用的 OpenAI API 账户，无需 macOS `say`。历史系统语音脚本保留为 `tooling/make-media.mjs`，默认流程不调用它。`npm run media:optimize` 独立生成截图 WebP。`npm run media:generate` 是品牌、视频和截图的完整重建入口；普通网站构建与 CI 不调用媒体生成命令，不需要 API 凭据或 FFmpeg。
 
 产品导览使用原生 HTML5 video；点击播放或章节后才挂载视频，提供中英文字幕、下载、文字稿和章节跳转。截图与视频保留开发预览性质，不能作为实时运行或生产性能证明。
 

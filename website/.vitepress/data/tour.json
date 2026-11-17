@@ -2,26 +2,26 @@
   {
     "title": "数据库同步是什么",
     "time": 0,
-    "duration": 19
+    "duration": 21
   },
   {
     "title": "准备并创建任务",
-    "time": 19,
-    "duration": 20
+    "time": 21,
+    "duration": 21
   },
   {
     "title": "检查、启动与观察",
-    "time": 39,
-    "duration": 20
+    "time": 42,
+    "duration": 24
   },
   {
     "title": "校验与按计划修复",
-    "time": 59,
-    "duration": 20
+    "time": 66,
+    "duration": 25
   },
   {
     "title": "跟着使用指南完成同步",
-    "time": 79,
-    "duration": 23
+    "time": 91,
+    "duration": 25
   }
 ]

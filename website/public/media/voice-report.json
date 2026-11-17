@@ -1,0 +1,164 @@
+{
+  "provider": "OpenAI",
+  "synthetic": true,
+  "revision": "0da9c933d4c4ed19",
+  "timestampModel": "whisper-1",
+  "duration": 116,
+  "chapters": [
+    {
+      "chapter": 1,
+      "title": "数据库同步是什么",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "audioDuration": 19.95,
+      "duration": 21,
+      "timestampSimilarity": 0.9883720930232558,
+      "sourceAudioSha256": "c2fdb56a558f3625b6b1ca79735e8634bf4d1518a1fa71c968260fa4cbebe534",
+      "usage": {
+        "total_tokens": 812,
+        "input_tokens": 273,
+        "output_tokens": 539,
+        "input_token_details": {
+          "text_tokens": 273,
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "cached_tokens": 0,
+          "cached_tokens_details": {
+            "text_tokens": 0,
+            "audio_tokens": 0,
+            "image_tokens": 0
+          }
+        },
+        "output_token_details": {
+          "text_tokens": 140,
+          "audio_tokens": 399,
+          "reasoning_tokens": 49
+        }
+      }
+    },
+    {
+      "chapter": 2,
+      "title": "准备并创建任务",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "audioDuration": 20.25,
+      "duration": 21,
+      "timestampSimilarity": 0.95,
+      "sourceAudioSha256": "b2a764e5350b49e1885e7763f9421ee52de41cadfd7a3766e45ad93fe6e56984",
+      "usage": {
+        "total_tokens": 780,
+        "input_tokens": 270,
+        "output_tokens": 510,
+        "input_token_details": {
+          "text_tokens": 270,
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "cached_tokens": 0,
+          "cached_tokens_details": {
+            "text_tokens": 0,
+            "audio_tokens": 0,
+            "image_tokens": 0
+          }
+        },
+        "output_token_details": {
+          "text_tokens": 105,
+          "audio_tokens": 405,
+          "reasoning_tokens": 16
+        }
+      }
+    },
+    {
+      "chapter": 3,
+      "title": "检查、启动与观察",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "audioDuration": 22.7,
+      "duration": 24,
+      "timestampSimilarity": 1,
+      "sourceAudioSha256": "f46f829cbc1c13e4f34535f111c3afd14cd2088bc5cd9a0d2507ce09a440cce9",
+      "usage": {
+        "total_tokens": 841,
+        "input_tokens": 271,
+        "output_tokens": 570,
+        "input_token_details": {
+          "text_tokens": 271,
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "cached_tokens": 0,
+          "cached_tokens_details": {
+            "text_tokens": 0,
+            "audio_tokens": 0,
+            "image_tokens": 0
+          }
+        },
+        "output_token_details": {
+          "text_tokens": 116,
+          "audio_tokens": 454,
+          "reasoning_tokens": 23
+        }
+      }
+    },
+    {
+      "chapter": 4,
+      "title": "校验与按计划修复",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "audioDuration": 24.05,
+      "duration": 25,
+      "timestampSimilarity": 0.9642857142857143,
+      "sourceAudioSha256": "c8ffbb035460b4b2fb2c54e42e2b4b343958c10d52b18ff58db5e5cbbe7e4d4b",
+      "usage": {
+        "total_tokens": 922,
+        "input_tokens": 274,
+        "output_tokens": 648,
+        "input_token_details": {
+          "text_tokens": 274,
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "cached_tokens": 0,
+          "cached_tokens_details": {
+            "text_tokens": 0,
+            "audio_tokens": 0,
+            "image_tokens": 0
+          }
+        },
+        "output_token_details": {
+          "text_tokens": 167,
+          "audio_tokens": 481,
+          "reasoning_tokens": 70
+        }
+      }
+    },
+    {
+      "chapter": 5,
+      "title": "跟着使用指南完成同步",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "audioDuration": 23.5,
+      "duration": 25,
+      "timestampSimilarity": 1,
+      "sourceAudioSha256": "6072ebea23b70428c57ea3562ed1670336cf5ca017ad6931195a70e11533cee2",
+      "usage": {
+        "total_tokens": 869,
+        "input_tokens": 277,
+        "output_tokens": 592,
+        "input_token_details": {
+          "text_tokens": 277,
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "cached_tokens": 0,
+          "cached_tokens_details": {
+            "text_tokens": 0,
+            "audio_tokens": 0,
+            "image_tokens": 0
+          }
+        },
+        "output_token_details": {
+          "text_tokens": 122,
+          "audio_tokens": 470,
+          "reasoning_tokens": 24
+        }
+      }
+    }
+  ]
+}

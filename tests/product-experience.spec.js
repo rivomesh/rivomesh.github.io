@@ -7,6 +7,8 @@ import ProductTour from '../website/.vitepress/theme/components/ProductTour.vue'
 import ScreenshotPreview from '../website/.vitepress/theme/components/ScreenshotPreview.vue'
 import QuickStart from '../website/.vitepress/theme/components/QuickStart.vue'
 import SiteHeader from '../website/.vitepress/theme/components/SiteHeader.vue'
+import chapters from '../website/.vitepress/data/tour.json'
+import media from '../website/.vitepress/data/tour-media.json'
 import {pairedRoute,pageRoute} from '../website/.vitepress/site-routes.mjs'
 let state,wrappers=[]
 vi.mock('vitepress',()=>({useData:()=>state}))
@@ -71,8 +73,8 @@ describe('product media and trial commands',()=>{
   expect(video.findAll('track')).toHaveLength(2)
   expect(video.get('track[srclang="en"]').attributes('default')).toBeDefined()
   await video.trigger('loadedmetadata');await flushPromises()
-  expect(video.element.currentTime).toBe(39);expect(play).toHaveBeenCalledOnce()
-  expect(wrapper.get('a[download]').attributes('href')).toBe('/media/rivomesh-tour.mp4')
+  expect(video.element.currentTime).toBe(chapters[2].time);expect(play).toHaveBeenCalledOnce()
+  expect(wrapper.get('a[download]').attributes('href')).toBe(`/media/rivomesh-tour.mp4?v=${media.revision}`)
  })
  it('keeps native controls available when browser playback is denied',async()=>{
   vi.spyOn(HTMLMediaElement.prototype,'load').mockImplementation(()=>{})

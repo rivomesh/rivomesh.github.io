@@ -11,20 +11,25 @@
     "docs:sync": "node tooling/import-source.mjs",
     "build": "vitepress build website && node tooling/redirects.mjs && node tooling/verify-build.mjs && node tooling/verify-metadata.mjs",
     "preview": "vitepress preview website --host 127.0.0.1",
-    "check": "node tooling/verify-content.mjs && node tooling/verify-brand.mjs",
+    "check": "node tooling/verify-content.mjs && node tooling/verify-brand.mjs && node tooling/verify-tour.mjs",
     "test": "vitest run",
     "media:generate": "npm run brand:generate && npm run video:generate && npm run media:optimize",
     "media:optimize": "node tooling/optimize-media.mjs",
     "brand:generate": "node tooling/make-brand.mjs",
-    "video:generate": "node tooling/make-media.mjs"
+    "video:generate": "node tooling/make-voice.mjs --all && node tooling/render-voice.mjs --apply",
+    "voice:sample": "node tooling/make-voice.mjs --chapter=1",
+    "voice:plan": "node tooling/make-voice.mjs --plan",
+    "video:preview": "node tooling/make-voice.mjs --all && node tooling/render-voice.mjs"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "5.2.4",
     "@vue/test-utils": "2.4.6",
+    "https-proxy-agent": "7.0.6",
     "jsdom": "26.1.0",
     "sharp": "0.35.5",
     "vitepress": "1.6.4",
     "vitest": "2.1.9",
-    "vue": "3.5.45"
+    "vue": "3.5.45",
+    "ws": "8.23.0"
   }
 }
