@@ -2,12 +2,17 @@
 kind: docs
 locale: en
 title: Roadmap
+description: Explore current RivoMesh capabilities, improvements to multi-node operations and recovery, and plans for additional database sources.
 ---
 
-# Specifications, delivery and acceptance
+# Product roadmap
 
-This view reads the SDD requirements from the current source snapshot. IDs, priorities, states, gaps, dependencies and acceptance conditions remain traceable.
+See what is available today, what is being improved and what is planned next. Follow the linked guides for supported database versions, deployment profiles and recovery requirements.
 
 <Roadmap />
 
-DONE closes the recorded scope. PARTIAL and NEW remain unfinished. Priorities are not release dates. Read the [specification](../sdd/spec), [plan](../sdd/plan), [tasks](../sdd/tasks) and [acceptance matrix](../sdd/acceptance) with the [implementation status](../reference/implementation-status).
+## Help shape RivoMesh
+
+Share your use cases, compatibility needs and operational blockers through [GitHub Issues](https://github.com/rivomesh/rivomesh/issues).
+
+[Requirements](../sdd/spec) · [Implementation plan](../sdd/plan) · [Task inventory](../sdd/tasks) · [Acceptance matrix](../sdd/acceptance) · [Implementation status](../reference/implementation-status)

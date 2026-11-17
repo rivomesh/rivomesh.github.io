@@ -29,7 +29,7 @@ function reset(){role.value='ALL';status.value='ALL';family.value='ALL';query.va
       </article>
     </div>
     <div v-if="!rows.length" class="directory-empty"><p>{{english?'No matching profiles. Try another direction or category.':'没有匹配项，请调整连接方向或系统类型。'}}</p><button @click="reset">{{english?'Reset filters':'重置筛选'}}</button></div>
-    <div v-if="compact" class="compact-directory-footer"><p>{{english?'MySQL capture is available. PostgreSQL and Oracle sources are planned.':'当前采集源为 MySQL，PostgreSQL / Oracle 源仍在规划。'}}</p><p class="directory-more"><a :href="`/docs/${locale}/start/connectors.html`">{{english?'Browse every connector and version profile':'查看全部连接器与版本范围'}} →</a></p></div>
+    <div v-if="compact" class="compact-directory-footer"><p>{{english?'Check source and sink support separately for each product.':'请按采集源与同步目标分别核对支持范围。'}}</p><p class="directory-more"><a :href="`/docs/${locale}/start/connectors.html`">{{english?'Browse every connector and version profile':'查看全部连接器与版本范围'}} →</a></p></div>
   </div>
 </template>
 <style scoped>

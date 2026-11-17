@@ -2,7 +2,7 @@
   {
     "locale": "zh",
     "route": "/docs/zh/reference/development-v3.html",
-    "title": "Rivomesh engineering checkpoint",
+    "title": "历史实现参考",
     "group": "architecture",
     "rank": 99,
     "sourcePath": "docs/development-v3.md"
@@ -1059,8 +1059,8 @@
     "locale": "zh",
     "route": "/docs/zh/start/roadmap.html",
     "title": "项目路线图",
-    "rank": -1,
-    "group": "sdd"
+    "rank": 6,
+    "group": "start"
   },
   {
     "locale": "en",
@@ -1178,7 +1178,7 @@
     "locale": "en",
     "route": "/docs/en/start/roadmap.html",
     "title": "Roadmap",
-    "rank": -1,
-    "group": "sdd"
+    "rank": 6,
+    "group": "start"
   }
 ]

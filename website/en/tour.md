@@ -11,13 +11,13 @@ description: Watch the English RivoMesh walkthrough with English narration, work
 
 ## Narrated walkthrough
 
-Play the walkthrough here, select an English or Chinese subtitle track, or jump to a chapter. This independent English edition has English workflow illustrations, English AI narration by OpenAI, and English subtitles by default. The illustrations explain the workflow and are not a live console recording. The video loads only after your action; an [English transcript](/media/transcript.en.txt) is also available.
+Watch the English walkthrough or jump to a chapter covering setup, monitoring, validation and recovery. English captions are selected by default; Chinese subtitles and an [English transcript](/media/transcript.en.txt) are also available. The video uses workflow illustrations.
 
 <ProductTour />
 
 ## Original product screenshots
 
-These captures show the real English-language console in a local development preview. The example pipeline is stopped; the images demonstrate controls rather than live replication activity.
+Explore the task workspace, pipeline wizard and connector catalog in the English console.
 
 <ProductGallery />
 
@@ -30,4 +30,4 @@ These captures show the real English-language console in a local development pre
 3. [Read progress and handle errors](/docs/en/start/monitoring.html).
 4. [Review validation and repair](/docs/en/start/data-validation.html).
 
-The available images do not include a dedicated validation-report or error-diagnosis screenshot. Those workflows are explained in the linked manuals rather than represented by invented UI.
+For report details and repair steps, see the [data validation guide](/docs/en/start/data-validation.html). For errors and recovery actions, see [troubleshooting](/docs/en/start/troubleshooting.html).

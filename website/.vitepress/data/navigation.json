@@ -33,6 +33,10 @@
         {
           "route": "/docs/zh/start/faq.html",
           "title": "常见问题"
+        },
+        {
+          "route": "/docs/zh/start/roadmap.html",
+          "title": "项目路线图"
         }
       ]
     },
@@ -248,7 +252,7 @@
         },
         {
           "route": "/docs/zh/reference/development-v3.html",
-          "title": "Rivomesh engineering checkpoint"
+          "title": "历史实现参考"
         }
       ]
     },
@@ -261,10 +265,6 @@
         {
           "route": "/docs/zh/sdd/design-execution-lifecycle.html",
           "title": "CP-07：管理入口与执行生命周期分离（分离档案已验收）"
-        },
-        {
-          "route": "/docs/zh/start/roadmap.html",
-          "title": "项目路线图"
         },
         {
           "route": "/docs/zh/sdd/index.html",
@@ -479,6 +479,10 @@
         {
           "route": "/docs/en/start/faq.html",
           "title": "Frequently asked questions"
+        },
+        {
+          "route": "/docs/en/start/roadmap.html",
+          "title": "Roadmap"
         }
       ]
     },
@@ -703,10 +707,6 @@
         {
           "route": "/docs/en/sdd/design-execution-lifecycle.html",
           "title": "CP-07: management and execution lifecycle separation (separated profile accepted)"
-        },
-        {
-          "route": "/docs/en/start/roadmap.html",
-          "title": "Roadmap"
         },
         {
           "route": "/docs/en/sdd/spec.html",

@@ -38,4 +38,4 @@ The horizontal wordmark uses original geometric vector paths and needs no instal
 
 ## Product media
 
-The [English product tour](/en/tour.html) has independent English narration, workflow illustrations, captions and a transcript. The screenshot gallery uses genuine English-language product captures from a local development preview. The Chinese site retains its original Chinese captures. Neither set is edited to simulate translated controls.
+Watch the [English product tour](/en/tour.html) with narration, captions, chapters and a transcript, or explore screenshots of the English console.

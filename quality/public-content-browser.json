@@ -1,0 +1,1015 @@
+{
+  "checks": [
+    {
+      "route": "/",
+      "width": 320,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 320,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 320,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 320,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 320,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 320,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 320,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 320,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 320,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 320,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 320,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 320,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/",
+      "width": 320,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 320,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 320,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 320,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 320,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 320,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 320,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 320,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 320,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 320,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 320,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 320,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/",
+      "width": 375,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 375,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 375,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 375,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 375,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 375,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 375,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 375,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 375,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 375,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 375,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 375,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/",
+      "width": 375,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 375,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 375,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 375,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 375,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 375,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 375,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 375,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 375,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 375,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 375,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 375,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 390,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 390,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 390,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 390,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 390,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 390,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 390,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 390,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 390,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 390,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 390,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 390,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 390,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 390,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 390,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 390,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 390,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 390,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 390,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 390,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 390,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 390,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/",
+      "width": 768,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 768,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 768,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 768,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 768,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 768,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 768,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 768,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 768,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 768,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 768,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 768,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/",
+      "width": 768,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 768,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 768,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 768,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 768,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 768,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 768,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 768,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 768,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 768,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 768,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 768,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/",
+      "width": 1024,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 1024,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 1024,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 1024,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 1024,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 1024,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 1024,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 1024,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 1024,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 1024,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 1024,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 1024,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/",
+      "width": 1024,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 1024,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 1024,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 1024,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 1024,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 1024,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 1024,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 1024,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 1024,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 1024,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 1024,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 1024,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/",
+      "width": 1440,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 1440,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 1440,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 1440,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 1440,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 1440,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 1440,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 1440,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 1440,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 1440,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 1440,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 1440,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/",
+      "width": 1440,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 1440,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 1440,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 1440,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 1440,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 1440,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 1440,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 1440,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 1440,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 1440,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 1440,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 1440,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/",
+      "width": 1920,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 1920,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 1920,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 1920,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 1920,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 1920,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 1920,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 1920,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 1920,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 1920,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 1920,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 1920,
+      "theme": "light",
+      "noOverflow": true
+    },
+    {
+      "route": "/",
+      "width": 1920,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/",
+      "width": 1920,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/brand.html",
+      "width": 1920,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/brand.html",
+      "width": 1920,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/tour.html",
+      "width": 1920,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/tour.html",
+      "width": 1920,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/download.html",
+      "width": 1920,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/download.html",
+      "width": 1920,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/community.html",
+      "width": 1920,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/en/community.html",
+      "width": 1920,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/zh/start/roadmap.html",
+      "width": 1920,
+      "theme": "dark",
+      "noOverflow": true
+    },
+    {
+      "route": "/docs/en/start/roadmap.html",
+      "width": 1920,
+      "theme": "dark",
+      "noOverflow": true
+    }
+  ],
+  "roadmap": "Closed by default; keyboard expansion, requirement search and acceptance detail verified at 390/1440px in both languages and themes.",
+  "media": "Both independent videos load with locale-specific default subtitles; original wizard images and configuration-format disclosure verified.",
+  "pageErrors": []
+}

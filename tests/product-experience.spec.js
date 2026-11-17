@@ -7,6 +7,8 @@ import ProductTour from '../website/.vitepress/theme/components/ProductTour.vue'
 import ScreenshotPreview from '../website/.vitepress/theme/components/ScreenshotPreview.vue'
 import QuickStart from '../website/.vitepress/theme/components/QuickStart.vue'
 import SiteHeader from '../website/.vitepress/theme/components/SiteHeader.vue'
+import Roadmap from '../website/.vitepress/theme/components/Roadmap.vue'
+import requirements from '../website/.vitepress/data/requirements.json'
 import media from '../website/.vitepress/data/tour-media.json'
 import englishChapters from '../website/.vitepress/data/tour-en.json'
 import englishMedia from '../website/.vitepress/data/tour-en-media.json'
@@ -23,7 +25,7 @@ describe('direction-specific connector profiles',()=>{
   expect(wrapper.findAll('select,input')).toHaveLength(0)
   const postgres=wrapper.findAll('.connector-product').find(row=>row.get('h3').text()==='PostgreSQL')
   expect(postgres.text()).toContain('同步目标');expect(postgres.text()).not.toContain('采集源')
-  expect(wrapper.text()).toContain('PostgreSQL / Oracle 源仍在规划')
+  expect(wrapper.text()).toContain('请按采集源与同步目标分别核对支持范围')
  })
  it('groups a product once and retains distinct source and sink support',()=>{
   const wrapper=create(ConnectorCatalog)
@@ -58,6 +60,33 @@ describe('direction-specific connector profiles',()=>{
   state.frontmatter.value.locale='en';const wrapper=create(ConnectorCatalog)
   expect(wrapper.text()).not.toMatch(/达梦|金仓|采集源|规划中/)
   expect(wrapper.findAll('.connector-profile a').every(x=>x.attributes('href').startsWith('/docs/en/'))).toBe(true)
+ })
+})
+describe('product roadmap and engineering details',()=>{
+ it('separates planned sources from available capabilities and keeps all requirement records collapsed',async()=>{
+  const wrapper=create(Roadmap)
+  expect(wrapper.get('.roadmap-current').text()).toContain('MySQL')
+  expect(wrapper.get('.roadmap-current').text()).not.toMatch(/PostgreSQL|Oracle/)
+  expect(wrapper.get('[data-phase="NEW"]').text()).toContain('PostgreSQL 与 Oracle')
+  expect(wrapper.get('[data-phase="PARTIAL"]').text()).toContain('多节点任务管理')
+  expect(wrapper.get('#engineering-details').attributes('open')).toBeUndefined()
+  expect(wrapper.findAll('.requirement-item')).toHaveLength(requirements.requirements.length)
+  wrapper.get('#engineering-details').element.open=true
+  await wrapper.get('input').setValue('SO-06')
+  expect(wrapper.findAll('.requirement-item')).toHaveLength(1)
+  expect(wrapper.get('.requirement-item').text()).toContain('PostgreSQL 源适配器')
+ })
+ it('localizes the product overview and preserves English links and requirement filters',async()=>{
+  state.frontmatter.value.locale='en';const wrapper=create(Roadmap)
+  expect(wrapper.get('.roadmap-current').text()).toContain('Available today')
+  expect(wrapper.get('[data-phase="NEW"]').text()).toContain('Additional source databases')
+  expect(wrapper.findAll('.roadmap-capabilities a,.roadmap-directions a').every(link=>link.attributes('href').startsWith('/docs/en/'))).toBe(true)
+  wrapper.get('#engineering-details').element.open=true
+  await wrapper.findAll('select')[0].setValue('SOURCE')
+  await wrapper.findAll('select')[1].setValue('NEW')
+  const expected=requirements.requirements.filter(row=>row.epic==='SOURCE'&&row.status==='NEW')
+  expect(wrapper.findAll('.requirement-item').map(row=>row.get('code').text())).toEqual(expected.map(row=>row.id))
+  expect(wrapper.get('input').attributes('placeholder')).not.toMatch(/会话/)
  })
 })
 describe('product media and trial commands',()=>{
@@ -103,7 +132,8 @@ describe('product media and trial commands',()=>{
   state.frontmatter.value.locale='en';await flushPromises()
   expect(pause).toHaveBeenCalledOnce();expect(wrapper.find('video').exists()).toBe(false)
   expect(wrapper.get('.video-poster img').attributes('src')).toBe('/media/tour-poster-en.png')
-  expect(wrapper.text()).toContain('English AI narration');expect(wrapper.text()).not.toContain('Chinese AI narration')
+  expect(wrapper.get('.tour-heading').text()).toContain('English narration')
+  expect(wrapper.get('.video-resources').text()).toContain('AI narration by OpenAI');expect(wrapper.text()).not.toContain('旁白由 OpenAI 合成')
  })
  it('keeps native controls available when browser playback is denied',async()=>{
   vi.spyOn(HTMLMediaElement.prototype,'load').mockImplementation(()=>{})

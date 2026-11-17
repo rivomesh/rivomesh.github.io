@@ -7,9 +7,9 @@ description: Build RivoMesh from source or use Docker Compose. Find real install
 
 # Get RivoMesh
 
-<p class="landing-lead">Build the synchronization service from public source and choose the deployment profile that fits your environment.</p>
+<p class="landing-lead">Build RivoMesh from source or use Docker Compose, then create your first replication pipeline.</p>
 
-The current version is **0.1.0-SNAPSHOT, a pre-release**. There is no formal GitHub Release or verified public container image in this website's checked baseline. The commands below build from source; they do not download a prebuilt distribution.
+The current version is **0.1.0-SNAPSHOT, a preview**. The trial setup builds from source, including a local image when using Docker Compose.
 
 ## Choose a deployment method
 
@@ -27,6 +27,6 @@ The Java build produces `sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar`. Docke
 
 ## Version and release status
 
-[GitHub Releases](https://github.com/rivomesh/rivomesh/releases) is the release destination; its existence does not imply a published package. Until a release is provided, use the source build above. Signed archives, checksums, public images and upgrade guidance must be checked against the actual release.
+Find release assets and version notes in [GitHub Releases](https://github.com/rivomesh/rivomesh/releases). Consult the [core repository](https://github.com/rivomesh/rivomesh) for licensing terms.
 
-[Implementation status](/docs/en/reference/implementation-status.html) · [Known limitations](/docs/en/start/compatibility.html) · [Multi-node deployment](/docs/en/start/multi-node.html) · [License status](/en/community.html#license-and-release-status)
+[Implementation status](/docs/en/reference/implementation-status.html) · [Known limitations](/docs/en/start/compatibility.html) · [Multi-node deployment](/docs/en/start/multi-node.html)

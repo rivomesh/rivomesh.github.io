@@ -61,6 +61,7 @@ for(const [file,raw]of inputs){
  }else{sub='reference/'+path.basename(rel,'.md');group='architecture';rank=99}
  if(['sync','operations','security'].includes(group))group='reference'
  if(path.basename(rel,'.md')==='development-preview')group='architecture'
+ if(rel==='development-v3.md')title='历史实现参考'
  const route=`/docs/${locale}/${sub}.html`;const item={locale,route,title,group,rank,sourcePath:'docs/'+rel}
  map.set(file,item);records.push(item)
 }
@@ -107,11 +108,11 @@ const authored={
  'zh/start/install':{title:'安装与启动',group:'sync',rank:0},'zh/start/create-task':{title:'创建同步任务',group:'sync',rank:1},'zh/start/monitoring':{title:'查看状态与日常操作',group:'sync',rank:2},
  'zh/start/troubleshooting':{title:'常见故障处理',group:'operations',rank:0},'zh/start/data-validation':{title:'核对数据与修复差异',group:'operations',rank:1},'zh/start/backup':{title:'备份与故障恢复',group:'operations',rank:2},'zh/start/access':{title:'账号与使用权限',group:'security',rank:0},
  'zh/start/multi-node':{title:'多节点部署与恢复',group:'sync',rank:3},'zh/start/xinchuang':{title:'信创数据库适配与改造',group:'start',rank:4},
- 'zh/start/index':{title:'使用指南',rank:0},'zh/start/introduction':{title:'项目介绍',rank:1},'zh/start/quick-start':{title:'快速开始',rank:2},'zh/start/compatibility':{title:'兼容性与能力边界',rank:3},'zh/start/scenarios':{title:'场景与试点指南',rank:4},'zh/start/faq':{title:'常见问题',rank:5},'zh/start/connectors':{title:'连接器目录',rank:-1,group:'connectors'},'zh/start/roadmap':{title:'项目路线图',rank:-1,group:'sdd'},
+ 'zh/start/index':{title:'使用指南',rank:0},'zh/start/introduction':{title:'项目介绍',rank:1},'zh/start/quick-start':{title:'快速开始',rank:2},'zh/start/compatibility':{title:'兼容性与能力边界',rank:3},'zh/start/scenarios':{title:'场景与试点指南',rank:4},'zh/start/faq':{title:'常见问题',rank:5},'zh/start/connectors':{title:'连接器目录',rank:-1,group:'connectors'},'zh/start/roadmap':{title:'项目路线图',rank:6,group:'start'},
  'en/start/install':{title:'Installation and sign-in',group:'sync',rank:0},'en/start/create-task':{title:'Create a synchronization task',group:'sync',rank:1},'en/start/monitoring':{title:'Progress and daily operations',group:'sync',rank:2},
  'en/start/troubleshooting':{title:'Troubleshooting',group:'operations',rank:0},'en/start/data-validation':{title:'Validate data and review repairs',group:'operations',rank:1},'en/start/backup':{title:'Backup and recovery',group:'operations',rank:2},'en/start/access':{title:'Accounts and permissions',group:'security',rank:0},'en/start/scenarios':{title:'Use cases and evaluation',rank:4},'en/start/faq':{title:'Frequently asked questions',rank:5},
  'en/start/multi-node':{title:'Multi-node deployment',group:'sync',rank:3},'en/start/xinchuang':{title:'Domestic database adaptation',group:'start',rank:4},
- 'en/start/index':{title:'User guide',rank:0},'en/start/introduction':{title:'Introduction',rank:1},'en/start/quick-start':{title:'Quick start',rank:2},'en/start/compatibility':{title:'Compatibility',rank:3},'en/start/connectors':{title:'Connector catalog',rank:-1,group:'connectors'},'en/start/roadmap':{title:'Roadmap',rank:-1,group:'sdd'}
+ 'en/start/index':{title:'User guide',rank:0},'en/start/introduction':{title:'Introduction',rank:1},'en/start/quick-start':{title:'Quick start',rank:2},'en/start/compatibility':{title:'Compatibility',rank:3},'en/start/connectors':{title:'Connector catalog',rank:-1,group:'connectors'},'en/start/roadmap':{title:'Roadmap',rank:6,group:'start'}
 }
 for(const [key,meta]of Object.entries(authored))records.push({locale:key.split('/')[0],route:'/docs/'+key+'.html',title:meta.title,rank:meta.rank,group:meta.group||'start'})
 const navigation={}
