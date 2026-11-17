@@ -1,0 +1,39 @@
+{
+  "capturedAt": "2026-11-17T08:39:19.446Z",
+  "source": "Unmodified RivoMesh product JAR, isolated localhost preview",
+  "browser": "Installed Google Chrome, Playwright headless",
+  "viewport": {
+    "width": 1800,
+    "height": 912,
+    "deviceScaleFactor": 1
+  },
+  "processing": "Native 1800x912 viewport PNG capture, lossless PNG encoding; no text or UI edits. Responsive WebP derivatives use Sharp quality 85.",
+  "taskState": "Stopped, not initialized; no replication started",
+  "captures": [
+    {
+      "name": "console-overview-en",
+      "heading": "Pipelines",
+      "language": "en",
+      "width": 1800,
+      "height": 912,
+      "sha256": "1863de20dd7d93a3979d647cf774d13ed98eaf5280a5a90ba9eb9073be8fed2c"
+    },
+    {
+      "name": "task-wizard-en",
+      "heading": "Create a pipeline",
+      "language": "en",
+      "width": 1800,
+      "height": 912,
+      "sha256": "0bebd76a40a4af45c92d6df0ea2b1f61efa2647362068630826cef517fae846f"
+    },
+    {
+      "name": "connector-catalog-en",
+      "heading": "Adapter capabilities",
+      "language": "en",
+      "width": 1800,
+      "height": 912,
+      "sha256": "59ae4ee839092990aa6856a800a4d507a692bfbc1641b32d186343e0696d84e5"
+    }
+  ],
+  "productJarSha256": "9f97b4d98c103e895c9d1262cd19dcd0946b21b6fc0f72fff2267e59c727de00"
+}

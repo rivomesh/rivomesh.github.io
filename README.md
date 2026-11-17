@@ -93,13 +93,13 @@ npm run video:preview:en # 独立英文配音与画面预览
 npm run video:generate:en # 生成并应用独立英文视频
 ```
 
-中英文视频各有独立的 MP4、封面、字幕、章节时间、缓存版本和来源记录，英文讲稿以 `website/.vitepress/data/tour-en-script.json` 为准。英文视频使用全英文流程示意，不嵌入中文控制台截图；真实产品截图仍在页面的截图区域保留并说明语言。默认字幕与页面语言一致，语言切换会停止旧视频并重置到对应封面。
+中英文视频各有独立的 MP4、封面、字幕、章节时间、缓存版本和来源记录，英文讲稿以 `website/.vitepress/data/tour-en-script.json` 为准。英文视频使用全英文流程示意，不嵌入中文控制台截图；中英文页面的截图区域分别使用真实中文与英文产品截图。默认字幕与页面语言一致，语言切换会停止旧视频并重置到对应封面。
 
 语音缓存、原视频备份和预览保存在 `.rivomesh-voice.local/`（Git 忽略），相同讲稿、音色、模型和指令会复用音频。显式 `--force` 才重生成相同片段。片段失败不会自动产生重复的付费请求。工具从已有视频提取原始静态画面，保持讲稿与展示内容，按新语音长度安排章节，不加速压缩旁白；随后统一音量并输出 H.264/AAC MP4。
 
 字幕对齐使用 OpenAI 的词级时间戳，保留原有中英文文字；目前该专门能力使用 `whisper-1`，该模型已公告将于 2027-02-26 关闭，需要在此之前更新离线对齐工具。语音生成使用当前 Realtime 流程，不依赖已弃用的 Speech API。每次应用前验证朗读文本、字幕顺序、时长与单一音轨；重制后仍应人工试听技术名称和查看字幕。
 
-视频重制需要 FFmpeg / FFprobe 和可用的 OpenAI API 账户，无需 macOS `say`。历史系统语音脚本保留为 `tooling/make-media.mjs`，默认流程不调用它。`npm run media:optimize` 独立生成截图 WebP。`npm run media:generate` 是品牌、视频和截图的完整重建入口；普通网站构建与 CI 不调用媒体生成命令，不需要 API 凭据或 FFmpeg。
+视频重制需要 FFmpeg / FFprobe 和可用的 OpenAI API 账户，无需 macOS `say`。历史系统语音脚本保留为 `tooling/make-media.mjs`，默认流程不调用它。`npm run media:optimize` 独立生成中英文截图 WebP，`node tooling/optimize-media.mjs --locale=en` 仅更新英文派生图片。`npm run media:generate` 是品牌、视频和截图的完整重建入口；普通网站构建与 CI 不调用媒体生成命令，不需要 API 凭据或 FFmpeg。
 
 产品导览使用原生 HTML5 video；点击播放或章节后才挂载视频，提供中英文字幕、下载、文字稿和章节跳转。截图与视频保留开发预览性质，不能作为实时运行或生产性能证明。
 
@@ -118,7 +118,7 @@ npm run video:generate:en # 生成并应用独立英文视频
 - `theme/data/home-copy.mjs`：分别维护中文产品价值与英文 replication / CDC 文案。
 - `theme/data/connectors.mjs`：共用源码导入的连接能力登记，按产品合并展示，源端和目标端状态单独保留。
 - `site-routes.mjs`：统一非文档语言对应关系；导航、语言切换、canonical 和 hreflang 共用。没有翻译的原始验收档案不生成虚假的语言对应页。
-- `ScreenshotPreview`、`ProductGallery`：复用三张原始截图，支持原图弹窗、Escape 关闭与焦点恢复。缺少的校验/诊断截图以文档说明。
+- `ScreenshotPreview`、`ProductGallery`：按页面语言复用三张真实产品截图，支持原图弹窗、Escape 关闭与焦点恢复。缺少的校验/诊断截图以文档说明。
 - `QuickStart`：源码 Java 与 Docker Compose 命令切换及复制；命令来自核心源码部署文件，不承诺公共镜像。
 - `npm run media:optimize`：从原始 PNG 生成 900 / 1800 宽 WebP，不裁剪、不伪造产品内容。原图保留供下载/放大。
 - `npm run build`：除原链接与导航检查外，校验主要双语页面及全部文档的唯一 SEO 标签、canonical、hreflang、HTML lang 和双语 sitemap。

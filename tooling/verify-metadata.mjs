@@ -25,6 +25,8 @@ for(const file of ['index.html','en/index.html']){
  const doc=new JSDOM(await fs.readFile(path.join(root,file),'utf8')).window.document
  for(const id of ['how-it-works','capabilities','connectors','use-cases','product','reliability','get-started'])if(!doc.getElementById(id))errors.push(file+': missing product section '+id)
  const hero=doc.querySelector('.hero-preview picture img');if(!hero||hero.loading==='lazy'||hero.getAttribute('width')!=='1800'||hero.getAttribute('height')!=='912')errors.push(file+': hero image priority/dimensions')
+ const expectedImage='/media/console-overview'+(file.startsWith('en/')?'-en':'')+'.png'
+ if(hero?.getAttribute('src')!==expectedImage)errors.push(file+': localized hero screenshot')
  const nav=doc.querySelector('.main-nav');if(file.startsWith('en/')&&!nav?.querySelector('a[href="/en/download.html"]'))errors.push(file+': English navigation')
  doc.defaultView.close()
 }

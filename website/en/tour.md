@@ -17,6 +17,8 @@ Play the walkthrough here, select an English or Chinese subtitle track, or jump 
 
 ## Original product screenshots
 
+These captures show the real English-language console in a local development preview. The example pipeline is stopped; the images demonstrate controls rather than live replication activity.
+
 <ProductGallery />
 
 [Download video](/media/rivomesh-tour-en.mp4) · [English subtitles](/media/tour-en.en.vtt) · [Chinese subtitles](/media/tour-en.zh-CN.vtt)

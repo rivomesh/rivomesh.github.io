@@ -61,6 +61,17 @@ describe('direction-specific connector profiles',()=>{
  })
 })
 describe('product media and trial commands',()=>{
+ it('uses English PNG and responsive images for every English gallery view',async()=>{
+  state.frontmatter.value.locale='en'
+  const wrapper=create(ProductGallery),names=['console-overview','task-wizard','connector-catalog']
+  for(const [i,name]of names.entries()){
+   await wrapper.findAll('.gallery-controls button')[i].trigger('click')
+   expect(wrapper.get('picture img').attributes('src')).toBe(`/media/${name}-en.png`)
+   expect(wrapper.get('picture source').attributes('srcset')).toBe(`/media/${name}-en-900.webp 900w, /media/${name}-en-1800.webp 1800w`)
+   expect(wrapper.get('picture img').attributes('alt')).toContain('English-language')
+  }
+  expect(wrapper.text()).not.toContain('captured in Chinese')
+ })
  it('loads video only after an action, selects English subtitles and seeks chapters',async()=>{
   state.frontmatter.value.locale='en'
   const load=vi.spyOn(HTMLMediaElement.prototype,'load').mockImplementation(()=>{})
@@ -119,6 +130,7 @@ describe('product media and trial commands',()=>{
   const button=wrapper.get('button');button.element.focus();await button.trigger('click');await flushPromises()
   const dialog=document.querySelector('dialog')
   expect(dialog.getAttribute('aria-label')).toBe('Real workspace');expect(dialog.hasAttribute('open')).toBe(true)
+  expect(dialog.querySelector('img').getAttribute('src')).toBe('/media/console-overview-en.png')
   dialog.dispatchEvent(new Event('cancel',{cancelable:true}));await flushPromises()
   expect(document.querySelector('dialog')).toBeNull();expect(document.activeElement).toBe(button.element);expect(document.body.classList.contains('media-open')).toBe(false)
  })

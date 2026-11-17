@@ -1,8 +1,9 @@
 <script setup>
-import {nextTick,onBeforeUnmount,ref} from 'vue'
+import {computed,nextTick,onBeforeUnmount,ref} from 'vue'
 import {useData} from 'vitepress'
 const {isDark}=useData()
 const props=defineProps({name:{type:String,required:true},alt:{type:String,required:true},locale:{type:String,default:'zh'},eager:Boolean})
+const assetName=computed(()=>props.name+(props.locale==='en'?'-en':''))
 const dialog=ref(null),opener=ref(null),opened=ref(false)
 async function show(){opened.value=true;await nextTick();dialog.value?.showModal();document.body.classList.add('media-open')}
 function close(){dialog.value?.close();opened.value=false;document.body.classList.remove('media-open');opener.value?.focus()}
@@ -12,10 +13,10 @@ onBeforeUnmount(()=>document.body.classList.remove('media-open'))
   <div class="screenshot-preview">
     <button ref="opener" type="button" class="screenshot-button" @click="show" :aria-label="(locale==='en'?'Enlarge screenshot: ':'放大截图：')+alt">
       <span class="screenshot-chrome"><span><img :src="isDark?'/brand/logo-light.svg':'/brand/logo.svg'" alt="" width="17" height="17">RivoMesh <span class="capture-label">{{locale==='en'?' / Development preview':' / 开发预览'}}</span></span><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" aria-hidden="true"><path d="M6 2H2v4m8-4h4v4M2 10v4h4m8-4v4h-4"/></svg></span>
-      <picture><source type="image/webp" :srcset="`/media/${name}-900.webp 900w, /media/${name}-1800.webp 1800w`" sizes="(max-width:760px) 90vw, 650px"><img :src="`/media/${name}.png`" :alt="alt" width="1800" height="912" :loading="eager?'eager':'lazy'" :fetchpriority="eager?'high':undefined" decoding="async"></picture>
+      <picture><source type="image/webp" :srcset="`/media/${assetName}-900.webp 900w, /media/${assetName}-1800.webp 1800w`" sizes="(max-width:760px) 90vw, 650px"><img :src="`/media/${assetName}.png`" :alt="alt" width="1800" height="912" :loading="eager?'eager':'lazy'" :fetchpriority="eager?'high':undefined" decoding="async"></picture>
       <span class="enlarge-label">{{locale==='en'?'View full size ↗':'查看大图 ↗'}}</span>
     </button>
-    <Teleport to="body"><dialog v-if="opened" ref="dialog" class="screenshot-dialog" :aria-label="alt" @cancel.prevent="close" @click="event=>{if(event.target===dialog)close()}"><div class="screenshot-dialog-bar"><span>{{locale==='en'?'Development preview · original screenshot':'开发预览 · 原始截图'}}</span><button @click="close" :aria-label="locale==='en'?'Close enlarged image':'关闭大图'">{{locale==='en'?'Close':'关闭'}} ×</button></div><img :src="`/media/${name}.png`" :alt="alt" width="1800" height="912"><p>{{alt}}</p></dialog></Teleport>
+    <Teleport to="body"><dialog v-if="opened" ref="dialog" class="screenshot-dialog" :aria-label="alt" @cancel.prevent="close" @click="event=>{if(event.target===dialog)close()}"><div class="screenshot-dialog-bar"><span>{{locale==='en'?'Development preview · original screenshot':'开发预览 · 原始截图'}}</span><button @click="close" :aria-label="locale==='en'?'Close enlarged image':'关闭大图'">{{locale==='en'?'Close':'关闭'}} ×</button></div><img :src="`/media/${assetName}.png`" :alt="alt" width="1800" height="912"><p>{{alt}}</p></dialog></Teleport>
   </div>
 </template>
 <style>

@@ -41,4 +41,4 @@ Selection reflects geometric simplicity, small-size legibility and continuity wi
 
 `npm run brand:generate` builds the identity assets using Node and sharp. It does not invoke FFmpeg, macOS say or the video workflow. Normal website builds use committed assets.
 
-The [English product tour](/en/tour.html) has independent English narration, workflow illustrations, captions and a transcript. Original Chinese-language development screenshots remain in the separate screenshot gallery; they are not altered to simulate an English console.
+The [English product tour](/en/tour.html) has independent English narration, workflow illustrations, captions and a transcript. The screenshot gallery uses genuine English-language product captures from a local development preview. The Chinese site retains its original Chinese captures. Neither set is edited to simulate translated controls.
