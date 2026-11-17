@@ -88,8 +88,12 @@ npm run brand:generate
 npm run voice:plan       # 仅查看讲稿与生成计划，不调用 API
 npm run voice:sample     # 生成第一章试听
 npm run video:preview    # 生成全部旁白与视频预览，不替换站点文件
-npm run video:generate   # 生成并应用视频、字幕、章节与来源记录
+npm run video:generate   # 生成并应用中文视频、字幕、章节与来源记录
+npm run video:preview:en # 独立英文配音与画面预览
+npm run video:generate:en # 生成并应用独立英文视频
 ```
+
+中英文视频各有独立的 MP4、封面、字幕、章节时间、缓存版本和来源记录，英文讲稿以 `website/.vitepress/data/tour-en-script.json` 为准。英文视频使用全英文流程示意，不嵌入中文控制台截图；真实产品截图仍在页面的截图区域保留并说明语言。默认字幕与页面语言一致，语言切换会停止旧视频并重置到对应封面。
 
 语音缓存、原视频备份和预览保存在 `.rivomesh-voice.local/`（Git 忽略），相同讲稿、音色、模型和指令会复用音频。显式 `--force` 才重生成相同片段。片段失败不会自动产生重复的付费请求。工具从已有视频提取原始静态画面，保持讲稿与展示内容，按新语音长度安排章节，不加速压缩旁白；随后统一音量并输出 H.264/AAC MP4。
 
@@ -119,4 +123,4 @@ npm run video:generate   # 生成并应用视频、字幕、章节与来源记�
 - `npm run media:optimize`：从原始 PNG 生成 900 / 1800 宽 WebP，不裁剪、不伪造产品内容。原图保留供下载/放大。
 - `npm run build`：除原链接与导航检查外，校验主要双语页面及全部文档的唯一 SEO 标签、canonical、hreflang、HTML lang 和双语 sitemap。
 
-本轮保留源码项目的实际许可证和发布状态：未提供独立 LICENSE、未提供正式 Release 时，不在网站补造协议或发行包。视频保留中文旁白，新增英文字幕与文字稿；更新原视频时需要同步审阅两种字幕。工程与视觉验收范围见 [设计验收记录](quality/design-review-2026-11-17.md)。
+本轮保留源码项目的实际许可证和发布状态：未提供独立 LICENSE、未提供正式 Release 时，不在网站补造协议或发行包。中英文视频分别制作，具有各自的旁白、画面、字幕与文字稿；更新视频时需要同步审阅对应字幕。工程与视觉验收范围见 [设计验收记录](quality/design-review-2026-11-17.md)。

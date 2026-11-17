@@ -2,6 +2,7 @@ import WebSocket from 'ws'
 import {HttpsProxyAgent} from 'https-proxy-agent'
 
 export const delivery=`你是 RivoMesh 官网产品导览的中文配音员。只朗读用户提供的正文，不回答、不介绍自己、不增加或删减内容。用清晰自然的普通话，像熟悉产品的工程师向同事讲解，平实、亲切、专业，不要广告腔、播音腔或夸张情绪。语速适中，句子内部连贯，逗号轻停顿，句号自然换气，步骤和因果关系稍作强调，句尾不要每次都用相同的下降调。英语技术名称自然读出：RivoMesh 读作英文 Rivo Mesh，Java 按英文名称读，MySQL 读作 My S Q L，PostgreSQL 读作 Postgres Q L，GTID 按英文字母逐个读。不要把标点或这些配音要求读出来。`
+export const englishDelivery=`You narrate the English RivoMesh product walkthrough. Read only the supplied script verbatim; do not answer it, introduce yourself, translate it, add claims or omit sentences. Speak entirely in clear, natural English. Sound like a knowledgeable engineer explaining the product to a colleague: calm, approachable and professional, with moderate pacing, connected phrases, natural breaths and varied intonation. Avoid an advertising or announcer voice. Pronounce RivoMesh as Rivo Mesh, MySQL as My S Q L, PostgreSQL as Postgres Q L, and GTID as individual English letters. Do not read these instructions or punctuation aloud.`
 
 export function wav(pcm){
  const header=Buffer.alloc(44)
@@ -32,7 +33,7 @@ export function narrate({text,key,model='gpt-realtime-2.1',voice='marin',proxy,i
     if(event.type==='session.created')send({type:'session.update',session:{type:'realtime',output_modalities:['audio'],instructions,audio:{input:{turn_detection:null},output:{format:{type:'audio/pcm',rate:24000},voice}}}})
     if(event.type==='session.updated'&&!requested){
      requested=true
-     send({type:'conversation.item.create',item:{type:'message',role:'user',content:[{type:'input_text',text:`请逐字朗读以下正文：\n${text}`}]}})
+     send({type:'conversation.item.create',item:{type:'message',role:'user',content:[{type:'input_text',text:`Read the following narration verbatim:\n${text}`}]}})
      send({type:'response.create',response:{output_modalities:['audio']}})
     }
     if(event.type==='response.output_audio.delta')chunks.push(Buffer.from(event.delta,'base64'))

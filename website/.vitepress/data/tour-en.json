@@ -1,0 +1,27 @@
+[
+  {
+    "title": "What replication does",
+    "time": 0,
+    "duration": 20
+  },
+  {
+    "title": "Create a pipeline",
+    "time": 20,
+    "duration": 20
+  },
+  {
+    "title": "Start and observe",
+    "time": 40,
+    "duration": 23
+  },
+  {
+    "title": "Validate and repair",
+    "time": 63,
+    "duration": 22
+  },
+  {
+    "title": "Follow the guide",
+    "time": 85,
+    "duration": 22
+  }
+]

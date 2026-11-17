@@ -13,13 +13,16 @@
     "preview": "vitepress preview website --host 127.0.0.1",
     "check": "node tooling/verify-content.mjs && node tooling/verify-brand.mjs && node tooling/verify-tour.mjs",
     "test": "vitest run",
-    "media:generate": "npm run brand:generate && npm run video:generate && npm run media:optimize",
+    "media:generate": "npm run brand:generate && npm run video:generate && npm run video:generate:en && npm run media:optimize",
     "media:optimize": "node tooling/optimize-media.mjs",
     "brand:generate": "node tooling/make-brand.mjs",
     "video:generate": "node tooling/make-voice.mjs --all && node tooling/render-voice.mjs --apply",
     "voice:sample": "node tooling/make-voice.mjs --chapter=1",
     "voice:plan": "node tooling/make-voice.mjs --plan",
-    "video:preview": "node tooling/make-voice.mjs --all && node tooling/render-voice.mjs"
+    "video:preview": "node tooling/make-voice.mjs --all && node tooling/render-voice.mjs",
+    "voice:sample:en": "node tooling/make-voice.mjs --locale=en --chapter=1",
+    "video:generate:en": "node tooling/make-voice.mjs --locale=en --all && node tooling/render-voice.mjs --locale=en --apply",
+    "video:preview:en": "node tooling/make-voice.mjs --locale=en --all && node tooling/render-voice.mjs --locale=en"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "5.2.4",

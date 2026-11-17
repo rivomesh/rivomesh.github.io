@@ -1,0 +1,166 @@
+{
+  "provider": "OpenAI",
+  "synthetic": true,
+  "locale": "en",
+  "revision": "8869932d35455460",
+  "visuals": "English workflow illustrations",
+  "timestampModel": "whisper-1",
+  "duration": 107,
+  "chapters": [
+    {
+      "chapter": 1,
+      "title": "What replication does",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "audioDuration": 19,
+      "duration": 20,
+      "timestampSimilarity": 0.9955555555555555,
+      "sourceAudioSha256": "90ca940e388c999417db4137d8e4ea40fc79c0405d0f7950421a2b0d98d383bb",
+      "usage": {
+        "total_tokens": 665,
+        "input_tokens": 193,
+        "output_tokens": 472,
+        "input_token_details": {
+          "text_tokens": 193,
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "cached_tokens": 0,
+          "cached_tokens_details": {
+            "text_tokens": 0,
+            "audio_tokens": 0,
+            "image_tokens": 0
+          }
+        },
+        "output_token_details": {
+          "text_tokens": 92,
+          "audio_tokens": 380,
+          "reasoning_tokens": 14
+        }
+      }
+    },
+    {
+      "chapter": 2,
+      "title": "Create a pipeline",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "audioDuration": 19,
+      "duration": 20,
+      "timestampSimilarity": 1,
+      "sourceAudioSha256": "2eaa8c7729ac0ea3ea44c6d8772fb4d8387b7ecebafe872637eea363c9af3543",
+      "usage": {
+        "total_tokens": 684,
+        "input_tokens": 201,
+        "output_tokens": 483,
+        "input_token_details": {
+          "text_tokens": 201,
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "cached_tokens": 0,
+          "cached_tokens_details": {
+            "text_tokens": 0,
+            "audio_tokens": 0,
+            "image_tokens": 0
+          }
+        },
+        "output_token_details": {
+          "text_tokens": 103,
+          "audio_tokens": 380,
+          "reasoning_tokens": 15
+        }
+      }
+    },
+    {
+      "chapter": 3,
+      "title": "Start and observe",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "audioDuration": 21.8,
+      "duration": 23,
+      "timestampSimilarity": 1,
+      "sourceAudioSha256": "550f7eb7a688abccbb15ba6306b0bf8a7e80ec366d92437a411129256b9b6264",
+      "usage": {
+        "total_tokens": 744,
+        "input_tokens": 200,
+        "output_tokens": 544,
+        "input_token_details": {
+          "text_tokens": 200,
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "cached_tokens": 0,
+          "cached_tokens_details": {
+            "text_tokens": 0,
+            "audio_tokens": 0,
+            "image_tokens": 0
+          }
+        },
+        "output_token_details": {
+          "text_tokens": 108,
+          "audio_tokens": 436,
+          "reasoning_tokens": 23
+        }
+      }
+    },
+    {
+      "chapter": 4,
+      "title": "Validate and repair",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "audioDuration": 20.9,
+      "duration": 22,
+      "timestampSimilarity": 1,
+      "sourceAudioSha256": "478496837b1c4e241fbfcc632ae0a23c70857de915676a05f56b138b48fbc474",
+      "usage": {
+        "total_tokens": 723,
+        "input_tokens": 200,
+        "output_tokens": 523,
+        "input_token_details": {
+          "text_tokens": 200,
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "cached_tokens": 128,
+          "cached_tokens_details": {
+            "text_tokens": 128,
+            "audio_tokens": 0,
+            "image_tokens": 0
+          }
+        },
+        "output_token_details": {
+          "text_tokens": 105,
+          "audio_tokens": 418,
+          "reasoning_tokens": 16
+        }
+      }
+    },
+    {
+      "chapter": 5,
+      "title": "Follow the guide",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "audioDuration": 20.35,
+      "duration": 22,
+      "timestampSimilarity": 1,
+      "sourceAudioSha256": "a6c0ffdc791168dae06ebbfc506851b57819680dc2df4be5eb79bb39bbbcabd3",
+      "usage": {
+        "total_tokens": 718,
+        "input_tokens": 207,
+        "output_tokens": 511,
+        "input_token_details": {
+          "text_tokens": 207,
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "cached_tokens": 0,
+          "cached_tokens_details": {
+            "text_tokens": 0,
+            "audio_tokens": 0,
+            "image_tokens": 0
+          }
+        },
+        "output_token_details": {
+          "text_tokens": 104,
+          "audio_tokens": 407,
+          "reasoning_tokens": 14
+        }
+      }
+    }
+  ]
+}

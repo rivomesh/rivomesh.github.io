@@ -1,38 +1,17 @@
 RivoMesh product walkthrough
-Chinese narration with English subtitles; original development preview imagery.
+English AI narration and workflow illustrations; not a live console recording.
 
-RivoMesh is a Java-based database replication platform.
+What replication does
+RivoMesh is a Java-based database replication platform. It reads existing MySQL data and later changes, delivering them to databases, analytics systems or message brokers. Snapshots, incremental changes, durable journals and target acknowledgements form one pipeline.
 
-It reads existing MySQL data and later changes, delivering them to databases, analytics systems or message brokers.
+Create a pipeline
+For your first run, prepare a small MySQL test source and an independent empty target. Build and start the console from source, then configure connections, database mappings and a journal in the wizard. Your database administrator should check GTID, full row images, replication and snapshot privileges.
 
-Snapshots, incremental changes, durable journals and target acknowledgements form one pipeline.
+Start and observe
+After saving the configuration, check it before starting. The console provides task, phase, backlog and target error views. Verify inserts, updates, deletes and restart recovery using your test database. These workflow illustrations explain the process. They are not a live console recording or performance evidence.
 
-For your first run, prepare a small MySQL test source and an independent empty target.
+Validate and repair
+When a target fails, fix the cause and retry the original transaction. Supported MySQL and PostgreSQL targets can compare data at a common checkpoint, then apply an administrator-reviewed repair plan. After repair, inspect the results and explicitly resume. Business cutover requires a separate plan.
 
-Build and start the console from source, then configure connections, database mappings and a journal in the wizard.
-
-Your database administrator should check GTID, full row images, replication and snapshot privileges.
-
-After saving the configuration, check it before starting.
-
-The console provides task, phase, backlog and target error views.
-
-Verify inserts, updates, deletes and restart recovery using your test database.
-
-These are original development preview screenshots. Their numbers are not performance or live synchronization evidence.
-
-When a target fails, fix the cause and retry the original transaction.
-
-Supported MySQL and PostgreSQL targets can compare data at a common checkpoint, then apply an administrator-reviewed repair plan.
-
-After repair, inspect the results and explicitly resume. Business cutover requires a separate plan.
-
-The user guide follows the operations you need to perform.
-
-Start with installation and sign-in, create a task, then learn to inspect progress, handle errors and validate data.
-
-Local search helps you find the next step.
-
-Check the connector profile before connecting a different database.
-
-Complete a small evaluation before expanding your scope.
+Follow the guide
+The user guide follows the operations you need to perform. Start with installation and sign-in, create a task, then learn to inspect progress, handle errors and validate data. Local search helps you find the next step. Check the connector profile before connecting a different database. Complete a small evaluation before expanding your scope.

@@ -1,0 +1,99 @@
+[
+  {
+    "title": "What replication does",
+    "cues": [
+      {
+        "en": "RivoMesh is a Java-based database replication platform.",
+        "zh": "RivoMesh 是一个基于 Java 的数据库实时同步平台。"
+      },
+      {
+        "en": "It reads existing MySQL data and later changes, delivering them to databases, analytics systems or message brokers.",
+        "zh": "它读取 MySQL 已有的数据和后续变更，把数据送到数据库、分析系统或者消息队列。"
+      },
+      {
+        "en": "Snapshots, incremental changes, durable journals and target acknowledgements form one pipeline.",
+        "zh": "全量、增量、持久日志和目标确认，共同组成一条同步链路。"
+      }
+    ]
+  },
+  {
+    "title": "Create a pipeline",
+    "cues": [
+      {
+        "en": "For your first run, prepare a small MySQL test source and an independent empty target.",
+        "zh": "第一次使用，请准备一个 MySQL 测试源和独立的空目标。"
+      },
+      {
+        "en": "Build and start the console from source, then configure connections, database mappings and a journal in the wizard.",
+        "zh": "从核心源码构建并启动控制台，通过向导填写连接、库映射和日志。"
+      },
+      {
+        "en": "Your database administrator should check GTID, full row images, replication and snapshot privileges.",
+        "zh": "数据库管理员需要核对 GTID、完整行镜像，以及复制和快照权限。"
+      }
+    ]
+  },
+  {
+    "title": "Start and observe",
+    "cues": [
+      {
+        "en": "After saving the configuration, check it before starting.",
+        "zh": "保存配置之后，先检查，再启动。"
+      },
+      {
+        "en": "The console provides task, phase, backlog and target error views.",
+        "zh": "控制台提供任务、阶段、积压和目标错误入口。"
+      },
+      {
+        "en": "Verify inserts, updates, deletes and restart recovery using your test database.",
+        "zh": "在测试库核对新增、修改、删除和重启恢复。"
+      },
+      {
+        "en": "These workflow illustrations explain the process. They are not a live console recording or performance evidence.",
+        "zh": "这些流程示意用于说明操作，不代表实时控制台录制或性能结果。"
+      }
+    ]
+  },
+  {
+    "title": "Validate and repair",
+    "cues": [
+      {
+        "en": "When a target fails, fix the cause and retry the original transaction.",
+        "zh": "遇到目标错误，先修复原因，再重试原事务。"
+      },
+      {
+        "en": "Supported MySQL and PostgreSQL targets can compare data at a common checkpoint, then apply an administrator-reviewed repair plan.",
+        "zh": "指定 MySQL 和 PostgreSQL 目标可以在共同校验点进行数据比较，由管理员审阅计划后修复。"
+      },
+      {
+        "en": "After repair, inspect the results and explicitly resume. Business cutover requires a separate plan.",
+        "zh": "修复后仍需核对结果并显式恢复，业务切换另有计划。"
+      }
+    ]
+  },
+  {
+    "title": "Follow the guide",
+    "cues": [
+      {
+        "en": "The user guide follows the operations you need to perform.",
+        "zh": "使用指南按实际操作组织。"
+      },
+      {
+        "en": "Start with installation and sign-in, create a task, then learn to inspect progress, handle errors and validate data.",
+        "zh": "从安装和登录开始，跟着向导创建任务，再学习查看进度、处理故障和核对数据。"
+      },
+      {
+        "en": "Local search helps you find the next step.",
+        "zh": "中文搜索可以帮你找到具体步骤。"
+      },
+      {
+        "en": "Check the connector profile before connecting a different database.",
+        "zh": "连接不同数据库前，请先查看连接说明。"
+      },
+      {
+        "en": "Complete a small evaluation before expanding your scope.",
+        "zh": "建议先完成小规模测试，再逐步扩大使用范围。"
+      }
+    ]
+  }
+]

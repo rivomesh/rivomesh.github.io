@@ -7,8 +7,9 @@ import ProductTour from '../website/.vitepress/theme/components/ProductTour.vue'
 import ScreenshotPreview from '../website/.vitepress/theme/components/ScreenshotPreview.vue'
 import QuickStart from '../website/.vitepress/theme/components/QuickStart.vue'
 import SiteHeader from '../website/.vitepress/theme/components/SiteHeader.vue'
-import chapters from '../website/.vitepress/data/tour.json'
 import media from '../website/.vitepress/data/tour-media.json'
+import englishChapters from '../website/.vitepress/data/tour-en.json'
+import englishMedia from '../website/.vitepress/data/tour-en-media.json'
 import {pairedRoute,pageRoute} from '../website/.vitepress/site-routes.mjs'
 let state,wrappers=[]
 vi.mock('vitepress',()=>({useData:()=>state}))
@@ -72,9 +73,26 @@ describe('product media and trial commands',()=>{
   expect(video.attributes('preload')).toBe('none');expect(video.attributes('autoplay')).toBeUndefined()
   expect(video.findAll('track')).toHaveLength(2)
   expect(video.get('track[srclang="en"]').attributes('default')).toBeDefined()
+  const tracks=[{language:'en',mode:'disabled'},{language:'zh-CN',mode:'showing'}]
+  Object.defineProperty(video.element,'textTracks',{value:tracks})
   await video.trigger('loadedmetadata');await flushPromises()
-  expect(video.element.currentTime).toBe(chapters[2].time);expect(play).toHaveBeenCalledOnce()
-  expect(wrapper.get('a[download]').attributes('href')).toBe(`/media/rivomesh-tour.mp4?v=${media.revision}`)
+  expect(tracks.map(track=>track.mode)).toEqual(['showing','disabled'])
+  expect(video.element.currentTime).toBe(englishChapters[2].time);expect(play).toHaveBeenCalledOnce()
+  expect(video.get('source').attributes('src')).toBe(`/media/rivomesh-tour-en.mp4?v=${englishMedia.revision}`)
+  expect(video.get('track[srclang="en"]').attributes('src')).toContain('/media/tour-en.en.vtt')
+  expect(wrapper.get('a[download]').attributes('href')).toBe(`/media/rivomesh-tour-en.mp4?v=${englishMedia.revision}`)
+ })
+ it('stops the current language video and shows the independent poster on a locale switch',async()=>{
+  vi.spyOn(HTMLMediaElement.prototype,'load').mockImplementation(()=>{})
+  const pause=vi.spyOn(HTMLMediaElement.prototype,'pause').mockImplementation(()=>{})
+  const wrapper=create(ProductTour)
+  expect(wrapper.get('.video-poster img').attributes('src')).toBe('/media/tour-poster.png')
+  await wrapper.get('.video-poster').trigger('click');await flushPromises()
+  expect(wrapper.get('video source').attributes('src')).toBe(`/media/rivomesh-tour.mp4?v=${media.revision}`)
+  state.frontmatter.value.locale='en';await flushPromises()
+  expect(pause).toHaveBeenCalledOnce();expect(wrapper.find('video').exists()).toBe(false)
+  expect(wrapper.get('.video-poster img').attributes('src')).toBe('/media/tour-poster-en.png')
+  expect(wrapper.text()).toContain('English AI narration');expect(wrapper.text()).not.toContain('Chinese AI narration')
  })
  it('keeps native controls available when browser playback is denied',async()=>{
   vi.spyOn(HTMLMediaElement.prototype,'load').mockImplementation(()=>{})

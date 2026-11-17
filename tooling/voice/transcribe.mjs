@@ -1,11 +1,11 @@
 import https from 'node:https'
 import {HttpsProxyAgent} from 'https-proxy-agent'
 
-export async function transcribe(audio,{key,proxy,model='whisper-1',timed=true}){
+export async function transcribe(audio,{key,proxy,model='whisper-1',timed=true,language='zh'}){
  const form=new FormData()
  form.set('model',model)
- if(timed){form.set('language','zh');form.set('response_format','verbose_json');form.set('timestamp_granularities[]','word')}
- form.set('prompt','简体中文。RivoMesh，Java，MySQL，PostgreSQL，GTID。全量、增量、持久日志、目标确认、共同校验点。')
+ if(timed){form.set('language',language);form.set('response_format','verbose_json');form.set('timestamp_granularities[]','word')}
+ form.set('prompt',language==='en'?'English. RivoMesh, Java, MySQL, PostgreSQL, GTID. Snapshots, change data capture, durable journals, target acknowledgements and checkpoints.':'简体中文。RivoMesh，Java，MySQL，PostgreSQL，GTID。全量、增量、持久日志、目标确认、共同校验点。')
  form.set('file',new Blob([audio],{type:'audio/wav'}),'chapter.wav')
  const request=new Request('https://api.openai.com/v1/audio/transcriptions',{method:'POST',body:form})
  const body=Buffer.from(await request.arrayBuffer())
