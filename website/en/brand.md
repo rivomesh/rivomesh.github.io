@@ -2,20 +2,20 @@
 kind: page
 locale: en
 title: Brand and media assets
-description: The RivoMesh Continuity R identity, three original vector directions, light/dark and monochrome marks, small-size previews and production downloads.
+description: Official RivoMesh brand assets — the current logo, wordmark, light and dark variants, monochrome marks, application icons and usage guidelines.
 ---
 
 # RivoMesh brand and media
 
-<p class="landing-lead">A clear input, a continuous path and an independent branch: an identity shaped around data movement and recovery.</p>
+<p class="landing-lead">Download the current official RivoMesh logo, wordmark and media assets. Light, dark and monochrome variants share the same mark; choose the version that suits your background.</p>
 
 <BrandShowcase />
 
-## Why Continuity R
+## The identity
 
-Direction B retains the original R and input connection, replacing two fine lines with one clear channel. A filled silhouette, open counter and outgoing branch work in one color and on both light and dark surfaces. The mark does not depend on gradients or miniature nodes.
+The RivoMesh mark combines an R with an input channel, a continuous path and an independent branch to express connectivity, replication and recovery. A filled silhouette and open counter keep it legible at small sizes. Monochrome variants retain the same geometry.
 
-Selection reflects geometric simplicity, small-size legibility and continuity with the existing identity; it is not a trademark-clearance claim. The horizontal wordmark uses original geometric vector paths, with no embedded font files or third-party brand artwork.
+The horizontal wordmark uses original geometric vector paths and needs no installed fonts. It is ready for use on websites, in documentation and in media coverage.
 
 ## Production assets
 
@@ -28,7 +28,6 @@ Selection reflects geometric simplicity, small-size legibility and continuity wi
 | Browser icons | [SVG favicon](/brand/favicon.svg) · <a href="/favicon.ico" download>ICO: 16 / 32 / 48px</a> |
 | Touch / app icons | [Apple Touch 180px](/brand/apple-touch-icon.png) · [Avatar / app icon 512px](/brand/avatar-512.png) |
 | Social sharing | [English PNG](/brand/social-card-en.png) · [Chinese PNG](/brand/social-card.png) · [English SVG](/brand/social-card-en.svg) · [Chinese SVG](/brand/social-card-zh.svg) |
-| Design exploration | [Direction A](/brand/concepts/a.svg) · [Direction B](/brand/concepts/b.svg) · [Direction C](/brand/concepts/c.svg) · [Static review sheet](/brand/identity-review.png) |
 
 ## Use the identity consistently
 
@@ -37,8 +36,6 @@ Selection reflects geometric simplicity, small-size legibility and continuity wi
 - Use blue or ink on light surfaces, and pale blue or white on dark surfaces.
 - Flow blue `#2859a6` is the primary color. Signal teal `#247f7c` is a restrained secondary accent. Functional states always include text.
 
-## Reproducible generation
-
-`npm run brand:generate` builds the identity assets using Node and sharp. It does not invoke FFmpeg, macOS say or the video workflow. Normal website builds use committed assets.
+## Product media
 
 The [English product tour](/en/tour.html) has independent English narration, workflow illustrations, captions and a transcript. The screenshot gallery uses genuine English-language product captures from a local development preview. The Chinese site retains its original Chinese captures. Neither set is edited to simulate translated controls.
