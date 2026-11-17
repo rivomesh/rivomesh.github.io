@@ -9,11 +9,13 @@ description: 查看 RivoMesh 真实任务工作台、配置向导和连接器目
 
 <p class="landing-lead">通过真实界面了解任务管理、配置向导与连接器，再按使用指南建立自己的同步链路。</p>
 
-<ProductGallery />
-
 ## 五步产品讲解
 
 <ProductTour />
+
+## 真实产品截图
+
+<ProductGallery />
 
 [下载讲解视频](/media/rivomesh-tour.mp4) · [中文字幕](/media/tour.zh-CN.vtt) · [英文字幕](/media/tour.en.vtt) · [完整文字稿](/media/transcript.txt)
 

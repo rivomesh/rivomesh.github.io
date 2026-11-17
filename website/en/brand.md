@@ -2,26 +2,43 @@
 kind: page
 locale: en
 title: Brand and media assets
-description: Brand and media assets · RivoMesh database replication, product documentation and project resources.
+description: The RivoMesh Continuity R identity, three original vector directions, light/dark and monochrome marks, small-size previews and production downloads.
 ---
 
-# RivoMesh brand assets
+# RivoMesh brand and media
 
-The RivoMesh mark combines the letter R, input connections and a forward path to represent capture and continuous data movement. The website uses original vector assets.
+<p class="landing-lead">A clear input, a continuous path and an independent branch: an identity shaped around data movement and recovery.</p>
 
-<div class="brand-preview"><img src="/brand/wordmark.svg" alt="RivoMesh horizontal wordmark" width="540" height="128"></div>
+<BrandShowcase />
 
-## Logos and icons
+## Why Continuity R
 
-- [Standard SVG mark](/brand/logo.svg)
-- [Mark for dark backgrounds](/brand/logo-light.svg)
-- [Horizontal wordmark](/brand/wordmark.svg)
-- [SVG favicon](/brand/favicon.svg) · <a href="/favicon.ico" download>ICO favicon</a>
-- [Apple Touch icon](/brand/apple-touch-icon.png)
-- [Social sharing image](/brand/social-card.png)
+Direction B retains the original R and input connection, replacing two fine lines with one clear channel. A filled silhouette, open counter and outgoing branch work in one color and on both light and dark surfaces. The mark does not depend on gradients or miniature nodes.
 
-Preserve clear space and proportions. Do not combine third-party marks to imply an unverified partnership. Availability of these files is not a substitute for the [project license terms](/en/community.html#license-and-release-status).
+Selection reflects geometric simplicity, small-size legibility and continuity with the existing identity; it is not a trademark-clearance claim. The horizontal wordmark uses original geometric vector paths, with no embedded font files or third-party brand artwork.
 
-## Product media
+## Production assets
 
-The [product tour](/en/tour.html) includes original Chinese-language development preview images, Chinese narration, English/Chinese subtitles and transcripts. Reuse should preserve the distinction between screenshots and live operational evidence.
+| Use | Download |
+| --- | --- |
+| Square mark / avatar | [Square SVG](/brand/logo-square.svg) · [512px PNG](/brand/avatar-512.png) |
+| Transparent mark | [Standard](/brand/logo.svg) · [Light surface](/brand/logo-on-light.svg) · [Dark surface](/brand/logo-light.svg) |
+| Monochrome | [Ink](/brand/logo-monochrome.svg) · [White](/brand/logo-monochrome-light.svg) |
+| Horizontal lockup | [Light surface](/brand/wordmark.svg) · [Dark surface](/brand/wordmark-light.svg) · [Monochrome](/brand/wordmark-monochrome.svg) |
+| Browser icons | [SVG favicon](/brand/favicon.svg) · <a href="/favicon.ico" download>ICO: 16 / 32 / 48px</a> |
+| Touch / app icons | [Apple Touch 180px](/brand/apple-touch-icon.png) · [Avatar / app icon 512px](/brand/avatar-512.png) |
+| Social sharing | [English PNG](/brand/social-card-en.png) · [Chinese PNG](/brand/social-card.png) · [English SVG](/brand/social-card-en.svg) · [Chinese SVG](/brand/social-card-zh.svg) |
+| Design exploration | [Direction A](/brand/concepts/a.svg) · [Direction B](/brand/concepts/b.svg) · [Direction C](/brand/concepts/c.svg) · [Static review sheet](/brand/identity-review.png) |
+
+## Use the identity consistently
+
+- Keep clear space of at least one eighth of the mark's height. Do not stretch, rotate or fill the counter.
+- Prefer the favicon below 24px. Use the standard mark at 24px or larger, and the horizontal lockup at 128px wide or larger.
+- Use blue or ink on light surfaces, and pale blue or white on dark surfaces.
+- Flow blue `#2859a6` is the primary color. Signal teal `#247f7c` is a restrained secondary accent. Functional states always include text.
+
+## Reproducible generation
+
+`npm run brand:generate` builds the identity assets using Node and sharp. It does not invoke FFmpeg, macOS say or the video workflow. Normal website builds use committed assets.
+
+The [product tour](/en/tour.html) retains original Chinese-language development screenshots and Chinese narration, with English/Chinese subtitles and transcripts. Historical product imagery is not altered to simulate a new interface.

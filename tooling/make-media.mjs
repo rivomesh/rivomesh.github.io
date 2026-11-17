@@ -1,27 +1,13 @@
 import fs from 'node:fs/promises'
 import sharp from 'sharp'
 import {execFileSync} from 'node:child_process'
-const brand='website/public/brand',media='website/public/media'
-await fs.mkdir(brand,{recursive:true});await fs.mkdir(media,{recursive:true});await fs.mkdir('website/.vitepress/data',{recursive:true})
-const symbol='<path d="M14 36V13h11c13 0 13 16 0 16H14m11 0 11 10"/><path d="M9 20h9m-9 8h9"/>'
-for(const [file,color,bg]of [['logo.svg','#2e60d6','none'],['logo-light.svg','#a8e8ff','none'],['favicon.svg','#fff','#1e46a4']])await fs.writeFile(`${brand}/${file}`,`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="${bg}"/><g fill="none" stroke="${color}" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round">${symbol}</g></svg>`)
-await fs.writeFile(`${brand}/wordmark.svg`,`<svg xmlns="http://www.w3.org/2000/svg" width="240" height="50" viewBox="0 0 240 50"><g transform="translate(0 1)" fill="none" stroke="#2e60d6" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round">${symbol}</g><text x="58" y="35" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#173875">RivoMesh</text></svg>`)
-const pngs=await Promise.all([16,32,48].map(n=>sharp(`${brand}/favicon.svg`).resize(n,n).png().toBuffer()))
-const head=Buffer.alloc(6+16*pngs.length);head.writeUInt16LE(1,2);head.writeUInt16LE(pngs.length,4);let offset=head.length
-pngs.forEach((buf,i)=>{const k=6+16*i,n=[16,32,48][i];head[k]=n;head[k+1]=n;head.writeUInt16LE(1,k+4);head.writeUInt16LE(32,k+6);head.writeUInt32LE(buf.length,k+8);head.writeUInt32LE(offset,k+12);offset+=buf.length})
-await fs.writeFile('website/public/favicon.ico',Buffer.concat([head,...pngs]));await sharp(`${brand}/favicon.svg`).resize(180,180).png().toFile(`${brand}/apple-touch-icon.png`)
-for(const [name,input]of [['console-overview','console'],['task-wizard','wizard'],['connector-catalog','catalog']]){
- const filename=`/tmp/rivomesh-${input}-window.png`
- const info=await sharp(filename).metadata()
- await sharp(filename).extract({left:0,top:242,width:info.width,height:info.height-242}).resize({width:1800}).png().toFile(`${media}/${name}.png`)
-}
+// Video-only workflow: existing screenshots in, narrated guide out. Brand generation is separate.
+const media='website/public/media'
+await fs.mkdir(media,{recursive:true})
+await fs.mkdir('website/.vitepress/data',{recursive:true})
 const esc=t=>t.replaceAll('&','&amp;').replaceAll('<','&lt;')
 const text=(x,y,value,size=26,color='#ffffff',weight=400)=>`<text x="${x}" y="${y}" font-family="PingFang SC,Arial,sans-serif" font-size="${size}" font-weight="${weight}" fill="${color}">${esc(value)}</text>`
 const svg=body=>Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720"><defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#102754"/><stop offset="1" stop-color="#234c85"/></linearGradient></defs><rect width="1280" height="720" fill="url(#bg)"/><path d="M900-80 1400 420M820-80 1320 420M740-80 1240 420" stroke="#8dbaff" stroke-width="1" opacity=".1"/>${body}</svg>`)
-let share=text(75,100,'RivoMesh',38,'#bbd6ff',650)+text(75,260,'数据库实时同步平台',66,'#fff',650)+text(75,340,'先同步已有数据，再持续同步新增、修改和删除。',27,'#c6d5ef')
-for(const [i,label]of ['MySQL','全量 + CDC + 持久日志','数据库 / 分析 / 消息'].entries()){const x=75+i*395;share+=`<rect x="${x}" y="425" width="350" height="115" rx="12" fill="#ffffff0b" stroke="#5777a3"/>`+text(x+24,490,label,i===1?24:27,'#eaf3ff',550)}
-share+=text(75,650,'rivomesh.github.io  /  0.1.0-SNAPSHOT',19,'#93b5df')
-await sharp(svg(share)).resize(1200,675).png().toFile(`${brand}/social-card.png`)
 const chapters=[
  {title:'数据库同步是什么',subtitle:'先同步已有数据，再持续同步新增、修改和删除。',voice:'RivoMesh 是一个基于 Java 的数据库实时同步平台。它读取 MySQL 已有的数据和后续变更，把数据送到数据库、分析系统或者消息队列。全量、增量、持久日志和目标确认，共同组成一条同步链路。',diagram:true},
  {title:'准备并创建任务',subtitle:'测试 MySQL → 独立空目标；先核对日志和权限。',voice:'第一次使用，请准备一个 MySQL 测试源和独立的空目标。从核心源码构建并启动控制台，通过向导填写连接、库映射和日志。数据库管理员需要核对 GTID、完整行镜像，以及复制和快照权限。',image:'task-wizard'},
@@ -46,4 +32,4 @@ for(let i=0;i<chapters.length;i++){
 }
 await fs.writeFile(`${work}/concat.txt`,chapters.map((_,i)=>`file '${work}/part-${i}.mp4'`).join('\n'));execFileSync('ffmpeg',['-y','-loglevel','error','-f','concat','-safe','0','-i',`${work}/concat.txt`,'-c','copy','-movflags','+faststart',`${media}/rivomesh-tour.mp4`])
 await fs.writeFile(`${media}/tour.zh-CN.vtt`,vtt.trimEnd()+'\n');await fs.writeFile(`${media}/transcript.txt`,chapters.map(c=>`${c.title}\n${c.voice}`).join('\n\n')+'\n');await fs.writeFile('website/.vitepress/data/tour.json',JSON.stringify(times,null,2)+'\n')
-console.log(`Generated original brand assets, authentic product screenshots and a ${cursor}s narrated guide.`)
+console.log(`Generated a ${cursor}s narrated guide.`)

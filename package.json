@@ -11,10 +11,12 @@
     "docs:sync": "node tooling/import-source.mjs",
     "build": "vitepress build website && node tooling/redirects.mjs && node tooling/verify-build.mjs && node tooling/verify-metadata.mjs",
     "preview": "vitepress preview website --host 127.0.0.1",
-    "check": "node tooling/verify-content.mjs",
+    "check": "node tooling/verify-content.mjs && node tooling/verify-brand.mjs",
     "test": "vitest run",
-    "media:generate": "node tooling/make-media.mjs && node tooling/optimize-media.mjs",
-    "media:optimize": "node tooling/optimize-media.mjs"
+    "media:generate": "npm run brand:generate && npm run video:generate && npm run media:optimize",
+    "media:optimize": "node tooling/optimize-media.mjs",
+    "brand:generate": "node tooling/make-brand.mjs",
+    "video:generate": "node tooling/make-media.mjs"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "5.2.4",

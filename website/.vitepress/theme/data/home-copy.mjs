@@ -1,6 +1,6 @@
 export const homeCopy = {
  zh:{
-  release:'公开源码 · 0.1.0-SNAPSHOT / 发布前版本',hero:['数据库实时同步，','可靠连接每一份数据'],lead:'融合全量同步与 CDC 增量采集。多目标独立投递、持久断点恢复与可视化管理，让跨数据库数据流转更可靠、灵活、可控。',tags:['全量 + CDC','多目标独立恢复','Web 可视化管理'],start:'快速开始',docs:'查看文档',scope:'当前采集源为 MySQL；PostgreSQL、Oracle 源在规划中。',preview:'真实工作台 · 开发预览截图',tour:'产品导览',
+  release:'RivoMesh · 0.1.0-SNAPSHOT / 开发预览',hero:['数据库实时同步，','可靠连接每一份数据'],lead:'融合全量同步与 CDC 增量采集。多目标独立投递、持久断点恢复与可视化管理，让跨数据库数据流转更可靠、灵活、可控。',tags:['全量 + CDC','多目标独立恢复','Web 可视化管理'],start:'快速开始',docs:'查看文档',scope:'当前采集源为 MySQL；PostgreSQL、Oracle 源在规划中。',preview:'真实工作台 · 开发预览截图',tour:'产品导览',
   workflowLabel:'同步流程',workflowTitle:'从业务变化，到每一个下游。',workflowText:'采集、持久化与目标确认各有职责。看清数据经过哪里，也看清进度保存在哪里。',
   coreLabel:'核心能力',coreTitle:'为持续同步设计。',coreText:'初始化、分发与日常管理，沿用同一条可恢复的数据链路。',
   core:[
@@ -8,7 +8,7 @@ export const homeCopy = {
    {title:'多目标独立恢复',text:'每个目标单独投递和确认。修复某个目标的 SQL 错误后，重试原事务，其他目标保留各自进度。',link:'故障隔离与恢复',href:'recovery',kind:'targets',labels:['目标 A · 持续投递','目标 B · 修复后重试','目标 C · 独立确认'],detail:'机制示意 · 各目标不组成分布式原子事务'},
    {title:'管理与校验有据可查',text:'从任务向导、配置历史到错误与校验报告，在管理界面中完成日常操作与差异审阅。',link:'校验与审阅修复',href:'managed-validation',kind:'check',labels:['检查配置','查看状态','审阅差异'],detail:'逐行校验与修复首批验证：MySQL / PostgreSQL'}
   ],
-  connectorsLabel:'连接器',connectorsTitle:'连接不同数据库与数据系统。',connectorsText:'按方向、系统类型和验证范围选择。信创数据库适配是其中一项重要能力，每个产品均保留实际支持边界。',
+  connectorsLabel:'连接器',connectorsTitle:'连接不同数据库与数据系统。',connectorsText:'从常用数据库开始，按连接方向与实际验证范围选择；完整目录提供筛选和兼容性说明。',
   useLabel:'应用场景',useTitle:'把同步能力用在实际工作中。',
   cases:[
    {title:'跨数据库实时同步',text:'将 MySQL 中的数据持续复制到独立数据库目标，为下游读取提供更新的数据。',route:'scenarios'},
@@ -26,10 +26,10 @@ export const homeCopy = {
   ],
   clusterTitle:'多节点管理与恢复',clusterText:'共享节点、账号、会话与审计。可选固定执行节点全局控制及管理入口 / 执行 Agent 分离，首批档案已验收；自动跨 Agent 接管和完整故障矩阵仍待扩展。',clusterCta:'部署条件与边界',architecture:'完整架构',evidence:'测试与验收记录',limits:'已知限制',
   startLabel:'开始试用',startTitle:'从一个测试库开始。',startText:'选择源码构建或 Docker Compose，启动自己的控制台。首次使用独立空目标，先完成小规模同步与恢复验证。',startNote:'打开 http://127.0.0.1:8080，使用自己设置的令牌登录。数据库日志、账号权限及 HTTPS 配置见快速开始。',download:'源码与下载说明',
-  trustTitle:'公开实现，按证据了解能力。',trustText:'源码、操作手册、实现计划与验收档案分开记录。没有统一的性能数字，也不把某个环境的通过结果扩大为所有部署承诺。',trustLinks:['GitHub 源码','问题反馈','贡献指南','实现状态','版本与发布','验证档案']
+  trustTitle:'为开发者保留清晰入口。',trustText:'试用指南、技术架构与验证资料分层组织，便于从第一次同步继续深入。',trustLinks:['GitHub 源码','问题反馈','贡献指南','实现状态','版本与发布','验证档案']
  },
  en:{
-  release:'Public source · 0.1.0-SNAPSHOT / pre-release',hero:['Reliable database replication.','Built for recovery.'],lead:'Bring snapshots and change data capture into one recoverable pipeline. Deliver to independent destinations, retain durable checkpoints, and manage synchronization through a web workspace.',tags:['Snapshot + CDC','Independent recovery','Web task management'],start:'Get started',docs:'Read the docs',scope:'MySQL capture is available today. PostgreSQL and Oracle sources are planned.',preview:'Real workspace · development preview in Chinese',tour:'Product tour',
+  release:'RivoMesh · 0.1.0-SNAPSHOT / development preview',hero:['Reliable database replication.','Built for recovery.'],lead:'Bring snapshots and change data capture into one recoverable pipeline. Deliver to independent destinations, retain durable checkpoints, and manage synchronization through a web workspace.',tags:['Snapshot + CDC','Independent recovery','Web task management'],start:'Get started',docs:'Read the docs',scope:'MySQL capture is available today. PostgreSQL and Oracle sources are planned.',preview:'Real workspace · development preview in Chinese',tour:'Product tour',
   workflowLabel:'How it works',workflowTitle:'From a database change to every destination.',workflowText:'Capture, durable storage and target acknowledgements have distinct responsibilities. Follow the data and the progress that makes recovery possible.',
   coreLabel:'Core capabilities',coreTitle:'Designed for continuous replication.',coreText:'Initialize, distribute and operate data flows through one recoverable pipeline.',
   core:[
@@ -37,7 +37,7 @@ export const homeCopy = {
    {title:'Recover each destination independently',text:'Each target delivers and acknowledges separately. Fix a target SQL error and retry its original transaction while other targets retain their progress.',link:'Isolation & recovery',href:'recovery',kind:'targets',labels:['Target A · delivering','Target B · retry after repair','Target C · acknowledging'],detail:'Mechanism illustration · not a distributed atomic transaction'},
    {title:'Operate with context',text:'Create and check tasks, inspect configuration history, diagnose errors and review validation reports in the web workspace.',link:'Validation & reviewed repair',href:'managed-validation',kind:'check',labels:['Check configuration','Inspect progress','Review differences'],detail:'Initial row validation/repair profile: MySQL / PostgreSQL'}
   ],
-  connectorsLabel:'Connectors',connectorsTitle:'Connect databases and downstream systems.',connectorsText:'Choose by direction, system category and verified profile. Source and target support are recorded separately, with explicit product and version boundaries.',
+  connectorsLabel:'Connectors',connectorsTitle:'Connect databases and downstream systems.',connectorsText:'Start with representative databases. Source and sink profiles retain their own status; explore the full catalog for versions and compatibility.',
   useLabel:'Use cases',useTitle:'Put continuous data movement to work.',
   cases:[
    {title:'Cross-database replication',text:'Continuously copy MySQL data into a dedicated database target to keep downstream reads up to date.',route:'scenarios'},
@@ -55,6 +55,6 @@ export const homeCopy = {
   ],
   clusterTitle:'Multi-node management & recovery',clusterText:'Share node observations, accounts, sessions and audit. Optional fixed-owner controls and separate management/Agent lifecycles have initial acceptance profiles. Automatic cross-Agent failover and the full fault matrix remain open.',clusterCta:'Deployment requirements & scope',architecture:'Architecture reference',evidence:'Acceptance records',limits:'Known limitations',
   startLabel:'Get started',startTitle:'Start with a small test database.',startText:'Build from source or use Docker Compose to start your own console. Use a dedicated empty target and verify a small pipeline before expanding the scope.',startNote:'Open http://127.0.0.1:8080 and sign in with your own token. See the quick start for database logging, privileges and HTTPS settings.',download:'Source & download options',
-  trustTitle:'Inspect the implementation and its evidence.',trustText:'Public source, operating manuals, delivery plans and acceptance archives describe different scopes. No universal throughput figures or production adoption claims are implied.',trustLinks:['Source on GitHub','Report an issue','Contribute','Implementation status','Versions & downloads','Verification archives']
+  trustTitle:'Explore the project at your own depth.',trustText:'Move from the first pipeline to architecture, operating guides and profile-specific verification records.',trustLinks:['Source on GitHub','Report an issue','Contribute','Implementation status','Versions & downloads','Verification archives']
  }
 }

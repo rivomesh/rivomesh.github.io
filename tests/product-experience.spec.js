@@ -3,6 +3,7 @@ import {flushPromises,mount} from '@vue/test-utils'
 import {ref} from 'vue'
 import ConnectorCatalog from '../website/.vitepress/theme/components/ConnectorCatalog.vue'
 import ProductGallery from '../website/.vitepress/theme/components/ProductGallery.vue'
+import ProductTour from '../website/.vitepress/theme/components/ProductTour.vue'
 import ScreenshotPreview from '../website/.vitepress/theme/components/ScreenshotPreview.vue'
 import QuickStart from '../website/.vitepress/theme/components/QuickStart.vue'
 import SiteHeader from '../website/.vitepress/theme/components/SiteHeader.vue'
@@ -13,6 +14,14 @@ function create(component,options={}){const wrapper=mount(component,{attachTo:do
 beforeEach(()=>{state={frontmatter:ref({locale:'zh'}),isDark:ref(false)};document.body.innerHTML='';document.body.className='';Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:vi.fn().mockResolvedValue(undefined)}})})
 afterEach(()=>{for(const wrapper of wrappers)wrapper.unmount();wrappers=[];document.body.innerHTML='';document.body.className='';vi.useRealTimers()})
 describe('direction-specific connector profiles',()=>{
+ it('keeps the homepage to six shared profiles without directory filters or planned source badges',()=>{
+  const wrapper=create(ConnectorCatalog,{props:{compact:true}})
+  expect(wrapper.findAll('.connector-product')).toHaveLength(6)
+  expect(wrapper.findAll('select,input')).toHaveLength(0)
+  const postgres=wrapper.findAll('.connector-product').find(row=>row.get('h3').text()==='PostgreSQL')
+  expect(postgres.text()).toContain('同步目标');expect(postgres.text()).not.toContain('采集源')
+  expect(wrapper.text()).toContain('PostgreSQL / Oracle 源仍在规划')
+ })
  it('groups a product once and retains distinct source and sink support',()=>{
   const wrapper=create(ConnectorCatalog)
   const postgres=wrapper.findAll('.connector-product').find(row=>row.get('h2').text()==='PostgreSQL')
@@ -49,14 +58,39 @@ describe('direction-specific connector profiles',()=>{
  })
 })
 describe('product media and trial commands',()=>{
+ it('loads video only after an action, selects English subtitles and seeks chapters',async()=>{
+  state.frontmatter.value.locale='en'
+  const load=vi.spyOn(HTMLMediaElement.prototype,'load').mockImplementation(()=>{})
+  const play=vi.spyOn(HTMLMediaElement.prototype,'play').mockResolvedValue(undefined)
+  const wrapper=create(ProductTour)
+  expect(wrapper.find('video').exists()).toBe(false)
+  await wrapper.findAll('.video-chapters button')[2].trigger('click');await flushPromises()
+  const video=wrapper.get('video')
+  expect(load).toHaveBeenCalledOnce()
+  expect(video.attributes('preload')).toBe('none');expect(video.attributes('autoplay')).toBeUndefined()
+  expect(video.findAll('track')).toHaveLength(2)
+  expect(video.get('track[srclang="en"]').attributes('default')).toBeDefined()
+  await video.trigger('loadedmetadata');await flushPromises()
+  expect(video.element.currentTime).toBe(39);expect(play).toHaveBeenCalledOnce()
+  expect(wrapper.get('a[download]').attributes('href')).toBe('/media/rivomesh-tour.mp4')
+ })
+ it('keeps native controls available when browser playback is denied',async()=>{
+  vi.spyOn(HTMLMediaElement.prototype,'load').mockImplementation(()=>{})
+  vi.spyOn(HTMLMediaElement.prototype,'play').mockRejectedValue(new Error('blocked'))
+  const wrapper=create(ProductTour)
+  await wrapper.get('.video-poster').trigger('click');await flushPromises()
+  await wrapper.get('video').trigger('loadedmetadata');await flushPromises()
+  expect(wrapper.get('[role="status"]').text()).toContain('控制按钮')
+  expect(wrapper.get('video').attributes('controls')).toBeDefined()
+ })
  it('switches original screenshots with keyboard-usable buttons',async()=>{
   const wrapper=create(ProductGallery)
   const controls=wrapper.findAll('.gallery-controls button')
   await controls[1].trigger('click')
   expect(controls[1].attributes('aria-pressed')).toBe('true')
-  expect(wrapper.get('img').attributes('src')).toBe('/media/task-wizard.png')
-  expect(wrapper.get('img').attributes('width')).toBe('1800')
-  expect(wrapper.get('img').attributes('height')).toBe('912')
+  expect(wrapper.get('picture img').attributes('src')).toBe('/media/task-wizard.png')
+  expect(wrapper.get('picture img').attributes('width')).toBe('1800')
+  expect(wrapper.get('picture img').attributes('height')).toBe('912')
  })
  it('opens a labeled native dialog, handles Escape cancel, and restores focus',async()=>{
   HTMLDialogElement.prototype.showModal=function(){this.setAttribute('open','')}

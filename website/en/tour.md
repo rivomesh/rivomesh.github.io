@@ -9,13 +9,15 @@ description: Product tour · RivoMesh database replication, product documentatio
 
 <p class="landing-lead">Inspect the real task workspace, pipeline wizard and connector catalog before running your first synchronization task.</p>
 
-<ProductGallery />
-
 ## Narrated walkthrough
 
-The existing recording has Chinese narration. Select the **English** subtitle track in the player, or read the [English transcript](/media/transcript.en.txt). The video uses actual development preview screenshots and explanatory diagrams; it is not live monitoring or performance evidence.
+Play the walkthrough here, select an English or Chinese subtitle track, or jump to a chapter. Narration remains in Chinese. The video loads only after your action; an [English transcript](/media/transcript.en.txt) is also available.
 
 <ProductTour />
+
+## Original product screenshots
+
+<ProductGallery />
 
 [Download video](/media/rivomesh-tour.mp4) · [English subtitles](/media/tour.en.vtt) · [Chinese subtitles](/media/tour.zh-CN.vtt)
 

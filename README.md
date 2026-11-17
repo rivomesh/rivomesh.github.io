@@ -74,13 +74,17 @@ SDD 状态取自实际清单，DONE、PARTIAL、NEW 分开计算。不要把新�
 
 ## 品牌与视频
 
-品牌图标、横版字标、SVG/ICO favicon、Apple Touch 图标与分享图均由新的素材工具生成。产品导览包含中文合成语音、字幕、完整文字稿和章节跳转。
+品牌几何源文件为 `tooling/brand/identity.mjs`，三个原创 SVG 方案及最终选择见中英文品牌页。正式图标、轮廓化字标、SVG/ICO favicon、Apple Touch 图标与两种语言的 1200×630 分享图可独立重建：
 
 ```bash
-npm run media:generate
+npm run brand:generate
 ```
 
-媒体重建需要 macOS `say` 的 Tingting 语音与 FFmpeg。原始截图输入为 `/tmp/rivomesh-{console,wizard,catalog}-window.png`；工具会裁去浏览器栏后生成产品素材。截图来自本地开发预览，仅展示部分界面，不能作为实时运行或生产性能证明。网页构建不需要上述媒体生成环境。
+此命令仅依赖 Node.js 与已安装的 Sharp，不调用 FFmpeg 或 macOS `say`，也不修改截图、字幕、旁白和视频。生成结果直接提交到仓库；`npm run check` 检查品牌文件格式与尺寸。
+
+只有需要重制既有产品讲解时才运行 `npm run video:generate`，该命令需要 macOS `say` 的 Tingting 语音与 FFmpeg，并复用已提交的真实截图。`npm run media:optimize` 独立生成截图 WebP。`npm run media:generate` 是上述三个步骤的完整媒体重建入口，普通网站构建与 CI 均不运行它。
+
+产品导览使用原生 HTML5 video；点击播放或章节后才挂载视频，提供中英文字幕、下载、文字稿和章节跳转。截图与视频保留开发预览性质，不能作为实时运行或生产性能证明。
 
 ## GitHub Pages 发布
 
