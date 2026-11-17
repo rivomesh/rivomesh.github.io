@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/node-registry.md
 
 # 共享节点目录与心跳
 
-English：[Node registry](/docs/en/reference/node-registry.html)。设计合同：[CP-01](/docs/zh/sdd/design-control-store.html)。本页描述共享节点观察，任务配置/命令、账号、审计和浏览器会话当前仍由各自控制器管理；全局远端控制及接管尚未完成。
+English：[Node registry](/docs/en/reference/node-registry.html)。设计合同：[CP-01](/docs/zh/sdd/design-control-store.html)。本页描述共享节点观察。账号、会话与审计可显式启用[共享访问](/docs/zh/reference/shared-access.html)；任务页和操作仍针对本机，全局远端控制及控制面接管尚未完成。
 
 ## 使用界面
 
@@ -52,7 +52,7 @@ helm upgrade --install rivomesh-node-a deploy/helm/rivomesh -n rivomesh -f deplo
 helm upgrade --install rivomesh-node-b deploy/helm/rivomesh -n rivomesh -f deploy/helm/rivomesh/values-cluster.yaml
 ```
 
-默认仍为单副本Recreate部署。当前registry档案通过多个独立release运行，不能把单个Deployment副本数直接加大并共享同一个PVC。各节点账号及会话尚不共享，不应把多个入口放到无会话连续性方案的统一负载均衡后声称已完成HA。
+默认仍为单副本Recreate部署。当前registry档案通过多个独立release运行，不能把单个Deployment副本数直接加大并共享同一个PVC。仅启用节点目录时，各节点账号及会话仍独立；需要统一身份和会话连续性时，按[共享访问](/docs/zh/reference/shared-access.html)部署。共享访问本身不等于控制面高可用。
 
 手动部署可修改 [node-a](/files/deploy/kubernetes/rivomesh-node-a.yaml) 与 [node-b](/files/deploy/kubernetes/rivomesh-node-b.yaml) 中的镜像、控制库地址和Secret引用后分别 `kubectl apply -f`。与Helm渲染结果有静态一致性检查；真实K8s/CSI/升级/控制器HA尚未验收。生产浏览器HTTPS配置另见[会话手册](/docs/zh/reference/browser-sessions.html)。
 
@@ -65,6 +65,6 @@ helm upgrade --install rivomesh-node-b deploy/helm/rivomesh -n rivomesh -f deplo
 - **节点kill后仍短暂HEALTHY**：在原租约期限内无法立即确认断电；对照心跳及到期时间，之后转STALE。不能把这段观察窗口当作故障转移授权。
 - **旧进程重开覆盖新节点？** 活动ID冲突和incarnation/epoch校验会拒绝；旧心跳/退出不会改写替代记录。
 - **停机为什么没显示STOPPED？** 正常退出且控制库可达时可提交注销；强杀、存储故障或提交确认丢失以租约过期判STALE，不猜测已经停止。
-- **备份与恢复**：独立备份控制SQL命名空间及每节点原有控制/账号/审计/配置/报告目录。当前共享目录只含观察，不能只恢复它就恢复任务，更不能声称全局控制HA。控制库回退和节点身份/epoch回退需要人工核对；跨备份不可变锚点仍待实现。
+- **备份与恢复**：独立备份控制SQL命名空间及每节点原有控制/账号/审计/配置/报告目录。节点目录只含观察；启用共享访问后还需备份共享账号、会话与审计，不能只恢复节点目录就恢复任务，更不能声称全局控制HA。控制库回退和节点身份/epoch回退需要人工核对；跨备份不可变锚点仍待实现。
 
-开发预览将提供两个入口读取同一目录：主入口 `http://127.0.0.1:18088`，第二入口 `http://localhost:18089`。使用不同主机名避免端口之间同名Cookie互相覆盖；令牌沿用私有预览凭据，两个控制器的会话分别登录。测试临时集群结束会清理，预览集群保留供查看。
+双入口的部署与验证方式见[共享访问](/docs/zh/reference/shared-access.html)及当前[实施状态](/docs/zh/reference/implementation-status.html)。历史测试地址不代表有常驻预览服务。

@@ -5,7 +5,7 @@ title: "达梦 DM"
 sourcePath: docs/en/dm-v3.md
 ---
 
-# DM V3 destination and FAQ
+# DM destination and FAQ
 
 中文：[达梦 V3](/docs/zh/reference/dm-v3.html). Example: [dm-v3.yml](/files/config/dm-v3.yml).
 

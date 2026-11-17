@@ -7,7 +7,9 @@ sourcePath: docs/en/node-registry.md
 
 # Shared node registry and heartbeat
 
-中文：[节点目录](/docs/zh/reference/node-registry.html). Contract: [CP-01](/docs/en/sdd/design-control-store.html). This feature shares observations; task/configuration commands, accounts, audit and browser sessions remain controller-local. Global remote control/failover are unfinished.
+For current deployment, see the [multi-node guide](/docs/en/start/multi-node.html). Accounts, sessions and audit can now be shared by explicitly enabling [shared access](/docs/en/reference/shared-access.html). Registry-only installations keep them local. Public task operations remain local; global task routing and control-plane HA are still being integrated.
+
+中文：[节点目录](/docs/zh/reference/node-registry.html). Contract: [CP-01](/docs/en/sdd/design-control-store.html). This feature shares node observations. Accounts, sessions and audit can be shared by explicitly enabling [shared access](/docs/en/reference/shared-access.html); public task/configuration operations remain local. Global remote control and control-plane failover are unfinished.
 
 ADMIN opens **Node registry**. Standalone mode shows one node with an ID retained in private `node-id`. With a shared control database, all endpoints in the same clusterId read the same directory. VIEWER/OPERATOR retain existing task grants without global registry access.
 
@@ -50,7 +52,7 @@ helm upgrade --install rivomesh-node-a deploy/helm/rivomesh -n rivomesh -f deplo
 helm upgrade --install rivomesh-node-b deploy/helm/rivomesh -n rivomesh -f deploy/helm/rivomesh/values-cluster.yaml
 ```
 
-Each release stays a single-replica Recreate deployment with a stable release-name nodeId. Increasing one Deployment's replicas while sharing its PVC is invalid. Accounts/sessions are not shared; load balancing independent controllers is not controller HA.
+Each release stays a single-replica Recreate deployment with a stable release-name nodeId. Increasing one Deployment's replicas while sharing its PVC is invalid. Registry-only accounts/sessions remain local. Enable [shared access](/docs/en/reference/shared-access.html) for shared identity/session continuity; this does not provide controller HA.
 
 For manual YAML edit/apply [node-a](/files/deploy/kubernetes/rivomesh-node-a.yaml) and [node-b](/files/deploy/kubernetes/rivomesh-node-b.yaml), including image/store/Secret references. Static parity is checked; live Kubernetes/CSI/upgrades/controller HA remain unaccepted. See [session HTTPS configuration](/docs/en/reference/browser-sessions.html).
 

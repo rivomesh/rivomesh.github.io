@@ -9,7 +9,7 @@ sourcePath: docs/sdd/001-control-recovery-compatibility/tasks.md
 
 RM-SDD-001 · 2026-11-16
 
-每项任务完成必须包括设计/实现、正反向与中断恢复测试、双语文档和候选包证据。已验收节点目录及4项会话任务，余43项保持未完成；见[会话证据](/docs/zh/evidence/2026-11-16-browser-sessions.html)。依赖是实施顺序，不表示必须等待所有厂商档案才能开发公共框架。
+每项任务完成必须包括设计/实现、正反向与中断恢复测试、双语文档和候选包证据。已验收节点目录及5项会话任务，余42项保持未完成；见[会话证据](/docs/zh/evidence/2026-11-16-browser-sessions.html)。依赖是实施顺序，不表示必须等待所有厂商档案才能开发公共框架。
 
 ## 多节点统一控制
 
@@ -45,7 +45,7 @@ RM-SDD-001 · 2026-11-16
 - [x] T-SE-03 · 安全会话传输和CSRF防护 · P0 · 依赖：SE-01
   交付：浏览器端不保存可读的长期认证令牌；会话标识采用受保护cookie/等效方案，生产HTTPS及HttpOnly/SameSite策略可验证；cookie鉴权写操作具备CSRF/Origin检查；会话不进URL或日志。
   验收：AC-SE-03
-- [ ] T-SE-04 · 跨控制节点的会话连续性 · P0 · 依赖：SE-02, SE-03, CP-02
+- [x] T-SE-04 · 跨控制节点的会话连续性 · P0 · 依赖：SE-02, SE-03, CP-01
   交付：登录A后请求落到B仍合法；重启/切换控制实例按有效期恢复；集群撤销即时按规定传播，不以粘性会话掩盖状态缺失。
   验收：AC-SE-04
 - [x] T-SE-05 · CLI/API兼容及身份冲突规则 · P1 · 依赖：SE-03, CP-05
@@ -169,3 +169,7 @@ RM-SDD-001 · 2026-11-16
 - [ ] T-LG-10 · 外部身份、不可变审计与Apache准备 · P2 · 依赖：CP-05, SE-05
   交付：核验外部身份映射/撤销、外部审计留存和依赖分发条件，补齐许可证NOTICE/SBOM/贡献文档；Rivomesh不自称已获Apache身份或商标权。
   验收：AC-LG-10
+
+v0.4：共享身份/会话独立于全局任务配置权威，因此SE-04依赖调整为CP-01；CP-05仅部分完成。 [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
+
+v0.5: CP-02/03 PARTIAL;6DONE/33PARTIAL/9NEW. [Evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html).

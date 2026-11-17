@@ -7,9 +7,9 @@ sourcePath: docs/sdd/001-control-recovery-compatibility/spec.en.md
 
 # Rivomesh SDD requirements and incomplete scope
 
-RM-SDD-001 · v0.3 · 2026-11-16 · IMPLEMENTING
+RM-SDD-001 · v0.5 · 2026-11-17 · IMPLEMENTING
 
-Implementation in progress:48tracked requirements,5DONE,43open (13NEW,30PARTIAL). Current increment closes CP-01 registry;global task/control authority remains open. See [registry evidence](/docs/zh/evidence/2026-11-16-node-registry.html).
+Implementation in progress:48 tracked requirements,6 DONE,42 open (9 NEW,33 PARTIAL). SE-04 shared sessions accepted; CP-05 partial; global task authority/remote execution remain open. See [shared-access evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
 
 [Baseline/decisions](/docs/en/sdd/plan.html) · [Tasks](/docs/en/sdd/tasks.html) · [Acceptance](/docs/en/sdd/acceptance.html) · [中文](/docs/zh/sdd/spec.html)
 
@@ -18,10 +18,10 @@ Implementation in progress:48tracked requirements,5DONE,43open (13NEW,30PARTIAL)
 | ID | Priority/status | Requirement | Gap |
 |---|---|---|---|
 | CP-01 | P0 / DONE | Global node registry and state | Shared registry passes PostgreSQL/MySQL two-node,kill/rejoin and storage-outage acceptance;global task authority/commands remain CP-02/03. |
-| CP-02 | P0 / NEW | Global task/configuration authority | Controller registry,configuration history,report paths and locks are local. |
-| CP-03 | P0 / NEW | Durable cross-node command routing | The Worker factory launches/stops local JVMs only. |
+| CP-02 | P0 / PARTIAL | Global task/configuration authority | Shared configuration authority,authorized paging,observations and internal cross-entry control accepted;public runtime/UI,migration/import and full configuration integration remain open. |
+| CP-03 | P0 / PARTIAL | Durable cross-node command routing | Durable admission,fixed-owner TaskService execution,receipt recovery and cancellation have native SQL evidence;public cross-node HTTP,startup recovery and full business-chain acceptance remain open. |
 | CP-04 | P0 / PARTIAL | Failover,fencing and placement | Worker leases/epochs exist;global scheduling,remote lifecycle and rolling-upgrade protocols do not. |
-| CP-05 | P0 / NEW | Shared authorization,audit and secret references | Accounts and operation audit persist locally without cluster-wide authority. |
+| CP-05 | P0 / PARTIAL | Shared authorization,audit and secret references | Shared accounts/grants/hash-chained audit and Worker environment filtering exist; complete remote correlation, least-secret references and process/filesystem isolation remain open. |
 | CP-06 | P1 / PARTIAL | Cluster logs,metrics and diagnostics | Local task/backlog/error UI exists without remote aggregation. |
 | CP-07 | P0 / NEW | Control-plane HA and worker independence | A local controller lock is not HA;controller shutdown stops child workers. |
 
@@ -32,7 +32,7 @@ Implementation in progress:48tracked requirements,5DONE,43open (13NEW,30PARTIAL)
 | SE-01 | P0 / DONE | Session survives page reload | Single-controller reload/new-page restoration complete;cross-controller continuity remains SE-04. |
 | SE-02 | P0 / DONE | Session expiry,logout and revocation | Expiry,logout,directory-revision revocation and optional browser persistence complete;memory sessions expire on controller restart. |
 | SE-03 | P0 / DONE | Secure session transport and CSRF protection | Protected cookies,Origin/CSRF and real TLS-proxy acceptance complete;the proxy terminates production TLS. |
-| SE-04 | P0 / NEW | Session continuity across controllers | No shared session authority for load-balanced controllers. |
+| SE-04 | P0 / DONE | Session continuity across controllers | Shared SQL sessions passed two-controller HTTPS/revocation/kill/reopen/store-outage acceptance on PostgreSQL/MySQL; global task control remains CP-02/03. |
 | SE-05 | P1 / DONE | CLI/API compatibility and identity conflicts | Bearer compatibility,no-fallback/conflict rules,grant checks,logout races and self-rotation complete. |
 
 ## Manual recovery,skip and corrective data
@@ -75,7 +75,7 @@ Implementation in progress:48tracked requirements,5DONE,43open (13NEW,30PARTIAL)
 
 | ID | Priority/status | Requirement | Gap |
 |---|---|---|---|
-| DO-01 | P0 / PARTIAL | Bilingual traceable SDD baseline | This change creates the v0.3 inventory;module designs,spec change control and implementation evidence closure remain open. |
+| DO-01 | P0 / PARTIAL | Bilingual traceable SDD baseline | This change creates the v0.5 inventory;module designs,spec change control and implementation evidence closure remain open. |
 | DO-02 | P1 / PARTIAL | Deployment and cluster operations docs | Existing deployment artifacts do not cover new cluster control/session models. |
 | DO-03 | P1 / PARTIAL | Recovery scenarios and FAQ | Existing reconciliation FAQ does not cover new skip,patch and distributed faults. |
 | DO-04 | P1 / PARTIAL | Configuration/API/compatibility and upgrade docs | Partial handbooks lack new APIs and a unified profile index. |
@@ -101,16 +101,16 @@ Implementation in progress:48tracked requirements,5DONE,43open (13NEW,30PARTIAL)
 | ID | Existing evidence/code (not completion) |
 |---|---|
 | CP-01 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) / [TaskWorker.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java) |
-| CP-02 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) |
-| CP-03 | [TaskWorker.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java) / [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) |
+| CP-02 | P0 / PARTIAL | Global task/configuration authority | Shared configuration authority,authorized paging,observations and internal cross-entry control accepted;public runtime/UI,migration/import and full configuration integration remain open. |
+| CP-03 | P0 / PARTIAL | Durable cross-node command routing | Durable admission,fixed-owner TaskService execution,receipt recovery and cancellation have native SQL evidence;public cross-node HTTP,startup recovery and full business-chain acceptance remain open. |
 | CP-04 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) |
-| CP-05 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) / [account-management.md](/docs/zh/reference/account-management.html) / [security-audit.md](/docs/zh/reference/security-audit.html) |
+| CP-05 | P0 / PARTIAL | Shared authorization,audit and secret references | Shared accounts/grants/hash-chained audit and Worker environment filtering exist; complete remote correlation, least-secret references and process/filesystem isolation remain open. |
 | CP-06 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) / [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) |
 | CP-07 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) / [TaskWorker.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java) |
 | SE-01 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) |
 | SE-02 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) / [account-management.md](/docs/zh/reference/account-management.html) |
 | SE-03 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) / [ConsoleServer.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/ConsoleServer.java) |
-| SE-04 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) |
+| SE-04 | P0 / DONE | Session continuity across controllers | Shared SQL sessions passed two-controller HTTPS/revocation/kill/reopen/store-outage acceptance on PostgreSQL/MySQL; global task control remains CP-02/03. |
 | SE-05 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) / [AccessControl.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/AccessControl.java) |
 | RC-01 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [FanoutDispatcher.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/FanoutDispatcher.java) |
 | RC-02 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [managed-validation.md](/docs/zh/reference/managed-validation.html) |
@@ -148,3 +148,5 @@ Implementation in progress:48tracked requirements,5DONE,43open (13NEW,30PARTIAL)
 | LG-08 | [pipeline-v3.md](/docs/zh/reference/pipeline-v3.html) / [rename-migration.md](/docs/zh/reference/rename-migration.html) |
 | LG-09 | [README.md](/docs/zh/evidence/2026-11-16-managed-repair.html) / [managed-validation.md](/docs/zh/reference/managed-validation.html) |
 | LG-10 | [account-management.md](/docs/zh/reference/account-management.html) / [security-audit.md](/docs/zh/reference/security-audit.html) |
+
+v0.5: CP-02/03 PARTIAL · [Internal foundations evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html). Public runtime integration remains open.

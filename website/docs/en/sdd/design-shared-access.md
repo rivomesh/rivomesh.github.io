@@ -18,3 +18,5 @@ Every authentication/grant/session check consults shared authority. Account muta
 Shared audit uses a serialized sequence/hash chain and retention anchor. Retry the same event ID idempotently and reject payload collisions. Drain local durable outboxes only after shared confirmation. Preserve/export pre-import local history separately.
 
 Acceptance requires independent directories sharing SQL: A-login/B-restore, kill-A/B-continuity, logout/rotation/grant revocation across nodes/restart, no local fallback during store failure, import/identity-loss/rollback refusal, concurrent account/session/audit and expiry/capacity/idempotency contracts, native PG/MySQL, UI and bilingual recovery docs. Full CP-05 also requires least-privilege task-secret distribution and cannot close based on shared accounts alone.
+
+SE-04 accepted; CP-05 remains partial. [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).

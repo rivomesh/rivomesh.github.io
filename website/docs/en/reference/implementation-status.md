@@ -7,11 +7,12 @@ sourcePath: docs/en/implementation-status.md
 
 # Implementation status and next work
 
+Development preview is on demand, with no permanent instance. Its containers were removed at the user’s request on2026-11-16; historical preview URLs are currently inactive.
 Updated: 2026-11-16. 中文：[实施状态](/docs/zh/reference/implementation-status.html). See [design](/docs/en/reference/platform-design.html) and [console manual](/docs/en/reference/console-and-deployment.html).
 
-Latest:shared node registry passes native PostgreSQL17/MySQL8.4 two-node registration,task observation,kill/expiry,rejoin and control-store outage recovery.223root,221artifact-first app,63DOM and8session tests per five JDKs pass. Two preview endpoints are updated. [Handbook](/docs/en/reference/node-registry.html) / [Evidence](/docs/zh/evidence/2026-11-16-node-registry.html). Task/access/audit/session authority remains local;global control/HA remain open.
+Latest: shared accounts/grants/sessions/audit passed native PostgreSQL17/MySQL8.4 two-controller HTTPS, revocation, kill/reopen and store-outage recovery.273app-build,273actual-JAR-first app,2SDK,68DOM and5x68control checks pass. Task execution remains LOCAL; global authority/dispatch remains in development. [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
 
-SDD tracking:48requirements,5DONE,43open (13NEW,30PARTIAL). CP-01 closes registry observations only;CP-02/03 task/command authority,CP-05 access/audit andSE-04 shared sessions remain open. [Backlog](/docs/en/sdd/tasks.html).
+SDD tracking:48requirements,6DONE,42open (9NEW,33PARTIAL). CP-01 and five session tasks accepted;CP-05partial;CP-02/03 global tasks/commands and control HA remain open. [Backlog](/docs/en/sdd/tasks.html).
 
 ## Implemented in this increment
 
@@ -70,3 +71,7 @@ The first SQL row-comparison/CLI native acceptance now passes all four journal p
 2026-11-16:COMMON_CUT repair CLI now passes four real journal modes with MySQL8.4/PostgreSQL17 business targets:explicit plans/hash confirmation,live drift refusal,SQL rollback,exact keyless identity restoration,lost commit reply,SIGKILL before/after commit and durable receipt replay without CDC advancement.200root cases (198app+2SDK),198actual-JAR-first and46DOM pass;Docker preview updated. Repair UI/durable jobs,dependency discovery,failed-transaction compensation/skip,takeover/cutover and full project scope remain incomplete. [Repair handbook](/docs/en/reference/common-cut-repair.html) / [Evidence](/docs/zh/evidence/2026-11-16-common-cut-repair.html).
 
 2026-11-16:managed repair now has accepted explicit scope,durable predetermined plan IDs,authenticated review/hash approval,revision/request checks,cancellation/retry,receipts and audit. Trigger/FK/metadata-visibility refusal is tested on the specified SQL profiles. Full dependency planning,budget editing,receipt catalogs,failed-transaction compensation/skip,takeover/cutover,other vendors and complete HA/capacity remain pending. [Managed repair](/docs/en/reference/managed-repair.html).
+
+2026-11-16 latest: shared identity/session/audit native acceptance passed; SDD v0.4 has6DONE/33PARTIAL/9NEW.273application,273actual-JAR-first,2SDK,68DOM and5x68control checks passed. Global task execution remains LOCAL. Persistent preview removed at user request; temporary fixtures/images cleaned. [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
+
+2026-11-17: CP-02/03 now PARTIAL: internal global task/control foundations passed307actual-JAR-first tests and native PostgreSQL/MySQL control fixtures. Public task control remains LOCAL. Configuration/history workflows are newer development work. [Evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html).

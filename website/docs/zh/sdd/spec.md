@@ -7,9 +7,9 @@ sourcePath: docs/sdd/001-control-recovery-compatibility/spec.md
 
 # Rivomesh SDD需求基线与未完成事项
 
-RM-SDD-001 · v0.3 · 2026-11-16 · IMPLEMENTING
+RM-SDD-001 · v0.5 · 2026-11-17 · IMPLEMENTING
 
-实施中：48项持续追踪，5项DONE，43项未完成（13项NEW、30项PARTIAL）。本轮关闭CP-01共享节点目录，全局任务/控制权威仍未完成。见[节点目录证据](/docs/zh/evidence/2026-11-16-node-registry.html)。
+实施中：48项持续追踪，6项DONE，42项未完成（9项NEW、33项PARTIAL）。共享会话SE-04已验收；CP-05部分完成，全局任务与远端执行仍未完成。见[共享访问证据](/docs/zh/evidence/2026-11-16-shared-access.html)。
 
 [基线和决策](/docs/zh/sdd/plan.html) · [任务](/docs/zh/sdd/tasks.html) · [验收矩阵](/docs/zh/sdd/acceptance.html) · [English](/docs/en/sdd/spec.html)
 
@@ -18,10 +18,10 @@ RM-SDD-001 · v0.3 · 2026-11-16 · IMPLEMENTING
 | ID | 优先级/状态 | 需求 | 尚缺内容 |
 |---|---|---|---|
 | CP-01 | P0 / DONE | 统一节点注册与状态 | 共享节点目录已通过PostgreSQL/MySQL双节点、kill/重开及控制库中断验收；任务权威/远端命令仍属CP-02/03。 |
-| CP-02 | P0 / NEW | 全局任务、配置与操作权威状态 | 控制器注册表、配置历史、报告路径及锁依赖本地目录，尚非统一控制面。 |
-| CP-03 | P0 / NEW | 跨节点持久命令路由 | 当前Worker工厂只在本机启动/停止Java进程。 |
+| CP-02 | P0 / PARTIAL | 全局任务、配置与操作权威状态 | 全局配置权威、授权分页、任务观察和内部跨入口控制已验收；公开运行时/界面、升级导入及完整配置工作流仍待接入。 |
+| CP-03 | P0 / PARTIAL | 跨节点持久命令路由 | 持久命令、固定owner实际TaskService执行、回执恢复和取消已有原生SQL验收；公开跨节点HTTP、启动恢复及完整业务链路仍待验收。 |
 | CP-04 | P0 / PARTIAL | 故障接管、隔离与资源调度 | 已有Worker租约/epoch，缺少统一节点调度、远端生命周期和滚动升级协议。 |
-| CP-05 | P0 / NEW | 共享权限、审计和密钥引用 | 现有账号与操作审计是控制器本地持久化，缺少集群一致视图。 |
+| CP-05 | P0 / PARTIAL | 共享权限、审计和密钥引用 | 共享账号/授权/链式审计及Worker环境过滤已实现；完整远端关联、最小密钥引用和进程/文件隔离仍缺。 |
 | CP-06 | P1 / PARTIAL | 全局日志、指标与诊断界面 | 已有本机任务界面、积压和错误展示，未聚合远端状态。 |
 | CP-07 | P0 / NEW | 控制面HA及控制/数据面解耦 | 单控制目录文件锁不等于HA，控制器关闭还会停止其子进程。 |
 
@@ -32,7 +32,7 @@ RM-SDD-001 · v0.3 · 2026-11-16 · IMPLEMENTING
 | SE-01 | P0 / DONE | 刷新后恢复登录态 | 已完成单控制器刷新/新页面恢复；跨控制器连续性仍属SE-04。 |
 | SE-02 | P0 / DONE | 会话期限、退出和撤销 | 已完成期限、退出、目录修订撤销及可配置记住浏览器；当前内存存储重启失效。 |
 | SE-03 | P0 / DONE | 安全会话传输和CSRF防护 | 已完成受保护Cookie、Origin/CSRF及TLS代理实测；生产TLS由代理终止。 |
-| SE-04 | P0 / NEW | 跨控制节点的会话连续性 | 负载均衡切换后没有共享会话权威状态。 |
+| SE-04 | P0 / DONE | 跨控制节点的会话连续性 | 已通过PostgreSQL/MySQL共享会话双节点、HTTPS、撤销、kill/重开及存储中断恢复验收；全局任务控制仍属CP-02/03。 |
 | SE-05 | P1 / DONE | CLI/API兼容及身份冲突规则 | 已完成Bearer兼容、不回退/身份冲突规则、权限重验、退出竞态及自身轮换。 |
 
 ## 人工恢复、跳过与补数据
@@ -75,7 +75,7 @@ RM-SDD-001 · v0.3 · 2026-11-16 · IMPLEMENTING
 
 | ID | 优先级/状态 | 需求 | 尚缺内容 |
 |---|---|---|---|
-| DO-01 | P0 / PARTIAL | 双语SDD基线与范围可追踪 | 本轮建立v0.3基线；详细模块设计、规格变更管理和实现证据闭环仍需完成。 |
+| DO-01 | P0 / PARTIAL | 双语SDD基线与范围可追踪 | 本轮建立v0.5基线；详细模块设计、规格变更管理和实现证据闭环仍需完成。 |
 | DO-02 | P1 / PARTIAL | 四类部署与多节点运维文档 | 现有Linux/Docker/Helm/原生K8s文件未覆盖新集群控制与会话模型。 |
 | DO-03 | P1 / PARTIAL | 恢复场景和FAQ完整手册 | 现有校验/共同点修复FAQ不能覆盖新跳过、补数据与跨节点故障。 |
 | DO-04 | P1 / PARTIAL | 配置/API/兼容性与升级文档 | 已有部分手册，缺新接口与统一源/目标/JDK档案索引。 |
@@ -101,16 +101,16 @@ RM-SDD-001 · v0.3 · 2026-11-16 · IMPLEMENTING
 | ID | 本地证据/实现位置（不代表本项完成） |
 |---|---|
 | CP-01 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) / [TaskWorker.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java) |
-| CP-02 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) |
-| CP-03 | [TaskWorker.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java) / [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) |
+| CP-02 | P0 / PARTIAL | 全局任务、配置与操作权威状态 | 全局配置权威、授权分页、任务观察和内部跨入口控制已验收；公开运行时/界面、升级导入及完整配置工作流仍待接入。 |
+| CP-03 | P0 / PARTIAL | 跨节点持久命令路由 | 持久命令、固定owner实际TaskService执行、回执恢复和取消已有原生SQL验收；公开跨节点HTTP、启动恢复及完整业务链路仍待验收。 |
 | CP-04 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) |
-| CP-05 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) / [account-management.md](/docs/zh/reference/account-management.html) / [security-audit.md](/docs/zh/reference/security-audit.html) |
+| CP-05 | P0 / PARTIAL | 共享权限、审计和密钥引用 | 共享账号/授权/链式审计及Worker环境过滤已实现；完整远端关联、最小密钥引用和进程/文件隔离仍缺。 |
 | CP-06 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) / [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) |
 | CP-07 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) / [TaskWorker.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java) |
 | SE-01 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) |
 | SE-02 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) / [account-management.md](/docs/zh/reference/account-management.html) |
 | SE-03 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) / [ConsoleServer.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/ConsoleServer.java) |
-| SE-04 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) |
+| SE-04 | P0 / DONE | 跨控制节点的会话连续性 | 已通过PostgreSQL/MySQL共享会话双节点、HTTPS、撤销、kill/重开及存储中断恢复验收；全局任务控制仍属CP-02/03。 |
 | SE-05 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) / [AccessControl.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/AccessControl.java) |
 | RC-01 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [FanoutDispatcher.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/FanoutDispatcher.java) |
 | RC-02 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [managed-validation.md](/docs/zh/reference/managed-validation.html) |
@@ -148,3 +148,5 @@ RM-SDD-001 · v0.3 · 2026-11-16 · IMPLEMENTING
 | LG-08 | [pipeline-v3.md](/docs/zh/reference/pipeline-v3.html) / [rename-migration.md](/docs/zh/reference/rename-migration.html) |
 | LG-09 | [README.md](/docs/zh/evidence/2026-11-16-managed-repair.html) / [managed-validation.md](/docs/zh/reference/managed-validation.html) |
 | LG-10 | [account-management.md](/docs/zh/reference/account-management.html) / [security-audit.md](/docs/zh/reference/security-audit.html) |
+
+v0.5: CP-02/03 PARTIAL · [Internal foundations evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html). Public runtime integration remains open.

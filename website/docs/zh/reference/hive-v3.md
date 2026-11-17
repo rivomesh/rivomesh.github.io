@@ -5,7 +5,7 @@ title: "Apache Hive"
 sourcePath: docs/zh-CN/hive-v3.md
 ---
 
-# Hive V3 目标、恢复与 FAQ
+# Hive 目标、恢复与 FAQ
 
 English：[Hive V3](/docs/en/reference/hive-v3.html)。配置：[hive-v3.yml](/files/config/hive-v3.yml)。
 

@@ -1,0 +1,21 @@
+{
+  "completed_tables" : 3,
+  "snapshotAcknowledgments" : {
+    "postgres" : 2,
+    "shadow" : 3
+  },
+  "table_count" : 3,
+  "tables" : [ {
+    "copiedRows" : 2,
+    "done" : true,
+    "table" : "vb_f925d1d130454fe3be_sales.duplicates"
+  }, {
+    "copiedRows" : 4,
+    "done" : true,
+    "table" : "vb_f925d1d130454fe3be_sales.items"
+  }, {
+    "copiedRows" : 1,
+    "done" : true,
+    "table" : "vb_f925d1d130454fe3be_billing.ledger"
+  } ]
+}

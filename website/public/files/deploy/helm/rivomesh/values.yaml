@@ -1,3 +1,4 @@
+controllerHeapMiB: 512 # Includes initialized LOCAL journal caches; separate from Worker heaps.
 image:
   repository: rivomesh
   tag: 0.1.0-SNAPSHOT

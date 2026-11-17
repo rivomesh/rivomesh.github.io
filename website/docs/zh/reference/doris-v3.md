@@ -5,7 +5,7 @@ title: "Apache Doris"
 sourcePath: docs/zh-CN/doris-v3.md
 ---
 
-# Doris V3 目标、恢复与 FAQ
+# Doris 目标、恢复与 FAQ
 
 English：[Doris V3](/docs/en/reference/doris-v3.html)。配置：[doris-v3.yml](/files/config/doris-v3.yml)。
 

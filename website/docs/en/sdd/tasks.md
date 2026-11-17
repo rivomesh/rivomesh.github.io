@@ -9,7 +9,7 @@ sourcePath: docs/sdd/001-control-recovery-compatibility/tasks.en.md
 
 RM-SDD-001 · 2026-11-16
 
-Every task requires design/implementation,positive/negative/crash tests,bilingual docs and candidate evidence. The registry and four session tasks are accepted;43tasks remain open. See [session evidence](/docs/zh/evidence/2026-11-16-browser-sessions.html). Dependencies guide implementation,not a requirement to block common infrastructure on every vendor profile.
+Every task requires design/implementation,positive/negative/crash tests,bilingual docs and candidate evidence. The registry and five session tasks are accepted;42tasks remain open. See [session evidence](/docs/zh/evidence/2026-11-16-browser-sessions.html). Dependencies guide implementation,not a requirement to block common infrastructure on every vendor profile.
 
 ## Unified cluster control
 
@@ -45,7 +45,7 @@ Every task requires design/implementation,positive/negative/crash tests,bilingua
 - [x] T-SE-03 · Secure session transport and CSRF protection · P0 · Depends on: SE-01
   Deliver: No readable long-lived browser credential;protected cookie/equivalent transport,HTTPS and HttpOnly/SameSite policy are verified;cookie-authenticated mutations enforce CSRF/Origin checks;session IDs never enter URLs/logs.
   Acceptance: AC-SE-03
-- [ ] T-SE-04 · Session continuity across controllers · P0 · Depends on: SE-02, SE-03, CP-02
+- [x] T-SE-04 · Session continuity across controllers · P0 · Depends on: SE-02, SE-03, CP-01
   Deliver: Login at A remains valid at B;controller restart/failover follows expiry/recovery policy;revocation propagates as specified without relying on sticky sessions to hide missing state.
   Acceptance: AC-SE-04
 - [x] T-SE-05 · CLI/API compatibility and identity conflicts · P1 · Depends on: SE-03, CP-05
@@ -169,3 +169,7 @@ Every task requires design/implementation,positive/negative/crash tests,bilingua
 - [ ] T-LG-10 · External identity,immutable audit and Apache preparation · P2 · Depends on: CP-05, SE-05
   Deliver: Verify external identity/revocation,external audit and distribution conditions;complete license/NOTICE/SBOM/contribution docs without claiming Apache affiliation or trademark rights.
   Acceptance: AC-LG-10
+
+v0.4: shared identity/session authority is independent of global task configuration, so SE-04 now depends on CP-01; CP-05 remains partial. [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
+
+v0.5: CP-02/03 PARTIAL;6DONE/33PARTIAL/9NEW. [Evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html).

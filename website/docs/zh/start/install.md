@@ -54,6 +54,10 @@ docker compose -f deploy/docker-compose.yml up -d --build
 
 HTTPS、容器持久目录、Linux 服务及 Kubernetes 参数见[部署配置参考](../reference/console-and-deployment)，浏览器登录设置见[会话配置参考](../reference/browser-sessions)。
 
+## 部署多个节点
+
+需要节点状态观察、统一登录或跨主机续传时，先阅读[多节点部署与恢复](multi-node)，分别准备共享控制库、独立节点目录和外部事务日志。
+
 ## 接下来
 
 控制台可以正常登录后，进入[创建同步任务](create-task)。启动失败或页面无法打开时，查看[常见故障处理](troubleshooting)。

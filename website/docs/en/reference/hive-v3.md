@@ -5,7 +5,7 @@ title: "Apache Hive"
 sourcePath: docs/en/hive-v3.md
 ---
 
-# Hive V3 destination, recovery and FAQ
+# Hive destination, recovery and FAQ
 
 中文：[Hive V3](/docs/zh/reference/hive-v3.html). Example: [hive-v3.yml](/files/config/hive-v3.yml).
 

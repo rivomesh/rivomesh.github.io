@@ -5,7 +5,7 @@ title: "ActiveMQ Classic"
 sourcePath: docs/en/classic-v3.md
 ---
 
-# ActiveMQ Classic V3
+# ActiveMQ Classic
 
 中文：[Classic 手册](/docs/zh/reference/classic-v3.html).
 

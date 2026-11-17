@@ -5,7 +5,7 @@ title: "达梦 DM"
 sourcePath: docs/zh-CN/dm-v3.md
 ---
 
-# 达梦 V3 目标与 FAQ
+# 达梦 目标与 FAQ
 
 English: [DM V3](/docs/en/reference/dm-v3.html)。示例：[dm-v3.yml](/files/config/dm-v3.yml)。
 

@@ -1,28 +1,176 @@
 <script setup>
-import {ref} from 'vue'
-import Icon from './Icon.vue'
-import UsagePaths from './UsagePaths.vue'
-const scene=ref('domestic')
-const features=[
- {icon:'database',title:'全量 + CDC 增量',text:'同步已有表数据，持续捕获新增、修改和删除，用同一条任务衔接历史数据与后续变化。',href:'/docs/zh/reference/pipeline-v3.html'},
- {icon:'branch',title:'多库、多目标分发',text:'显式映射多个 database 和目标。各目标独立投递、确认和恢复，按需连接不同下游。',href:'/docs/zh/reference/pipeline-v3.html'},
- {icon:'recover',title:'持久断点与恢复',text:'在持久日志中保存事件和进度。暂时连接故障按策略重试，SQL 错误修复后重试原事务。',href:'/docs/zh/start/backup.html'},
- {icon:'console',title:'Web 可视化管理',text:'通过向导或 YAML 创建任务，检查连接、查看全量与积压，并执行授权范围内的启停和恢复。',href:'/docs/zh/start/create-task.html'},
- {icon:'check',title:'数据校验与计划修复',text:'比较共同校验点的数据，审阅计划后修复目标差异。首版业务目标限定为 MySQL / PostgreSQL。',href:'/docs/zh/start/data-validation.html'},
- {icon:'shield',title:'权限与操作审计',text:'以角色和任务范围管理访问，查询与导出操作记录。按职责开放查看、操作和管理权限，保留关键操作记录。',href:'/docs/zh/start/access.html'}
+const targets = [
+  {name:'openGauss / GaussDB', scope:'openGauss 部分验证；商业及分布式 GaussDB 待验证', href:'gaussdb-index-policy'},
+  {name:'达梦 DM', scope:'DM8 指定模式 · 实验性', href:'dm-v3'},
+  {name:'金仓 Kingbase', scope:'V9 PG / UTF8 · 实验性', href:'kingbase-v3'},
+  {name:'GBase 8c', scope:'指定 PG / UTF8 模式 · 实验性', href:'gbase8c-v3'},
+  {name:'OceanBase', scope:'MySQL 兼容模式 · 实验性', href:'oceanbase-v3'}
 ]
-const scenes=[
- {id:'domestic',name:'国产数据库适配评估',title:'验证新数据库，先从代表性业务数据开始。',text:'将 MySQL 中的业务数据同步到独立目标，核对中文、时间、精度、JSON、无主键和索引行为，形成可复核的适配记录。',target:'PostgreSQL / openGauss / 达梦 / 金仓 / GBase 8c',note:'国产厂商目标按特定版本和模式评估，业务接管与回退需要独立计划。'},
- {id:'analytics',name:'分析数据持续更新',title:'把业务变化，持续送入分析系统。',text:'先准备已有数据，再同步后续变化。按 ClickHouse、Doris 或 Hive 的物化与读取协议，验证更新、删除、重启和故障追平。',target:'ClickHouse / Apache Doris / Apache Hive',note:'各分析系统有不同的可见性与物化协议，集群、安全和容量应按环境验收。'},
- {id:'events',name:'多系统数据分发',title:'一条来源，按需服务多个下游。',text:'分别观察每个目标的确认位置和积压，对故障目标定位与恢复。向消息系统发送快照与增量事件，为消费者提供持续变化的数据。',target:'关系数据库 / 分析系统 / Kafka / Pulsar / 更多消息系统',note:'多目标分别确认；消息为至少一次投递，消费者需按协议去重。'}
+const capabilities = [
+  {title:'全量与增量同步', text:'先读取已有表数据，再持续捕获新增、修改和删除。持久日志保存事件与进度，重启后按已确认位置继续。', href:'/docs/zh/start/quick-start.html'},
+  {title:'多库、多目标分发', text:'显式配置来源库与目标映射。各目标独立投递、确认和恢复，单个目标的 SQL 错误可独立处理。', href:'/docs/zh/reference/pipeline-v3.html'},
+  {title:'Web 任务管理', text:'通过向导或 YAML 创建任务，检查连接、查看进度与积压，编辑配置并查看版本历史。', href:'/docs/zh/start/create-task.html'},
+  {title:'数据核对与修复', text:'在共同检查点比较数据，审阅计划后修复目标差异。当前首批验证业务目标为 MySQL / PostgreSQL。', href:'/docs/zh/start/data-validation.html'},
+  {title:'多节点与共享访问', text:'集中查看节点和心跳，按需统一账号、跨节点会话与审计。任务主备恢复按外部日志与租约配置。', href:'/docs/zh/start/multi-node.html'},
+  {title:'权限与操作记录', text:'按角色、节点和任务范围分配访问权限，查询及导出操作记录，追踪配置与管理操作。', href:'/docs/zh/start/access.html'}
+]
+const steps = [
+  {title:'安装与登录', text:'从源码构建，或通过 Docker 启动控制台。', href:'install'},
+  {title:'创建同步任务', text:'连接测试源与独立空目标，检查后启动。', href:'create-task'},
+  {title:'核对结果与恢复', text:'检查字段值、持续变化及重启后的进度。', href:'monitoring'}
 ]
 </script>
-<template><div class="project-home"><div class="home-announcement"><span class="live-dot"></span><b>0.1.0-SNAPSHOT</b><span>发布前预览</span><a href="/docs/zh/reference/implementation-status.html">查看产品进展 <span>→</span></a></div><section class="hero section-container"><div class="hero-content"><div class="eyebrow"><span class="eyebrow-line"></span> RIVOMESH · DATA SYNCHRONIZATION</div><h1>数据库实时<br><em>同步平台</em></h1><p class="hero-lead">先同步已有数据，再持续同步<br class="small-only">新增、修改和删除。</p><p class="hero-explanation">从 MySQL 采集数据，分发到数据库、分析系统与消息队列。使用 Web 控制台配置任务、观察进度，并从持久断点恢复。</p><div class="hero-buttons"><a class="button primary" href="/docs/zh/start/quick-start.html">快速开始 <Icon name="arrow"/></a><a class="button secondary" href="/docs/zh/start/index.html">阅读文档</a></div><div class="hero-shortcuts"><a href="/tour.html"><span class="play-icon">▶</span> 观看产品讲解</a><span></span><a href="https://github.com/rivomesh/rivomesh">GitHub 源码 ↗</a></div></div><div class="hero-system" role="img" aria-label="同步流程示意：MySQL 通过 RivoMesh 全量、增量和持久日志同步到关系数据库、分析系统和消息队列。"><div class="system-top"><span>PIPELINE OVERVIEW</span><span>数据流示意</span></div><div class="system-source"><span class="system-node-icon"><Icon name="database"/></span><div><b>MySQL</b><small>现有数据 + binlog 变更</small></div><span class="source-tag">SOURCE</span></div><div class="system-line line-down"><i></i></div><div class="system-engine"><div class="engine-brand"><img src="/brand/logo-light.svg" alt=""><b>RivoMesh</b></div><div class="engine-functions"><span>全量同步</span><span>CDC 增量</span><span>持久日志</span></div><div class="engine-bottom"><span class="live-dot"></span> 保存事件与进度 · 按目标确认恢复</div></div><div class="system-branches"><span></span><span></span><span></span></div><div class="system-targets"><div><Icon name="database"/><b>关系数据库</b><small>PostgreSQL<br>openGauss · 更多</small></div><div><Icon name="grid"/><b>分析系统</b><small>ClickHouse<br>Doris · Hive</small></div><div><Icon name="message"/><b>消息队列</b><small>Kafka · Pulsar<br>更多消息目标</small></div></div><div class="system-note"><span>多目标独立确认</span><a href="/docs/zh/start/connectors.html">查看适配状态 ↗</a></div></div></section><div class="technology-bar section-container"><span>连接业务数据与下游系统</span><div><b>MySQL</b><b>PostgreSQL</b><b>openGauss</b><b>ClickHouse</b><b>Apache Doris</b><b>Apache Kafka</b></div></div><section class="home-journey section-container"><div class="section-heading"><div><div class="eyebrow">YOUR FIRST PIPELINE</div><h2>从第一次登录，到持续同步。</h2></div><a class="text-link" href="/docs/zh/start/index.html">打开使用指南 →</a></div><UsagePaths compact/></section><section class="feature-section section-container"><div class="section-heading"><div><div class="eyebrow">CAPABILITIES</div><h2>围绕一条可靠的数据同步链路。</h2></div><p>采集、投递、管理与恢复各司其职。<br>具体版本和能力范围，以运行手册为准。</p></div><div class="feature-grid"><a v-for="(f,i) in features" :key="f.title" :href="f.href" class="feature-item" :data-tone="['blue','teal','purple','cyan','orange','rose'][i]"><span class="feature-icon"><Icon :name="f.icon"/></span><h3>{{f.title}}</h3><p>{{f.text}}</p><span class="feature-link">阅读手册 <span>↗</span></span></a></div></section><section id="architecture" class="architecture-band"><div class="section-container architecture-content"><div class="architecture-summary"><div class="eyebrow">ARCHITECTURE</div><h2>独立运行。<br>进度持久保存。</h2><p>以独立 Java 服务直接订阅 MySQL 复制协议。全量与增量按基线衔接，事件通过持久日志交给各目标处理。</p><a class="text-link" href="/docs/zh/reference/platform-design.html">了解完整架构 →</a></div><ol class="architecture-list"><li><span>01</span><div><h3>源端采集</h3><p>读取已有表数据，根据 binlog 捕获业务变化，保留源事务与位置语义。</p></div></li><li><span>02</span><div><h3>持久事务日志</h3><p>选择本地日志或外部事务日志库，保存快照、变更事件与采集进度。</p></div></li><li><span>03</span><div><h3>独立目标确认</h3><p>各目标分别记录处理进度，按数据库、分析或消息协议确认并恢复。</p></div></li></ol></div></section><section class="scenario-section section-container"><div class="section-heading"><div><div class="eyebrow">USE CASES</div><h2>从实际场景开始验证。</h2></div><a class="text-link" href="/docs/zh/start/scenarios.html">政企试点指南 →</a></div><div class="scenario-selector" role="group" aria-label="选择应用场景"><button v-for="s in scenes" :key="s.id" :class="{selected:scene===s.id}" :aria-pressed="scene===s.id" @click="scene=s.id">{{s.name}}</button></div><article v-for="s in scenes" v-show="s.id===scene" :key="s.id" class="scenario-detail"><div><span class="scenario-category">{{s.name}}</span><h3>{{s.title}}</h3><p>{{s.text}}</p></div><div class="scenario-route"><div><Icon name="database"/><span>MySQL 业务库</span></div><span>↓</span><img src="/brand/wordmark.svg" alt="RivoMesh"><span>↓</span><strong>{{s.target}}</strong></div><small>{{s.note}}</small></article></section><section class="console-section section-container"><div class="console-image-frame"><div class="image-toolbar"><i></i><i></i><i></i><span>RivoMesh Workspace</span></div><a href="/tour.html"><img src="/media/console-overview.png" loading="lazy" alt="真实开发预览中的 RivoMesh 任务控制台，显示任务列表和同步状态入口"></a><div class="image-caption">真实开发预览截图 · 功能范围以当前手册为准</div></div><div class="console-copy"><div class="eyebrow">WORKSPACE</div><h2>创建任务，<br>看清每一步状态。</h2><p>通过向导或 YAML 配置任务，检查后启动。查看阶段、积压和目标错误，再使用对应的恢复或数据质量流程。</p><ul><li><Icon name="check"/>中英文任务向导与配置检查</li><li><Icon name="check"/>多目标状态与独立恢复入口</li><li><Icon name="check"/>角色授权、操作审计与校验报告</li></ul><a class="text-link" href="/tour.html">查看截图与中文讲解 →</a></div></section><section class="start-band"><div class="section-container start-grid"><div><div class="eyebrow">GET STARTED</div><h2>准备一个测试库，<br>建立第一条同步任务。</h2><p>从源码构建控制台，按向导连接 MySQL 和独立空目标。先核对值与重启恢复，再扩大使用范围。</p><a class="button primary" href="/docs/zh/start/quick-start.html">打开快速开始 <Icon name="arrow"/></a></div><div class="home-code"><div><span>TERMINAL</span><span>Java 8 + Maven</span></div><pre><code><span># 构建核心项目</span>
-git clone https://github.com/rivomesh/rivomesh.git
-cd rivomesh
-mvn -s build/settings.xml verify
 
-<span># 使用配置与访问令牌启动控制台</span>
-java -Xmx128m -jar \
-  sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar \
-  serve config/platform.yml</code></pre><small>先按快速开始设置 RIVOMESH_TOKEN</small></div></div></section><section class="community-section section-container"><div class="section-heading"><div><div class="eyebrow">PROJECT & COMMUNITY</div><h2>围绕使用，持续完善。</h2></div><p>使用指南、公开路线图与社区协作。<br>让每一次使用和改进都有清晰入口。</p></div><div class="project-links"><a href="/docs/zh/start/index.html"><span>01 / 使用指南</span><h3>找到每一步操作</h3><p>从部署和创建任务，到数据核对、故障处理与恢复。</p><b>阅读使用指南 ↗</b></a><a href="/docs/zh/start/roadmap.html"><span>02 / 演进计划</span><h3>查看产品路线图</h3><p>了解正在完善的能力、后续方向与交付进展。</p><b>查看路线图 ↗</b></a><a href="/community.html"><span>03 / 一起建设</span><h3>参与项目贡献</h3><p>反馈使用问题、改进文档，或提交可复现的适配验证。</p><b>进入社区 ↗</b></a></div></section></div></template>
+<template>
+  <div class="product-home">
+    <section class="product-intro section-container">
+      <div class="intro-copy">
+        <p class="release-note">开源数据库同步 · 0.1.0-SNAPSHOT / 发布前版本</p>
+        <h1>数据库实时同步</h1>
+        <p class="intro-lead">面向信创改造与业务数据集成</p>
+        <p class="intro-description">将业务数据持续同步到信创数据库、分析系统和消息队列。提供全量与增量同步、持久断点及 Web 管理。</p>
+        <p class="source-scope">当前采集源为 MySQL。源适配接口面向更多数据库扩展，PostgreSQL、Oracle 源已列入规划。</p>
+        <div class="intro-actions">
+          <a class="button primary" href="/docs/zh/start/quick-start.html">快速开始</a>
+          <a class="button secondary" href="/docs/zh/start/xinchuang.html">信创适配指南</a>
+          <a class="plain-link" href="https://github.com/rivomesh/rivomesh">GitHub ↗</a>
+        </div>
+      </div>
+      <figure class="product-preview">
+        <a href="/tour.html" aria-label="查看控制台截图与产品讲解"><img src="/media/console-overview.png" alt="RivoMesh 任务工作台，查看任务列表、运行状态及管理操作" width="1200" height="686"></a>
+        <figcaption>任务工作台 · 开发预览截图 <a href="/tour.html">查看产品导览 →</a></figcaption>
+      </figure>
+    </section>
+
+    <div class="recent-update section-container">
+      <span>近期进展</span>
+      <p>共享账号、跨节点会话与审计已有双节点验证记录；全局任务与远端命令正在接入。</p>
+      <a href="/docs/zh/reference/global-control.html">查看实现范围 →</a>
+    </div>
+
+    <section class="connections-section section-container" aria-labelledby="connections-title">
+      <div class="home-section-heading">
+        <h2 id="connections-title">连接业务数据与下游系统</h2>
+        <a href="/docs/zh/start/connectors.html">完整连接器目录 →</a>
+      </div>
+      <div class="connection-layout">
+        <div class="source-column">
+          <h3>采集源</h3>
+          <div class="current-source"><strong>MySQL</strong><span>已实现</span></div>
+          <p>读取已有数据，通过 binlog 捕获后续变化。</p>
+          <div class="planned-sources"><h4>后续源类型</h4><p>PostgreSQL、Oracle <span>规划中</span></p><p>其他数据库通过源适配接口逐步扩展。</p><a href="/docs/zh/start/xinchuang.html#源端扩展计划">了解源端扩展 →</a></div>
+        </div>
+        <div class="target-column">
+          <h3>信创数据库目标</h3>
+          <ul class="domestic-targets">
+            <li v-for="target in targets" :key="target.name"><a :href="`/docs/zh/reference/${target.href}.html`"><strong>{{target.name}}</strong><span>{{target.scope}}</span><span class="row-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+          <p class="target-note">按指定版本、驱动与模式适配。用于数据同步和改造验证，应用切换需单独评估。</p>
+          <dl class="other-targets">
+            <div><dt>其他关系数据库</dt><dd>MySQL · PostgreSQL</dd></div>
+            <div><dt>分析系统</dt><dd>ClickHouse · Apache Doris · Apache Hive</dd></div>
+            <div><dt>消息系统</dt><dd>Kafka · Pulsar · RabbitMQ · RocketMQ 等</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="capabilities-section section-container" aria-labelledby="capabilities-title">
+      <div class="home-section-heading"><h2 id="capabilities-title">同步与管理能力</h2><a href="/docs/zh/start/introduction.html">项目介绍 →</a></div>
+      <dl class="capability-list"><div v-for="item in capabilities" :key="item.title"><dt><a :href="item.href">{{item.title}} <span aria-hidden="true">→</span></a></dt><dd>{{item.text}}</dd></div></dl>
+    </section>
+
+    <section class="deployment-section" aria-labelledby="deployment-title">
+      <div class="section-container deployment-layout">
+        <div class="deployment-intro"><h2 id="deployment-title">多节点部署</h2><p>根据使用需要，分别配置节点观察、共享访问和同步任务主备恢复。控制器保留各自的持久目录。</p><a href="/docs/zh/start/multi-node.html">部署步骤与恢复条件 →</a></div>
+        <dl class="deployment-details">
+          <div><dt>节点状态</dt><dd>通过共享控制库查看节点、心跳、资源和任务观察。</dd></div>
+          <div><dt>统一访问</dt><dd>显式启用共享账号、会话和审计，在不同入口使用统一身份。</dd></div>
+          <div><dt>任务主备</dt><dd>符合条件的工作进程通过外部日志与租约接管，旧进程受到写入隔离。</dd></div>
+          <div class="integration-note"><dt>接入中</dt><dd>公开控制台的任务操作仍针对本机。全局任务控制、自动迁移和控制面高可用尚未完成。</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="getting-started section-container" aria-labelledby="start-title">
+      <div class="home-section-heading"><h2 id="start-title">开始使用</h2><a href="/docs/zh/start/index.html">全部使用文档 →</a></div>
+      <ol class="start-steps"><li v-for="(step,index) in steps" :key="step.title"><span class="step-index">0{{index+1}}</span><div><h3><a :href="`/docs/zh/start/${step.href}.html`">{{step.title}} →</a></h3><p>{{step.text}}</p></div></li></ol>
+      <div class="project-note"><p>使用前请按实际数据库版本、数据类型和故障场景验证。项目计划与验收记录持续更新。</p><div><a href="/docs/zh/start/roadmap.html">产品路线图</a><a href="/project.html">架构与验证资料</a><a href="/community.html">参与项目</a></div></div>
+    </section>
+  </div>
+</template>
+
+<style scoped>
+.product-home{font-size:14px}
+.product-intro{display:grid;grid-template-columns:1fr 1.03fr;gap:60px;align-items:center;padding:72px 0 58px}
+.release-note{font-size:12px;color:var(--muted);margin-bottom:23px}
+.intro-copy h1{font-size:46px;line-height:1.3;font-weight:650;letter-spacing:-1px;margin-bottom:15px}
+.intro-lead{font-size:22px;line-height:1.6;margin-bottom:18px;font-weight:500}
+.intro-description{font-size:15px;line-height:1.95;color:var(--muted);max-width:480px}
+.source-scope{font-size:12px;line-height:1.9;color:var(--muted);max-width:450px;margin-top:16px}
+.intro-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:27px}
+.intro-actions .button{padding:10px 20px;border-radius:4px;box-shadow:none;transform:none}
+.plain-link{font-size:12px;margin-left:8px;color:var(--muted)}
+.product-preview{min-width:0;margin:0}
+.product-preview>a{display:block;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--surface)}
+.product-preview img{display:block;width:100%;height:auto;aspect-ratio:1.75;object-fit:cover;object-position:top}
+.product-preview figcaption{display:flex;justify-content:space-between;gap:15px;font-size:11px;color:var(--muted);margin-top:13px}
+.product-home a:hover{color:var(--blue)}
+.intro-actions .primary:hover{color:#fff}
+.recent-update{display:flex;align-items:baseline;gap:22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:17px 0;font-size:12px}
+.recent-update>span{font-weight:600;white-space:nowrap}
+.recent-update>p{flex:1;color:var(--muted);line-height:1.9}
+.recent-update>a{white-space:nowrap;color:var(--blue)}
+.home-section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:30px}
+.home-section-heading h2,.deployment-intro h2{font-size:25px;line-height:1.6;font-weight:600;letter-spacing:-.3px}
+.home-section-heading>a,.deployment-intro>a{font-size:12px;color:var(--blue)}
+.connections-section{padding:58px 0}
+.connection-layout{display:grid;grid-template-columns:1fr 2fr;gap:60px}
+.connection-layout h3{font-size:13px;font-weight:600;margin-bottom:15px}
+.source-column{border-right:1px solid var(--line);padding-right:40px}
+.current-source{display:flex;align-items:baseline;gap:15px;margin:20px 0 8px}
+.current-source strong{font-size:23px;font-weight:600}
+.current-source span{font-size:11px;color:var(--green)}
+.source-column p{font-size:12px;line-height:1.9;color:var(--muted)}
+.planned-sources{margin-top:35px}
+.planned-sources h4{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:10px}
+.planned-sources p{margin:6px 0}
+.planned-sources p span{font-size:10px;margin-left:10px}
+.planned-sources>a{font-size:12px;color:var(--blue);display:inline-block;margin-top:11px}
+.domestic-targets{list-style:none}
+.domestic-targets li+li{border-top:1px solid var(--line)}
+.domestic-targets a{display:grid;grid-template-columns:180px 1fr 12px;gap:12px;align-items:baseline;padding:12px 0;line-height:1.75}
+.domestic-targets strong{font-size:14px;font-weight:550}
+.domestic-targets span{font-size:11px;color:var(--muted)}
+.domestic-targets .row-arrow{color:var(--blue)}
+.target-note{color:var(--muted);font-size:11px;line-height:1.9;margin-top:14px}
+.other-targets{border-top:1px solid var(--line);margin-top:24px;padding-top:14px}
+.other-targets>div{display:grid;grid-template-columns:130px 1fr;gap:15px;margin:7px 0;font-size:12px;line-height:1.8}
+.other-targets dt{font-weight:500}.other-targets dd{color:var(--muted);margin:0}
+.capabilities-section{border-top:1px solid var(--line);padding:47px 0 54px}
+.capability-list{display:grid;grid-template-columns:1fr 1fr;column-gap:65px;margin:0}
+.capability-list>div{padding:23px 0;border-top:1px solid var(--line)}
+.capability-list dt{font-size:16px;font-weight:550;margin-bottom:9px}
+.capability-list dt span{font-size:13px;color:var(--muted);margin-left:5px}
+.capability-list dd{font-size:13px;line-height:1.95;color:var(--muted);margin:0;max-width:490px}
+.deployment-section{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:45px 0}
+.deployment-layout{display:grid;grid-template-columns:1fr 1.7fr;gap:75px}
+.deployment-intro p{font-size:13px;line-height:1.95;color:var(--muted);margin:16px 0 22px;max-width:310px}
+.deployment-details{margin:0}
+.deployment-details>div{display:grid;grid-template-columns:90px 1fr;gap:20px;padding:13px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:1.9}
+.deployment-details>div:first-child{padding-top:0}.deployment-details>div:last-child{border-bottom:0;padding-bottom:0}
+.deployment-details dt{font-weight:550}.deployment-details dd{color:var(--muted);margin:0}
+.deployment-details .integration-note{font-size:12px}
+.getting-started{padding:52px 0 35px}
+.start-steps{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}
+.start-steps>li{display:flex;gap:17px}
+.step-index{font-size:13px;font-family:monospace;color:var(--muted);padding-top:3px}
+.start-steps h3{font-size:15px;font-weight:550;margin-bottom:8px}
+.start-steps p{font-size:12px;color:var(--muted);line-height:1.9}
+.project-note{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:12px 30px;border-top:1px solid var(--line);margin-top:38px;padding-top:22px;font-size:11px;color:var(--muted)}
+.project-note>div{display:flex;gap:20px}.project-note a{color:var(--blue)}
+@media(min-width:1450px){.product-intro{padding-top:85px;padding-bottom:70px;gap:75px}.intro-copy h1{font-size:51px}}
+@media(max-width:1050px){.product-intro{gap:35px;padding:50px 0}.intro-copy h1{font-size:38px}.intro-lead{font-size:19px}.intro-description{font-size:14px}.connection-layout{gap:35px}.domestic-targets a{grid-template-columns:150px 1fr 12px}.deployment-layout{gap:40px}.recent-update{gap:15px}.recent-update>a{font-size:11px}}
+@media(max-width:760px){.product-intro{grid-template-columns:1fr;gap:33px;padding:35px 0}.intro-copy h1{font-size:39px}.intro-description{max-width:580px}.source-scope{max-width:550px}.product-preview{max-width:580px}.release-note{margin-bottom:18px}.recent-update{flex-wrap:wrap;gap:7px 15px}.recent-update>p{flex-basis:calc(100% - 70px)}.recent-update>a{margin-left:63px}.home-section-heading{margin-bottom:22px;align-items:start}.home-section-heading h2,.deployment-intro h2{font-size:22px}.home-section-heading>a{white-space:nowrap;font-size:11px;padding-top:6px}.connections-section{padding:35px 0}.connection-layout{grid-template-columns:1fr;gap:28px}.source-column{padding:0 0 24px;border-right:0;border-bottom:1px solid var(--line)}.planned-sources{margin-top:18px}.current-source{margin-top:10px}.capability-list{column-gap:30px}.capabilities-section{padding:30px 0}.deployment-layout{grid-template-columns:1fr;gap:25px}.deployment-section{padding:30px 0}.deployment-intro p{max-width:580px;margin:10px 0 14px}.getting-started{padding-top:32px}.start-steps{gap:25px;grid-template-columns:1fr}.project-note{margin-top:28px}}
+@media(max-width:520px){.intro-copy h1{font-size:34px;letter-spacing:-.8px}.intro-lead{font-size:18px}.release-note{font-size:10px}.intro-description{font-size:13px}.source-scope{font-size:11px}.intro-actions{gap:10px}.intro-actions .button{padding:9px 15px;font-size:12px}.plain-link{font-size:11px;margin-left:0}.product-preview figcaption{font-size:9px;gap:10px}.home-section-heading{flex-wrap:wrap;gap:5px}.home-section-heading h2{font-size:21px}.home-section-heading>a{padding:0}.domestic-targets a{grid-template-columns:1fr 12px;gap:2px 10px;padding:11px 0}.domestic-targets a>span:not(.row-arrow){grid-column:1;grid-row:2}.domestic-targets .row-arrow{grid-column:2;grid-row:1/3;align-self:center}.other-targets>div{grid-template-columns:100px 1fr;font-size:11px;gap:10px}.capability-list{grid-template-columns:1fr}.capability-list>div{padding:18px 0}.capability-list dt{font-size:15px}.capability-list dd{font-size:12px}.deployment-details>div{grid-template-columns:65px 1fr;gap:12px;font-size:12px}.project-note>div{gap:15px}.recent-update{font-size:11px}}
+</style>

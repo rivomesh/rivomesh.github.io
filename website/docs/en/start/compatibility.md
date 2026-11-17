@@ -12,6 +12,8 @@ MySQL is the implemented capture source. PostgreSQL and Oracle source adapters r
 
 Multiple targets acknowledge independently and do not form one distributed atomic transaction. Message delivery is confirmed at least once; consumers must handle duplicates according to the protocol. Unsupported DDL or types can block progress.
 
-First-use business targets must be empty and exclusively written by the service. Managed COMMON_CUT repair has a limited MySQL/PostgreSQL acceptance profile. Node observation, shared access and global task control have separate contracts.
+First-use business targets must be empty and exclusively written by the service. Managed COMMON_CUT repair has a limited MySQL/PostgreSQL acceptance profile. Shared node observation and shared accounts/sessions/audit have acceptance records. Public task operations remain local while global task control is being integrated. See [multi-node deployment](multi-node).
+
+[Domestic database adaptation](xinchuang) covers target profiles and source expansion. MySQL is currently the implemented source; PostgreSQL and Oracle sources remain planned. Additional database types require independent source adapters and acceptance.
 
 Read [implementation status](../reference/implementation-status), [performance](../reference/performance), [node registry](../reference/node-registry), [shared access](../reference/shared-access) and the [SDD requirements](../sdd/spec) for exact scope.

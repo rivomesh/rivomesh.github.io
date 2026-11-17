@@ -9,21 +9,21 @@ sourcePath: docs/sdd/001-control-recovery-compatibility/acceptance.en.md
 
 RM-SDD-001 · 2026-11-16
 
-These contracts track implementation acceptance. SE-01/02/03/05 passed for a single controller;remaining rows stay open. Given a supported profile/authorization,when normal,error or interrupted operations occur,the outcomes below must hold. Include positive,refusal,duplicate and relevant restart/failover scenarios.
+These contracts track implementation acceptance. CP-01 and SE-01/02/03/04/05 accepted; CP-05 is partial and remaining scope stays open. Given a supported profile/authorization,when normal,error or interrupted operations occur,the outcomes below must hold. Include positive,refusal,duplicate and relevant restart/failover scenarios.
 
 | ID | Requirement | Acceptance contract | Evidence state |
 |---|---|---|---|
 | AC-CP-01 | CP-01 | With two nodes,any console shows the same IDs,roles,versions/JDK/architecture,capacity,heartbeat age and ownership;stale/unreachable nodes are explicitly marked. | [PASS](/docs/zh/evidence/2026-11-16-node-registry.html) |
-| AC-CP-02 | CP-02 | A task created/edited through A appears at B with the same global revision;IDs are unique within a cluster;independent sources remain isolated and standalone mode remains usable. | NOT_RUN |
-| AC-CP-03 | CP-03 | Any entry controls tasks on B;typed commands cover create/check/lifecycle/retry/validation/repair and carry request ID,revision and owner generation;duplicate delivery is idempotent and acceptance is distinct from execution. | NOT_RUN |
+| AC-CP-02 | CP-02 | A task created/edited through A appears at B with the same global revision;IDs are unique within a cluster;independent sources remain isolated and standalone mode remains usable. | PARTIAL · [foundations](/docs/zh/evidence/2026-11-17-global-control-foundations.html) |
+| AC-CP-03 | CP-03 | Any entry controls tasks on B;typed commands cover create/check/lifecycle/retry/validation/repair and carry request ID,revision and owner generation;duplicate delivery is idempotent and acceptance is distinct from execution. | PARTIAL · [foundations](/docs/zh/evidence/2026-11-17-global-control-foundations.html) |
 | AC-CP-04 | CP-04 | Power loss,partition and stale-node return never permit dual writers;unconfirmed stops remain unknown/fenced;placement respects JDK,adapter,storage reachability and quotas;drain/move preserves progress. | NOT_RUN |
-| AC-CP-05 | CP-05 | Revocation at A is enforced at B;remote actions correlate by request/task/node/plan;secrets are not returned to UI and agents receive only authorized task references. | NOT_RUN |
+| AC-CP-05 | CP-05 | Revocation at A is enforced at B;remote actions correlate by request/task/node/plan;secrets are not returned to UI and agents receive only authorized task references. | PARTIAL · [shared-access](/docs/zh/evidence/2026-11-16-shared-access.html) |
 | AC-CP-06 | CP-06 | UI filters node/task/destination status,lag,backlog,logs and errors with observation timestamps and bounded redacted log access. | NOT_RUN |
 | AC-CP-07 | CP-07 | Another entry survives controller failure;accepted commands recover;existing workers continue safely under documented policy;replica count/shared files alone are insufficient. | NOT_RUN |
 | AC-SE-01 | SE-01 | Reload/reopening the site restores an unexpired session and permissions without reentering the token;expired sessions return to login without unintended actions. | [PASS, single controller](/docs/zh/evidence/2026-11-16-browser-sessions.html) |
 | AC-SE-02 | SE-02 | Idle/absolute expiry is configurable;logout,disable,rotation and revocation invalidate sessions as specified;tabs agree;remembering across browser closure is a separate configurable policy. | [PASS, single controller](/docs/zh/evidence/2026-11-16-browser-sessions.html) |
 | AC-SE-03 | SE-03 | No readable long-lived browser credential;protected cookie/equivalent transport,HTTPS and HttpOnly/SameSite policy are verified;cookie-authenticated mutations enforce CSRF/Origin checks;session IDs never enter URLs/logs. | [PASS, single controller](/docs/zh/evidence/2026-11-16-browser-sessions.html) |
-| AC-SE-04 | SE-04 | Login at A remains valid at B;controller restart/failover follows expiry/recovery policy;revocation propagates as specified without relying on sticky sessions to hide missing state. | NOT_RUN |
+| AC-SE-04 | SE-04 | Login at A remains valid at B;controller restart/failover follows expiry/recovery policy;revocation propagates as specified without relying on sticky sessions to hide missing state. | DONE · [shared-access](/docs/zh/evidence/2026-11-16-shared-access.html) |
 | AC-SE-05 | SE-05 | Existing API tokens work;conflicting cookie/header identities follow explicit rules;restoration rechecks grants and late responses cannot revive logout;messages are bilingual. | [PASS, single controller](/docs/zh/evidence/2026-11-16-browser-sessions.html) |
 | AC-RC-01 | RC-01 | Distinguish source/read,decode,DDL/normalization,apply,ack and journal failures;UI offers only valid retry/compensation/skip/gap-recovery actions for that stage. | NOT_RUN |
 | AC-RC-02 | RC-02 | Show source/transaction identity,event range,affected objects/destinations,raw/normalized hashes,before/after-image availability and checkpoints;bounded raw access is authorized and evidence is retained before action. | NOT_RUN |

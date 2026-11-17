@@ -7,7 +7,7 @@ sourcePath: docs/sdd/001-control-recovery-compatibility/plan.md
 
 # 设计边界、决策和实施顺序
 
-RM-SDD-001 · v0.3 · 2026-11-16 · 实施中：单控制器会话已验收
+RM-SDD-001 · v0.5 · 2026-11-17 · 实施中：单控制器会话已验收
 
 [规格](/docs/zh/sdd/spec.html) · [任务](/docs/zh/sdd/tasks.html) · [验收](/docs/zh/sdd/acceptance.html) · [English](/docs/en/sdd/plan.html)
 
@@ -41,7 +41,7 @@ v0.1整理时的发布包 SHA256：`10d95a3990835f2286f036b962d88fc8533ade427753
 | 6 完整文档 | DO-01～DO-05 | 5 |
 | 既有范围合并保留 | LG-01～LG-10 | 10 |
 
-共48项：5项DONE，余43项为13项NEW、30项PARTIAL。PARTIAL表示已有基础但本项整体未完成；不是把已验收功能删除重做。
+共48项：6项DONE，余42项为9项NEW、33项PARTIAL。PARTIAL表示已有基础但本项整体未完成；不是把已验收功能删除重做。
 
 ## 2. 用户已明确的需求，不再当作可选项
 
@@ -50,7 +50,7 @@ v0.1整理时的发布包 SHA256：`10d95a3990835f2286f036b962d88fc8533ade427753
 3. 遇到同步故障，有经审阅的人工跳过、补数据及重试路径；普通自动恢复继续默认不跳过。
 4. 源端必须纳入 MySQL5.7/8.0/8.2/8.4、PostgreSQL、Oracle；PG/Oracle从“未来预留”升级为本次承诺范围。
 5. Java8/11/17/21/25都要有实际运行证据，不能只看编译级别或镜像标签。
-6. 完整中英文文档、场景和FAQ；既有多库显式映射、同源多目标、产品覆盖、可选日志、四类部署和政企迁移目标继续保留。
+6. 完整中英文文档、场景和FAQ；既有多库显式映射、同源多目标、产品覆盖、可选日志、四类部署和信创改造目标继续保留。
 
 ## 3. 多节点设计提案
 
@@ -129,6 +129,10 @@ Java矩阵必须绑定候选包SHA、实际JVM/架构、驱动、源版本/模�
 
 需求ID关联设计、任务、API/UI、正向/拒绝/重复/中断测试、配置/状态升级、双语文档与同一候选包证据后才可标完成。构建通过不代表连接器通过；静态YAML不代表K8s实机通过；DOM/HTTP不代表视觉或可访问性通过。仅完成本轮整理不能把48项待办改为已实现。
 
-当前增量：SE-01/02/03/05已完成。SE-04、共享控制状态及M1/M2其余部分保持未完成。见[会话设计](/docs/zh/sdd/design-sessions.html)、[操作手册](/docs/zh/reference/browser-sessions.html)和[证据](/docs/zh/evidence/2026-11-16-browser-sessions.html)。
+当前增量：SE-01/02/03/04/05已完成，CP-05部分完成。全局任务/远端执行及M1/M2其余部分保持未完成。见[会话设计](/docs/zh/sdd/design-sessions.html)、[操作手册](/docs/zh/reference/browser-sessions.html)和[证据](/docs/zh/evidence/2026-11-16-browser-sessions.html)。
 
 CP-01节点目录现已通过真实PostgreSQL/MySQL双节点及中断档案。全局任务/命令/身份/会话权威仍未完成。[目录证据](/docs/zh/evidence/2026-11-16-node-registry.html)。
+
+v0.5验收关闭SE-04；共享会话不依赖全局任务配置实现，依赖调整为CP-01。无常驻预览，使用临时原生/Docker验收。 [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
+
+v0.5: CP-02/03 PARTIAL · [Internal foundations evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html). Public runtime integration remains open.

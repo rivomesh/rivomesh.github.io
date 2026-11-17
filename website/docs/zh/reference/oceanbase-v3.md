@@ -5,7 +5,7 @@ title: "OceanBase"
 sourcePath: docs/zh-CN/oceanbase-v3.md
 ---
 
-# OceanBase V3 目标与 FAQ
+# OceanBase 目标与 FAQ
 
 English：[OceanBase V3](/docs/en/reference/oceanbase-v3.html)。示例：[oceanbase-v3.yml](/files/config/oceanbase-v3.yml)。
 

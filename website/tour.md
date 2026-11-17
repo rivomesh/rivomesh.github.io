@@ -20,7 +20,7 @@ title: 产品导览
 
 ## 任务向导
 
-<figure class="product-figure"><img src="/media/task-wizard.png" alt="V3 新建任务向导，配置 MySQL 逻辑源和连接信息" loading="lazy"><figcaption>开发预览截图：配置源、目标与日志，再检查计划。截图采集未提交任务。</figcaption></figure>
+<figure class="product-figure"><img src="/media/task-wizard.png" alt="新建同步任务向导，配置 MySQL 逻辑源和连接信息" loading="lazy"><figcaption>开发预览截图：配置源、目标与日志，再检查计划。截图采集未提交任务。</figcaption></figure>
 
 ## 能力目录
 

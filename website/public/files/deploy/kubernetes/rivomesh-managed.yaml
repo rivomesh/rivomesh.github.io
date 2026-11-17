@@ -73,7 +73,7 @@ spec:
           args: [serve, /app/config/platform.yml]
           env:
             - name: JAVA_TOOL_OPTIONS
-              value: -Xmx128m
+              value: -Xmx512m
           ports:
             - name: http
               containerPort: 8080

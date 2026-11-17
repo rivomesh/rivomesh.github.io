@@ -27,6 +27,10 @@
           "title": "场景与试点指南"
         },
         {
+          "route": "/docs/zh/start/xinchuang.html",
+          "title": "信创数据库适配与改造"
+        },
+        {
           "route": "/docs/zh/start/faq.html",
           "title": "常见问题"
         }
@@ -49,6 +53,10 @@
         {
           "route": "/docs/zh/start/monitoring.html",
           "title": "查看状态与日常操作"
+        },
+        {
+          "route": "/docs/zh/start/multi-node.html",
+          "title": "多节点部署与恢复"
         }
       ]
     },
@@ -147,8 +155,12 @@
           "title": "账号管理"
         },
         {
+          "route": "/docs/zh/reference/node-registry.html",
+          "title": "共享节点目录"
+        },
+        {
           "route": "/docs/zh/reference/pipeline-v3.html",
-          "title": "同步任务与 V3 配置"
+          "title": "多库、多目标同步配置"
         },
         {
           "route": "/docs/zh/reference/reconciliation-workflow.html",
@@ -215,8 +227,8 @@
           "title": "完整平台设计"
         },
         {
-          "route": "/docs/zh/reference/node-registry.html",
-          "title": "共享节点目录"
+          "route": "/docs/zh/reference/global-control.html",
+          "title": "跨节点任务控制进展"
         },
         {
           "route": "/docs/zh/reference/requirements-and-decisions.html",
@@ -377,6 +389,22 @@
         {
           "route": "/docs/zh/evidence/2026-11-16-node-registry.html",
           "title": "11-16-node-registry · CP-01：共享节点目录验收 / Shared node registry acceptance"
+        },
+        {
+          "route": "/docs/zh/evidence/2026-11-16-shared-access-attempt-b7.html",
+          "title": "11-16-shared-access · B7候选记录 / Candidate B7"
+        },
+        {
+          "route": "/docs/zh/evidence/2026-11-16-shared-access-commands.html",
+          "title": "11-16-shared-access · Reproduction"
+        },
+        {
+          "route": "/docs/zh/evidence/2026-11-16-shared-access.html",
+          "title": "11-16-shared-access · SE-04：共享身份、会话与审计 / Shared identity, sessions and audit"
+        },
+        {
+          "route": "/docs/zh/evidence/2026-11-17-global-control-foundations.html",
+          "title": "11-17-global-control-foundations · Global task/control foundations / 全局控制基础验收"
         }
       ]
     }
@@ -403,6 +431,22 @@
         {
           "route": "/docs/en/start/compatibility.html",
           "title": "Compatibility"
+        },
+        {
+          "route": "/docs/en/start/xinchuang.html",
+          "title": "Domestic database adaptation"
+        }
+      ]
+    },
+    {
+      "id": "sync",
+      "audience": "user",
+      "defaultClosed": false,
+      "title": "Installation & tasks",
+      "items": [
+        {
+          "route": "/docs/en/start/multi-node.html",
+          "title": "Multi-node deployment"
         }
       ]
     },
@@ -469,8 +513,12 @@
           "title": "Account management"
         },
         {
+          "route": "/docs/en/reference/node-registry.html",
+          "title": "Node registry"
+        },
+        {
           "route": "/docs/en/reference/pipeline-v3.html",
-          "title": "V3 pipelines"
+          "title": "Multi-database pipelines"
         },
         {
           "route": "/docs/en/reference/reconciliation-workflow.html",
@@ -537,8 +585,8 @@
           "title": "Platform design"
         },
         {
-          "route": "/docs/en/reference/node-registry.html",
-          "title": "Node registry"
+          "route": "/docs/en/reference/global-control.html",
+          "title": "Global task control progress"
         },
         {
           "route": "/docs/en/reference/requirements-and-decisions.html",

@@ -7,7 +7,7 @@ sourcePath: docs/sdd/001-control-recovery-compatibility/plan.en.md
 
 # Design boundaries,decisions and delivery order
 
-RM-SDD-001 · v0.3 · 2026-11-16 · IMPLEMENTING: single-controller sessions accepted
+RM-SDD-001 · v0.5 · 2026-11-17 · IMPLEMENTING: single-controller sessions accepted
 
 [Spec](/docs/en/sdd/spec.html) · [Tasks](/docs/en/sdd/tasks.html) · [Acceptance](/docs/en/sdd/acceptance.html) · [中文](/docs/zh/sdd/plan.html)
 
@@ -41,7 +41,7 @@ The historical JDK matrix uses SHA256 `2985bbbb51b84ec8de97d8a9b44c88d5a5a1d7370
 | 6 Complete docs | DO-01–DO-05 | 5 |
 | Preserved previous scope | LG-01–LG-10 | 10 |
 
-48items total:5DONE,13NEW and30PARTIAL;43remain open. PARTIAL means foundations exist but the whole requirement is incomplete,not that accepted features must be rebuilt.
+48items total:6DONE,9NEW and33PARTIAL;42remain open. PARTIAL means foundations exist but the whole requirement is incomplete,not that accepted features must be rebuilt.
 
 ## Confirmed scope
 
@@ -117,6 +117,10 @@ Control-store product/HA,agent enrollment/auth and standalone upgrade;session ex
 
 A requirement closes only with linked design/task/API/UI,positive/refusal/duplicate/crash tests,state/config migration,bilingual docs and the same candidate artifact evidence. Build success is not connector acceptance;static YAML is not liveK8s;DOM/HTTP is not visual/accessibility acceptance. This inventory does not mark48runtime requirements implemented.
 
-Current increment: SE-01/02/03/05 complete. SE-04,shared control state and the remainder of M1/M2 are open. See [session design](/docs/en/sdd/design-sessions.html),[operations](/docs/en/reference/browser-sessions.html) and [evidence](/docs/zh/evidence/2026-11-16-browser-sessions.html).
+Current increment: SE-01/02/03/04/05 complete; CP-05 partial. Global tasks/remote execution and the remainder of M1/M2 are open. See [session design](/docs/en/sdd/design-sessions.html),[operations](/docs/en/reference/browser-sessions.html) and [evidence](/docs/zh/evidence/2026-11-16-browser-sessions.html).
 
 CP-01 registry now passes native PostgreSQL/MySQL two-node and outage profiles. Global task/command/identity/session authority remain open. [Registry evidence](/docs/zh/evidence/2026-11-16-node-registry.html).
+
+v0.5 closes SE-04; shared sessions do not depend on global task configuration, so its dependency changes to CP-01. Temporary native/Docker acceptance replaces a persistent preview. [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
+
+v0.5: CP-02/03 PARTIAL · [Internal foundations evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html). Public runtime integration remains open.

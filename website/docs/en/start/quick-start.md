@@ -6,7 +6,7 @@ title: Quick start
 
 # Quick start
 
-Prepare Java 8, Maven, a MySQL test source and an independent empty PostgreSQL / openGauss target. MySQL needs GTID, ROW/FULL binlog settings and the replication/snapshot privileges described in the [V3 manual](../reference/pipeline-v3).
+Prepare Java 8, Maven, a MySQL test source and an independent empty PostgreSQL / openGauss target. MySQL needs GTID, ROW/FULL binlog settings and the replication/snapshot privileges described in the [pipeline manual](../reference/pipeline-v3).
 
 ## Build the core project
 
@@ -27,8 +27,8 @@ Open <http://127.0.0.1:8080> and sign in with the token. Keep credentials out of
 
 ## Create and verify a pipeline
 
-Use the V3 wizard to configure source identity, databases, an independent target, explicit mappings and a persistent journal. Save, check, and then start. Validate snapshot values, inserts, updates, deletes and Worker restart recovery.
+Use the default pipeline wizard to configure source identity, databases, an independent target, explicit mappings and a persistent journal. Save, check, and then start. Validate snapshot values, inserts, updates, deletes and Worker restart recovery.
 
 Targets require empty business tables on first use. The check operation does not validate every runtime privilege. Default recovery retries the original transaction; it does not skip failed data.
 
-[Console and deployment](../reference/console-and-deployment) · [V3 pipelines](../reference/pipeline-v3)
+[Console and deployment](../reference/console-and-deployment) · [Multi-database pipelines](../reference/pipeline-v3)

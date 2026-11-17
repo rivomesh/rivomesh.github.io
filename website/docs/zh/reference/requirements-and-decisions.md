@@ -32,7 +32,7 @@ sourcePath: docs/zh-CN/requirements-and-decisions.md
 | D13 | 尽量支持既有非空目标、对象差异处理和业务接管 | 当前要求目标表首次为空；共同校验点修复已有首版，既有非空目标导入/合并仍待实现 |
 | D14 | 不定统一吞吐承诺，发布可复现的硬件—工作负载—性能标准 | 已有基准工具和小规模SQL/JDK冒烟证据；代表性硬件容量标准、长稳仍未完成 |
 | D15 | 完整中英文Web界面、向导、诊断与尽量通过界面恢复 | 本机工作台、权限、配置编辑、校验与MySQL/PG共同点修复已实现；跨节点、登录保持、跳过补数据、切换仍待完成 |
-| D16 | 服务政企信创迁移、分阶段切换及两环境并行服务 | 单向数据镜像是基础；应用接管/回切/多写场景边界见平台设计 |
+| D16 | 服务信创迁移、分阶段切换及两环境并行服务 | 单向数据镜像是基础；应用接管/回切/多写场景边界见平台设计 |
 | D17 | 目标包含ClickHouse、Apache Doris、Apache Hive及可扩展分析库/数仓 | 三者均有首批物化/恢复档案；集群、安全、容量和全部JDK验收待补，不等同关系库事务语义 |
 | D18 | 消息目标包含Kafka、Pulsar、RabbitMQ、RocketMQ、ActiveMQ Classic/Artemis、Redis Streams、NATS JetStream | 均有首批传输/恢复实现与证据；完整集群/TLS/容量及新跳过补偿协议仍需逐目标验收 |
 | D19 | PostgreSQL、Oracle源端为本次明确实施范围，保留中立SPI/事件/位置 | 当前真实源仍为MySQL；PG/Oracle SOURCE为PLANNED，需实现原生全量/增量和恢复 |

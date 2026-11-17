@@ -21,9 +21,13 @@ title: 兼容性与能力边界
 
 ## 数据源与运行时
 
-当前实际采集源为 MySQL。5.7.44 有基础链路，8.0 有历史 V2/HA，8.4 有代表性 V3 同步与恢复记录；MySQL 8.2 专项、完整版本档案与 PostgreSQL / Oracle 源仍在完善计划中。PostgreSQL 目标与 PostgreSQL 源是两项独立能力。
+当前实际采集源为 MySQL。5.7.44 有基础链路，8.0 有旧格式主备恢复记录，8.4 有当前多库多目标同步与恢复记录；MySQL 8.2 专项、完整版本档案与 PostgreSQL / Oracle 源仍在完善计划中。PostgreSQL 目标与 PostgreSQL 源是两项独立能力。
 
 项目代码以 Java 8 为基线。部分 SQL 与会话场景有 Java 8/11/17/21/25 记录，完整平台、所有驱动、消息 SDK 与故障矩阵并未因此全部通过。[性能与运行时手册](../reference/performance)记录具体条件。
+
+## 信创数据库与源端扩展
+
+openGauss、达梦、金仓、GBase 8c 与 OceanBase 作为目标的版本、模式和验证状态见[信创适配指南](xinchuang)。当前只有 MySQL 源已实现，PostgreSQL、Oracle 源处于规划中；源适配接口可扩展其他数据库，不能把目标兼容性直接当成源采集能力。
 
 ## 同步与目标边界
 
@@ -35,6 +39,6 @@ title: 兼容性与能力边界
 
 ## 控制器与多节点
 
-共享节点目录用于观察节点和心跳，不能单独证明任务已经全局调度。单控制器会话、共享访问配置和远端任务控制也应分别核对。最新说明见[节点目录](../reference/node-registry)、[共享账号、会话与审计](../reference/shared-access)及[实施状态](../reference/implementation-status)。
+节点目录已提供共享心跳与任务观察；启用共享访问后，可统一账号、跨节点会话与审计。跨主机同步恢复需要外部日志与有效执行租约；公开任务操作仍针对本机，全局任务与远端命令正在接入。部署步骤见[多节点部署与恢复](multi-node)。最新说明见[节点目录](../reference/node-registry)、[共享账号、会话与审计](../reference/shared-access)及[实施状态](../reference/implementation-status)。
 
 Linux、Docker、Helm 和 Kubernetes 文件已经提供。静态清单检查与真实 K8s/CSI、集群安全、容量和控制面 HA 是不同验收范围。

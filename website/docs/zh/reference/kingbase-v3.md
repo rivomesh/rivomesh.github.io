@@ -5,7 +5,7 @@ title: "金仓 Kingbase"
 sourcePath: docs/zh-CN/kingbase-v3.md
 ---
 
-# 金仓 V3 目标与 FAQ
+# 金仓 目标与 FAQ
 
 English: [Kingbase V3](/docs/en/reference/kingbase-v3.html)。配置：[kingbase-v3.yml](/files/config/kingbase-v3.yml)。
 

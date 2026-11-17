@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-16T11:20:59.219Z",
+  "capturedAt": "2026-11-17T01:07:27.102Z",
   "version": "0.1.0-SNAPSHOT",
   "sourceRepository": "https://github.com/rivomesh/rivomesh",
   "documents": [
@@ -56,12 +56,16 @@
       "sha256": "fb606b54faf2df2c5e24655353062cd43ac9f940499c972bc9a89ac38a729a94"
     },
     {
+      "path": "docs/en/global-control.md",
+      "sha256": "3f48e5ad0b1b5ae10f5bfd263877229773f18521cb721e5c26d7209d2d53df8d"
+    },
+    {
       "path": "docs/en/hive-v3.md",
       "sha256": "cf6f8dd446470975e924251004ee7d4f2920e7080f99e848328d13dba289480c"
     },
     {
       "path": "docs/en/implementation-status.md",
-      "sha256": "38034d1cc2889a21defaa25d5347ff744ec13a2cc3aa3fd94cad82d72b229f34"
+      "sha256": "005059a960b3cbc53195dccbeb73f358202380c33ecaf3a599c35d780f44b08d"
     },
     {
       "path": "docs/en/kingbase-v3.md",
@@ -93,7 +97,7 @@
     },
     {
       "path": "docs/en/pipeline-v3.md",
-      "sha256": "9a47d6121c3c4dd9cef04cd1737f4a450d6182e590f450358277ccfc51e3831b"
+      "sha256": "312017256e7d447b004ff34e58e054ff27c7725319f9624798afa401c1dae1ff"
     },
     {
       "path": "docs/en/platform-design.md",
@@ -137,11 +141,11 @@
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/acceptance.en.md",
-      "sha256": "9ebb94c75f73b5f7af5e6f2a5fb1f57a27a705d343954b9b29dcb188c5d57b49"
+      "sha256": "c4dcced8e13419346a3b3b867217842cff9e052215345a0bbe7baae53c59fb09"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/acceptance.md",
-      "sha256": "f0f6c6811dedf23298f52e747877aae081de4d06d657d34c631f967bec4dfa3f"
+      "sha256": "c0f52154480862b436f33e88ea208193b377ac3166cecfa7242ee18d0299304d"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/design-control-store.en.md",
@@ -153,11 +157,11 @@
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/design-global-control.en.md",
-      "sha256": "a268c76546d4a21c3bfbc0a2f74946a9e93b96f77c3402f3252cb075f0ee0e96"
+      "sha256": "f7ff4693f4636d43e160d84b8cb2677c1cf8a5bf17dce8dcb275a556e6fc72a1"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/design-global-control.md",
-      "sha256": "d326ce5ac52c6d98b37f27ae3c040ce1af9fe72dfdc1542338af1ae25e9c069c"
+      "sha256": "67d0abca505f3fb6c96ae68c380db679a6ebd94c8d4df807e943e8aac7be4d44"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/design-sessions.en.md",
@@ -169,35 +173,35 @@
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/design-shared-access.en.md",
-      "sha256": "ba92ecf3a428ad3a36f00ce39ea0e624f04822daad0f25d430263c10c91387f5"
+      "sha256": "18cc5b4584cf21ea0010002f3c438488dab78716c40e5fac91f439731d209bf3"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/design-shared-access.md",
-      "sha256": "c84c5f483a8192d9d9c8196e454f958cb25a52db1c15ae4add5e0c1022c08a26"
+      "sha256": "9d7309ce40a15b38c0100918666c19403128544fe031e0857a3d7a3fc9f7f99a"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/plan.en.md",
-      "sha256": "a95202da94860cb043186f111cb6f31fed349411b700d3be30c9b638c5519450"
+      "sha256": "91e78fc622d2c1a98aaa7aee24668019dfa093316b90b4710f44dbe4cc65067a"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/plan.md",
-      "sha256": "563acc2fa06e4235860750f139bb5e0444e04c6a81cd10d4829558ca1b46e2c5"
+      "sha256": "09e178aded68519be885b32ae8767106c1294a26b37f216be1f9a73625405c10"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/spec.en.md",
-      "sha256": "0ce8e091eed8a7a66f3a9f5f1f1fbcb4d08662cc5f384110c34d25bcdb1f2cb2"
+      "sha256": "6656c14542996d33ee4369ab4ecefa390ad8c048b190350b0906a4dded17a8e7"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/spec.md",
-      "sha256": "fa4430dd679114f143cc2fa976db109f5148741b7e73335feb52757a3627c098"
+      "sha256": "84ed763ffede1cd4b8e41e138b926f68203ede2c6f8834f3bfdb4b14ee0eaa7d"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/tasks.en.md",
-      "sha256": "26073ab19ec2cdfe6a9b7f8ff856575755543e914b77a87f925d81d2d70ba8aa"
+      "sha256": "1d4ecf14d11d5fc2331a6b626773eee9dcd2c51ef2517c1b0dac40008d1471e3"
     },
     {
       "path": "docs/sdd/001-control-recovery-compatibility/tasks.md",
-      "sha256": "a1320db918cc4a55add875685fcc38711b9cdef00e732c4c5174eea4fc44da3c"
+      "sha256": "3d197fe706b35b4a526c8b758781b1df3b929616570a1b15616fdaa43f3117e1"
     },
     {
       "path": "docs/sdd/README.md",
@@ -292,6 +296,22 @@
       "sha256": "587697d02e59e8f706f13e8187ae4856ef766964b130aac53e171ac4e1a0fbc5"
     },
     {
+      "path": "docs/verification/2026-11-16-shared-access/README.md",
+      "sha256": "a53392e24efc1186634dd46627f256274f4d29e17ccb8e9c670e342c45c0ed18"
+    },
+    {
+      "path": "docs/verification/2026-11-16-shared-access/attempt-b7/README.md",
+      "sha256": "86ccd4f5b0b1794c5daa7151f1992699f4b071a912c8221029a428ce694f7f4b"
+    },
+    {
+      "path": "docs/verification/2026-11-16-shared-access/commands.md",
+      "sha256": "ca12ef593ffdb82b0e7e74c2843d7828b316b247af003dcf6edf64a09fbf62e7"
+    },
+    {
+      "path": "docs/verification/2026-11-17-global-control-foundations/README.md",
+      "sha256": "bbe064915f153cbedbf30c67e29805706ca5bc5cbc19f4e6ebfd775c59418caa"
+    },
+    {
       "path": "docs/zh-CN/account-management.md",
       "sha256": "f182f1e3d50c5d1f324f69625aa9aefda52dcf33d6ca1a70065baea796c57699"
     },
@@ -340,12 +360,16 @@
       "sha256": "271346a21defef716746642e5f0e0a13c514bf559edac0e6fca7c12b4f1eefec"
     },
     {
+      "path": "docs/zh-CN/global-control.md",
+      "sha256": "7408ab3fdc5a5de38aac96ea2e3c673f6990656965036d38545d7cf513bfc288"
+    },
+    {
       "path": "docs/zh-CN/hive-v3.md",
       "sha256": "eb85b91b03b16077eda5c125ab19a6528656e1fcdfc00351850b376f7d6e3bcb"
     },
     {
       "path": "docs/zh-CN/implementation-status.md",
-      "sha256": "77e8449218a668daf5ba3dbd0d3d5a46fe8056ac8e98c7941a9b1b9912592a34"
+      "sha256": "98b4699c2f71c0b8bb1c2ac7a5f262248495078a051e6ee76e835b1e4b3d9cb0"
     },
     {
       "path": "docs/zh-CN/kingbase-v3.md",
@@ -377,7 +401,7 @@
     },
     {
       "path": "docs/zh-CN/pipeline-v3.md",
-      "sha256": "fc7073dc97604588c7e72295f4b9bf22c749fe64bf052804a5cfbadcb8028bfe"
+      "sha256": "17996c1f79f8e4002b60ca8818f2df7fc764d203642303d90773e0dea62c5319"
     },
     {
       "path": "docs/zh-CN/platform-design.md",
@@ -438,17 +462,23 @@
     "deploy/helm/rivomesh/values.yaml",
     "docs/verification/2026-11-16-browser-sessions/runtime-manifest.json",
     "docs/verification/2026-11-16-node-registry/runtime-manifest.json",
+    "docs/verification/2026-11-16-shared-access/runtime-manifest.json",
+    "docs/verification/2026-11-16-shared-access/sdk-cache-manifest.json",
+    "docs/verification/2026-11-16-shared-access/candidate-manifest.json",
+    "docs/verification/2026-11-16-shared-access/attempt-b7/cdc-retained-progress.json",
+    "docs/verification/2026-11-17-global-control-foundations/sdk-cache-manifest.json",
+    "docs/verification/2026-11-17-global-control-foundations/candidate-manifest.json",
     "config/platform.yml"
   ],
   "sourceCatalogSha256": "f49440e30a6ed758d135d18943a95edd704e7b93c38479ed3f00a25188a99942",
   "sdd": {
-    "version": "0.3",
+    "version": "0.5",
     "date": "2026-11-16",
     "state": "IMPLEMENTING",
     "counts": {
-      "DONE": 5,
-      "PARTIAL": 30,
-      "NEW": 13
+      "DONE": 6,
+      "PARTIAL": 33,
+      "NEW": 9
     }
   }
 }

@@ -28,3 +28,19 @@ A protected independent random32-byte master key derives separate keys bound to 
 Use typed encrypted, expiring requests/replies in shared SQL for owner-only previews/reports; production SQL transport uses TLS. Bind replies to cluster/store/task/request/owner epoch, cap and promptly expire sensitive payloads, and never trust browser-supplied actor roles. Separate waiting, dispatched, locally persisted, executing and terminal states. Persist original local revision/request/body digest before dispatch; lost replies reconcile original receipts/operations rather than resubmitting a fresh revision. Cancellation bypasses the maintenance queue it must interrupt. A202 is durable acceptance, not a committed destination transaction.
 
 Owner node plus private directory identity pins execution. Control epochs do not fence existing Workers or replace native journal/target guards. Pod deletion, lost contact or lease expiry does not prove a Worker stopped; cross-node execution takeover remains CP-04/07.
+
+## Owner implementation progress (global entry not exposed)
+
+AgentDirectory binds stable nodeId, private directory UUID and current registration lease using task-store-derived HMACs. Initialization audit receipts and authenticated root counts detect missing/reset state. Wrong directories, expired leases and old incarnations cannot claim commands. Admission and claim validate leases in SQL transactions, locking IAM, task authority, node lease, agent root, then command root. This does not authorize automatic Worker failover.
+
+DurableCommands persists PENDING, DISPATCHED, ACCEPTED, UNKNOWN and terminal states. Before local invocation it seals the exact original local TaskRequest/revision. OwnerExecution invokes LocalTaskPlane and reconciles actual TaskService receipts/operations; local acceptance is not execution success. Lost replies/reopen reuse the original request. Missing evidence plus changed local revision remains UNKNOWN. TASK_BUSY/OPERATION_PENDING wait without replacing revisions/request IDs.
+
+Outstanding local receipts are protected from ordinary500-entry pruning while the owner is active. Global mode must restore every outstanding pin before exposing local mutation APIs. These remain internal primitives: CP-02/03 do not close until public global routing and acceptance exist.
+
+Cancellation has a parent and reserved capacity. An undispatched parent is atomically CANCELLED; an uncertain dispatched parent is reconciled first; actual cancellation is dispatched after parent ACCEPTED. Service completion can record committed outcomes after actor revocation, while new execution rechecks shared identity revision and task/node grants.
+
+## Queries and observations (runtime integration open)
+
+OwnerQueries uses an expiring encrypted SQL mailbox and rejects mutations/LIST. It checks identity before execution, publication and delivery and binds owner/directory/epoch. Limits are512KiB requests,1MiB responses and1–60second expiry; expired rows release capacity. PostgreSQL/MySQL native checks passed. GlobalTaskViews publishes bounded authenticated observations and returns UNKNOWN for offline/new-epoch/stale owners; original metric observedAt is retained separately from ownerObservedAt. GlobalTaskPlane has internal cross-entry create/owner lifecycle/grant/offline STOP tests. Configuration/history/restore, startup migration, public HTTP/UI and complete business-chain acceptance remain open; CP-02/03 stay incomplete.
+
+[Operations and FAQ](/docs/en/reference/global-control.html).

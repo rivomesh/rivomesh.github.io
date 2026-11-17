@@ -105,6 +105,14 @@
   },
   {
     "locale": "en",
+    "route": "/docs/en/reference/global-control.html",
+    "title": "Global task control progress",
+    "group": "architecture",
+    "rank": 1,
+    "sourcePath": "docs/en/global-control.md"
+  },
+  {
+    "locale": "en",
     "route": "/docs/en/reference/hive-v3.html",
     "title": "Apache Hive",
     "group": "connectors",
@@ -155,8 +163,8 @@
     "locale": "en",
     "route": "/docs/en/reference/node-registry.html",
     "title": "Node registry",
-    "group": "architecture",
-    "rank": 1,
+    "group": "reference",
+    "rank": 0,
     "sourcePath": "docs/en/node-registry.md"
   },
   {
@@ -178,7 +186,7 @@
   {
     "locale": "en",
     "route": "/docs/en/reference/pipeline-v3.html",
-    "title": "V3 pipelines",
+    "title": "Multi-database pipelines",
     "group": "reference",
     "rank": 0,
     "sourcePath": "docs/en/pipeline-v3.md"
@@ -577,6 +585,38 @@
   },
   {
     "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-16-shared-access.html",
+    "title": "11-16-shared-access · SE-04：共享身份、会话与审计 / Shared identity, sessions and audit",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-16-shared-access/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-16-shared-access-attempt-b7.html",
+    "title": "11-16-shared-access · B7候选记录 / Candidate B7",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-16-shared-access/attempt-b7/README.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-16-shared-access-commands.html",
+    "title": "11-16-shared-access · Reproduction",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-16-shared-access/commands.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/evidence/2026-11-17-global-control-foundations.html",
+    "title": "11-17-global-control-foundations · Global task/control foundations / 全局控制基础验收",
+    "group": "evidence",
+    "rank": 1,
+    "sourcePath": "docs/verification/2026-11-17-global-control-foundations/README.md"
+  },
+  {
+    "locale": "zh",
     "route": "/docs/zh/reference/account-management.html",
     "title": "账号管理",
     "group": "reference",
@@ -673,6 +713,14 @@
   },
   {
     "locale": "zh",
+    "route": "/docs/zh/reference/global-control.html",
+    "title": "跨节点任务控制进展",
+    "group": "architecture",
+    "rank": 1,
+    "sourcePath": "docs/zh-CN/global-control.md"
+  },
+  {
+    "locale": "zh",
     "route": "/docs/zh/reference/hive-v3.html",
     "title": "Apache Hive",
     "group": "connectors",
@@ -723,8 +771,8 @@
     "locale": "zh",
     "route": "/docs/zh/reference/node-registry.html",
     "title": "共享节点目录",
-    "group": "architecture",
-    "rank": 1,
+    "group": "reference",
+    "rank": 0,
     "sourcePath": "docs/zh-CN/node-registry.md"
   },
   {
@@ -746,7 +794,7 @@
   {
     "locale": "zh",
     "route": "/docs/zh/reference/pipeline-v3.html",
-    "title": "同步任务与 V3 配置",
+    "title": "多库、多目标同步配置",
     "group": "reference",
     "rank": 0,
     "sourcePath": "docs/zh-CN/pipeline-v3.md"
@@ -858,6 +906,20 @@
   },
   {
     "locale": "zh",
+    "route": "/docs/zh/start/multi-node.html",
+    "title": "多节点部署与恢复",
+    "rank": 3,
+    "group": "sync"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/xinchuang.html",
+    "title": "信创数据库适配与改造",
+    "rank": 4,
+    "group": "start"
+  },
+  {
+    "locale": "zh",
     "route": "/docs/zh/start/index.html",
     "title": "使用指南",
     "rank": 0,
@@ -911,6 +973,20 @@
     "title": "项目路线图",
     "rank": -1,
     "group": "sdd"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/multi-node.html",
+    "title": "Multi-node deployment",
+    "rank": 3,
+    "group": "sync"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/xinchuang.html",
+    "title": "Domestic database adaptation",
+    "rank": 4,
+    "group": "start"
   },
   {
     "locale": "en",

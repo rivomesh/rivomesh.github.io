@@ -42,3 +42,19 @@ sourcePath: docs/sdd/001-control-recovery-compatibility/design-global-control.md
 派发状态区分等待、已派发、本机已持久接受、操作执行中和终态。Agent在本机持久保存原请求ID、原本机修订及正文摘要后派发；返回丢失时先恢复本机回执/原操作，不用新修订重发。任务队列的冲突意图串行；取消拥有独立优先通道，不能被正在等待取消的校验/修复占住。目标已提交但本机/全局状态回复丢失依照原生事务凭据恢复，不把一次202作为落库成功。
 
 固定owner节点加私有目录身份共同决定执行归属；数据库租约和节点代次只保护控制命令派发，不能代替Worker/journal/目标原生隔离。仅删除Pod、失联或心跳过期不证明旧Worker已经停止。跨节点执行接管必须另行验证CP-04/07。
+
+## 执行端实现进展（尚未开放全局入口）
+
+AgentDirectory将稳定nodeId绑定私有目录UUID和当前注册租约，使用共享任务存储派生的HMAC验证元数据。目录与审计初始化回执、根计数共同检查；缺失目录/根、替换目录、过期租约和旧incarnation都不能重新获得派发权限。租约检查与命令认领同一个SQL事务；锁序为IAM、任务权威、节点租约、Agent根、命令根。此绑定不是自动Worker接管协议。
+
+DurableCommands保存PENDING、DISPATCHED、ACCEPTED、UNKNOWN及终态。首次派发前将原本机TaskRequest（包括本机修订）认证加密持久化。OwnerExecution复用这个请求调用LocalTaskPlane，查询实际TaskService回执/操作，不能把本机接受当作执行完成。全局回复丢失或控制器重开后先查原回执；缺少证据且修订已变化时保留UNKNOWN。暂时TASK_BUSY/OPERATION_PENDING继续等待，不更换修订或重新生成请求。
+
+未确认的本机请求回执在执行端活动期间免于普通500条回收；启用全局入口时必须在开放API/本地修改前恢复所有活动请求保护。当前仍是内部执行原语，尚无公开全局模式，因此不能据此关闭CP-02/03。
+
+取消命令有父请求与预留容量。父任务未派发时原子标记父CANCELLED及取消成功；父已派发但本机是否接受不明时，先恢复父回执；仅在父ACCEPTED后派发实际取消。完成后的真实执行结果由服务身份登记，即使原操作者的权限已撤销；尚未执行的新命令须重验共享账号修订与节点/任务授权。
+
+## 查询和观察实现（待运行时接入）
+
+OwnerQueries使用有期限的SQL加密信箱，禁止修改/LIST。执行前、结果发布和读取时检查当前身份，绑定owner目录/代次；请求512KiB、响应1MiB，有效期1至60秒，过期删除释放容量。原生PG/MySQL均已验证。GlobalTaskViews以认证密文发布有界任务观察，离线/新代次/过期返回UNKNOWN，不沿用旧健康状态；保留本机指标observedAt，另给出ownerObservedAt。GlobalTaskPlane已通过跨入口创建、实际owner启停、按节点/任务授权、失联STOP等待等内部测试。配置编辑/历史恢复、启动迁移、公开HTTP/界面和完整真实业务链路仍缺，不能关闭CP-02/03。
+
+[Operations and FAQ](/docs/zh/reference/global-control.html).

@@ -117,7 +117,7 @@ spec:
                   name: "rivomesh-control-store"
                   key: "password"
             - name: JAVA_TOOL_OPTIONS
-              value: -Xmx128m
+              value: -Xmx512m
           ports:
             - name: http
               containerPort: 8080

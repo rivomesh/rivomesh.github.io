@@ -5,7 +5,7 @@ title: "金仓 Kingbase"
 sourcePath: docs/en/kingbase-v3.md
 ---
 
-# Kingbase V3 destination and FAQ
+# Kingbase destination and FAQ
 
 中文：[金仓 V3](/docs/zh/reference/kingbase-v3.html). Example: [kingbase-v3.yml](/files/config/kingbase-v3.yml).
 

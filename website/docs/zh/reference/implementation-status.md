@@ -7,11 +7,12 @@ sourcePath: docs/zh-CN/implementation-status.md
 
 # 实施状态与下一批工作
 
+开发预览按需启动，默认不常驻。2026-11-16已按用户要求清理预览容器；历史记录中的预览地址当前未启动。
 更新：2026-11-16。English: [Implementation status](/docs/en/reference/implementation-status.html)。完整需求见[平台方案](/docs/zh/reference/platform-design.html)，操作方式见[控制台手册](/docs/zh/reference/console-and-deployment.html)。
 
-最新进展：共享节点目录已通过真实PostgreSQL17和MySQL8.4双节点启动、任务观察、kill/过期、持久目录重开及控制库中断恢复；223根构建、221发布包优先应用测试、63DOM及五JDK各8项会话回归通过。开发预览已更新为两个入口。[节点手册](/docs/zh/reference/node-registry.html) / [证据](/docs/zh/evidence/2026-11-16-node-registry.html)。任务/权限/审计/会话目前仍在各自控制器，远端全局控制及HA继续实现。
+最新进展：共享账号、权限、会话及链式审计已通过PostgreSQL17/MySQL8.4双节点、跨节点撤销、HTTPS及kill/重开/控制库中断恢复。273项应用构建、273项发布包优先应用测试、2项SDK、68项DOM和五JDK各68项控制专项通过。全局任务与远端命令执行仍在实现。[证据](/docs/zh/evidence/2026-11-16-shared-access.html)。
 
-SDD跟踪：48项中5项DONE，余43项（13NEW、30PARTIAL）。CP-01只关闭目录观察，CP-02/03全局任务与命令、CP-05权限/审计及SE-04共享会话均未因此完成。[清单](/docs/zh/sdd/tasks.html)。
+SDD跟踪：48项中6项DONE，余42项（9NEW、33PARTIAL）。CP-01和5项会话已关闭，CP-05部分完成；CP-02/03全局任务/命令与控制面HA仍未完成。[清单](/docs/zh/sdd/tasks.html)。
 
 ## 本批已实现
 
@@ -54,7 +55,7 @@ ADMIN 配置编辑及版本恢复已通过独立真实发布包链路，包含 P
 
 实际集群 Kubernetes/CSI、剩余目标和已实现消息目标的完整集群矩阵、OIDC及外部身份集成、完整迁移接管、源 PostgreSQL/Oracle 和硬件性能标准尚未验收。当前通过的单项记录见[验证记录](/docs/zh/reference/validation.html)。真实浏览器窗口在当前环境不可用，已完成 DOM/HTTP 验证，截图级外观与可访问性待补验。
 
-Docker 开发预览已部署并通过健康、管理员登录、界面资源及能力目录 HTTP 验证，见[开发预览](/docs/zh/reference/development-preview.html)。界面随源码刷新，后端/驱动在构建后发布；不表示所有目标已通过生产验收。
+开发预览已按用户要求停止；后续使用临时验证环境，完成即清理。历史预览说明见[开发预览](/docs/zh/reference/development-preview.html)。
 
 共同校验屏障基础已实现并通过 LOCAL/H2、外部 PostgreSQL/MySQL/openGauss 四种日志下的真实库验证，包含跨 database 的同一 MVCC 视图、源写锁/元数据锁、超时/强杀释放、采集/规范化/目标 ACK 原子追平与持久暂停、所选目标隔离及未选目标真实停机恢复。现有 GBase 8c 联合故障链路也回归通过。已继续实现私有磁盘源行密封、事务型 SQL 目标逐行读取、缺失/多余/变更报告及 CLI；其新增验收单独记录，不能将屏障测试视为完整对账验收。管理端校验作业/UI的新增验收见下文；修复、接管切换仍待完成，见[校验修复工作流](/docs/zh/reference/reconciliation-workflow.html)。
 
@@ -68,3 +69,5 @@ SQL逐行校验及CLI首批真实验收现已通过上述四种日志配置，�
 2026-11-16：共同校验点修复CLI首版已通过四种真实日志模式、MySQL8.4/PostgreSQL17业务目标验收：显式计划/摘要确认、目标变化拒绝、SQL回滚、无主键身份恢复、提交响应丢失、提交前后强杀及凭据续跑，CDC位点保持不变。200项根构建（198应用+2SDK）、198项发布包优先测试和46项DOM通过；Docker预览已更新。修复界面/持久作业、依赖检查、失败事务补偿/跳过、接管切换及完整项目目标仍待完成。[修复手册](/docs/zh/reference/common-cut-repair.html) / [证据](/docs/zh/evidence/2026-11-16-common-cut-repair.html)。
 
 2026-11-16：管理端修复首版已验收：显式选表、预定计划ID持久化、认证管理员审阅/摘要确认、修订号/请求去重、取消与重试、提交凭据和审计。MySQL/PostgreSQL目标上的触发器、外键与元数据权限拒绝已有实测；完整依赖规划、预算编辑、独立凭据目录、失败事务补偿/跳过、接管切换、其他厂商及完整HA/容量矩阵仍待完成。见[管理端修复](/docs/zh/reference/managed-repair.html)。
+
+2026-11-17: CP-02/03 now PARTIAL: internal global task/control foundations passed307actual-JAR-first tests and native PostgreSQL/MySQL control fixtures. Public task control remains LOCAL. Configuration/history workflows are newer development work. [Evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html).

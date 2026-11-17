@@ -12,7 +12,7 @@ title: 项目资料
 
 ## 架构与技术说明
 
-[平台架构](/docs/zh/reference/platform-design.html) · [恢复与一致性](/docs/zh/reference/recovery.html) · [共享节点目录](/docs/zh/reference/node-registry.html) · [当前实现范围](/docs/zh/reference/implementation-status.html)
+[平台架构](/docs/zh/reference/platform-design.html) · [恢复与一致性](/docs/zh/reference/recovery.html) · [多节点部署](/docs/zh/start/multi-node.html) · [跨节点控制进展](/docs/zh/reference/global-control.html) · [当前实现范围](/docs/zh/reference/implementation-status.html)
 
 ## SDD 计划与交付
 

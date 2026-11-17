@@ -1,6 +1,6 @@
 {
   "specId": "RM-SDD-001",
-  "version": "0.3",
+  "version": "0.5",
   "date": "2026-11-16",
   "state": "IMPLEMENTING",
   "scope": "CP-01 shared registry and SE-01/02/03/05 single-controller sessions complete; global task/control authority remains open",
@@ -46,14 +46,14 @@
       "id": "CP-02",
       "epic": "CLUSTER",
       "priority": "P0",
-      "status": "NEW",
+      "status": "PARTIAL",
       "title": {
         "zh-CN": "全局任务、配置与操作权威状态",
         "en": "Global task/configuration authority"
       },
       "gap": {
-        "zh-CN": "控制器注册表、配置历史、报告路径及锁依赖本地目录，尚非统一控制面。",
-        "en": "Controller registry,configuration history,report paths and locks are local."
+        "zh-CN": "全局配置权威、授权分页、任务观察和内部跨入口控制已验收；公开运行时/界面、升级导入及完整配置工作流仍待接入。",
+        "en": "Shared configuration authority,authorized paging,observations and internal cross-entry control accepted;public runtime/UI,migration/import and full configuration integration remain open."
       },
       "acceptance": {
         "zh-CN": "同一集群中从A创建/修改任务后B读到同一全局修订；全局taskId唯一，独立任务与源配置仍隔离；单机模式保留可运行配置。",
@@ -63,21 +63,27 @@
         "CP-01"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java"
-      ]
+        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
+        "docs/verification/2026-11-17-global-control-foundations/README.md",
+        "docs/zh-CN/global-control.md"
+      ],
+      "implementation": {
+        "scope": "Internal global control foundations; public task scope remains LOCAL",
+        "design": "docs/sdd/001-control-recovery-compatibility/design-global-control.md"
+      }
     },
     {
       "id": "CP-03",
       "epic": "CLUSTER",
       "priority": "P0",
-      "status": "NEW",
+      "status": "PARTIAL",
       "title": {
         "zh-CN": "跨节点持久命令路由",
         "en": "Durable cross-node command routing"
       },
       "gap": {
-        "zh-CN": "当前Worker工厂只在本机启动/停止Java进程。",
-        "en": "The Worker factory launches/stops local JVMs only."
+        "zh-CN": "持久命令、固定owner实际TaskService执行、回执恢复和取消已有原生SQL验收；公开跨节点HTTP、启动恢复及完整业务链路仍待验收。",
+        "en": "Durable admission,fixed-owner TaskService execution,receipt recovery and cancellation have native SQL evidence;public cross-node HTTP,startup recovery and full business-chain acceptance remain open."
       },
       "acceptance": {
         "zh-CN": "任一入口可控制B的任务：创建、检查、启停、暂停/恢复、重试、校验/修复；命令含全局请求ID/修订/owner代次，重复投递只生效一次，202仅表示接受，返回已执行/拒绝/未知结果。",
@@ -88,8 +94,14 @@
       ],
       "evidence": [
         "sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java",
-        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java"
-      ]
+        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
+        "docs/verification/2026-11-17-global-control-foundations/README.md",
+        "docs/zh-CN/global-control.md"
+      ],
+      "implementation": {
+        "scope": "Internal global control foundations; public task scope remains LOCAL",
+        "design": "docs/sdd/001-control-recovery-compatibility/design-global-control.md"
+      }
     },
     {
       "id": "CP-04",
@@ -122,14 +134,14 @@
       "id": "CP-05",
       "epic": "CLUSTER",
       "priority": "P0",
-      "status": "NEW",
+      "status": "PARTIAL",
       "title": {
         "zh-CN": "共享权限、审计和密钥引用",
         "en": "Shared authorization,audit and secret references"
       },
       "gap": {
-        "zh-CN": "现有账号与操作审计是控制器本地持久化，缺少集群一致视图。",
-        "en": "Accounts and operation audit persist locally without cluster-wide authority."
+        "zh-CN": "共享账号/授权/链式审计及Worker环境过滤已实现；完整远端关联、最小密钥引用和进程/文件隔离仍缺。",
+        "en": "Shared accounts/grants/hash-chained audit and Worker environment filtering exist; complete remote correlation, least-secret references and process/filesystem isolation remain open."
       },
       "acceptance": {
         "zh-CN": "从A撤销权限后B拒绝新命令；同一远端操作可按请求ID/任务/节点/计划追踪；界面不返回密钥，节点仅获得授权任务必需的密钥引用。",
@@ -141,7 +153,9 @@
       "evidence": [
         "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
         "docs/zh-CN/account-management.md",
-        "docs/zh-CN/security-audit.md"
+        "docs/zh-CN/security-audit.md",
+        "sync-app/src/main/java/io/rivomesh/platform/SharedAccessStore.java",
+        "docs/verification/2026-11-16-shared-access/README.md"
       ]
     },
     {
@@ -313,14 +327,14 @@
       "id": "SE-04",
       "epic": "SESSION",
       "priority": "P0",
-      "status": "NEW",
+      "status": "DONE",
       "title": {
         "zh-CN": "跨控制节点的会话连续性",
         "en": "Session continuity across controllers"
       },
       "gap": {
-        "zh-CN": "负载均衡切换后没有共享会话权威状态。",
-        "en": "No shared session authority for load-balanced controllers."
+        "zh-CN": "已通过PostgreSQL/MySQL共享会话双节点、HTTPS、撤销、kill/重开及存储中断恢复验收；全局任务控制仍属CP-02/03。",
+        "en": "Shared SQL sessions passed two-controller HTTPS/revocation/kill/reopen/store-outage acceptance on PostgreSQL/MySQL; global task control remains CP-02/03."
       },
       "acceptance": {
         "zh-CN": "登录A后请求落到B仍合法；重启/切换控制实例按有效期恢复；集群撤销即时按规定传播，不以粘性会话掩盖状态缺失。",
@@ -329,11 +343,21 @@
       "dependsOn": [
         "SE-02",
         "SE-03",
-        "CP-02"
+        "CP-01"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java"
-      ]
+        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
+        "sync-app/src/main/java/io/rivomesh/platform/SharedAccessStore.java",
+        "docs/verification/2026-11-16-shared-access/README.md"
+      ],
+      "implementation": {
+        "scope": "Opt-in shared SQL identity/session profile; global task control excluded",
+        "design": "docs/sdd/001-control-recovery-compatibility/design-shared-access.md"
+      },
+      "verification": {
+        "artifactSha256": "a1ec34fc060b4078cdaa10f357d5933f4df60f5b9616519433c851ddad69fa4a",
+        "archive": "docs/verification/2026-11-16-shared-access/README.md"
+      }
     },
     {
       "id": "SE-05",
@@ -1311,17 +1335,17 @@
     }
   ],
   "candidateVerification": {
-    "artifactSha256": "e42cd685bcc9fb38a1e0e82819230ac58869a54f40c4417d39cd596337b91d11",
-    "rootTests": 223,
-    "releaseFirstAppTests": 221,
-    "domTests": 63,
-    "sessionRuntimeProfiles": 5,
-    "sessionRuntimeTestsPerProfile": 8,
-    "tlsProxy": true,
-    "registryProducts": [
+    "artifactSha256": "1e474ad174f9425ac83af2642c5ec707ddb7435ba5ee5e898003c92a5d612019",
+    "mavenAppDiscovered": 332,
+    "mavenAppExecuted": 307,
+    "mavenIntegrationSkipped": 25,
+    "releaseFirstAppTests": 307,
+    "releaseFirstSkipped": 0,
+    "nativeProducts": [
       "POSTGRESQL17",
       "MYSQL8.4"
     ],
-    "evidence": "docs/verification/2026-11-16-node-registry/README.md"
+    "scope": "Internal global task/control foundations; no public runtime/HTTP/business CDC claim",
+    "evidence": "docs/verification/2026-11-17-global-control-foundations/README.md"
   }
 }
