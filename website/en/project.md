@@ -11,6 +11,8 @@ description: Architecture and project evidence · RivoMesh database replication,
 
 ## Architecture and operations
 
+<PipelineFlow />
+
 [Platform design](/docs/en/reference/platform-design.html) · [Pipeline configuration](/docs/en/reference/pipeline-v3.html) · [Recovery and consistency](/docs/en/reference/recovery.html) · [Multi-node deployment](/docs/en/start/multi-node.html) · [Global task control](/docs/en/reference/global-control.html)
 
 [Quick start](/docs/en/start/quick-start.html) covers the first pipeline. [Compatibility](/docs/en/start/compatibility.html) explains current source/target, delivery and deployment boundaries.
@@ -23,9 +25,9 @@ DONE, PARTIAL and NEW refer to the scope of each requirement, not a promise that
 
 ## Verification evidence
 
-[Implementation status](/docs/en/reference/implementation-status.html) · [Performance and runtimes](/docs/en/reference/performance.html) · [Source snapshot](/source-snapshot.json)
+[Implementation status](/docs/en/reference/implementation-status.html) · [Performance and runtimes](/docs/en/reference/performance.html) · [Verification baseline](/docs/zh/evidence/baseline.html) · [Source snapshot](/source-snapshot.json)
 
-Acceptance archives preserve candidate hashes, exact environments and both successful and failed attempts. Some original evidence is bilingual or Chinese; the English implementation status links to the original records. Native database, DOM, deployment-template and live-cluster tests are different verification scopes.
+The consolidated baseline records candidate hashes, exact profiles and bounded results. It identifies evidence carried forward from earlier candidates. See the implementation status for an English summary.
 
 ## Source and contribution
 

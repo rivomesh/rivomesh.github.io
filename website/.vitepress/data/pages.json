@@ -1,13 +1,5 @@
 [
   {
-    "locale": "zh",
-    "route": "/docs/zh/reference/development-v3.html",
-    "title": "历史实现参考",
-    "group": "architecture",
-    "rank": 99,
-    "sourcePath": "docs/development-v3.md"
-  },
-  {
     "locale": "en",
     "route": "/docs/en/reference/account-management.html",
     "title": "Account management",
@@ -41,6 +33,14 @@
   },
   {
     "locale": "en",
+    "route": "/docs/en/reference/commit-acknowledgement.html",
+    "title": "Commit acknowledgement recovery",
+    "group": "reference",
+    "rank": 7,
+    "sourcePath": "docs/en/commit-acknowledgement.md"
+  },
+  {
+    "locale": "en",
     "route": "/docs/en/reference/common-cut-repair.html",
     "title": "COMMON_CUT repair",
     "group": "reference",
@@ -52,7 +52,7 @@
     "route": "/docs/en/reference/configuration-editor.html",
     "title": "Configuration revisions",
     "group": "reference",
-    "rank": 2,
+    "rank": 3,
     "sourcePath": "docs/en/configuration-editor.md"
   },
   {
@@ -62,14 +62,6 @@
     "group": "reference",
     "rank": 1,
     "sourcePath": "docs/en/console-and-deployment.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/reference/development-preview.html",
-    "title": "Development preview",
-    "group": "architecture",
-    "rank": 3,
-    "sourcePath": "docs/en/development-preview.md"
   },
   {
     "locale": "en",
@@ -94,6 +86,46 @@
     "group": "reference",
     "rank": 1,
     "sourcePath": "docs/en/execution-lifecycle.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/failed-transactions.html",
+    "title": "Failed transaction diagnostics",
+    "group": "reference",
+    "rank": 4,
+    "sourcePath": "docs/en/failed-transactions.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/failure-evidence.html",
+    "title": "Failed transaction evidence",
+    "group": "reference",
+    "rank": 5,
+    "sourcePath": "docs/en/failure-evidence.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/failure-review.html",
+    "title": "Retain and review failure evidence",
+    "group": "reference",
+    "rank": 6,
+    "sourcePath": "docs/en/failure-review.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/first-release.html",
+    "title": "First-release configuration",
+    "group": "reference",
+    "rank": 2,
+    "sourcePath": "docs/en/first-release.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/gap-verification.html",
+    "title": "Data-gap verification",
+    "group": "reference",
+    "rank": 9,
+    "sourcePath": "docs/en/gap-verification.md"
   },
   {
     "locale": "en",
@@ -161,6 +193,14 @@
   },
   {
     "locale": "en",
+    "route": "/docs/en/reference/manual-correction.html",
+    "title": "Manual target corrections",
+    "group": "reference",
+    "rank": 11,
+    "sourcePath": "docs/en/manual-correction.md"
+  },
+  {
+    "locale": "en",
     "route": "/docs/en/reference/messaging-v3.html",
     "title": "Messaging targets",
     "group": "connectors",
@@ -188,7 +228,7 @@
     "route": "/docs/en/reference/performance.html",
     "title": "Performance & runtimes",
     "group": "reference",
-    "rank": 5,
+    "rank": 13,
     "sourcePath": "docs/en/performance.md"
   },
   {
@@ -220,7 +260,7 @@
     "route": "/docs/en/reference/recovery.html",
     "title": "Recovery & consistency",
     "group": "reference",
-    "rank": 4,
+    "rank": 12,
     "sourcePath": "docs/en/recovery.md"
   },
   {
@@ -228,7 +268,7 @@
     "route": "/docs/en/reference/rename-migration.html",
     "title": "Rename migration",
     "group": "reference",
-    "rank": 6,
+    "rank": 14,
     "sourcePath": "docs/en/rename-migration.md"
   },
   {
@@ -265,6 +305,22 @@
   },
   {
     "locale": "en",
+    "route": "/docs/en/reference/transaction-compensation.html",
+    "title": "Failed transaction compensation",
+    "group": "reference",
+    "rank": 10,
+    "sourcePath": "docs/en/transaction-compensation.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/transaction-skip.html",
+    "title": "Controlled transaction skipping",
+    "group": "reference",
+    "rank": 8,
+    "sourcePath": "docs/en/transaction-skip.md"
+  },
+  {
+    "locale": "en",
     "route": "/docs/en/reference/validation.html",
     "title": "Validation records",
     "group": "evidence",
@@ -294,6 +350,22 @@
     "group": "sdd",
     "rank": 4,
     "sourcePath": "docs/sdd/001-control-recovery-compatibility/acceptance.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/sdd/design-checkpoint-recovery.html",
+    "title": "RC-05: failed-transaction native checkpoint reconciliation",
+    "group": "sdd",
+    "rank": -1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-checkpoint-recovery.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/design-checkpoint-recovery.html",
+    "title": "RC-05：失败事务原生断点核对",
+    "group": "sdd",
+    "rank": -1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-checkpoint-recovery.md"
   },
   {
     "locale": "en",
@@ -329,6 +401,54 @@
   },
   {
     "locale": "en",
+    "route": "/docs/en/sdd/design-failed-transactions.html",
+    "title": "Failed-transaction recovery contract",
+    "group": "sdd",
+    "rank": -1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-failed-transactions.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/design-failed-transactions.html",
+    "title": "失败事务恢复契约",
+    "group": "sdd",
+    "rank": -1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-failed-transactions.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/sdd/design-failure-evidence.html",
+    "title": "Durable failed-transaction evidence",
+    "group": "sdd",
+    "rank": -1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-failure-evidence.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/design-failure-evidence.html",
+    "title": "失败事务持久证据",
+    "group": "sdd",
+    "rank": -1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-failure-evidence.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/sdd/design-gap-verification.html",
+    "title": "Gap verification: common cut and atomic records",
+    "group": "sdd",
+    "rank": -1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-gap-verification.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/design-gap-verification.html",
+    "title": "缺口核验：共同校验点与原子记录",
+    "group": "sdd",
+    "rank": -1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-gap-verification.md"
+  },
+  {
+    "locale": "en",
     "route": "/docs/en/sdd/design-global-control.html",
     "title": "Global control design",
     "group": "sdd",
@@ -342,6 +462,22 @@
     "group": "sdd",
     "rank": 7,
     "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-global-control.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/sdd/design-native-skip.html",
+    "title": "RC-03 / RC-08: transaction skipping and durable gaps",
+    "group": "sdd",
+    "rank": -1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-native-skip.en.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/sdd/design-native-skip.html",
+    "title": "RC-03 / RC-08：事务跳过与缺口记录设计",
+    "group": "sdd",
+    "rank": -1,
+    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-native-skip.md"
   },
   {
     "locale": "en",
@@ -441,259 +577,11 @@
   },
   {
     "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-accounts.html",
-    "title": "11-15-accounts · Managed local accounts / 本地账号管理验收",
+    "route": "/docs/zh/evidence/baseline.html",
+    "title": "首版验证基线 / Verification baseline",
     "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-accounts/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-audit.html",
-    "title": "11-15-audit · Security audit acceptance / 安全审计验收",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-audit/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-classic.html",
-    "title": "11-15-classic · Classic acceptance, 2026-11-15",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-classic/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-configuration.html",
-    "title": "11-15-configuration · Configuration editing acceptance / 配置编辑验收",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-configuration/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-dm.html",
-    "title": "11-15-dm · DM8 native-mode acceptance / 达梦原生验收",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-dm/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-doris-hardening.html",
-    "title": "11-15-doris-hardening · Doris SQL-mode and encoding hardening / SQL 模式与字符校验",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-doris-hardening/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-doris.html",
-    "title": "11-15-doris · Doris acceptance / Doris 验收",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-doris/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-gbase8c.html",
-    "title": "11-15-gbase8c · GBase 8c native acceptance / 南大通用 8c 原生验收",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-gbase8c/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-hive.html",
-    "title": "11-15-hive · Hive experimental acceptance / Hive 实验适配验收",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-hive/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-kingbase.html",
-    "title": "11-15-kingbase · Kingbase PG/UTF8 native acceptance / 金仓原生验收",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-kingbase/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-oceanbase.html",
-    "title": "11-15-oceanbase · OceanBase experimental implementation — full recovery NOT accepted",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-oceanbase/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-row-reconciliation.html",
-    "title": "11-15-row-reconciliation · SQL row reconciliation / SQL 逐行校验首批验收",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-row-reconciliation/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-task-scopes.html",
-    "title": "11-15-task-scopes · Exact task grants acceptance / 精确任务授权验收",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-task-scopes/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-15-validation-barrier.html",
-    "title": "11-15-validation-barrier · Common validation barrier / 共同校验屏障基础验收",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-15-validation-barrier/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-16-browser-sessions.html",
-    "title": "11-16-browser-sessions · RM-SDD-001：浏览器会话验收 / Browser-session acceptance",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-16-browser-sessions/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-16-browser-sessions-commands.html",
-    "title": "11-16-browser-sessions · Reproduction commands",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-16-browser-sessions/commands.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-16-common-cut-repair.html",
-    "title": "11-16-common-cut-repair · COMMON_CUT SQL repair / 共同校验点 SQL 修复",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-16-common-cut-repair/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-16-difference-details.html",
-    "title": "11-16-difference-details · Administrator difference details / 管理员差异详情",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-16-difference-details/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-16-managed-repair.html",
-    "title": "11-16-managed-repair · Managed repair / 管理界面修复",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-16-managed-repair/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-16-managed-validation.html",
-    "title": "11-16-managed-validation · Managed validation jobs / 管理界面校验作业首批验收",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-16-managed-validation/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-16-node-registry.html",
-    "title": "11-16-node-registry · CP-01：共享节点目录验收 / Shared node registry acceptance",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-16-node-registry/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-16-shared-access.html",
-    "title": "11-16-shared-access · SE-04：共享身份、会话与审计 / Shared identity, sessions and audit",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-16-shared-access/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-16-shared-access-attempt-b7.html",
-    "title": "11-16-shared-access · B7候选记录 / Candidate B7",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-16-shared-access/attempt-b7/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-16-shared-access-commands.html",
-    "title": "11-16-shared-access · Reproduction",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-16-shared-access/commands.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-17-execution-lifecycle.html",
-    "title": "11-17-execution-lifecycle · Independent execution lifecycle / 独立执行生命周期",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-17-execution-lifecycle/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-17-execution-lifecycle-attempt-aae.html",
-    "title": "11-17-execution-lifecycle · Intermediate role candidate with known admission races",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-17-execution-lifecycle/attempt-aae/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-17-execution-lifecycle-attempt-nonroot.html",
-    "title": "11-17-execution-lifecycle · Preserved nonroot fixture failures",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-17-execution-lifecycle/attempt-nonroot/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-17-global-configuration.html",
-    "title": "11-17-global-configuration · Global configuration/history workflows / 全局配置工作流",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-17-global-configuration/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-17-global-control-foundations.html",
-    "title": "11-17-global-control-foundations · Global task/control foundations / 全局控制基础验收",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-17-global-control-foundations/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-17-global-maintenance.html",
-    "title": "11-17-global-maintenance · Global maintenance and recovery / 全局维护与恢复",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-17-global-maintenance/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-17-global-routing.html",
-    "title": "11-17-global-routing · Public global routing / 公开全局控制增量",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-17-global-routing/README.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/2026-11-17-global-routing-attempt-4639.html",
-    "title": "11-17-global-routing · Intermediate maintenance candidate: native failure retained",
-    "group": "evidence",
-    "rank": 1,
-    "sourcePath": "docs/verification/2026-11-17-global-routing/attempt-4639/README.md"
+    "rank": 0,
+    "sourcePath": "docs/verification/README.md"
   },
   {
     "locale": "zh",
@@ -729,6 +617,14 @@
   },
   {
     "locale": "zh",
+    "route": "/docs/zh/reference/commit-acknowledgement.html",
+    "title": "提交确认与断点恢复",
+    "group": "reference",
+    "rank": 7,
+    "sourcePath": "docs/zh-CN/commit-acknowledgement.md"
+  },
+  {
+    "locale": "zh",
     "route": "/docs/zh/reference/common-cut-repair.html",
     "title": "共同校验点修复",
     "group": "reference",
@@ -740,7 +636,7 @@
     "route": "/docs/zh/reference/configuration-editor.html",
     "title": "配置编辑与版本恢复",
     "group": "reference",
-    "rank": 2,
+    "rank": 3,
     "sourcePath": "docs/zh-CN/configuration-editor.md"
   },
   {
@@ -750,14 +646,6 @@
     "group": "reference",
     "rank": 1,
     "sourcePath": "docs/zh-CN/console-and-deployment.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/reference/development-preview.html",
-    "title": "开发预览",
-    "group": "architecture",
-    "rank": 3,
-    "sourcePath": "docs/zh-CN/development-preview.md"
   },
   {
     "locale": "zh",
@@ -782,6 +670,46 @@
     "group": "reference",
     "rank": 1,
     "sourcePath": "docs/zh-CN/execution-lifecycle.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/failed-transactions.html",
+    "title": "失败事务诊断",
+    "group": "reference",
+    "rank": 4,
+    "sourcePath": "docs/zh-CN/failed-transactions.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/failure-evidence.html",
+    "title": "失败事务证据",
+    "group": "reference",
+    "rank": 5,
+    "sourcePath": "docs/zh-CN/failure-evidence.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/failure-review.html",
+    "title": "证据留存与审阅",
+    "group": "reference",
+    "rank": 6,
+    "sourcePath": "docs/zh-CN/failure-review.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/first-release.html",
+    "title": "首版部署基线",
+    "group": "reference",
+    "rank": 2,
+    "sourcePath": "docs/zh-CN/first-release.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/gap-verification.html",
+    "title": "数据缺口复核",
+    "group": "reference",
+    "rank": 9,
+    "sourcePath": "docs/zh-CN/gap-verification.md"
   },
   {
     "locale": "zh",
@@ -849,6 +777,14 @@
   },
   {
     "locale": "zh",
+    "route": "/docs/zh/reference/manual-correction.html",
+    "title": "手工修正目标行",
+    "group": "reference",
+    "rank": 11,
+    "sourcePath": "docs/zh-CN/manual-correction.md"
+  },
+  {
+    "locale": "zh",
     "route": "/docs/zh/reference/messaging-v3.html",
     "title": "消息目标与投递协议",
     "group": "connectors",
@@ -876,7 +812,7 @@
     "route": "/docs/zh/reference/performance.html",
     "title": "性能与运行时验证",
     "group": "reference",
-    "rank": 5,
+    "rank": 13,
     "sourcePath": "docs/zh-CN/performance.md"
   },
   {
@@ -908,7 +844,7 @@
     "route": "/docs/zh/reference/rename-migration.html",
     "title": "版本与更名迁移",
     "group": "reference",
-    "rank": 6,
+    "rank": 14,
     "sourcePath": "docs/zh-CN/rename-migration.md"
   },
   {
@@ -942,6 +878,22 @@
     "group": "reference",
     "rank": 3,
     "sourcePath": "docs/zh-CN/task-authorization.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/transaction-compensation.html",
+    "title": "失败事务补偿",
+    "group": "reference",
+    "rank": 10,
+    "sourcePath": "docs/zh-CN/transaction-compensation.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/transaction-skip.html",
+    "title": "受控事务跳过",
+    "group": "reference",
+    "rank": 8,
+    "sourcePath": "docs/zh-CN/transaction-skip.md"
   },
   {
     "locale": "zh",
@@ -1135,7 +1087,7 @@
   {
     "locale": "en",
     "route": "/docs/en/start/xinchuang.html",
-    "title": "Domestic database adaptation",
+    "title": "Database compatibility validation",
     "rank": 4,
     "group": "start"
   },

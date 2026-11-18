@@ -17,9 +17,9 @@ Watch the English walkthrough or jump to a chapter covering setup, monitoring, v
 
 ## Original product screenshots
 
-Explore the task workspace, pipeline wizard and connector catalog in the English console.
+Explore the English task workspace, pipeline wizard, connector catalog and a real destination SQL failure.
 
-<ProductGallery />
+<ProductGallery full :initial="0" />
 
 [Download video](/media/rivomesh-tour-en.mp4) · [English subtitles](/media/tour-en.en.vtt) · [Chinese subtitles](/media/tour-en.zh-CN.vtt)
 

@@ -6,7 +6,7 @@
 
 本站根据同级 RivoMesh 核心源码重新生成，采用全新页面、主题、文档路由、固定导航和品牌素材。VitePress 负责 Markdown 编译、客户端路由与静态输出；布局、侧栏、搜索、连接器目录和 SDD 展示使用本仓库自有组件。
 
-验证记录与页面截图见 [quality/verification.md](quality/verification.md)。
+本轮产品对照、品牌设计与浏览器验收见 [V3.0 交付记录](quality/v3-brand-product-sync.md)。[此前的验证记录](quality/verification.md)继续保留。
 
 ## 本地运行
 
@@ -68,19 +68,19 @@ npm test
 npm run build
 ```
 
-导入器读取核心项目的 Markdown、SDD `requirements.json` 与 `AdapterCatalog.java`，为全部手册建立唯一文档路由和两棵语言导航树。它只重建生成目录，保留 `start/` 原创文档；旧地址规范化到 `rivomesh` 组织，源码外链统一指向核心仓库。
+导入器固定读取核心项目同一 Git 提交的 Markdown、SDD `requirements.json` 与 `AdapterCatalog.java`，为全部手册建立唯一文档路由和两棵语言导航树。它只重建生成目录，保留 `start/` 原创文档；旧地址规范化到 `rivomesh` 组织，源码外链统一指向核心仓库。
 
 SDD 状态取自实际清单，DONE、PARTIAL、NEW 分开计算。不要把新增操作手册自动当作全部需求已经完成。快照清单的原始哈希对应源文件，站内链接与纯文本占位符会在导入时转换。`tooling/document-copy.mjs` 维护网站用语及已被新手册取代的旧状态说明，不修改命令、配置字段或证据原文；配置格式编号只在必要的技术说明中保留。嵌套验收目录生成独立路由，导入前拒绝重复路由，避免覆盖正式验收记录。
 
 ## 品牌与视频
 
-品牌几何源文件为 `tooling/brand/identity.mjs`，三个原创 SVG 方案及最终选择见中英文品牌页。正式图标、轮廓化字标、SVG/ICO favicon、Apple Touch 图标与两种语言的 1200×630 分享图可独立重建：
+品牌几何源文件为 `tooling/brand/identity.mjs`，水獭、翠鸟与燕子三套原创 SVG 及正式选型见中英文品牌与设计评审页。正式图标、轮廓化字标、SVG/ICO favicon、Apple Touch 图标与两种语言的 1200×630 分享图可独立重建：
 
 ```bash
 npm run brand:generate
 ```
 
-此命令仅依赖 Node.js 与已安装的 Sharp，不调用 FFmpeg 或 macOS `say`，也不修改截图、字幕、旁白和视频。生成结果直接提交到仓库；`npm run check` 检查品牌文件格式与尺寸。
+此命令通过 Node.js 与 Sharp 生成资产。渲染中文分享卡需系统有可用简体中文字形，例如 Noto Sans CJK SC。截图、字幕、旁白和视频有独立的生成命令。生成结果直接提交到仓库；`npm run check` 检查品牌文件格式与尺寸。
 
 产品旁白使用 OpenAI Realtime API，默认 `gpt-realtime-2.1` / `marin`。离线工具读取项目根目录已忽略的 `.env.local` 中的 `OPENAI_API_KEY`，或同名环境变量；不要提交密钥。可选 `RIVOMESH_VOICE`、`RIVOMESH_VOICE_MODEL` 调整音色和模型，`HTTPS_PROXY` / `https_proxy` 支持本机代理。
 

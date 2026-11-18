@@ -33,4 +33,4 @@ owner仍由稳定nodeId和原私有目录UUID绑定。管理节点不得被选�
 
 [English](/docs/en/sdd/design-execution-lifecycle.html) · [当前全局控制](/docs/zh/reference/global-control.html)
 
-2026-11-17: protocol4 implementation and declared LOCAL-journal lifecycle accepted. [Evidence](/docs/zh/evidence/2026-11-17-execution-lifecycle.html). Current deployment instructions and remaining limits are in the operations guide.
+2026-11-17: protocol4 implementation and declared LOCAL-journal lifecycle accepted. [Evidence](/docs/zh/evidence/baseline.html). Current deployment instructions and remaining limits are in the operations guide.

@@ -11,9 +11,9 @@ Updated: 2026-11-17. 中文：[控制台与部署](/docs/zh/reference/console-an
 
 ## Runtime scope
 
-Load independent MySQL task configurations into isolated JVMs with bounded heap/concurrency. V3 supports explicit databases/mappings, SQL/message fan-out, keyless/JSON/supported generated columns and LOCAL/EXTERNAL journals. The wizard supports Gauss/PostgreSQL/MySQL, the eight implemented message products plus ClickHouse and Doris; v2 single-target tasks remain supported. See the [V3 manual](/docs/en/reference/pipeline-v3.html) and [messaging contract](/docs/en/reference/messaging-v3.html). Capability entries distinguish remaining adapters.
+Independent tasks run in isolated JVMs with bounded heap and concurrency. The multi-database wizard configures relational, analytical and eight messaging destinations plus local or external journals. See the [connector catalog](/docs/en/start/connectors.html) for product profiles. Legacy single-target tasks remain supported.
 
-The bilingual workbench provides creation, connection/source-object checks, start/stop, shared pause/resume, progress/backlog, and operation history. Independent VIEWER/OPERATOR/ADMIN tokens enforce access. ADMIN can edit configuration, rotate credentials and restore revisions. Row validation and reviewed repairs at a common paused cut are available; failed-transaction patches/skips, mapping migration and business cutover remain open. See [validation](/docs/en/reference/managed-validation.html) and [repair](/docs/en/reference/managed-repair.html).
+The bilingual workbench provides creation, connection/source-object checks, start/stop, shared pause/resume, progress/backlog, and operation history. Independent VIEWER/OPERATOR/ADMIN tokens enforce access. ADMIN can edit configuration, rotate credentials and restore revisions. Row validation and reviewed repairs at a common paused cut are available. Transactional PostgreSQL and MySQL have scoped profiles for [commit confirmation](/docs/en/reference/commit-acknowledgement.html), [transaction skipping](/docs/en/reference/transaction-skip.html), [gap verification](/docs/en/reference/gap-verification.html), [compensation](/docs/en/reference/transaction-compensation.html) and [manual correction](/docs/en/reference/manual-correction.html). Configure the corresponding gates in the [first-release baseline](/docs/en/reference/first-release.html). Plan business cutover separately. See [validation](/docs/en/reference/managed-validation.html) and [repair](/docs/en/reference/managed-repair.html).
 
 Local task control is the default. Opt in with `cluster.sharedAccess=true` and `cluster.sharedTasks=true` for fixed-owner global tasks. Any entry manages authorized remote tasks while distinguishing durable admission, actual outcomes and uncertainty. See [global control](/docs/en/reference/global-control.html) for private directories/keys, upgrade refusal, Helm and native two-node deployment. Automatic execution takeover remains open.
 
@@ -66,7 +66,7 @@ Configuration files may contain credentials and are written with mode 0600. Task
 
 | API | Purpose |
 |---|---|
-| GET /healthz, /readyz | Process probes without database side effects or authentication |
+| GET /healthz, /readyz | Unauthenticated process probes. Readiness returns 503 if configured control services are unavailable. |
 | GET /api/tasks | Sanitized tasks/status/load errors/operations |
 | POST /api/tasks | Create stopped task using config object or yaml string |
 | GET /api/tasks/{id} | Single-task view |
@@ -167,3 +167,5 @@ tasks; omitting the new field retains NONE automatically. See the [ClickHouse ha
 
 
 The Doris wizard configures SQL/Stream Load HTTP origins, redirect allowlist, replicas/buckets and index policy. Default3 replicas; one-BE tests explicitly select1. Expand `dorisIndexPlans` in check results. Pause leaves materialization in flight unconfirmed, not a cutover barrier. Initial identity checks require a Doris ADMIN account; see the [Doris handbook](/docs/en/reference/doris-v3.html).
+
+Optional protocol5 adds administrator evidence creation,raw/normalized pages and typed image review. See [review operations](/docs/en/reference/failure-review.html) for activation/upgrade and deployment profiles. Default legacy profiles do not upgrade automatically. See [implementation status](/docs/en/reference/implementation-status.html) for scoped recovery.

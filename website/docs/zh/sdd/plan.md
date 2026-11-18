@@ -7,41 +7,29 @@ sourcePath: docs/sdd/001-control-recovery-compatibility/plan.md
 
 # 设计边界、决策和实施顺序
 
-RM-SDD-001 · v0.5 · 2026-11-17 · 实施中：单控制器会话已验收
+RM-SDD-001 · v0.9 · 2026-11-17 · 实施中：推进事务跳过与缺口
 
 [规格](/docs/zh/sdd/spec.html) · [任务](/docs/zh/sdd/tasks.html) · [验收](/docs/zh/sdd/acceptance.html) · [English](/docs/en/sdd/plan.html)
 
-## 1. 当前基线和核对范围
+当前状态以 [requirements.json](/files/docs/sdd/001-control-recovery-compatibility/requirements.json)、[任务清单](/docs/zh/sdd/tasks.html)和[验收清单](/docs/zh/sdd/acceptance.html)为准：**13 DONE、30 PARTIAL、5 NEW，35 项未完成**。[RC-05](/docs/zh/sdd/design-checkpoint-recovery.html)与[RC-03](/docs/zh/evidence/baseline.html)限定档案已验收，缺口核验和事务补偿已通过限定档案。下一项为分布式恢复作业。
 
-v0.1整理作为历史起点保留。v0.2已实现单控制器会话，候选包与五JDK会话专项见[证据](/docs/zh/evidence/2026-11-16-browser-sessions.html)；Docker预览已更新，原TODO保持原样。
+## 1. 当前基线
 
-v0.1整理时的发布包 SHA256：`10d95a3990835f2286f036b962d88fc8533ade427753ad9961ef1429988a88e2`。对应207项根构建测试（205应用+2 SDK）、205项发布包优先应用测试、49项DOM；新修复场景覆盖 LOCAL/H2、外部 MySQL/PostgreSQL/openGauss 日志，业务目标为 MySQL8.4/PostgreSQL17。完整 LOCAL 与外部修复专项范围不同，见[证据](/docs/zh/evidence/2026-11-16-managed-repair.html)。这些结果不能当成新增集群、会话、跳过或新源端已经完成。
-
-| 方向 | 已有基础 | 尚缺的核心 |
-|---|---|---|
-| 多节点 | Worker租约/epoch、owner、独立任务进程、部分接管验证 | 全局节点/任务权威状态、远端命令、统一权限/会话、控制面HA |
-| 登录 | 本地账号、Bearer令牌、任务授权与审计 | 刷新恢复及服务器会话生命周期；目前页面初始化为 token/session 空值 |
-| 人工恢复 | 原事务重试、共同校验点对账与审阅修复、SQL本地凭据 | 失败事务审阅/补偿、手工补丁、事务跳过及缺口台账 |
-| MySQL源 | 5.7基础、8.0历史V2/HA、8.4代表性V3链路 | 当前统一发布的四条版本档案；8.2专项实现/实测缺失 |
-| PG/Oracle源 | 中立事件/位置接口及规划目录 | 原生采集、全量衔接、故障恢复、UI/API和实际证据 |
-| Java | Java8代码基线；旧发布包五JDK×两日志的SQL冒烟 | 当前完整平台、全部驱动/SDK和故障场景跨JDK验收 |
-| 文档 | 较多双语手册、FAQ和归档 | 全局控制/会话/人工恢复/新源的完整说明、统一矩阵、发布门禁 |
-
-历史 JDK 矩阵的包 SHA 为 `2985bbbb51b84ec8de97d8a9b44c88d5a5a1d737032b1e13263d03d4a9134aa0`，与当前包不同。其范围仅为单 MySQL 源→PostgreSQL 主键ASCII表、LOCAL/外部PG日志，不能转标成当前全连接器兼容。见[运行时原始矩阵](/files/docs/benchmarks/2026-11-15-runtime/matrix.json)。
+只维护当前首版规格与[验证基线](/docs/zh/evidence/baseline.html)，不再保留逐候选版本的重复清单、常驻预览或旧二进制升级步骤。已验收能力的范围及限制仍保留，不将历史测试冒充当前改动的验证。
 
 ## 本次六项要求的追踪映射
 
 | 用户项 | SDD范围 | 未完成项数 |
 |---|---|---|
-| 1 多节点统一控制 | CP-01～CP-07 | 7 |
-| 2 登录保持 | SE-01～SE-05 | 5 |
-| 3 跳过与补数据 | RC-01～RC-10 | 10 |
+| 1 多节点统一控制 | CP-01～CP-07 | 5 |
+| 2 登录保持 | SE-01～SE-05 | 0 |
+| 3 跳过与补数据 | RC-01～RC-10 | 5 |
 | 4 源版本/PG/Oracle | SO-01～SO-07 | 7 |
 | 5 五个Java版本 | JV-01～JV-04 | 4 |
 | 6 完整文档 | DO-01～DO-05 | 5 |
 | 既有范围合并保留 | LG-01～LG-10 | 10 |
 
-共48项：6项DONE，余42项为9项NEW、33项PARTIAL。PARTIAL表示已有基础但本项整体未完成；不是把已验收功能删除重做。
+共48项：13项DONE，余35项为5项NEW、30项PARTIAL。PARTIAL表示已有基础但本项整体未完成；不是把已验收功能删除重做。
 
 ## 2. 用户已明确的需求，不再当作可选项
 
@@ -79,7 +67,7 @@ v0.1整理时的发布包 SHA256：`10d95a3990835f2286f036b962d88fc8533ade427753
 | 共同校验点修复（已有） | 在共同历史点修复差异 | 完成后仍暂停；历史报告不改写为MATCH |
 | 失败事务补偿（待做） | 恢复受影响身份的事务前状态，再允许重放 | 保留原事务、无主键ROW_ID、主键移动及重复变更顺序；补偿不提前算原事务成功 |
 | 手工补数据（待做） | 审阅的类型化目标数据补丁 | 默认只写目标；前后状态/行数可审阅；漂移、依赖和权限不符拒绝 |
-| 目标事务跳过（待做） | 对指定目标不应用一整个已知事务 | 生成SKIP凭据和一致性缺口，安全覆盖进度可前进，但不得伪装为已应用 |
+| 目标事务跳过（限定档案已完成） | 对指定目标不应用一整个已知事务 | 生成SKIP凭据和一致性缺口，安全覆盖进度可前进，但不得伪装为已应用 |
 | 采集范围隔离/排除（待做） | 针对采集/解码未完成处的独立缺口计划 | 影响全部相关订阅；必须证明范围边界、留存原日志；无法证明则拒绝并引导日志恢复/合格源/新基线 |
 
 “类似MySQL从库操作”指操作体验和可恢复性，不是照搬数据库服务器命令。MySQL官方也区分GTID与非GTID的跳过方式，参见[事务跳过](https://dev.mysql.com/doc/refman/8.4/en/replication-administration-skip.html)。Rivomesh是异构同步服务，应使用自己的可审计回执和缺口协议，不向源库注入空事务、不直接修改源 `gtid_executed`，也不把 `sql_replica_skip_counter` 当作跨产品通用实现。
@@ -128,11 +116,3 @@ Java矩阵必须绑定候选包SHA、实际JVM/架构、驱动、源版本/模�
 ## 9. SDD完成标准
 
 需求ID关联设计、任务、API/UI、正向/拒绝/重复/中断测试、配置/状态升级、双语文档与同一候选包证据后才可标完成。构建通过不代表连接器通过；静态YAML不代表K8s实机通过；DOM/HTTP不代表视觉或可访问性通过。仅完成本轮整理不能把48项待办改为已实现。
-
-当前增量：SE-01/02/03/04/05已完成，CP-05部分完成。全局任务/远端执行及M1/M2其余部分保持未完成。见[会话设计](/docs/zh/sdd/design-sessions.html)、[操作手册](/docs/zh/reference/browser-sessions.html)和[证据](/docs/zh/evidence/2026-11-16-browser-sessions.html)。
-
-CP-01节点目录现已通过真实PostgreSQL/MySQL双节点及中断档案。全局任务/命令/身份/会话权威仍未完成。[目录证据](/docs/zh/evidence/2026-11-16-node-registry.html)。
-
-v0.5验收关闭SE-04；共享会话不依赖全局任务配置实现，依赖调整为CP-01。无常驻预览，使用临时原生/Docker验收。 [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
-
-v0.5: CP-02/03 PARTIAL · [Internal foundations evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html). Public runtime integration remains open.

@@ -1,5 +1,5 @@
 // Shared by navigation, language switching, metadata and build verification.
-export const landingPages = ['download', 'community', 'project', 'tour', 'brand']
+export const landingPages = ['download', 'community', 'project', 'tour', 'brand', 'brand-review']
 export const homePath = locale => locale === 'en' ? '/en/' : '/'
 export const sitePath = (locale, name) => name === 'home' ? homePath(locale) : `${locale === 'en' ? '/en' : ''}/${name}.html`
 export function pageRoute(relativePath) {

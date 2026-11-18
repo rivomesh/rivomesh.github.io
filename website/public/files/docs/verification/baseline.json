@@ -1,0 +1,540 @@
+{
+  "policy": "Single prerelease baseline;development iterations removed from working tree;Git history retains provenance. Current cleanup validation is recorded separately. Historical test results are not claimed as fresh tests of cleaned code.",
+  "acceptedRequirements": [
+    {
+      "id": "CP-01",
+      "title": {
+        "zh-CN": "统一节点注册与状态",
+        "en": "Global node registry and state"
+      },
+      "status": "DONE",
+      "verification": {
+        "artifactSha256": "e42cd685bcc9fb38a1e0e82819230ac58869a54f40c4417d39cd596337b91d11",
+        "archive": "docs/verification/2026-11-16-node-registry/README.md"
+      }
+    },
+    {
+      "id": "CP-07",
+      "title": {
+        "zh-CN": "控制面HA及控制/数据面解耦",
+        "en": "Control-plane HA and worker independence"
+      },
+      "status": "DONE",
+      "verification": {
+        "artifactSha256": "aa17cf5b6d9c21e302af818c5f48ff7c46bbb32d3a532ab1fa0491abe43403bf",
+        "archive": "docs/verification/2026-11-17-execution-lifecycle/README.md",
+        "profile": "Java8 real CDC;fixed Agent;LOCAL/H2 journal;MySQL8.4 source;PostgreSQL17/MySQL8.4 targets;PostgreSQL17/MySQL8.4 control"
+      }
+    },
+    {
+      "id": "SE-01",
+      "title": {
+        "zh-CN": "刷新后恢复登录态",
+        "en": "Session survives page reload"
+      },
+      "status": "DONE",
+      "verification": {
+        "artifactSha256": "95127453ff4e6b9a6b0f16d80ea1a16c2c5861b4a260226e875bab6bc72c60a3",
+        "archive": "docs/verification/2026-11-16-browser-sessions/README.md"
+      }
+    },
+    {
+      "id": "SE-02",
+      "title": {
+        "zh-CN": "会话期限、退出和撤销",
+        "en": "Session expiry,logout and revocation"
+      },
+      "status": "DONE",
+      "verification": {
+        "artifactSha256": "95127453ff4e6b9a6b0f16d80ea1a16c2c5861b4a260226e875bab6bc72c60a3",
+        "archive": "docs/verification/2026-11-16-browser-sessions/README.md"
+      }
+    },
+    {
+      "id": "SE-03",
+      "title": {
+        "zh-CN": "安全会话传输和CSRF防护",
+        "en": "Secure session transport and CSRF protection"
+      },
+      "status": "DONE",
+      "verification": {
+        "artifactSha256": "95127453ff4e6b9a6b0f16d80ea1a16c2c5861b4a260226e875bab6bc72c60a3",
+        "archive": "docs/verification/2026-11-16-browser-sessions/README.md"
+      }
+    },
+    {
+      "id": "SE-04",
+      "title": {
+        "zh-CN": "跨控制节点的会话连续性",
+        "en": "Session continuity across controllers"
+      },
+      "status": "DONE",
+      "verification": {
+        "artifactSha256": "a1ec34fc060b4078cdaa10f357d5933f4df60f5b9616519433c851ddad69fa4a",
+        "archive": "docs/verification/2026-11-16-shared-access/README.md"
+      }
+    },
+    {
+      "id": "SE-05",
+      "title": {
+        "zh-CN": "CLI/API兼容及身份冲突规则",
+        "en": "CLI/API compatibility and identity conflicts"
+      },
+      "status": "DONE",
+      "verification": {
+        "artifactSha256": "95127453ff4e6b9a6b0f16d80ea1a16c2c5861b4a260226e875bab6bc72c60a3",
+        "archive": "docs/verification/2026-11-16-browser-sessions/README.md"
+      }
+    },
+    {
+      "id": "RC-02",
+      "title": {
+        "zh-CN": "失败事务检查与原始证据留存",
+        "en": "Failed-transaction inspection and evidence retention"
+      },
+      "status": "DONE",
+      "verification": {
+        "artifactSha256": "bcaae9309898a33ecfe919d69bfa6c43227647524498f8269682df44942cbcbe",
+        "archive": "docs/verification/2026-11-17-managed-failure-review/README.md"
+      }
+    },
+    {
+      "id": "RC-03",
+      "title": {
+        "zh-CN": "目标应用阶段按完整事务跳过",
+        "en": "Skip a complete destination transaction"
+      },
+      "status": "DONE",
+      "verification": {
+        "artifactSha256": "656245c6ed5d8c80c3017ed319e3802d8974f03e69f432a2ec64f0566660ac74",
+        "archive": "docs/verification/2026-11-17-managed-skip/README.md",
+        "profile": "Java8;MySQL8.4 two-database source;original fixed Agent;LOCAL/H2 journal;PostgreSQL17 business skip target;PG17/MySQL8.4 control stores;native PG/MySQL contracts;both pauses retained"
+      }
+    },
+    {
+      "id": "RC-05",
+      "title": {
+        "zh-CN": "不确定提交与断点核对",
+        "en": "Uncertain commit and checkpoint reconciliation"
+      },
+      "status": "DONE",
+      "verification": {
+        "artifactSha256": "9f97b4d98c103e895c9d1262cd19dcd0946b21b6fc0f72fff2267e59c727de00",
+        "archive": "docs/verification/2026-11-17-managed-commit/README.md",
+        "profile": "Java8;MySQL8.4 source;original fixed Agent;LOCAL/H2 journal;PostgreSQL17/MySQL8.4 control stores;public real-CDC PostgreSQL confirmation;native PG/MySQL transaction contracts;whole task paused"
+      }
+    },
+    {
+      "id": "RC-08",
+      "title": {
+        "zh-CN": "一致性缺口台账与真实水位",
+        "en": "Consistency-gap ledger and honest watermarks"
+      },
+      "status": "DONE",
+      "verification": {
+        "artifactSha256": "abee42cfb26ee3623c419f9d43d9dbe6a429508a8dd01da33da38338dcdcf372",
+        "archive": "docs/verification/README.md",
+        "profile": "Java8;PG/MySQL native journal/target contracts58/product;103 DOM;22 focused progress/API checks. Unchanged public mutation workflow reuses parent3404041 PG/MySQL-control real CDC27/product with original Agent/LOCAL-H2/MySQL8.4 two-database source/PostgreSQL17 verification target. No full target/JDK/K8s claim.",
+        "reusedWorkflowArtifactSha256": "3404041b03ed0a407777366056b509778f4c93e12dea0a4f14572b01670a63ce"
+      }
+    },
+    {
+      "id": "RC-06",
+      "title": {
+        "zh-CN": "失败事务前镜像补偿",
+        "en": "Failed-transaction before-image compensation"
+      },
+      "status": "DONE",
+      "verification": {
+        "artifactSha256": "d1b1595b8efbe4a6e2258f899836fa53cf33b2c11d31f621c5fc4ca9955b67a3",
+        "archive": "docs/verification/README.md",
+        "profile": "Java 8 with PostgreSQL 17 and MySQL 8.4 native compensation. Real CDC uses two controllers, PostgreSQL control storage, LOCAL/H2 journal, the original Agent, and PostgreSQL as the compensation destination."
+      }
+    },
+    {
+      "id": "RC-07",
+      "title": {
+        "zh-CN": "界面手工补数据与修正",
+        "en": "Guided manual corrective data entry"
+      },
+      "status": "DONE",
+      "verification": {
+        "artifactSha256": "33a1d4dca6a381664855c0ae96100fa9da004a61070155b0ed7a646c6a2c4f25",
+        "archive": "docs/verification/README.md",
+        "profile": "Java 8 with native PostgreSQL 17 and MySQL 8.4 correction tests. Real CDC uses two management entries, a fixed Agent and LOCAL/H2 journal with MySQL 8.4 source and PostgreSQL 17 correction destination/control store."
+      }
+    }
+  ],
+  "productProfiles": [
+    {
+      "product": "gbase8c",
+      "manual": "docs/zh-CN/gbase8c-v3.md",
+      "previousEvidenceId": "2026-11-15-gbase8c",
+      "historicalArtifactSha256": "2b462813f74210cab0b2f93a40d700c27c45dffd5ac0de5061995638fa4e6034",
+      "scope": "Historical bounded native profile;adapter remains EXPERIMENTAL. Current constraints are in the linked manual;this change does not recertify the connector.",
+      "provenanceCommit": "f57221cb51c656a82df64f4dcd2dad1e95bec673"
+    },
+    {
+      "product": "dm",
+      "manual": "docs/zh-CN/dm-v3.md",
+      "previousEvidenceId": "2026-11-15-dm",
+      "historicalArtifactSha256": "2753680903200ace25175d36fa4d9f9d3f699e2e0574f664b466535c8659a16b",
+      "scope": "Historical bounded native profile;adapter remains EXPERIMENTAL. Current constraints are in the linked manual;this change does not recertify the connector.",
+      "provenanceCommit": "f57221cb51c656a82df64f4dcd2dad1e95bec673"
+    },
+    {
+      "product": "kingbase",
+      "manual": "docs/zh-CN/kingbase-v3.md",
+      "previousEvidenceId": "2026-11-15-kingbase",
+      "historicalArtifactSha256": "075f6bc61b32464e764538ebcb097fea0c3df7dd28471fa5a8c63a3e1a807be8",
+      "scope": "Historical bounded native profile;adapter remains EXPERIMENTAL. Current constraints are in the linked manual;this change does not recertify the connector.",
+      "provenanceCommit": "f57221cb51c656a82df64f4dcd2dad1e95bec673"
+    },
+    {
+      "product": "doris",
+      "manual": "docs/zh-CN/doris-v3.md",
+      "previousEvidenceId": "2026-11-15-doris-hardening",
+      "historicalArtifactSha256": "11667063fff1ee2c39d23df260b5b3bfe3d4e944c9009a1b696e890515ae1fd8",
+      "scope": "Historical bounded native profile;adapter remains EXPERIMENTAL. Current constraints are in the linked manual;this change does not recertify the connector.",
+      "provenanceCommit": "f57221cb51c656a82df64f4dcd2dad1e95bec673"
+    },
+    {
+      "product": "hive",
+      "manual": "docs/zh-CN/hive-v3.md",
+      "previousEvidenceId": "2026-11-15-hive",
+      "historicalArtifactSha256": "5c23ea0d7f05c726f731ebf985392bb2fea4572797432cfcc773a287209cacb6",
+      "scope": "Historical bounded native profile;adapter remains EXPERIMENTAL. Current constraints are in the linked manual;this change does not recertify the connector.",
+      "provenanceCommit": "f57221cb51c656a82df64f4dcd2dad1e95bec673"
+    },
+    {
+      "product": "classic",
+      "manual": "docs/zh-CN/classic-v3.md",
+      "previousEvidenceId": "2026-11-15-classic",
+      "historicalArtifactSha256": null,
+      "scope": "Historical bounded native profile;adapter remains EXPERIMENTAL. Current constraints are in the linked manual;this change does not recertify the connector.",
+      "provenanceCommit": "f57221cb51c656a82df64f4dcd2dad1e95bec673"
+    }
+  ],
+  "latestAcceptedBeforeCleanup": {
+    "artifactSha256": "656245c6ed5d8c80c3017ed319e3802d8974f03e69f432a2ec64f0566660ac74",
+    "bytes": 188594455,
+    "status": "PASS_BOUNDED_RC03",
+    "build": "Full reactor488 app cases/29 skipped/one30s fixture lease expiry;focused51 retry PASS without changing production fences or fixture lease",
+    "scope": "Bounded RC03:Java8,MySQL8.4 two-database source,original fixed Agent,LOCAL/H2 journal,PostgreSQL17 target,PG17/MySQL8.4 control stores;native PG/MySQL skip contracts;public complete cross-database skip and source-ACK-loss/Agent-SIGKILL recovery;verified gap closure and full target/source/JDK/K8s matrices remain open",
+    "jarFirstFocusedTests": 51,
+    "domTests": 96,
+    "nativeProducts": {
+      "POSTGRESQL": 34,
+      "MYSQL": 34
+    },
+    "businessChecksPerControlProduct": 26
+  },
+  "cleanupValidation": {
+    "artifactSha256": "aafb7f9ff03147b652f8a5773de61a936e6db39d47254ab00c5486849d676207",
+    "testClassesSha256": "64075754e19b842ede707f418c495e4dcedf8be85370fc22690e66168d2ed762",
+    "sourceManifestSha256": "03890778985a801c53589d8b4179181bbcd9765b927366a9e7931328572e4269",
+    "status": "PASS_CLEANUP_SCOPE",
+    "scope": "Current control-mode invariance,role races,account recovery and PostgreSQL skip contracts. No full source/vendor/JDK/K8s recertification claim.",
+    "unitContracts": 73,
+    "nativeSkipPostgresql": 32,
+    "nativeRoleProducts": [
+      "POSTGRESQL",
+      "MYSQL"
+    ],
+    "nativeAccounts": true,
+    "helmParity": true,
+    "brokenMarkdownLinks": 0,
+    "domReuse": {
+      "tests": 96,
+      "artifactSha256": "656245c6ed5d8c80c3017ed319e3802d8974f03e69f432a2ec64f0566660ac74",
+      "allEightConsoleAssetsIdentical": true
+    },
+    "nativeRoleFixtureSha256": "600d17878f2cd7c0af538b8b2cef8db354762386fa35250acfae8ab48142ab07"
+  },
+  "historicalRuntimeProfile": {
+    "artifactSha256": "2985bbbb51b84ec8de97d8a9b44c88d5a5a1d737032b1e13263d03d4a9134aa0",
+    "scope": "MySQL source -> PostgreSQL target, one keyed ASCII table, snapshot/CDC and exact content checks. Not whole-platform/JDBC/MQ/TLS/failover acceptance or a hardware throughput standard.",
+    "profiles": [
+      {
+        "java": "8",
+        "journalMode": "LOCAL",
+        "status": "PASSED",
+        "actualJavaVersion": "openjdk version \"1.8.0_512\"\nOpenJDK Runtime Environment (Temurin)(build 1.8.0_512-b09)\nOpenJDK 64-Bit Server VM (Temurin)(build 25.512-b09, mixed mode)"
+      },
+      {
+        "java": "8",
+        "journalMode": "EXTERNAL",
+        "status": "PASSED",
+        "actualJavaVersion": "openjdk version \"1.8.0_512\"\nOpenJDK Runtime Environment (Temurin)(build 1.8.0_512-b09)\nOpenJDK 64-Bit Server VM (Temurin)(build 25.512-b09, mixed mode)"
+      },
+      {
+        "java": "11",
+        "journalMode": "LOCAL",
+        "status": "PASSED",
+        "actualJavaVersion": "openjdk version \"11.0.33\" 2026-10-20\nOpenJDK Runtime Environment Temurin-11.0.33+10 (build 11.0.33+10)\nOpenJDK 64-Bit Server VM Temurin-11.0.33+10 (build 11.0.33+10, mixed mode, sharing)"
+      },
+      {
+        "java": "11",
+        "journalMode": "EXTERNAL",
+        "status": "PASSED",
+        "actualJavaVersion": "openjdk version \"11.0.33\" 2026-10-20\nOpenJDK Runtime Environment Temurin-11.0.33+10 (build 11.0.33+10)\nOpenJDK 64-Bit Server VM Temurin-11.0.33+10 (build 11.0.33+10, mixed mode, sharing)"
+      },
+      {
+        "java": "17",
+        "journalMode": "LOCAL",
+        "status": "PASSED",
+        "actualJavaVersion": "openjdk version \"17.0.21\" 2026-10-20\nOpenJDK Runtime Environment Temurin-17.0.21+9 (build 17.0.21+9)\nOpenJDK 64-Bit Server VM Temurin-17.0.21+9 (build 17.0.21+9, mixed mode, sharing)"
+      },
+      {
+        "java": "17",
+        "journalMode": "EXTERNAL",
+        "status": "PASSED",
+        "actualJavaVersion": "openjdk version \"17.0.21\" 2026-10-20\nOpenJDK Runtime Environment Temurin-17.0.21+9 (build 17.0.21+9)\nOpenJDK 64-Bit Server VM Temurin-17.0.21+9 (build 17.0.21+9, mixed mode, sharing)"
+      },
+      {
+        "java": "21",
+        "journalMode": "LOCAL",
+        "status": "PASSED",
+        "actualJavaVersion": "openjdk version \"21.0.13\" 2026-10-20 LTS\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)"
+      },
+      {
+        "java": "21",
+        "journalMode": "EXTERNAL",
+        "status": "PASSED",
+        "actualJavaVersion": "openjdk version \"21.0.13\" 2026-10-20 LTS\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)"
+      },
+      {
+        "java": "25",
+        "journalMode": "LOCAL",
+        "status": "PASSED",
+        "actualJavaVersion": "openjdk version \"25.0.5\" 2026-10-20 LTS\nOpenJDK Runtime Environment Temurin-25.0.5+8 (build 25.0.5+8-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.5+8 (build 25.0.5+8-LTS, mixed mode, sharing)"
+      },
+      {
+        "java": "25",
+        "journalMode": "EXTERNAL",
+        "status": "PASSED",
+        "actualJavaVersion": "openjdk version \"25.0.5\" 2026-10-20 LTS\nOpenJDK Runtime Environment Temurin-25.0.5+8 (build 25.0.5+8-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.5+8 (build 25.0.5+8-LTS, mixed mode, sharing)"
+      }
+    ],
+    "provenanceCommit": "f57221cb51c656a82df64f4dcd2dad1e95bec673",
+    "currentCandidateRecertified": false
+  },
+  "currentValidation": {
+    "artifact": "target/release-evidence/current/rivomesh.jar",
+    "artifactSha256": "33a1d4dca6a381664855c0ae96100fa9da004a61070155b0ed7a646c6a2c4f25",
+    "testClasses": "target/release-evidence/current/test-classes",
+    "testClassesSha256": "03cb68bf179406157f057b8b4bcb49fc774c9040670c4fe6765c4fd1d4c9e2a1",
+    "sourceManifest": "target/release-evidence/current/sources.json",
+    "sourceManifestSha256": "b1e764835b413f51263c67afcf10fd7d078573a312e24fe731e8a4b89a53938a",
+    "status": "PASS_BOUNDED_RC07",
+    "focusedContracts": 39,
+    "domTests": 107,
+    "nativeProducts": {
+      "POSTGRESQL": {
+        "tests": 4,
+        "cleanupExitCode": 0,
+        "images": {
+          "postgres:17": {
+            "id": "sha256:6865912920d21689de1485f9965b718ef0d5cac229ba7be3042d7251738bd9de",
+            "architecture": "arm64"
+          },
+          "eclipse-temurin:8-jre": {
+            "id": "sha256:1afe630c420f3f276515f570d8d4c82394dd6f072e5619244299438e692f9f09",
+            "architecture": "arm64"
+          }
+        }
+      },
+      "MYSQL": {
+        "tests": 4,
+        "cleanupExitCode": 0,
+        "images": {
+          "mysql:8.4": {
+            "id": "sha256:ae113cae2661960c4665a586812ae8150b2a133772a9f3ad63d1f1ae4f9e8ce7",
+            "architecture": "arm64"
+          },
+          "eclipse-temurin:8-jre": {
+            "id": "sha256:1afe630c420f3f276515f570d8d4c82394dd6f072e5619244299438e692f9f09",
+            "architecture": "arm64"
+          }
+        }
+      }
+    },
+    "realCdc": {
+      "checks": 18,
+      "controlStore": "PostgreSQL 17",
+      "source": "MySQL 8.4",
+      "journal": "LOCAL/H2",
+      "target": "PostgreSQL 17",
+      "healthyPeer": "MySQL 8.4",
+      "cleanupExitCode": 0
+    },
+    "scope": "Java 8 with native PostgreSQL 17 and MySQL 8.4 correction tests. Real CDC uses two management entries, a fixed Agent and LOCAL/H2 journal with MySQL 8.4 source and PostgreSQL 17 correction destination/control store.",
+    "sddCounts": {
+      "DONE": 13,
+      "PARTIAL": 30,
+      "NEW": 5
+    }
+  },
+  "reusedPublicGapWorkflow": {
+    "artifactSha256": "3404041b03ed0a407777366056b509778f4c93e12dea0a4f14572b01670a63ce",
+    "testClassesSha256": "f1fa7e9f38c3fb1df272e552042d162803ea40dfe2790d85c5f6b6229958e4b9",
+    "sourceManifestSha256": "ec7fca22f6a8f0f37e8eb4df6d88ae6bd16475ff584664a08d09901270c530eb",
+    "sourceManifestScope": "Build/test/deployment inputs;documentation excluded",
+    "status": "PASS_BOUNDED_PUBLIC_GAP_WORKFLOW",
+    "expandedContracts": 87,
+    "finalFocusedContracts": 23,
+    "domTests": 102,
+    "scope": "Java8;public PG business gap-verification workflow with PG17/MySQL8.4 control stores;native PG/MySQL journal/target contracts;102 fresh DOM checks. Full applied/coverage watermarks,other target protocols and broader source/JDK/K8s matrices remain open.",
+    "nativeProducts": {
+      "POSTGRESQL": {
+        "tests": 54,
+        "cleanupExitCode": 0,
+        "images": {
+          "postgres:17": {
+            "id": "sha256:6865912920d21689de1485f9965b718ef0d5cac229ba7be3042d7251738bd9de",
+            "architecture": "arm64"
+          },
+          "eclipse-temurin:8-jre": {
+            "id": "sha256:1afe630c420f3f276515f570d8d4c82394dd6f072e5619244299438e692f9f09",
+            "architecture": "arm64"
+          }
+        }
+      },
+      "MYSQL": {
+        "tests": 54,
+        "cleanupExitCode": 0,
+        "images": {
+          "mysql:8.4": {
+            "id": "sha256:ae113cae2661960c4665a586812ae8150b2a133772a9f3ad63d1f1ae4f9e8ce7",
+            "architecture": "arm64"
+          },
+          "eclipse-temurin:8-jre": {
+            "id": "sha256:1afe630c420f3f276515f570d8d4c82394dd6f072e5619244299438e692f9f09",
+            "architecture": "arm64"
+          }
+        }
+      }
+    },
+    "businessProducts": {
+      "POSTGRESQL": {
+        "checks": 27,
+        "cleanupExitCode": 0,
+        "scope": "Two management entries/original fixed Agent,LOCAL-H2 journal,MySQL8.4 two-database source,PG17 business gap verification and unaffected MySQL8.4 peer",
+        "lastCheck": "Cross-entry reviewed gap verification freshly scans two affected tables,atomically records both gaps and preserves SKIP history and the whole-task pause"
+      },
+      "MYSQL": {
+        "checks": 27,
+        "cleanupExitCode": 0,
+        "scope": "Two management entries/original fixed Agent,LOCAL-H2 journal,MySQL8.4 two-database source,PG17 business gap verification and unaffected MySQL8.4 peer",
+        "lastCheck": "Cross-entry reviewed gap verification freshly scans two affected tables,atomically records both gaps and preserves SKIP history and the whole-task pause"
+      }
+    },
+    "brokenMarkdownLinks": 0,
+    "sddCounts": {
+      "DONE": 10,
+      "PARTIAL": 32,
+      "NEW": 6
+    },
+    "testAccounting": "87 expanded contracts followed by23 focused checks after final changes,including one additional cross-entry case. Overlapping cases are not added. Native54/product and fresh102 DOM are separate profiles."
+  },
+  "watermarkValidation": {
+    "artifactSha256": "abee42cfb26ee3623c419f9d43d9dbe6a429508a8dd01da33da38338dcdcf372",
+    "testClassesSha256": "ba9166879239bfddecb0af4e98ea1f4d23ebd09236f3295cbfbda28046664ee7",
+    "sourceManifestSha256": "ed23fe47efb00a53f51fb43057728b9c10c215616d768fd30ebd2c312b2050ea",
+    "sourceManifestScope": "Build/test/deployment inputs;documentation excluded",
+    "status": "PASS_BOUNDED_RC08",
+    "focusedContracts": 22,
+    "domTests": 103,
+    "scope": "Java8;PG/MySQL native journal/target contracts58/product;103 DOM;22 focused progress/API checks. Unchanged public mutation workflow reuses parent3404041 PG/MySQL-control real CDC27/product with original Agent/LOCAL-H2/MySQL8.4 two-database source/PostgreSQL17 verification target. No full target/JDK/K8s claim.",
+    "nativeProducts": {
+      "POSTGRESQL": {
+        "tests": 58,
+        "cleanupExitCode": 0,
+        "images": {
+          "postgres:17": {
+            "id": "sha256:6865912920d21689de1485f9965b718ef0d5cac229ba7be3042d7251738bd9de",
+            "architecture": "arm64"
+          },
+          "eclipse-temurin:8-jre": {
+            "id": "sha256:1afe630c420f3f276515f570d8d4c82394dd6f072e5619244299438e692f9f09",
+            "architecture": "arm64"
+          }
+        }
+      },
+      "MYSQL": {
+        "tests": 58,
+        "cleanupExitCode": 0,
+        "images": {
+          "mysql:8.4": {
+            "id": "sha256:ae113cae2661960c4665a586812ae8150b2a133772a9f3ad63d1f1ae4f9e8ce7",
+            "architecture": "arm64"
+          },
+          "eclipse-temurin:8-jre": {
+            "id": "sha256:1afe630c420f3f276515f570d8d4c82394dd6f072e5619244299438e692f9f09",
+            "architecture": "arm64"
+          }
+        }
+      }
+    },
+    "reusedWorkflowArtifactSha256": "3404041b03ed0a407777366056b509778f4c93e12dea0a4f14572b01670a63ce",
+    "reuseReason": "Only read-only journal progress/status projection and progress labels changed from42e0754;transaction skip,verification writes,approvals,receipts and durable command protocols are unchanged. Current package reruns affected progress/API/native/UI checks;parent real CDC results are not relabelled as fresh runs.",
+    "sddCounts": {
+      "DONE": 11,
+      "PARTIAL": 31,
+      "NEW": 6
+    }
+  },
+  "compensationValidation": {
+    "artifactSha256": "d1b1595b8efbe4a6e2258f899836fa53cf33b2c11d31f621c5fc4ca9955b67a3",
+    "testClassesSha256": "99f5819737e4aefe4e7c3cc1b24a8819bdf6b79ea9301cfee101b0905b5945b8",
+    "sourceManifestSha256": "d86c8d18c5f126a7b80a37d5f1411ddbee57e84a878d0029bcd46a6d95590224",
+    "status": "PASS_BOUNDED_RC06",
+    "focusedContracts": 32,
+    "domTests": 104,
+    "nativeProducts": {
+      "POSTGRESQL": {
+        "tests": 4,
+        "cleanupExitCode": 0,
+        "images": {
+          "postgres:17": {
+            "id": "sha256:6865912920d21689de1485f9965b718ef0d5cac229ba7be3042d7251738bd9de",
+            "architecture": "arm64"
+          },
+          "eclipse-temurin:8-jre": {
+            "id": "sha256:1afe630c420f3f276515f570d8d4c82394dd6f072e5619244299438e692f9f09",
+            "architecture": "arm64"
+          }
+        }
+      },
+      "MYSQL": {
+        "tests": 4,
+        "cleanupExitCode": 0,
+        "images": {
+          "mysql:8.4": {
+            "id": "sha256:ae113cae2661960c4665a586812ae8150b2a133772a9f3ad63d1f1ae4f9e8ce7",
+            "architecture": "arm64"
+          },
+          "eclipse-temurin:8-jre": {
+            "id": "sha256:1afe630c420f3f276515f570d8d4c82394dd6f072e5619244299438e692f9f09",
+            "architecture": "arm64"
+          }
+        }
+      }
+    },
+    "realCdc": {
+      "checks": 18,
+      "controlStore": "PostgreSQL 17",
+      "source": "MySQL 8.4",
+      "journal": "LOCAL/H2",
+      "target": "PostgreSQL 17",
+      "healthyPeer": "MySQL 8.4",
+      "cleanupExitCode": 0
+    },
+    "scope": "Java 8 with PostgreSQL 17 and MySQL 8.4 native compensation. Real CDC uses two controllers, PostgreSQL control storage, LOCAL/H2 journal, the original Agent, and PostgreSQL as the compensation destination.",
+    "sddCounts": {
+      "DONE": 12,
+      "PARTIAL": 31,
+      "NEW": 5
+    }
+  }
+}

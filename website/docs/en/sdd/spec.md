@@ -7,9 +7,9 @@ sourcePath: docs/sdd/001-control-recovery-compatibility/spec.en.md
 
 # Rivomesh SDD requirements and incomplete scope
 
-RM-SDD-001 · v0.6 · 2026-11-17 · IMPLEMENTING
+RM-SDD-001 · v0.9 · 2026-11-17 · IMPLEMENTING
 
-Implementation in progress:48 tracked requirements,6 DONE,42 open (9 NEW,33 PARTIAL). SE-04 shared sessions accepted; CP-05 partial; global task authority/remote execution remain open. See [shared-access evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
+Implementation:48requirements,13DONE,30PARTIAL,5NEW;35open. RC-02/RC-05/RC-03/RC-06/RC-07/RC-08 bounded profiles are accepted;automatic takeover, recovery jobs and complete matrices remain tracked.
 
 [Baseline/decisions](/docs/en/sdd/plan.html) · [Tasks](/docs/en/sdd/tasks.html) · [Acceptance](/docs/en/sdd/acceptance.html) · [中文](/docs/zh/sdd/spec.html)
 
@@ -39,15 +39,15 @@ Implementation in progress:48 tracked requirements,6 DONE,42 open (9 NEW,33 PART
 
 | ID | Priority/status | Requirement | Gap |
 |---|---|---|---|
-| RC-01 | P0 / PARTIAL | Phase-aware fault classification | Error isolation/resume exists without complete skip/compensation diagnostics. |
-| RC-02 | P0 / PARTIAL | Failed-transaction inspection and evidence retention | Journal/history details exist but not a full failed-queue transaction review. |
-| RC-03 | P0 / NEW | Skip a complete destination transaction | Resume retries the original transaction;manual skipping is absent. |
+| RC-01 | P0 / PARTIAL | Phase-aware fault classification | Initial destination preparation/snapshot and delivery phases pass dual-entry native fault/restart acceptance;complete source phases and manual-action diagnostics remain open. |
+| RC-02 | P0 / DONE | Failed-transaction inspection and evidence retention | Accepted bounded MySQL8.4,fixed original Agent/LOCAL journal,PG/MySQL control profile:ADMIN whole-transaction review,positions/historical columns/images,authorized pages and durable evidence surviving restart/journal GC. Catalog automation,other profiles,Agent migration and execution semantics remain separately tracked. |
+| RC-03 | P0 / DONE | Skip a complete destination transaction | Protocol7 bounded profile accepted:Java8,MySQL8.4 two-database source,original Agent/LOCAL journal,PostgreSQL business target and PG/MySQL control stores. Complete transaction skip,native commit/source ACK failure,Agent SIGKILL/reopen and cross-entry recovery pass. Other targets/full matrices remain RC-10/LG-01. |
 | RC-04 | P0 / NEW | Controlled capture/decode gap recovery | Destination skipping cannot fix failures before complete events exist. |
-| RC-05 | P0 / PARTIAL | Uncertain commit and checkpoint reconciliation | Automatic apply reconciles commits leading ACK;manual recovery has not reused it. |
-| RC-06 | P0 / NEW | Failed-transaction before-image compensation | COMMON_CUT repair exists but does not reconstruct the failed transaction pre-state. |
-| RC-07 | P0 / PARTIAL | Guided manual corrective data entry | Report-driven repair exists without independent failed-transaction/manual patches. |
-| RC-08 | P0 / NEW | Consistency-gap ledger and honest watermarks | No durable distinction between applied/skipped history or gap lifecycle. |
-| RC-09 | P0 / PARTIAL | Durable distributed recovery jobs | COMMON_CUT has local durable operations/receipts;distributed/new modes do not. |
+| RC-05 | P0 / DONE | Uncertain commit and checkpoint reconciliation | Protocol6 original-Agent/LOCAL-journal bounded profile accepted on PG/MySQL control stores:whole-task pause,fresh evidence,native fencing,cross-entry ADMIN confirmation,atomic ACK/receipt and idempotent retry,with both pauses retained. Skip,compensation and full additional matrices remain separate. |
+| RC-06 | P0 / DONE | Failed-transaction before-image compensation | The bounded SQL profile passed. Administrators review table scope and mutation counts across entries, restore the before-images and explicitly resume the original transaction. PostgreSQL passes real CDC and MySQL passes native contracts. RC-10 tracks other destinations. |
+| RC-07 | P0 / DONE | Guided manual corrective data entry | The bounded SQL profile passed. Typed entry and JSON import support administrator review of before/after values, exact identities, atomic batches and resumption of the original transaction. PostgreSQL passes real CDC and MySQL passes native checks. RC-10 tracks other destinations. |
+| RC-08 | P0 / DONE | Consistency-gap ledger and honest watermarks | First SQL profile accepted:durable gaps,reviewed plans,cross-entry approval/cancellation,fresh full-table scans,atomic receipts and distinct safe coverage/contiguous application. Verification preserves SKIP and the original applied prefix without resuming. Other target protocols remain RC-10/LG-03/LG-04. |
+| RC-09 | P0 / PARTIAL | Durable distributed recovery jobs | Cross-node planning, approval, evidence and destination receipts are available. Cancellation and process termination at compensation/correction commit boundaries remain open. |
 | RC-10 | P1 / PARTIAL | Destination-specific recovery and retention | SQL,analytical and queue consistency protocols differ. |
 
 ## Source compatibility
@@ -75,7 +75,7 @@ Implementation in progress:48 tracked requirements,6 DONE,42 open (9 NEW,33 PART
 
 | ID | Priority/status | Requirement | Gap |
 |---|---|---|---|
-| DO-01 | P0 / PARTIAL | Bilingual traceable SDD baseline | This change creates the v0.5 inventory;module designs,spec change control and implementation evidence closure remain open. |
+| DO-01 | P0 / PARTIAL | Bilingual traceable SDD baseline | This change creates the v0.1 inventory;module designs,spec change control and implementation evidence closure remain open. |
 | DO-02 | P1 / PARTIAL | Deployment and cluster operations docs | Existing deployment artifacts do not cover new cluster control/session models. |
 | DO-03 | P1 / PARTIAL | Recovery scenarios and FAQ | Existing reconciliation FAQ does not cover new skip,patch and distributed faults. |
 | DO-04 | P1 / PARTIAL | Configuration/API/compatibility and upgrade docs | Partial handbooks lack new APIs and a unified profile index. |
@@ -92,7 +92,7 @@ Implementation in progress:48 tracked requirements,6 DONE,42 open (9 NEW,33 PART
 | LG-05 | P0 / PARTIAL | Optional storage and cross-node reachability | Local/external journals exist;authority/reports/sessions/control-store relocation and HA boundaries are not unified. |
 | LG-06 | P1 / PARTIAL | Live K8s/CSI and node-fault acceptance | Helm/native static checks do not establish live-cluster safety. |
 | LG-07 | P1 / PARTIAL | Large catalogs,transactions and hardware standards | Small benchmark tools exist;large-transaction/catalog/cache/capacity standards remain incomplete. |
-| LG-08 | P1 / PARTIAL | Historical DDL,types,indexes and state migration | Supported objects/index conversion and v2 compatibility exist;full dynamic DDL,types and explicit migration/rollback remain open. |
+| LG-08 | P1 / PARTIAL | Historical DDL,types,indexes and state migration | Supported objects and UNIQUE/GSI conversion exist;full dynamic DDL,complex types and backup/restore profiles remain open. The first release does not retain prerelease-candidate compatibility. |
 | LG-09 | P1 / PARTIAL | Report retention and real-browser acceptance | Summaries/details/DOM/HTTP exist;full catalogs,cleanup,visual/accessibility evidence do not. |
 | LG-10 | P2 / PARTIAL | External identity,immutable audit and Apache preparation | Local accounts/hash-chained audit exist;external identity/anchors,licenses/NOTICE/SBOM/contribution workflows remain open. |
 
@@ -100,59 +100,51 @@ Implementation in progress:48 tracked requirements,6 DONE,42 open (9 NEW,33 PART
 
 | ID | Existing evidence/code (not completion) |
 |---|---|
-| CP-01 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) / [TaskWorker.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java) |
+| CP-01 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java) / [TaskWorker.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/platform/TaskWorker.java) |
 | CP-02 | P0 / PARTIAL | Global task/configuration authority | Opt-in fixed-owner global HTTP/UI,shared configuration and history are wired;legacy import,complete business and scale acceptance remain open. |
 | CP-03 | P0 / PARTIAL | Durable cross-node command routing | Public durable commands,offline STOP,actual multi-target validation/repair and original UNKNOWN upgrade recovery accepted;complete cancellation/fault/migration/capacity matrices remain open. |
-| CP-04 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) |
+| CP-04 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java) / [TaskService.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java) |
 | CP-05 | P0 / PARTIAL | Shared authorization,audit and secret references | Shared accounts/grants/hash-chained audit and Worker environment filtering exist; complete remote correlation, least-secret references and process/filesystem isolation remain open. |
 | CP-06 | P1 / PARTIAL | Cluster logs,metrics and diagnostics | Global observations,owner/unknown state,pagination and maintenance results exist;complete node/target filters,remote logs and diagnostics search remain open. Worker process liveness versus journal-claim readiness needs clearer presentation. |
-| CP-07 | P0 / DONE | Control-plane HA and worker independence | Protocol4 separated profile accepted on PG/MySQL control stores,all-controller loss/pending-command recovery,store outage,same-Worker continuation and nonroot runtime;default combined remains coupled and failover/other storage-adapter profiles are separate. |
-| SE-01 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) |
-| SE-02 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) / [account-management.md](/docs/zh/reference/account-management.html) |
-| SE-03 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) / [ConsoleServer.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/ConsoleServer.java) |
-| SE-04 | P0 / DONE | Session continuity across controllers | Shared SQL sessions passed two-controller HTTPS/revocation/kill/reopen/store-outage acceptance on PostgreSQL/MySQL; global task control remains CP-02/03. |
-| SE-05 | [app.js](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/resources/console/app.js) / [AccessControl.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/AccessControl.java) |
-| RC-01 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [FanoutDispatcher.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/FanoutDispatcher.java) |
-| RC-02 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [managed-validation.md](/docs/zh/reference/managed-validation.html) |
-| RC-03 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [JdbcSink.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcSink.java) |
-| RC-04 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [reconciliation-workflow.md](/docs/zh/reference/reconciliation-workflow.html) |
-| RC-05 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [FanoutDispatcher.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/FanoutDispatcher.java) / [README.md](/docs/zh/evidence/2026-11-16-managed-repair.html) |
-| RC-06 | [README.md](/docs/zh/evidence/2026-11-16-managed-repair.html) / [common-cut-repair.md](/docs/zh/reference/common-cut-repair.html) |
-| RC-07 | [README.md](/docs/zh/evidence/2026-11-16-managed-repair.html) / [RepairRequest.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/RepairRequest.java) |
-| RC-08 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [reconciliation-workflow.md](/docs/zh/reference/reconciliation-workflow.html) |
-| RC-09 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/TaskService.java) / [README.md](/docs/zh/evidence/2026-11-16-managed-repair.html) |
-| RC-10 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) / [messaging-v3.md](/docs/zh/reference/messaging-v3.html) |
-| SO-01 | [AdapterCatalog.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/AdapterCatalog.java) / [SourceAdapter.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/SourceAdapter.java) |
-| SO-02 | [validation.md](/docs/zh/reference/validation.html) / [mysql57-run.sh](https://github.com/rivomesh/rivomesh/blob/main/tests/mysql57-run.sh) |
-| SO-03 | [validation.md](/docs/zh/reference/validation.html) / [matrix.sh](https://github.com/rivomesh/rivomesh/blob/main/tests/matrix.sh) |
-| SO-04 | [AdapterCatalog.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/AdapterCatalog.java) / [matrix.sh](https://github.com/rivomesh/rivomesh/blob/main/tests/matrix.sh) |
+| CP-07 | [README.md](/docs/zh/evidence/baseline.html) / [OwnerRuntime.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/platform/OwnerRuntime.java) |
+| SE-01 | [app.js](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/resources/console/app.js) |
+| SE-02 | [app.js](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/resources/console/app.js) / [account-management.md](/docs/zh/reference/account-management.html) |
+| SE-03 | [app.js](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/resources/console/app.js) / [ConsoleServer.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/platform/ConsoleServer.java) |
+| SE-04 | [README.md](/docs/zh/evidence/baseline.html) / [browser-sessions.md](/docs/en/reference/browser-sessions.html) |
+| SE-05 | [app.js](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/resources/console/app.js) / [AccessControl.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/platform/AccessControl.java) |
+| RC-01 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java) / [FanoutDispatcher.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/FanoutDispatcher.java) |
+| RC-02 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java) / [managed-validation.md](/docs/zh/reference/managed-validation.html) |
+| RC-03 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java) / [JdbcSink.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/JdbcSink.java) |
+| RC-04 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java) / [reconciliation-workflow.md](/docs/zh/reference/reconciliation-workflow.html) |
+| RC-05 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java) / [FanoutDispatcher.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/FanoutDispatcher.java) / [README.md](/docs/zh/evidence/baseline.html) |
+| RC-06 | [transaction-compensation.md](/docs/en/reference/transaction-compensation.html) / [TransactionCompensation.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/TransactionCompensation.java) |
+| RC-07 | [manual-correction.md](/docs/en/reference/manual-correction.html) / [CorrectionBatch.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/CorrectionBatch.java) |
+| RC-08 | [gap-verification.md](/docs/en/reference/gap-verification.html) / [README.md](/docs/zh/evidence/baseline.html) |
+| RC-09 | [TaskService.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java) / [README.md](/docs/zh/evidence/baseline.html) |
+| RC-10 | [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java) / [messaging-v3.md](/docs/zh/reference/messaging-v3.html) |
+| SO-01 | [AdapterCatalog.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/platform/AdapterCatalog.java) / [SourceAdapter.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/SourceAdapter.java) |
+| SO-02 | [validation.md](/docs/zh/reference/validation.html) / [mysql57-run.sh](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/tests/mysql57-run.sh) |
+| SO-03 | [validation.md](/docs/zh/reference/validation.html) / [matrix.sh](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/tests/matrix.sh) |
+| SO-04 | [AdapterCatalog.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/platform/AdapterCatalog.java) / [matrix.sh](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/tests/matrix.sh) |
 | SO-05 | [validation.md](/docs/zh/reference/validation.html) / [pipeline-v3.md](/docs/zh/reference/pipeline-v3.html) |
-| SO-06 | [AdapterCatalog.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/AdapterCatalog.java) / [SourceAdapter.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/SourceAdapter.java) |
-| SO-07 | [AdapterCatalog.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/platform/AdapterCatalog.java) |
-| JV-01 | [performance.md](/docs/zh/reference/performance.html) / [matrix.json](/files/docs/benchmarks/2026-11-15-runtime/matrix.json) |
+| SO-06 | [AdapterCatalog.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/platform/AdapterCatalog.java) / [SourceAdapter.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/SourceAdapter.java) |
+| SO-07 | [AdapterCatalog.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/platform/AdapterCatalog.java) |
+| JV-01 | [performance.md](/docs/zh/reference/performance.html) / [baseline.json](/files/docs/verification/baseline.json) |
 | JV-02 | [performance.md](/docs/zh/reference/performance.html) |
-| JV-03 | [verify-artifact.py](https://github.com/rivomesh/rivomesh/blob/main/tests/verify-artifact.py) / [performance.md](/docs/zh/reference/performance.html) |
+| JV-03 | [verify-artifact.py](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/tests/verify-artifact.py) / [performance.md](/docs/zh/reference/performance.html) |
 | JV-04 | [performance.md](/docs/zh/reference/performance.html) / [values.yaml](/files/deploy/helm/rivomesh/values.yaml) |
 | DO-01 | [requirements-and-decisions.md](/docs/zh/reference/requirements-and-decisions.html) / [implementation-status.md](/docs/zh/reference/implementation-status.html) |
-| DO-02 | [rivomesh](https://github.com/rivomesh/rivomesh/tree/main/deploy/helm/rivomesh) / [kubernetes](https://github.com/rivomesh/rivomesh/tree/main/deploy/kubernetes) / [console-and-deployment.md](/docs/zh/reference/console-and-deployment.html) |
+| DO-02 | [rivomesh](https://github.com/rivomesh/rivomesh/tree/5c545222c4175e8407196636725063861a69d4b2/deploy/helm/rivomesh) / [kubernetes](https://github.com/rivomesh/rivomesh/tree/5c545222c4175e8407196636725063861a69d4b2/deploy/kubernetes) / [console-and-deployment.md](/docs/zh/reference/console-and-deployment.html) |
 | DO-03 | [managed-repair.md](/docs/zh/reference/managed-repair.html) / [recovery.md](/docs/zh/reference/recovery.html) |
 | DO-04 | [pipeline-v3.md](/docs/zh/reference/pipeline-v3.html) / [validation.md](/docs/en/reference/validation.html) |
-| DO-05 | [verify-artifact.py](https://github.com/rivomesh/rivomesh/blob/main/tests/verify-artifact.py) / [README.md](/docs/zh/evidence/2026-11-16-managed-repair.html) |
+| DO-05 | [verify-artifact.py](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/tests/verify-artifact.py) / [README.md](/docs/zh/evidence/baseline.html) |
 | LG-01 | [implementation-status.md](/docs/zh/reference/implementation-status.html) / [gaussdb-index-policy.md](/docs/zh/reference/gaussdb-index-policy.html) |
 | LG-02 | [platform-design.md](/docs/zh/reference/platform-design.html) / [gaussdb-index-policy.md](/docs/zh/reference/gaussdb-index-policy.html) |
 | LG-03 | [clickhouse-v3.md](/docs/zh/reference/clickhouse-v3.html) / [doris-v3.md](/docs/zh/reference/doris-v3.html) / [hive-v3.md](/docs/zh/reference/hive-v3.html) |
 | LG-04 | [messaging-v3.md](/docs/zh/reference/messaging-v3.html) / [classic-v3.md](/docs/zh/reference/classic-v3.html) |
-| LG-05 | [pipeline-v3.md](/docs/zh/reference/pipeline-v3.html) / [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/main/sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java) |
-| LG-06 | [rivomesh](https://github.com/rivomesh/rivomesh/tree/main/deploy/helm/rivomesh) / [kubernetes](https://github.com/rivomesh/rivomesh/tree/main/deploy/kubernetes) |
-| LG-07 | [performance.md](/docs/zh/reference/performance.html) / [benchmark.py](https://github.com/rivomesh/rivomesh/blob/main/tests/benchmark.py) |
+| LG-05 | [pipeline-v3.md](/docs/zh/reference/pipeline-v3.html) / [JdbcJournal.java](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java) |
+| LG-06 | [rivomesh](https://github.com/rivomesh/rivomesh/tree/5c545222c4175e8407196636725063861a69d4b2/deploy/helm/rivomesh) / [kubernetes](https://github.com/rivomesh/rivomesh/tree/5c545222c4175e8407196636725063861a69d4b2/deploy/kubernetes) |
+| LG-07 | [performance.md](/docs/zh/reference/performance.html) / [benchmark.py](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/tests/benchmark.py) |
 | LG-08 | [pipeline-v3.md](/docs/zh/reference/pipeline-v3.html) / [rename-migration.md](/docs/zh/reference/rename-migration.html) |
-| LG-09 | [README.md](/docs/zh/evidence/2026-11-16-managed-repair.html) / [managed-validation.md](/docs/zh/reference/managed-validation.html) |
+| LG-09 | [README.md](/docs/zh/evidence/baseline.html) / [managed-validation.md](/docs/zh/reference/managed-validation.html) |
 | LG-10 | [account-management.md](/docs/zh/reference/account-management.html) / [security-audit.md](/docs/zh/reference/security-audit.html) |
-
-v0.5: CP-02/03 PARTIAL · [Internal foundations evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html). Historical foundations scope; newer public routing evidence follows.
-
-2026-11-17: fixed-owner public routing/CDC incremental acceptance, with a known maintenance projection gap. [Evidence](/docs/zh/evidence/2026-11-17-global-routing.html). CP-02/03 remain PARTIAL.
-
-2026-11-17: [Global maintenance and original UNKNOWN upgrade](/docs/zh/evidence/2026-11-17-global-maintenance.html).339application tests,5x143maintenance controls and native business evidence;CP-02/03 remain PARTIAL.
-
-v0.6: CP-07 explicit separated profile accepted;7DONE/33PARTIAL/8NEW,41open. [Evidence](/docs/zh/evidence/2026-11-17-execution-lifecycle.html).

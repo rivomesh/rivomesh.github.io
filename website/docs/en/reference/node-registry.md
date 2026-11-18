@@ -67,4 +67,4 @@ For manual YAML edit/apply [node-a](/files/deploy/kubernetes/rivomesh-node-a.yam
 - **Graceful shutdown did not show STOPPED:** kill, storage failure or lost commit confirmation falls back to STALE through expiry.
 - **Backup/restore:** back up the SQL control namespace and each node's existing accounts/audit/configuration/reports. Restoring the registry alone does not restore tasks or provide HA. Rollback of metadata/epochs requires review; external immutable backup anchors remain unfinished.
 
-Development preview uses `http://127.0.0.1:18088` and `http://localhost:18089` for two endpoints reading one registry. Different hostnames avoid same-name cookies overwriting across ports. Existing private preview credentials remain; sign in separately. Acceptance fixtures are removed; the development preview remains available.
+Docker deployment uses `http://127.0.0.1:18088` and `http://localhost:18089` for two endpoints reading one registry. Different hostnames avoid same-name cookies overwriting across ports. Existing private preview credentials remain; sign in separately. Acceptance fixtures are removed; the development preview remains available.

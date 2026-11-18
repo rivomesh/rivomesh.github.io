@@ -13,6 +13,8 @@ for(const file of files){
  if(doc.documentElement.lang!==(en?'en':'zh-CN'))errors.push(file+': html lang')
  for(const selector of ['meta[name="description"]','meta[property="og:title"]','meta[property="og:description"]','meta[property="og:url"]','meta[property="og:image"]'])if(doc.querySelectorAll(selector).length!==1||!doc.querySelector(selector)?.content)errors.push(file+': '+selector)
  if(doc.querySelector('meta[property="og:url"]')?.content!==origin+route)errors.push(file+': Open Graph URL')
+ const expectedCard=origin+'/brand/social-card'+(en?'-en':'')+'.png'
+ if(doc.querySelector('meta[property="og:image"]')?.content!==expectedCard)errors.push(file+': localized Open Graph image')
  for(const [locale,lang]of [['zh','zh-CN'],['en','en']]){
   const alternate=pairedRoute(route,locale,routes),other=pairedRoute(route,locale==='zh'?'en':'zh',routes),links=doc.querySelectorAll(`link[rel="alternate"][hreflang="${lang}"]`)
   if(alternate&&other){if(links.length!==1||links[0].href!==origin+alternate)errors.push(file+': '+lang+' alternate')}
@@ -27,6 +29,8 @@ for(const file of ['index.html','en/index.html']){
  const hero=doc.querySelector('.hero-preview picture img');if(!hero||hero.loading==='lazy'||hero.getAttribute('width')!=='1800'||hero.getAttribute('height')!=='912')errors.push(file+': hero image priority/dimensions')
  const expectedImage='/media/console-overview'+(file.startsWith('en/')?'-en':'')+'.png'
  if(hero?.getAttribute('src')!==expectedImage)errors.push(file+': localized hero screenshot')
+ const gallery=doc.querySelector('.product-gallery picture img')
+ if(gallery?.getAttribute('src')!=='/media/task-wizard'+(file.startsWith('en/')?'-en':'')+'.png')errors.push(file+': independent wizard screenshot')
  const nav=doc.querySelector('.main-nav');if(file.startsWith('en/')&&!nav?.querySelector('a[href="/en/download.html"]'))errors.push(file+': English navigation')
  doc.defaultView.close()
 }

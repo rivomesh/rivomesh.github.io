@@ -11,7 +11,7 @@ English: [DM V3](/docs/en/reference/dm-v3.html)。示例：[dm-v3.yml](/files/co
 
 ## 当前范围与实例要求
 
-`product: DM` 已接入 V3 配置、CLI、中英文向导、独立事务目标和类型转换计划，目录状态为 **EXPERIMENTAL**。DM8.1.4.80 ARM64＋厂商Java8 JDBC8.1.3.140 已通过首批原生事务及真实 MySQL8.4.13＋PostgreSQL17.12 联合全量/增量、目标停机追平、Worker强杀、两端SQL修复和缺表隔离，见[验收记录](/docs/zh/evidence/2026-11-15-dm.html)。新增既有空表布局、文本主键大小写/尾空格和四字节Unicode也通过；不能用其他PostgreSQL协议目标的结果代替。
+`product: DM` 已接入 V3 配置、CLI、中英文向导、独立事务目标和类型转换计划，目录状态为 **EXPERIMENTAL**。DM8.1.4.80 ARM64＋厂商Java8 JDBC8.1.3.140 已通过首批原生事务及真实 MySQL8.4.13＋PostgreSQL17.12 联合全量/增量、目标停机追平、Worker强杀、两端SQL修复和缺表隔离，见[验收记录](/docs/zh/evidence/baseline.html)。新增既有空表布局、文本主键大小写/尾空格和四字节Unicode也通过；不能用其他PostgreSQL协议目标的结果代替。
 
 使用 `dm.jdbc.driver.DmDriver` 和 `jdbc:dm://host:5236`，驱动来自固定 Maven Central `com.dameng:DmJdbcDriver18:8.1.3.140`。厂商 POM 声明 Apache-2.0；完整发行版许可证及 NOTICE 审核仍待完成。数据库软件与 license 不随本项目分发。
 

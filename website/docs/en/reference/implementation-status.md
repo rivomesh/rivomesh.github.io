@@ -5,75 +5,55 @@ title: "Implementation status"
 sourcePath: docs/en/implementation-status.md
 ---
 
-# Implementation status and next work
+# Current implementation status
 
-Development preview is on demand, with no permanent instance. Its containers were removed at the user’s request on2026-11-16; historical preview URLs are currently inactive.
-Updated: 2026-11-17. 中文：[实施状态](/docs/zh/reference/implementation-status.html). See [design](/docs/en/reference/platform-design.html) and [console manual](/docs/en/reference/console-and-deployment.html).
+The first release is not published. Java/Maven namespace:`io.github.rivomesh`. [SDD](/docs/en/sdd/spec.html) · [Tasks](/docs/en/sdd/tasks.html) · [中文](/docs/zh/reference/implementation-status.html).
 
-The protocol4 separated profile passes348app/actual-JAR tests,76DOM and5x152controls,PG/MySQL stores,actual multi-database/two-target CDC,all-controller loss,store outage,pending accepting-entry recovery,nonroot processes and SQL role races.Automatic Agent takeover and complete journal/adapter/JDK matrices remain open. [Evidence](/docs/zh/evidence/2026-11-17-execution-lifecycle.html).
+48 requirements: **13 DONE,30 PARTIAL,5 NEW;35 open**. Each accepted item is limited to its declared profile rather than every product/version/deployment combination.
 
-SDD tracking:48requirements,7DONE,41open (8NEW,33PARTIAL). CP-01 and five session tasks accepted;CP-05partial;CP-02/03 global tasks/commands and control HA remain open. [Backlog](/docs/en/sdd/tasks.html).
+## Accepted
 
-## Implemented in this increment
-
-| Area | Delivery |
+| Scope | Result |
 |---|---|
-| Multiple configurations | Independent source/task JVMs, durable intent, bounded concurrency/heap, restart backoff, identity/overlap checks |
-| Access | VIEWER/OPERATOR/ADMIN bearer identities; server and UI permissions, startup credential snapshot, actor-attributed durable operations and Helm/native Secret role profiles; global API/async hash-chain audit, retention, UI and streaming export implemented; exact task grants implemented; local account/grant editing, token rotation and offline recovery verified; external identity/immutable anchors pending |
-| Workbench | Bilingual login/wizard/YAML import/capability catalog/check/start/stop/progress/backlog/operations; ADMIN editing, credential rotation, revision history and reviewed restore |
-| Shared controls | Metadata PAUSED, old-owner fencing, generation-bound resume, request replay and optimistic revisions |
-| Files/state | Atomic writes, controller-directory lock, private credentials, immutable worker snapshots, rotating logs, stale-status reporting |
-| Extension core | Source/Sink/Journal SPI, lossless types/presence, durable logs and independent target ACKs; v2 retained, v3 wired into CLI/Web; SQL/event targets use their actual protocols |
-| Deployment | Linux service, nonroot Docker, Helm/native manifests from one Chart, probes, persistent volumes |
-| Regression | Unit/API, real-database multi-worker/pause/restart, existing HA/MGR, DOM, image/manifests; final counts in validation |
+| CP-01 | Unified registry,roles,versions,heartbeat and ownership |
+| SE-01–05 | Reload persistence,expiry/revocation,secure cookies/CSRF,cross-entry sessions and API identity rules |
+| CP-07 | Separated control/execution;bounded original-Worker continuity during management outages |
+| RC-02 | Durable transaction evidence,authorized pagination,historical schemas and images |
+| RC-05 | Native commit verification and acknowledgment recovery without reapplying rows |
+| RC-03 | Complete cross-database skip,native commit/source ACK failure,original-Agent SIGKILL/reopen and cross-entry recovery;pauses/gaps retained |
+| RC-08 | Durable gaps,reviewed verification,cross-entry approval/cancellation and honest incremental progress;bounded SQL profile |
+| RC-06 | Before-image compensation with cross-entry approval and explicit resume. Bounded SQL profile |
+| RC-07 | Typed entry, JSON import, before/after preview and cross-entry approval. Bounded SQL profile |
 
-Web and CLI now run v3. Its multi-target wizard, independent recovery and managed local journal passed real HTTP tests; v2 tasks remain supported. V3 supports explicit multi-database mappings, multiple transactional targets, optional journals, keyless/JSON/supported generated columns and secondary-index policy; see the [V3 manual](/docs/en/reference/pipeline-v3.html). A real MySQL 8.4 → PostgreSQL 17 + openGauss 7 dual-instance pipeline passed isolated SQL failure and worker-crash recovery. Three actual MySQL 8.4/PostgreSQL 17/openGauss 7 target instances passed with both journal modes; v3 async and MGR fault cases passed, with the full version matrix still expanding. Kafka 3.9.2, RabbitMQ 4.1.4, NATS 2.11.8, Redis 7.4.2 and Pulsar 4.0.14 confirmed publication/snapshot/CDC/worker and broker restarts passed; see the [messaging manual](/docs/en/reference/messaging-v3.html). RocketMQ native 5.5.1 client / 5.5.0 broker transport passed local synchronous-disk, restart and missing-topic acceptance; mixed snapshot/CDC, worker kill and three broker restart rounds passed (49 executions). Native RocketMQ progress/content verification also rejects an actual older nonempty broker backup; receipt persistence passed MySQL/PostgreSQL/openGauss journals. Artemis Core transport and UI are wired; independent Java 8/current-broker transport and native receipt acceptance passed, including refusal of an older nonempty backup retaining the same resource IDs. A focused actual-release seven-message-product pipeline case now passed full snapshot/CDC, worker kill, three all-broker stop/start rounds and independent missing-Artemis-queue isolation. Earlier timeout runs remain failed evidence; client transport faults are now distinguished from actual HTTP responses. ClickHouse native versioned materialization now passed its first real MySQL+PostgreSQL fan-out/recovery profile; see the [ClickHouse manual](/docs/en/reference/clickhouse-v3.html). Plain BTREE/business UNIQUE/simple GSI conversion, exact FINAL queries and compatible NONE mode are implemented; expressions/prefix/fulltext/spatial still require a plan. ActiveMQ Classic is implemented and passed independent native publication/consumption/restart/old-backup guards; its MySQL+PostgreSQL pipeline passed snapshot/CDC, worker kill, broker outage, SQL constraint repair/retry and purge isolation. Doris4.1.3 ARM64/Java8 native MoW/Stream Load passed independent restart/older nonempty backup refusal and actual MySQL8.4+PostgreSQL17 snapshot/CDC, target-outage automatic catch-up, worker kill, SQL repair/retry and missing-view isolation; see the [Doris handbook](/docs/en/reference/doris-v3.html). An experimental OceanBase MySQL-mode user-tenant adapter is now implemented; native strong reads, cross-database rollback, ownership/epoch, snapshots and partial CDC passed. Full mixed restart/recovery acceptance has not passed, so the adapter remains EXPERIMENTAL; see the [OceanBase handbook](/docs/en/reference/oceanbase-v3.html). Hive experimental configuration, isolated JDBC, ACID ORC history/views and explicit index/storage plans are implemented. Independent native materialization, lost-confirmation replay, case-folded columns, restart and old nonempty backup refusal passed. Actual MySQL+PostgreSQL mixed snapshot/CDC/outage/catch-up/worker-kill/SQL-repair/view-loss isolation passed, including the final artifact gate; see the [Hive manual](/docs/en/reference/hive-v3.html). Kingbase PG/UTF8 experimental CLI/UI and the vendor Java8 driver are implemented. The first native transaction and actual MySQL+PostgreSQL mixed snapshot/CDC, signed microsecond TIME/keyless, outage/catchup, worker kill, SQL repair and missing-table isolation passed. See the [Kingbase guide](/docs/en/reference/kingbase-v3.html). Other Kingbase modes, clusters and security/capacity remain pending. DM native0/UTF8/blank1 experimental support passed the first MySQL+PostgreSQL mixed snapshot/CDC, reviewed JSON/wide-decimal text, empty-layout guards, text-key case/trailing spaces, TIME, outage/catchup, worker kill, SQL repair and missing-table isolation; see the [DM guide](/docs/en/reference/dm-v3.html). Other modes/clusters/security/capacity remain pending. GBase 8c V6 S1.3.0B19 PG/UTF8 vendor JDBC, CLI/UI and session guards are implemented; first native MySQL+PostgreSQL mixed snapshot/CDC/TIME/keyless/text-key/outage/catch-up/worker-kill/SQL-repair/missing-table acceptance passed. See the [GBase 8c guide](/docs/en/reference/gbase8c-v3.html); 8a/8s remain separate planned adapters.
+The [single verification baseline](/docs/zh/evidence/baseline.html) retains scoped provenance rather than repeated development snapshots. Cleanup validation is distinguished from earlier acceptance.
 
-ADMIN configuration editing and restore passed an independent actual-release pipeline: PostgreSQL password rotation, idempotent save, revision restore and controller restart with missing projections. See the [configuration handbook](/docs/en/reference/configuration-editor.html). Global API/async audit, retention and export passed independent Java8 HTTP/process-kill acceptance and actual SQL-pipeline validation; see the [audit handbook](/docs/en/reference/security-audit.html). Local account management passed actual-release upgrade/kill/old-state guards and real SQL continuity; see [accounts](/docs/en/reference/account-management.html). External immutable anchors, OIDC and migration remain unfinished.
+## Existing capabilities and limits
 
-Exact task grants now filter task listings and protect direct action routes. VIEWER/OPERATOR can be restricted by task ID, empty grants allow no tasks, and ADMIN remains deployment-wide. See the [authorization handbook](/docs/en/reference/task-authorization.html). Local account/grant editing UI/API, last-admin/version/audit-anchor guards and offline recovery are implemented; see [accounts](/docs/en/reference/account-management.html).
+| Capability | Current boundary |
+|---|---|
+| Replication | MySQL multi-database mappings/fan-out,table creation,chunked snapshot-to-stream,durable progress,keyless/JSON/supported generated columns |
+| Management | Bilingual wizard,configuration revisions,isolated Workers,durable cross-entry commands,accounts/grants/audit |
+| Compare/repair | Common-cut row comparison and reviewed repair plans;bounded MySQL/PostgreSQL profiles |
+| Gap verification | Reviewed plans,administrator confirmation,fresh scans,atomic receipts and cross-entry cancellation;bounded PG/MySQL,see [guide](/docs/en/reference/gap-verification.html) for acceptance |
+| Transaction compensation | Administrator review and approval for PostgreSQL and MySQL with atomic target receipts and original transaction replay. See the [operator guide](/docs/en/reference/transaction-compensation.html) |
+| Relational targets | Actual MySQL/PostgreSQL/openGauss profiles;experimental DM/Kingbase/GBase8c profiles;OceanBase full recovery and distributed GaussDB remain open |
+| Analytical targets | Initial ClickHouse/Doris/Hive materialization/recovery;production clustering,security/performance remain open |
+| Messaging | Kafka/Pulsar/RabbitMQ/RocketMQ/Classic/Artemis/Redis Streams/NATS JetStream have bounded confirmation/recovery profiles;complete cluster/TLS matrices remain open |
+| Deployment | Linux,Docker,Helm,native Kubernetes YAML;liveK8s/CSI/node-fault acceptance remains open |
+| Java | Java8 build baseline;partial five-JRE profiles,not the full source/target/driver/TLS/recovery matrix |
 
-## Next core increments
+See [design](/docs/en/reference/platform-design.html),[console operations](/docs/en/reference/console-and-deployment.html) and product guides for constraints. Protocol/data-format numbers identify internal modes,not compatibility promises for unreleased builds.
 
-1. Integrate external identities and extend repair/configuration migration and implement explicit v2 migration/rollback; complete combined async/MGR/multi-worker journal fault matrices.
-2. Add oversized-transaction staging, paginated catalogs/bounded caches, physical-capacity monitoring, receipt compaction, shared catch-up barriers and metrics.
-3. Extend generated-expression/type profiles, historical DDL, index conversion plans and nonempty target takeover. Never downgrade identity keys; business UNIQUE/GSI boundaries are documented.
-4. Complete OceanBase restart/recovery acceptance, extend ClickHouse/Doris cluster/performance profiles and extend Hive cluster/security/performance acceptance and implement vendor adapters; extend Kafka/RabbitMQ/NATS/Redis/Pulsar cluster, TLS and capacity fault acceptance.
-5. Complete roles, credential lifecycle/configuration migration, validation/repair, cutover/failback, hardware benchmarks, soak/upgrade/live-cluster matrices.
+## Cleanup
 
-Phasing does not reduce confirmed scope or make planned UI entries implemented features.
+Historical-binary probes,automatic control-mode migration and duplicate development snapshots are removed. Namespaces are created in the configured mode and refuse mismatches without silent migration/fallback.73 affected contracts pass. SDKs are installed in the Maven cache,so application-only iterations avoid rebuilding them.
 
-## Additional workspace backlog
+The V2/V3 execution branches,wizard and configuration fixtures still share dependencies;their consolidation is a separate pending batch. Business data and current state-integrity checks were not removed.
 
-The workspace TODO also records manual data repair/skipping and Java 8/11/17/21/25. The original file remains independent; this page records their implementation implications.
+## Next work
 
-Repair/skipping requires retained original events, failed-transaction/all-target scope, permissions/audit, idempotent compensation, replay, and reconciliation. Skipping must mark consistency gaps explicitly; it is not resume, nor permission to edit GTIDs and claim complete replication. Current UI resume retries the original transaction; manual skip/data editing is unimplemented.
-
-Builds and broker fault tests use Java 8. Actual MySQL→PostgreSQL keyed-table snapshot/CDC/content checks passed on Temurin 8/11/17/21/25 with both LOCAL and PostgreSQL EXTERNAL journals (ten profiles); see [raw reports](/docs/en/reference/performance.html). Other drivers, messaging, TLS and failover still require per-runtime acceptance.
-
-## Verification boundaries
-
-Live Kubernetes/CSI, remaining targets and complete cluster matrices for implemented messaging, OIDC/external identity integration, complete takeover, PostgreSQL/Oracle sources, and hardware standards remain unaccepted. See [validation](/docs/en/reference/validation.html) for passing checks. Browser windows were unavailable; DOM/HTTP checks passed, while visual/accessibility acceptance remains pending.
-
-
-
-The Docker development preview passed health, administrator authentication, source UI and capability-catalog HTTP checks. See [Development preview](/docs/en/reference/development-preview.html). UI refreshes from source; backend/drivers are published after builds. This does not establish full production acceptance.
-
-The common-cut foundation passed four real journal profiles: LOCAL/H2 and external PostgreSQL/MySQL/openGauss. These cover a shared MVCC view across databases, actual source/metadata locks, deadline/SIGKILL release, atomic capture/normalization/selected-target ACK checks and durable pause, physical fences and a real unselected-target outage/recovery. The existing GBase 8c mixed fault pipeline also regressed successfully. Private source-row sealing, transactional SQL typed scans, missing/extra/changed reports and CLI are now implemented, with their additional acceptance recorded separately. A barrier test alone does not establish row equality. Management validation jobs/UI are accepted in the later entries below; repair and takeover/cutover remain pending. See [Reconciliation workflow](/docs/en/reference/reconciliation-workflow.html).
-
-The first SQL row-comparison/CLI native acceptance now passes all four journal profiles, including source-offline comparison, validation-process SIGKILL recovery and exact difference counts. Destinations are limited to MySQL8.4/PostgreSQL17. [Evidence](/docs/zh/evidence/2026-11-15-row-reconciliation.html). Managed UI acceptance follows below; repair remains pending.
-
-
-2026-11-16:the first managed validation workflow passed native HTTP/Worker/database acceptance across four journal modes:destination/budget selection,durable jobs,cancellation,target retry,table summaries,grants and report audit.187root Java/SDK cases (185app+2SDK),185actual-JAR-first app cases and44DOM pass. Fresh MySQL-journal read-only status/first START is corrected. Raw row details,repair,full catalogs/retention,takeover/cutover and remaining project-wide scope stay open. [Managed validation](/docs/en/reference/managed-validation.html) / [Evidence](/docs/zh/evidence/2026-11-16-managed-validation.html).
-
-2026-11-16:ADMIN difference paging/raw values now pass all four journal profiles with real SQL/HTTP authorization and retained original barrier suite.191root cases (189app+2SDK),189actual-JAR-first app cases and46DOM pass. Docker preview is updated. Repair,skip and cutover remain pending. [Difference details evidence](/docs/zh/evidence/2026-11-16-difference-details.html).
-
-2026-11-16:COMMON_CUT repair CLI now passes four real journal modes with MySQL8.4/PostgreSQL17 business targets:explicit plans/hash confirmation,live drift refusal,SQL rollback,exact keyless identity restoration,lost commit reply,SIGKILL before/after commit and durable receipt replay without CDC advancement.200root cases (198app+2SDK),198actual-JAR-first and46DOM pass;Docker preview updated. Repair UI/durable jobs,dependency discovery,failed-transaction compensation/skip,takeover/cutover and full project scope remain incomplete. [Repair handbook](/docs/en/reference/common-cut-repair.html) / [Evidence](/docs/zh/evidence/2026-11-16-common-cut-repair.html).
-
-2026-11-16:managed repair now has accepted explicit scope,durable predetermined plan IDs,authenticated review/hash approval,revision/request checks,cancellation/retry,receipts and audit. Trigger/FK/metadata-visibility refusal is tested on the specified SQL profiles. Full dependency planning,budget editing,receipt catalogs,failed-transaction compensation/skip,takeover/cutover,other vendors and complete HA/capacity remain pending. [Managed repair](/docs/en/reference/managed-repair.html).
-
-2026-11-16 latest: shared identity/session/audit native acceptance passed; SDD v0.4 has6DONE/33PARTIAL/9NEW.273application,273actual-JAR-first,2SDK,68DOM and5x68control checks passed. Global task execution remains LOCAL. Persistent preview removed at user request; temporary fixtures/images cleaned. [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
-
-2026-11-17: CP-02/03 now PARTIAL: internal global task/control foundations passed307actual-JAR-first tests and native PostgreSQL/MySQL control fixtures. Historical 1e47 candidate used LOCAL public control; later candidates add the opt-in global profile. [Evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html).
-
-2026-11-17 development increment: opt-in sharedTasks fixed-owner global HTTP/UI,configuration/history,durable commands and remote reads are wired. Startup STOP/PAUSE barriers and recovery beyond50commands have regression coverage. The new candidate passes336application build tests; native cross-node business CDC and its five-JDK acceptance are ongoing. CP-02/03 remain PARTIAL; legacy import and automatic takeover are open. [Operations](/docs/en/reference/global-control.html).
+1. Distributed recovery jobs and recovery protocols for other destinations.
+2. Automatic Agent relocation,draining,global diagnostics and storage reachability.
+3. PostgreSQL/Oracle sources,MySQL8.2 and complete5.7/8.0/8.4 profiles.
+4. Distributed GaussDB and complete vendor/messaging/analytical production matrices.
+5. Large transactions/catalogs,hardware benchmarks,liveK8s,complete JDK matrix and bilingual docs.

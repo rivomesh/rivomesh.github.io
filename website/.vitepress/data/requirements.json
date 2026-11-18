@@ -1,15 +1,15 @@
 {
   "specId": "RM-SDD-001",
-  "version": "0.6",
+  "version": "0.9",
   "date": "2026-11-17",
   "state": "IMPLEMENTING",
-  "scope": "CP-01,SE-01/02/03/04/05 and CP-07 separated LOCAL-journal profile accepted; global migration/full command matrices and remaining source/recovery/vendor/deployment work stay open",
+  "scope": "CP-01,SE-01/02/03/04/05,CP-07,RC-02,RC-05 and bounded RC-03 original-Agent/LOCAL-journal PostgreSQL target profile accepted;verified gap closure,automatic relocation and full matrices stay open",
   "baseline": {
     "artifactSha256": "10d95a3990835f2286f036b962d88fc8533ade427753ad9961ef1429988a88e2",
     "rootTests": 207,
     "releaseFirstAppTests": 205,
     "domTests": 49,
-    "evidence": "docs/verification/2026-11-16-managed-repair/README.md"
+    "evidence": "docs/verification/README.md"
   },
   "requirements": [
     {
@@ -31,15 +31,15 @@
       },
       "dependsOn": [],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
-        "sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java",
-        "sync-app/src/main/java/io/rivomesh/platform/JdbcControlStore.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskWorker.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/JdbcControlStore.java",
         "tests/node-registry-native.py",
-        "docs/verification/2026-11-16-node-registry/README.md"
+        "docs/verification/README.md"
       ],
       "verification": {
         "artifactSha256": "e42cd685bcc9fb38a1e0e82819230ac58869a54f40c4417d39cd596337b91d11",
-        "archive": "docs/verification/2026-11-16-node-registry/README.md"
+        "archive": "docs/verification/README.md"
       }
     },
     {
@@ -63,14 +63,12 @@
         "CP-01"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
-        "docs/verification/2026-11-17-global-control-foundations/README.md",
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java",
+        "docs/verification/README.md",
         "docs/zh-CN/global-control.md",
-        "sync-app/src/main/java/io/rivomesh/platform/GlobalControl.java",
-        "sync-app/src/main/java/io/rivomesh/platform/OwnerRuntime.java",
-        "tests/global-control-pipeline.py",
-        "docs/verification/2026-11-17-global-routing/README.md",
-        "docs/verification/2026-11-17-global-maintenance/README.md"
+        "sync-app/src/main/java/io/github/rivomesh/platform/GlobalControl.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/OwnerRuntime.java",
+        "tests/global-control-pipeline.py"
       ],
       "implementation": {
         "scope": "Opt-in fixed-owner public global HTTP/UI with shared configuration, commands, queries and startup STOP/PAUSE barrier; migration and complete business acceptance remain open",
@@ -98,15 +96,13 @@
         "CP-02"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java",
-        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
-        "docs/verification/2026-11-17-global-control-foundations/README.md",
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskWorker.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java",
+        "docs/verification/README.md",
         "docs/zh-CN/global-control.md",
-        "sync-app/src/main/java/io/rivomesh/platform/GlobalControl.java",
-        "sync-app/src/main/java/io/rivomesh/platform/OwnerRuntime.java",
-        "tests/global-control-pipeline.py",
-        "docs/verification/2026-11-17-global-routing/README.md",
-        "docs/verification/2026-11-17-global-maintenance/README.md"
+        "sync-app/src/main/java/io/github/rivomesh/platform/GlobalControl.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/OwnerRuntime.java",
+        "tests/global-control-pipeline.py"
       ],
       "implementation": {
         "scope": "Opt-in fixed-owner public global HTTP/UI with shared configuration, commands, queries and startup STOP/PAUSE barrier; migration and complete business acceptance remain open",
@@ -136,8 +132,8 @@
         "LG-05"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
-        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java"
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java"
       ]
     },
     {
@@ -161,11 +157,11 @@
         "CP-02"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java",
         "docs/zh-CN/account-management.md",
         "docs/zh-CN/security-audit.md",
-        "sync-app/src/main/java/io/rivomesh/platform/SharedAccessStore.java",
-        "docs/verification/2026-11-16-shared-access/README.md"
+        "sync-app/src/main/java/io/github/rivomesh/platform/SharedAccessStore.java",
+        "docs/verification/README.md"
       ]
     },
     {
@@ -192,7 +188,7 @@
       ],
       "evidence": [
         "sync-app/src/main/resources/console/app.js",
-        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java"
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java"
       ]
     },
     {
@@ -218,16 +214,16 @@
         "SE-04"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
-        "sync-app/src/main/java/io/rivomesh/platform/TaskWorker.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskWorker.java",
         "docs/sdd/001-control-recovery-compatibility/design-execution-lifecycle.md",
-        "docs/verification/2026-11-17-execution-lifecycle/README.md",
+        "docs/verification/README.md",
         "docs/zh-CN/execution-lifecycle.md",
-        "sync-app/src/test/java/io/rivomesh/platform/ExecutionRolesTest.java"
+        "sync-app/src/test/java/io/github/rivomesh/platform/ExecutionRolesTest.java"
       ],
       "verification": {
         "artifactSha256": "aa17cf5b6d9c21e302af818c5f48ff7c46bbb32d3a532ab1fa0491abe43403bf",
-        "archive": "docs/verification/2026-11-17-execution-lifecycle/README.md",
+        "archive": "docs/verification/README.md",
         "profile": "Java8 real CDC;fixed Agent;LOCAL/H2 journal;MySQL8.4 source;PostgreSQL17/MySQL8.4 targets;PostgreSQL17/MySQL8.4 control"
       }
     },
@@ -251,11 +247,11 @@
       "dependsOn": [],
       "evidence": [
         "sync-app/src/main/resources/console/app.js",
-        "sync-app/src/main/java/io/rivomesh/platform/BrowserSessions.java",
-        "sync-app/src/test/java/io/rivomesh/platform/BrowserSessionsTest.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/BrowserSessions.java",
+        "sync-app/src/test/java/io/github/rivomesh/platform/BrowserSessionsTest.java",
         "tests/browser-sessions-tls.py",
         "tests/browser-sessions-runtime.py",
-        "docs/verification/2026-11-16-browser-sessions/README.md"
+        "docs/verification/README.md"
       ],
       "implementation": {
         "scope": "Completed single-controller browser sessions; shared authority SE-04 excluded",
@@ -263,7 +259,7 @@
       },
       "verification": {
         "artifactSha256": "95127453ff4e6b9a6b0f16d80ea1a16c2c5861b4a260226e875bab6bc72c60a3",
-        "archive": "docs/verification/2026-11-16-browser-sessions/README.md"
+        "archive": "docs/verification/README.md"
       }
     },
     {
@@ -289,11 +285,11 @@
       "evidence": [
         "sync-app/src/main/resources/console/app.js",
         "docs/zh-CN/account-management.md",
-        "sync-app/src/main/java/io/rivomesh/platform/BrowserSessions.java",
-        "sync-app/src/test/java/io/rivomesh/platform/BrowserSessionsTest.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/BrowserSessions.java",
+        "sync-app/src/test/java/io/github/rivomesh/platform/BrowserSessionsTest.java",
         "tests/browser-sessions-tls.py",
         "tests/browser-sessions-runtime.py",
-        "docs/verification/2026-11-16-browser-sessions/README.md"
+        "docs/verification/README.md"
       ],
       "implementation": {
         "scope": "Completed single-controller browser sessions; shared authority SE-04 excluded",
@@ -301,7 +297,7 @@
       },
       "verification": {
         "artifactSha256": "95127453ff4e6b9a6b0f16d80ea1a16c2c5861b4a260226e875bab6bc72c60a3",
-        "archive": "docs/verification/2026-11-16-browser-sessions/README.md"
+        "archive": "docs/verification/README.md"
       }
     },
     {
@@ -326,12 +322,12 @@
       ],
       "evidence": [
         "sync-app/src/main/resources/console/app.js",
-        "sync-app/src/main/java/io/rivomesh/platform/ConsoleServer.java",
-        "sync-app/src/main/java/io/rivomesh/platform/BrowserSessions.java",
-        "sync-app/src/test/java/io/rivomesh/platform/BrowserSessionsTest.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/ConsoleServer.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/BrowserSessions.java",
+        "sync-app/src/test/java/io/github/rivomesh/platform/BrowserSessionsTest.java",
         "tests/browser-sessions-tls.py",
         "tests/browser-sessions-runtime.py",
-        "docs/verification/2026-11-16-browser-sessions/README.md"
+        "docs/verification/README.md"
       ],
       "implementation": {
         "scope": "Completed single-controller browser sessions; shared authority SE-04 excluded",
@@ -339,7 +335,7 @@
       },
       "verification": {
         "artifactSha256": "95127453ff4e6b9a6b0f16d80ea1a16c2c5861b4a260226e875bab6bc72c60a3",
-        "archive": "docs/verification/2026-11-16-browser-sessions/README.md"
+        "archive": "docs/verification/README.md"
       }
     },
     {
@@ -365,9 +361,9 @@
         "CP-01"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
-        "sync-app/src/main/java/io/rivomesh/platform/SharedAccessStore.java",
-        "docs/verification/2026-11-16-shared-access/README.md"
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/SharedAccessStore.java",
+        "docs/verification/README.md"
       ],
       "implementation": {
         "scope": "Opt-in shared SQL identity/session profile; global task control excluded",
@@ -375,7 +371,7 @@
       },
       "verification": {
         "artifactSha256": "a1ec34fc060b4078cdaa10f357d5933f4df60f5b9616519433c851ddad69fa4a",
-        "archive": "docs/verification/2026-11-16-shared-access/README.md"
+        "archive": "docs/verification/README.md"
       }
     },
     {
@@ -401,12 +397,12 @@
       ],
       "evidence": [
         "sync-app/src/main/resources/console/app.js",
-        "sync-app/src/main/java/io/rivomesh/platform/AccessControl.java",
-        "sync-app/src/main/java/io/rivomesh/platform/BrowserSessions.java",
-        "sync-app/src/test/java/io/rivomesh/platform/BrowserSessionsTest.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/AccessControl.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/BrowserSessions.java",
+        "sync-app/src/test/java/io/github/rivomesh/platform/BrowserSessionsTest.java",
         "tests/browser-sessions-tls.py",
         "tests/browser-sessions-runtime.py",
-        "docs/verification/2026-11-16-browser-sessions/README.md"
+        "docs/verification/README.md"
       ],
       "implementation": {
         "scope": "Completed single-controller browser sessions; shared authority SE-04 excluded",
@@ -414,7 +410,7 @@
       },
       "verification": {
         "artifactSha256": "95127453ff4e6b9a6b0f16d80ea1a16c2c5861b4a260226e875bab6bc72c60a3",
-        "archive": "docs/verification/2026-11-16-browser-sessions/README.md"
+        "archive": "docs/verification/README.md"
       }
     },
     {
@@ -427,8 +423,8 @@
         "en": "Phase-aware fault classification"
       },
       "gap": {
-        "zh-CN": "现有错误隔离/恢复已实现，但没有完整的跳过与补偿诊断入口。",
-        "en": "Error isolation/resume exists without complete skip/compensation diagnostics."
+        "zh-CN": "首次目标准备/快照及增量投递阶段已持久化并通过双入口真实故障/重启验收；完整源连接/读取/解码/DDL阶段及人工操作诊断仍待补。",
+        "en": "Initial destination preparation/snapshot and delivery phases pass dual-entry native fault/restart acceptance;complete source phases and manual-action diagnostics remain open."
       },
       "acceptance": {
         "zh-CN": "分别展示源连接/读取、解码、DDL/规范化、目标应用、确认及日志存储错误；UI给出该阶段可用的重试、补偿、事务跳过或缺口恢复路径，不能把所有binlog故障当目标SQL错误。",
@@ -436,22 +432,30 @@
       },
       "dependsOn": [],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
-        "sync-app/src/main/java/io/rivomesh/cdc/FanoutDispatcher.java"
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/FanoutDispatcher.java",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/SubscriberFailure.java",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcFailureReview.java",
+        "sync-app/src/test/java/io/github/rivomesh/cdc/FailureReviewTest.java",
+        "docs/zh-CN/failed-transactions.md",
+        "docs/en/failed-transactions.md",
+        "docs/verification/README.md",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/SnapshotDispatcher.java",
+        "sync-app/src/test/java/io/github/rivomesh/cdc/SnapshotDispatcherTest.java"
       ]
     },
     {
       "id": "RC-02",
       "epic": "RECOVERY",
       "priority": "P0",
-      "status": "PARTIAL",
+      "status": "DONE",
       "title": {
         "zh-CN": "失败事务检查与原始证据留存",
         "en": "Failed-transaction inspection and evidence retention"
       },
       "gap": {
-        "zh-CN": "已有日志及历史校验行详情，但没有失败队列的完整事务审阅工作流。",
-        "en": "Journal/history details exist but not a full failed-queue transaction review."
+        "zh-CN": "已验收MySQL8.4、固定原Agent/LOCAL日志、PG/MySQL控制库的ADMIN完整事务审阅及持久证据：位置/历史列/镜像、授权分页、重启及日志GC后可读。自动证据目录管理、其他档案、跨Agent迁移与执行语义另行追踪。",
+        "en": "Accepted bounded MySQL8.4,fixed original Agent/LOCAL journal,PG/MySQL control profile:ADMIN whole-transaction review,positions/historical columns/images,authorized pages and durable evidence surviving restart/journal GC. Catalog automation,other profiles,Agent migration and execution semantics remain separately tracked."
       },
       "acceptance": {
         "zh-CN": "显示源身份、完整事务ID、事件范围、表/目标、原始及规范化摘要、前后镜像可用性和当前断点；原始值仅授权角色可读并分页限额；执行前保留可恢复证据。",
@@ -462,22 +466,44 @@
         "CP-05"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
-        "docs/zh-CN/managed-validation.md"
-      ]
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java",
+        "docs/zh-CN/managed-validation.md",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/SubscriberFailure.java",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcFailureReview.java",
+        "sync-app/src/test/java/io/github/rivomesh/cdc/FailureReviewTest.java",
+        "docs/zh-CN/failed-transactions.md",
+        "docs/en/failed-transactions.md",
+        "docs/verification/README.md",
+        "sync-app/src/main/java/io/github/rivomesh/recovery/FailureEvidence.java",
+        "sync-app/src/main/java/io/github/rivomesh/recovery/FailureEvidenceStore.java",
+        "sync-app/src/main/java/io/github/rivomesh/recovery/FailureEvidenceCapture.java",
+        "sync-app/src/test/java/io/github/rivomesh/cdc/FailureEvidenceStoreTest.java",
+        "docs/zh-CN/failure-evidence.md",
+        "docs/en/failure-evidence.md",
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskRequest.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/ConsoleServer.java",
+        "sync-app/src/test/java/io/github/rivomesh/platform/ManagedFailureReviewTest.java",
+        "docs/zh-CN/failure-review.md",
+        "docs/en/failure-review.md"
+      ],
+      "verification": {
+        "artifactSha256": "bcaae9309898a33ecfe919d69bfa6c43227647524498f8269682df44942cbcbe",
+        "archive": "docs/verification/README.md"
+      }
     },
     {
       "id": "RC-03",
       "epic": "RECOVERY",
       "priority": "P0",
-      "status": "NEW",
+      "status": "DONE",
       "title": {
         "zh-CN": "目标应用阶段按完整事务跳过",
         "en": "Skip a complete destination transaction"
       },
       "gap": {
-        "zh-CN": "当前恢复只会重试原事务，没有人工跳过实现。",
-        "en": "Resume retries the original transaction;manual skipping is absent."
+        "zh-CN": "协议7首批限定档案已验收：Java8、MySQL8.4双库源、原Agent/LOCAL日志、PostgreSQL业务目标、PG/MySQL控制库；完整跨库事务跳过、原生提交后源ACK失败、Agent强杀重开与跨入口确认均通过。其他目标/完整矩阵由RC-10/LG-01继续追踪。",
+        "en": "Protocol7 bounded profile accepted:Java8,MySQL8.4 two-database source,original Agent/LOCAL journal,PostgreSQL business target and PG/MySQL control stores. Complete transaction skip,native commit/source ACK failure,Agent SIGKILL/reopen and cross-entry recovery pass. Other targets/full matrices remain RC-10/LG-01."
       },
       "acceptance": {
         "zh-CN": "对已知边界的下一失败事务，管理员选择目标、原因并审阅后跳过；同一源事务跨表事件不可拆半；目标原生SKIP凭据与安全进度同本地事务，崩溃重放不重复/误跳其他事务。",
@@ -489,9 +515,24 @@
         "RC-08"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
-        "sync-app/src/main/java/io/rivomesh/cdc/JdbcSink.java"
-      ]
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcSink.java",
+        "sync-app/src/main/java/io/github/rivomesh/recovery/SkipPlan.java",
+        "sync-app/src/main/java/io/github/rivomesh/recovery/SkipReceipt.java",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcSkipJournal.java",
+        "sync-app/src/test/java/io/github/rivomesh/cdc/SkipPlanTest.java",
+        "docs/sdd/001-control-recovery-compatibility/design-native-skip.md",
+        "sync-app/src/main/resources/console/recovery.js",
+        "tests/ui/recovery-cases.mjs",
+        "docs/zh-CN/transaction-skip.md",
+        "docs/en/transaction-skip.md",
+        "docs/verification/README.md"
+      ],
+      "verification": {
+        "artifactSha256": "656245c6ed5d8c80c3017ed319e3802d8974f03e69f432a2ec64f0566660ac74",
+        "archive": "docs/verification/README.md",
+        "profile": "Java8;MySQL8.4 two-database source;original fixed Agent;LOCAL/H2 journal;PostgreSQL17 business skip target;PG17/MySQL8.4 control stores;native PG/MySQL contracts;both pauses retained"
+      }
     },
     {
       "id": "RC-04",
@@ -517,7 +558,7 @@
         "SO-01"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java",
         "docs/zh-CN/reconciliation-workflow.md"
       ]
     },
@@ -525,14 +566,14 @@
       "id": "RC-05",
       "epic": "RECOVERY",
       "priority": "P0",
-      "status": "PARTIAL",
+      "status": "DONE",
       "title": {
         "zh-CN": "不确定提交与断点核对",
         "en": "Uncertain commit and checkpoint reconciliation"
       },
       "gap": {
-        "zh-CN": "自动应用已能识别提交领先ACK，人工跳过/补偿尚未复用此保护。",
-        "en": "Automatic apply reconciles commits leading ACK;manual recovery has not reused it."
+        "zh-CN": "协议6原Agent/LOCAL日志、PG/MySQL控制库限定档案已验收：全任务暂停、新证据、原生围栏、管理员跨入口确认、ACK/回执原子提交及幂等重试，保持原暂停。跳过、补偿和其他完整矩阵另行追踪。",
+        "en": "Protocol6 original-Agent/LOCAL-journal bounded profile accepted on PG/MySQL control stores:whole-task pause,fresh evidence,native fencing,cross-entry ADMIN confirmation,atomic ACK/receipt and idempotent retry,with both pauses retained. Skip,compensation and full additional matrices remain separate."
       },
       "acceptance": {
         "zh-CN": "若目标已提交但ACK未落盘，先验证事务内容并恢复确认，禁止再次补偿/伪记为未应用跳过；来源、世代、epoch、错误版本、配置、原事务摘要或断点不符必须拒绝。",
@@ -542,23 +583,36 @@
         "RC-02"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
-        "sync-app/src/main/java/io/rivomesh/cdc/FanoutDispatcher.java",
-        "docs/verification/2026-11-16-managed-repair/README.md"
-      ]
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/FanoutDispatcher.java",
+        "docs/verification/README.md",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/FailureCheckpointInspection.java",
+        "docs/sdd/001-control-recovery-compatibility/design-checkpoint-recovery.md",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcCommitAcknowledgement.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/CommitRequest.java",
+        "sync-app/src/test/java/io/github/rivomesh/cdc/CommitAcknowledgementTest.java",
+        "sync-app/src/test/java/io/github/rivomesh/platform/ManagedCommitTest.java",
+        "docs/zh-CN/commit-acknowledgement.md",
+        "docs/en/commit-acknowledgement.md"
+      ],
+      "verification": {
+        "artifactSha256": "9f97b4d98c103e895c9d1262cd19dcd0946b21b6fc0f72fff2267e59c727de00",
+        "archive": "docs/verification/README.md",
+        "profile": "Java8;MySQL8.4 source;original fixed Agent;LOCAL/H2 journal;PostgreSQL17/MySQL8.4 control stores;public real-CDC PostgreSQL confirmation;native PG/MySQL transaction contracts;whole task paused"
+      }
     },
     {
       "id": "RC-06",
       "epic": "RECOVERY",
       "priority": "P0",
-      "status": "NEW",
+      "status": "DONE",
       "title": {
         "zh-CN": "失败事务前镜像补偿",
         "en": "Failed-transaction before-image compensation"
       },
       "gap": {
-        "zh-CN": "已有共同校验点修复，尚不能让落后的失败目标回到原事务可重放状态。",
-        "en": "COMMON_CUT repair exists but does not reconstruct the failed transaction pre-state."
+        "zh-CN": "首批 SQL 档案通过。管理员跨入口审阅表范围及增删数量，按原事务前镜像恢复目标，随后显式恢复并重放。真实 CDC 验证 PostgreSQL 补偿，MySQL 通过原生合同。其他目标由 RC-10 追踪。",
+        "en": "The bounded SQL profile passed. Administrators review table scope and mutation counts across entries, restore the before-images and explicitly resume the original transaction. PostgreSQL passes real CDC and MySQL passes native contracts. RC-10 tracks other destinations."
       },
       "acceptance": {
         "zh-CN": "重建首个受影响身份的事务前状态，正确处理同键多次变更、主键移动、插入后删除、无主键重复行/ROW_ID、JSON与生成值；只修补审阅范围；数据与补偿凭据原子提交，原事务和GTID不改写。",
@@ -569,22 +623,33 @@
         "RC-05"
       ],
       "evidence": [
-        "docs/verification/2026-11-16-managed-repair/README.md",
-        "docs/zh-CN/common-cut-repair.md"
-      ]
+        "docs/verification/README.md",
+        "docs/zh-CN/common-cut-repair.md",
+        "docs/zh-CN/transaction-compensation.md",
+        "docs/en/transaction-compensation.md",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/TransactionCompensation.java",
+        "sync-app/src/test/java/io/github/rivomesh/cdc/TransactionCompensationTest.java",
+        "sync-app/src/test/java/io/github/rivomesh/platform/ManagedCompensationTest.java",
+        "tests/global-control-pipeline.py"
+      ],
+      "verification": {
+        "artifactSha256": "d1b1595b8efbe4a6e2258f899836fa53cf33b2c11d31f621c5fc4ca9955b67a3",
+        "archive": "docs/verification/README.md",
+        "profile": "Java 8 with PostgreSQL 17 and MySQL 8.4 native compensation. Real CDC uses two controllers, PostgreSQL control storage, LOCAL/H2 journal, the original Agent, and PostgreSQL as the compensation destination."
+      }
     },
     {
       "id": "RC-07",
       "epic": "RECOVERY",
       "priority": "P0",
-      "status": "PARTIAL",
+      "status": "DONE",
       "title": {
         "zh-CN": "界面手工补数据与修正",
         "en": "Guided manual corrective data entry"
       },
       "gap": {
-        "zh-CN": "已有报告驱动修复，不支持独立的失败事务数据补充或用户补丁。",
-        "en": "Report-driven repair exists without independent failed-transaction/manual patches."
+        "zh-CN": "首批 SQL 档案通过。逐行录入和 JSON 导入支持管理员审阅前后值、精确行定位、原子批次和原事务恢复。PostgreSQL 通过真实 CDC，MySQL 通过原生检查。其他目标由 RC-10 跟踪。",
+        "en": "The bounded SQL profile passed. Typed entry and JSON import support administrator review of before/after values, exact identities, atomic batches and resumption of the original transaction. PostgreSQL passes real CDC and MySQL passes native checks. RC-10 tracks other destinations."
       },
       "acceptance": {
         "zh-CN": "界面提供类型化新增/修改/删除和导入预览；校验精度、NULL、键和内部行身份，禁止无主键误批量修改；计划显示前后值、范围和行数，目标漂移拒绝；不自动修改源库，不绕过外键/触发器保护。",
@@ -596,22 +661,32 @@
         "RC-06"
       ],
       "evidence": [
-        "docs/verification/2026-11-16-managed-repair/README.md",
-        "sync-app/src/main/java/io/rivomesh/platform/RepairRequest.java"
-      ]
+        "docs/verification/README.md",
+        "docs/zh-CN/manual-correction.md",
+        "docs/en/manual-correction.md",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/CorrectionBatch.java",
+        "sync-app/src/test/java/io/github/rivomesh/cdc/ManualCorrectionTest.java",
+        "tests/ui/recovery-cases.mjs",
+        "tests/global-control-pipeline.py"
+      ],
+      "verification": {
+        "artifactSha256": "33a1d4dca6a381664855c0ae96100fa9da004a61070155b0ed7a646c6a2c4f25",
+        "archive": "docs/verification/README.md",
+        "profile": "Java 8 with native PostgreSQL 17 and MySQL 8.4 correction tests. Real CDC uses two management entries, a fixed Agent and LOCAL/H2 journal with MySQL 8.4 source and PostgreSQL 17 correction destination/control store."
+      }
     },
     {
       "id": "RC-08",
       "epic": "RECOVERY",
       "priority": "P0",
-      "status": "NEW",
+      "status": "DONE",
       "title": {
         "zh-CN": "一致性缺口台账与真实水位",
         "en": "Consistency-gap ledger and honest watermarks"
       },
       "gap": {
-        "zh-CN": "现有断点没有已应用与主动跳过的持久区别和缺口生命周期。",
-        "en": "No durable distinction between applied/skipped history or gap lifecycle."
+        "zh-CN": "首批SQL档案已验收：持久缺口、审阅计划、跨入口审批/取消、全表重扫、原子凭据及安全覆盖/连续应用水位。核验不改写SKIP、不推进原应用前缀、不自动恢复；其他目标协议由RC-10/LG-03/LG-04继续追踪。",
+        "en": "First SQL profile accepted:durable gaps,reviewed plans,cross-entry approval/cancellation,fresh full-table scans,atomic receipts and distinct safe coverage/contiguous application. Verification preserves SKIP and the original applied prefix without resuming. Other target protocols remain RC-10/LG-03/LG-04."
       },
       "acceptance": {
         "zh-CN": "记录每次跳过的事务/范围、目标、原因、操作者、摘要和原事件位置；界面/API区分已应用、安全覆盖及有缺口继续运行；对账/补偿证据才可验证关闭缺口，接受丢失不能伪装成数据一致。",
@@ -621,9 +696,32 @@
         "RC-02"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
-        "docs/zh-CN/reconciliation-workflow.md"
-      ]
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java",
+        "docs/zh-CN/reconciliation-workflow.md",
+        "sync-app/src/main/java/io/github/rivomesh/recovery/SkipPlan.java",
+        "sync-app/src/main/java/io/github/rivomesh/recovery/SkipReceipt.java",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcSkipJournal.java",
+        "sync-app/src/test/java/io/github/rivomesh/cdc/SkipPlanTest.java",
+        "docs/sdd/001-control-recovery-compatibility/design-native-skip.md",
+        "sync-app/src/main/resources/console/recovery.js",
+        "tests/ui/recovery-cases.mjs",
+        "docs/zh-CN/transaction-skip.md",
+        "docs/en/transaction-skip.md",
+        "docs/sdd/001-control-recovery-compatibility/design-gap-verification.md",
+        "sync-app/src/test/java/io/github/rivomesh/cdc/GapVerificationLedgerTest.java",
+        "docs/zh-CN/gap-verification.md",
+        "sync-app/src/test/java/io/github/rivomesh/cdc/GapVerificationServiceTest.java",
+        "sync-app/src/test/java/io/github/rivomesh/platform/ManagedGapVerificationTest.java",
+        "tests/ui/gap-verification-cases.mjs",
+        "sync-app/src/test/java/io/github/rivomesh/cdc/DeliveryProgressTest.java",
+        "sync-app/src/test/java/io/github/rivomesh/platform/PipelineProgressTest.java"
+      ],
+      "verification": {
+        "artifactSha256": "abee42cfb26ee3623c419f9d43d9dbe6a429508a8dd01da33da38338dcdcf372",
+        "archive": "docs/verification/README.md",
+        "profile": "Java8;PG/MySQL native journal/target contracts58/product;103 DOM;22 focused progress/API checks. Unchanged public mutation workflow reuses parent3404041 PG/MySQL-control real CDC27/product with original Agent/LOCAL-H2/MySQL8.4 two-database source/PostgreSQL17 verification target. No full target/JDK/K8s claim.",
+        "reusedWorkflowArtifactSha256": "3404041b03ed0a407777366056b509778f4c93e12dea0a4f14572b01670a63ce"
+      }
     },
     {
       "id": "RC-09",
@@ -635,8 +733,8 @@
         "en": "Durable distributed recovery jobs"
       },
       "gap": {
-        "zh-CN": "共同点修复已有本地持久操作与凭据，跨节点及新模式还缺实现。",
-        "en": "COMMON_CUT has local durable operations/receipts;distributed/new modes do not."
+        "zh-CN": "已支持跨节点计划、审批、证据与目标凭据。补偿和手工修正的跨节点取消与提交边界强杀恢复仍待验收。",
+        "en": "Cross-node planning, approval, evidence and destination receipts are available. Cancellation and process termination at compensation/correction commit boundaries remain open."
       },
       "acceptance": {
         "zh-CN": "远端目标的计划、批准、取消、凭据和原始数据位置可追踪；控制/执行节点强杀后以同一请求恢复；已提交不重复、未提交回滚；跳过后不自动宣称业务接管完成。",
@@ -649,8 +747,8 @@
         "RC-07"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/platform/TaskService.java",
-        "docs/verification/2026-11-16-managed-repair/README.md"
+        "sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java",
+        "docs/verification/README.md"
       ]
     },
     {
@@ -676,7 +774,7 @@
         "LG-04"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java",
         "docs/zh-CN/messaging-v3.md"
       ]
     },
@@ -699,8 +797,8 @@
       },
       "dependsOn": [],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/platform/AdapterCatalog.java",
-        "sync-app/src/main/java/io/rivomesh/cdc/SourceAdapter.java"
+        "sync-app/src/main/java/io/github/rivomesh/platform/AdapterCatalog.java",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/SourceAdapter.java"
       ]
     },
     {
@@ -774,7 +872,7 @@
         "SO-01"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/platform/AdapterCatalog.java",
+        "sync-app/src/main/java/io/github/rivomesh/platform/AdapterCatalog.java",
         "tests/matrix.sh"
       ]
     },
@@ -824,8 +922,8 @@
         "SO-01"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/platform/AdapterCatalog.java",
-        "sync-app/src/main/java/io/rivomesh/cdc/SourceAdapter.java"
+        "sync-app/src/main/java/io/github/rivomesh/platform/AdapterCatalog.java",
+        "sync-app/src/main/java/io/github/rivomesh/cdc/SourceAdapter.java"
       ]
     },
     {
@@ -849,7 +947,7 @@
         "SO-01"
       ],
       "evidence": [
-        "sync-app/src/main/java/io/rivomesh/platform/AdapterCatalog.java"
+        "sync-app/src/main/java/io/github/rivomesh/platform/AdapterCatalog.java"
       ]
     },
     {
@@ -872,7 +970,7 @@
       "dependsOn": [],
       "evidence": [
         "docs/zh-CN/performance.md",
-        "docs/benchmarks/2026-11-15-runtime/matrix.json"
+        "docs/verification/baseline.json"
       ]
     },
     {
@@ -1091,7 +1189,7 @@
       ],
       "evidence": [
         "tests/verify-artifact.py",
-        "docs/verification/2026-11-16-managed-repair/README.md"
+        "docs/verification/README.md"
       ]
     },
     {
@@ -1218,7 +1316,7 @@
       ],
       "evidence": [
         "docs/zh-CN/pipeline-v3.md",
-        "sync-app/src/main/java/io/rivomesh/cdc/JdbcJournal.java"
+        "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java"
       ]
     },
     {
@@ -1284,19 +1382,20 @@
         "en": "Historical DDL,types,indexes and state migration"
       },
       "gap": {
-        "zh-CN": "已有白名单对象、UNIQUE/GSI转换和v2兼容；完整动态DDL、复杂类型及显式迁移/回退仍缺。",
-        "en": "Supported objects/index conversion and v2 compatibility exist;full dynamic DDL,types and explicit migration/rollback remain open."
+        "zh-CN": "已有白名单对象和UNIQUE/GSI转换；完整动态DDL、复杂类型及备份恢复档案仍缺。首版不支持旧开发候选兼容。",
+        "en": "Supported objects and UNIQUE/GSI conversion exist;full dynamic DDL,complex types and backup/restore profiles remain open. The first release does not retain prerelease-candidate compatibility."
       },
       "acceptance": {
-        "zh-CN": "对象变化有历史schema和计划，身份键不降级；发布v2/v3/新控制与缺口状态迁移、备份/回退或安全拒绝方案；各产品不支持项明确。",
-        "en": "Preserve schema history/plans and identity keys;publish v2/v3/new control-gap schema migrations,backup/rollback or safe refusal with product-specific limits."
+        "zh-CN": "对象变化保留源schema历史和审阅计划，身份键不降级；首版状态结构直接创建，不兼容旧开发候选；验证当前状态的备份恢复、损坏拒绝及各产品限制。",
+        "en": "Preserve source schema history,reviewed plans and identity keys;create first-release state directly without prerelease-candidate compatibility;verify current-state backup/restore,corruption refusal and product-specific limits."
       },
       "dependsOn": [
         "SO-01"
       ],
       "evidence": [
         "docs/zh-CN/pipeline-v3.md",
-        "docs/zh-CN/rename-migration.md"
+        "docs/zh-CN/rename-migration.md",
+        "docs/zh-CN/first-release.md"
       ]
     },
     {
@@ -1322,7 +1421,7 @@
         "RC-09"
       ],
       "evidence": [
-        "docs/verification/2026-11-16-managed-repair/README.md",
+        "docs/verification/README.md",
         "docs/zh-CN/managed-validation.md"
       ]
     },
@@ -1354,17 +1453,20 @@
     }
   ],
   "candidateVerification": {
-    "artifactSha256": "aa17cf5b6d9c21e302af818c5f48ff7c46bbb32d3a532ab1fa0491abe43403bf",
-    "mavenAppExecuted": 348,
-    "releaseFirstAppTests": 348,
+    "artifactSha256": "656245c6ed5d8c80c3017ed319e3802d8974f03e69f432a2ec64f0566660ac74",
+    "mavenAppExecuted": 459,
+    "mavenInitialPassed": 458,
+    "mavenInitialErrors": 1,
+    "mavenFinalFocused": 51,
+    "releaseFirstFocusedTests": 51,
     "releaseFirstSkipped": 0,
-    "domTests": 76,
-    "fiveJdkCasesEach": 152,
-    "nativeProducts": [
-      "POSTGRESQL17",
-      "MYSQL8.4"
-    ],
-    "scope": "Protocol4 separated lifecycle and transactional role admission,LOCAL journal real CDC,nonroot and pending accepting-entry recovery;full failover/connector/JDK matrices remain open",
-    "evidence": "docs/verification/2026-11-17-execution-lifecycle/README.md"
+    "domTests": 96,
+    "nativeProducts": {
+      "POSTGRESQL": 34,
+      "MYSQL": 34
+    },
+    "businessChecksPerControlProduct": 26,
+    "scope": "Bounded RC03;initial full reactor has one30s fixture lease expiry during678s setup;focused51 retry and final JAR-first51 pass with unchanged production fences/fixture lease. Native34 per product and CDC26 per control store pass. Not a single clean full-reactor run;no full JDK/vendor/TLS/liveK8s claim.",
+    "evidence": "docs/verification/README.md"
   }
 }

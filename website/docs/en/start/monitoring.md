@@ -31,3 +31,7 @@ Watch phase, backlog trends, per-target acknowledgements, SQL errors, connectivi
 Optional fixed-owner global mode routes commands to the execution owner. HTTP 202 means accepted, not finished; inspect the original command receipt. An offline STOP waits until the original owner can recover it.
 
 Administrators can review configuration history and restore versions according to identity/state restrictions. [Configuration revisions](../reference/configuration-editor) · [Global control](../reference/global-control) · [Backup](backup)
+
+## Read incremental progress after a skip
+
+Coverage counts explicit skips. The contiguous applied watermark stops before the first skipped transaction and stays there after historical verification. For brokers, confirmation covers publication; consumer processing requires its own tracking. See [gap verification and watermarks](../reference/gap-verification).

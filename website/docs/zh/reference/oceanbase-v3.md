@@ -11,7 +11,7 @@ English：[OceanBase V3](/docs/en/reference/oceanbase-v3.html)。示例：[ocean
 
 ## 当前范围
 
-已接入 V3 配置、CLI、多目标 Worker 和中英文向导，OceanBase CE4.3.5.6 ARM64/Java8 的原生事务、跨 database 回滚、归属冲突、epoch隔离、全量/类型及部分增量已实测。**完整联合重启恢复验收尚未通过，当前保持 EXPERIMENTAL。** 证据见[验收记录](/docs/zh/evidence/2026-11-15-oceanbase.html)。本页不是全部版本、集群或 Oracle 兼容模式的完成声明。
+已接入 V3 配置、CLI、多目标 Worker 和中英文向导，OceanBase CE4.3.5.6 ARM64/Java8 的原生事务、跨 database 回滚、归属冲突、epoch隔离、全量/类型及部分增量已实测。**完整联合重启恢复验收尚未通过，当前保持 EXPERIMENTAL。** 证据见[验收记录](/docs/zh/evidence/baseline.html)。本页不是全部版本、集群或 Oracle 兼容模式的完成声明。
 
 `product: OCEANBASE` 使用 MySQL Connector/J8.4.0 和 `jdbc:mysql://`，默认端口2881。必须连接 **MySQL 兼容的业务租户**，用户名通常为 `rivomesh@business`；不是 `root@sys`。启动和每次重新连接均核对 OceanBase 产品、兼容模式及非系统租户，并强制 `ob_read_consistency=STRONG`。MySQL 线协议版本号不代表 OceanBase 产品版本。Oracle 模式、seekdb 和其他兼容数据库不在本配置的已验证范围内。
 

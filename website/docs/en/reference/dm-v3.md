@@ -11,7 +11,7 @@ sourcePath: docs/en/dm-v3.md
 
 ## Scope and instance requirements
 
-`product: DM` is wired into V3 configuration, CLI, bilingual wizard, independent transactional destinations and type plans. Availability remains **EXPERIMENTAL**. The first DM8.1.4.80 ARM64/vendor Java8 JDBC8.1.3.140 native transaction and actual MySQL8.4.13+PostgreSQL17.12 snapshot/CDC/outage/catchup/worker-kill/separate-SQL-repair/missing-table isolation profile passed; see [evidence](/docs/zh/evidence/2026-11-15-dm.html). Empty-layout guards, text-key case/trailing spaces and four-byte Unicode also passed. PostgreSQL-protocol results do not prove DM support.
+`product: DM` is wired into V3 configuration, CLI, bilingual wizard, independent transactional destinations and type plans. Availability remains **EXPERIMENTAL**. The first DM8.1.4.80 ARM64/vendor Java8 JDBC8.1.3.140 native transaction and actual MySQL8.4.13+PostgreSQL17.12 snapshot/CDC/outage/catchup/worker-kill/separate-SQL-repair/missing-table isolation profile passed; see [evidence](/docs/zh/evidence/baseline.html). Empty-layout guards, text-key case/trailing spaces and four-byte Unicode also passed. PostgreSQL-protocol results do not prove DM support.
 
 Use `dm.jdbc.driver.DmDriver`, `jdbc:dm://host:5236`, and pinned Maven Central `com.dameng:DmJdbcDriver18:8.1.3.140`. The vendor POM declares Apache-2.0; full distribution license/NOTICE review remains pending. Database installation packages/licenses are not distributed with Rivomesh.
 

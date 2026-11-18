@@ -37,7 +37,10 @@ cluster:
   enabled: false
   sharedAccess: false # Shared accounts/sessions/audit; task routing remains separate.
   sharedTasks: false # Opt-in fixed-owner global task control; start with empty task directories.
-  separateExecution: false # Protocol4: roles are enforced; old members must stop before upgrade.
+  recoveryReview: false # Configure consistently before first deployment; namespace mode is fixed.
+  recoveryCommit: false # Configure consistently before first deployment; namespace mode is fixed.
+  recoverySkip: false # Configure consistently before first deployment; namespace mode is fixed.
+  separateExecution: false # Configure consistently before first deployment; namespace mode is fixed.
   role: COMBINED # COMBINED, CONTROLLER (no Workers), or AGENT (probes only).
   taskKeyKey: task-key # Canonical base64-encoded 32-byte key in existingSecret, shared by all members.
   maximumTasks: 10000

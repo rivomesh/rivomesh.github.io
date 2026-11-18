@@ -24,6 +24,6 @@ Deliver one logical source to independently acknowledged targets. Rehearse a slo
 
 Populate an independent environment while preserving the original business database. Review actual values, object differences, restarts and recovery. Application SQL, write cutover, rollback and business constraints require their own plan.
 
-For openGauss, DM, KingbaseES, GBase 8c and OceanBase, use the [domestic database adaptation guide](xinchuang). Managed row validation/repair has a MySQL/PostgreSQL acceptance profile; do not assume all domestic target profiles support the same maintenance workflow.
+For openGauss, DM, KingbaseES, GBase 8c and OceanBase, use the [database compatibility guide](xinchuang). Managed row validation/repair has a MySQL/PostgreSQL acceptance profile; do not assume all target profiles support the same maintenance workflow.
 
 [Performance measurement](../reference/performance) · [Multi-node evaluation](multi-node) · [Compatibility boundaries](compatibility)

@@ -7,7 +7,7 @@ sourcePath: docs/en/managed-repair.md
 
 # Managed data repair
 
-The first managed workflow passed real HTTP/Worker/database acceptance across LOCAL/H2 and external MySQL/PostgreSQL/openGauss journals,with MySQL8.4/PostgreSQL17 business destinations. [Evidence](/docs/zh/evidence/2026-11-16-managed-repair.html). Full vendor,cluster,capacity and security acceptance remains incomplete.
+The first managed workflow passed real HTTP/Worker/database acceptance across LOCAL/H2 and external MySQL/PostgreSQL/openGauss journals,with MySQL8.4/PostgreSQL17 business destinations. [Evidence](/docs/zh/evidence/baseline.html). Full vendor,cluster,capacity and security acceptance remains incomplete.
 
 ## Workflow
 
@@ -59,7 +59,7 @@ A reviewed plan can become ineligible:execution rechecks current data,schema,con
 
 Retry the same plan to resolve commits after cancellation. A complete real-time progress catalog,independent receipt browsing,report/scratch retention and cleanup remain pending.
 
-This mode requires a common cut. Failed-transaction before-image compensation,manual skip/consistency gaps,nonempty adoption,constraint restoration and cutover are separate pending workflows. Plans display default CLI repair budgets;UI budget editing is not implemented. Full vendor/version/cluster/capacity/security/controller-HA matrices remain incomplete.
+This mode requires a common cut. For a failed transaction, see [compensation](/docs/en/reference/transaction-compensation.html) or [reviewed skip](/docs/en/reference/transaction-skip.html). Nonempty adoption, constraint restoration and cutover remain open. Plans display default CLI repair budgets;UI budget editing is not implemented. Full vendor/version/cluster/capacity/security/controller-HA matrices remain incomplete.
 
 [COMMON_CUT foundations](/docs/en/reference/common-cut-repair.html) · [Managed validation](/docs/en/reference/managed-validation.html)
 

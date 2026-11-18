@@ -7,9 +7,9 @@ sourcePath: docs/sdd/001-control-recovery-compatibility/tasks.en.md
 
 # SDD task backlog
 
-RM-SDD-001 · 2026-11-16
+RM-SDD-001 · 2026-11-17
 
-Every task requires design/implementation,positive/negative/crash tests,bilingual docs and candidate evidence. The registry and five session tasks are accepted;42tasks remain open. See [session evidence](/docs/zh/evidence/2026-11-16-browser-sessions.html). Dependencies guide implementation,not a requirement to block common infrastructure on every vendor profile.
+Each task requires implementation,appropriate fault tests,bilingual docs and scoped evidence. Ten requirements are accepted;38 remain open. See the[single baseline](/docs/zh/evidence/baseline.html). Dependencies guide implementation order.
 
 ## Unified cluster control
 
@@ -53,30 +53,35 @@ Every task requires design/implementation,positive/negative/crash tests,bilingua
   Acceptance: AC-SE-05
 ## Manual recovery,skip and corrective data
 
+Implementation contract: [failed transactions](/docs/en/sdd/design-failed-transactions.html). Read-only inspection is not an execution credential;native receipts,gaps and format upgrades precede skip operations.
+
 - [ ] T-RC-01 · Phase-aware fault classification · P0 · Depends on: none
   Deliver: Distinguish source/read,decode,DDL/normalization,apply,ack and journal failures;UI offers only valid retry/compensation/skip/gap-recovery actions for that stage.
   Acceptance: AC-RC-01
-- [ ] T-RC-02 · Failed-transaction inspection and evidence retention · P0 · Depends on: RC-01, CP-05
+- [x] T-RC-02 · Failed-transaction inspection and evidence retention · P0 · Depends on: RC-01, CP-05
   Deliver: Show source/transaction identity,event range,affected objects/destinations,raw/normalized hashes,before/after-image availability and checkpoints;bounded raw access is authorized and evidence is retained before action.
   Acceptance: AC-RC-02
-- [ ] T-RC-03 · Skip a complete destination transaction · P0 · Depends on: RC-02, RC-05, RC-08
+- [x] T-RC-03 · Skip a complete destination transaction · P0 · Depends on: RC-02, RC-05, RC-08
   Deliver: For a known next failed transaction,ADMIN reviews destination scope/reason;cross-table events are not split;native SKIP receipt and safe progress commit locally and crash replay never skips another transaction.
   Acceptance: AC-RC-03
+  Accepted:[bounded RC-03 profile](/docs/zh/evidence/baseline.html);other products/full matrices stay open.
 - [ ] T-RC-04 · Controlled capture/decode gap recovery · P0 · Depends on: RC-01, RC-02, RC-08, SO-01
   Deliver: Provide a separate verified transaction/source-range quarantine/exclusion plan affecting all relevant subscriptions with original logs retained;unprovable boundaries are refused with log recovery,valid source or rebaseline alternatives;never fabricate successful application.
   Acceptance: AC-RC-04
-- [ ] T-RC-05 · Uncertain commit and checkpoint reconciliation · P0 · Depends on: RC-02
+- [x] T-RC-05 · Uncertain commit and checkpoint reconciliation · P0 · Depends on: RC-02
   Deliver: If commit leads ACK,verify content and recover acknowledgment instead of compensating or declaring an unapplied skip;identity,generation,epoch,error/config/hash/checkpoint mismatches refuse action.
   Acceptance: AC-RC-05
-- [ ] T-RC-06 · Failed-transaction before-image compensation · P0 · Depends on: RC-02, RC-05
+  Accepted:protocol6 cross-entry ADMIN confirmation,native comparison,whole-task pause/fencing,atomic ACK/receipt,and retry under the [bounded profile](/docs/zh/evidence/baseline.html). Skip,compensation and gaps remain separate requirements.
+- [x] T-RC-06 · Failed-transaction before-image compensation · P0 · Depends on: RC-02, RC-05
   Deliver: Reconstruct initial affected identity state across repeated keys,PK moves,insert/delete chains,keyless occurrences,JSON/generated values;modify only reviewed scope;commit compensation/receipt atomically without rewriting the source transaction/GTID.
   Acceptance: AC-RC-06
-- [ ] T-RC-07 · Guided manual corrective data entry · P0 · Depends on: RC-02, RC-05, RC-06
+- [x] T-RC-07 · Guided manual corrective data entry · P0 · Depends on: RC-02, RC-05, RC-06
   Deliver: UI offers typed insert/update/delete and import preview;precision,NULL,keys and occurrence IDs are validated;review before/after scope/counts;refuse drift and unsafe keyless bulk edits;no implicit source writes or dependency bypass.
   Acceptance: AC-RC-07
-- [ ] T-RC-08 · Consistency-gap ledger and honest watermarks · P0 · Depends on: RC-02
+- [x] T-RC-08 · Consistency-gap ledger and honest watermarks · P0 · Depends on: RC-02
   Deliver: Track skipped transactions/ranges,destinations,reason,actor,hashes and original evidence;separate applied progress,safe coverage and running-with-gaps;only verification evidence closes a gap and accepted loss is not equality.
   Acceptance: AC-RC-08
+  Accepted first SQL profile:verification,cross-entry commands,cancellation and honest progress;see [design](/docs/en/sdd/design-gap-verification.html) and [verification](/docs/zh/evidence/baseline.html). Other target protocols remain RC-10.
 - [ ] T-RC-09 · Durable distributed recovery jobs · P0 · Depends on: CP-03, RC-03, RC-06, RC-07
   Deliver: Remote plans,approval,cancellation,receipts and evidence locations are traceable;controller/agent kill recovers the same request with idempotent commits/rollback;skip is not cutover approval.
   Acceptance: AC-RC-09
@@ -161,7 +166,7 @@ Every task requires design/implementation,positive/negative/crash tests,bilingua
   Deliver: Bound memory/disk for large transactions/catalogs/slow sinks and publish multi-run hardware/workload results without linear extrapolation or count-only correctness.
   Acceptance: AC-LG-07
 - [ ] T-LG-08 · Historical DDL,types,indexes and state migration · P1 · Depends on: SO-01
-  Deliver: Preserve schema history/plans and identity keys;publish v2/v3/new control-gap schema migrations,backup/rollback or safe refusal with product-specific limits.
+  Deliver: Preserve source schema history,reviewed plans and identity keys;create first-release state directly without prerelease-candidate compatibility;verify current-state backup/restore,corruption refusal and product-specific limits.
   Acceptance: AC-LG-08
 - [ ] T-LG-09 · Report retention and real-browser acceptance · P1 · Depends on: CP-06, SE-05, RC-09
   Deliver: Provide authorized report/receipt search,retention and active-file protection;real browsers verify cluster/session/confirmation/recovery/pagination and accessibility.
@@ -170,10 +175,16 @@ Every task requires design/implementation,positive/negative/crash tests,bilingua
   Deliver: Verify external identity/revocation,external audit and distribution conditions;complete license/NOTICE/SBOM/contribution docs without claiming Apache affiliation or trademark rights.
   Acceptance: AC-LG-10
 
-v0.4: shared identity/session authority is independent of global task configuration, so SE-04 now depends on CP-01; CP-05 remains partial. [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
+## Recent deliverables (not additional parent requirements)
 
-v0.5: CP-02/03 PARTIAL;6DONE/33PARTIAL/9NEW. [Evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html).
-
-2026-11-17: [Public fixed-owner routing/CDC evidence](/docs/zh/evidence/2026-11-17-global-routing.html); incomplete maintenance projection/migration/HA remain tracked, without changing DONE counts.
-
-v0.6: CP-07 separated LOCAL-journal profile accepted;7DONE/33PARTIAL/8NEW. [Evidence](/docs/zh/evidence/2026-11-17-execution-lifecycle.html).
+| Parent | Reviewable delivery | State |
+|---|---|---|
+| RC-08 | Immutable verification scope and plan hash | DONE |
+| RC-08 | Cross-entry ADMIN approval,durable commands and cancellation | DONE |
+| RC-08 | Fresh full affected-table scans against sealed source roots | DONE |
+| RC-08 | Atomic receipts/gap links and idempotent recovery | DONE |
+| RC-08 | Console,authorization,late-response handling and bilingual FAQ | DONE |
+| RC-08 | Distinct safe coverage,contiguous application and broker semantics | DONE |
+| RC-06 | Before-image reconstruction, atomic target writes, cross-entry approval, and console | Java, DOM, both native target profiles and real CDC passed |
+| RC-07 | Typed entry, JSON import, before/after approval and atomic batches | Bounded SQL profile passed |
+| RC-09 | Distributed recovery jobs and commit-boundary tests | NEXT |

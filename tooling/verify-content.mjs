@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import {createHash} from 'node:crypto'
 import sharp from 'sharp'
 const root=path.resolve('website'),pages=JSON.parse(await fs.readFile(path.join(root,'.vitepress/data/pages.json'),'utf8')),navigation=JSON.parse(await fs.readFile(path.join(root,'.vitepress/data/navigation.json'),'utf8'))
 async function walk(dir){const out=[];for(const e of await fs.readdir(dir,{withFileTypes:true})){if(['dist','cache'].includes(e.name))continue;const p=path.join(dir,e.name);if(e.isDirectory())out.push(...await walk(p));else out.push(p)}return out}
@@ -12,14 +13,17 @@ const requirements=JSON.parse(await fs.readFile(path.join(root,'.vitepress/data/
 if(ids.size!==requirements.requirements.length)errors.push('Duplicate requirement IDs')
 for(const row of requirements.requirements){if(!['DONE','PARTIAL','NEW'].includes(row.status))errors.push('Unknown SDD status '+row.id);for(const dep of row.dependsOn)if(!ids.has(dep))errors.push(`Invalid SDD dependency ${row.id} -> ${dep}`)}
 for(const asset of ['favicon.ico','brand/logo.svg','brand/logo-light.svg','brand/wordmark.svg','brand/social-card.png','brand/apple-touch-icon.png','media/console-overview.png','media/task-wizard.png','media/connector-catalog.png','media/rivomesh-tour.mp4','media/tour.zh-CN.vtt','media/transcript.txt','media/transcript.en.txt','media/tour.en.vtt','media/console-overview-900.webp','media/console-overview-1800.webp','media/task-wizard-900.webp','media/task-wizard-1800.webp','media/connector-catalog-900.webp','media/connector-catalog-1800.webp','robots.txt','search-index.json','source-snapshot.json'])if(!await isFile(path.join(root,'public',asset)))errors.push('Missing asset '+asset)
+const captureRecord=JSON.parse(await fs.readFile('quality/console-screenshots-v3.json','utf8'))
+const captures=new Map(captureRecord.captures.map(capture=>[capture.name,capture]))
 // Check every localized image used by the shared preview component, including responsive variants.
-for(const locale of ['zh','en'])for(const base of ['console-overview','task-wizard','connector-catalog']){
+for(const locale of ['zh','en'])for(const base of ['console-overview','task-wizard','connector-catalog','target-recovery','data-validation','node-registry']){
  const name=base+(locale==='en'?'-en':'')
  for(const [suffix,width]of [['.png',1800],['-900.webp',900],['-1800.webp',1800]]){
   const asset='media/'+name+suffix,file=path.join(root,'public',asset)
   if(!await isFile(file)){errors.push('Missing localized screenshot '+asset);continue}
   const info=await sharp(file).metadata()
   if(info.width!==width||info.height!==Math.round(width*912/1800))errors.push('Incorrect screenshot dimensions '+asset)
+  if(suffix==='.png'&&createHash('sha256').update(await fs.readFile(file)).digest('hex')!==captures.get(name)?.sha256)errors.push('Screenshot does not match capture record '+asset)
  }
 }
 if(errors.length){console.error(errors.join('\n'));process.exitCode=1}else console.log(`Verified ${pages.length} documents, complete fixed navigation trees, ${links} local links, ${ids.size} SDD requirements and required media.`)

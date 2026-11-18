@@ -148,4 +148,4 @@ Run `bash tests/classic-pipeline-run.sh`; an unchanged verified release can use
 `RIVOMESH_TEST_PREBUILT=1`. Python runs on the host for verification, not as a
 runtime dependency in the Maven/JRE8 containers. All own resources were cleaned.
 
-Final package: `target/classic-final-unit-package.log`2 SDK +63 core/API passes,0fail/error/skip; UI20 passes. Current145723617-byte release SHA256290adcc746a64c427ccefc6de712b8fbb7bbdc7ed4d48fcd2757485e99b6c2fe. All65091 class files were compared with the accepted pipeline release; only AdapterCatalog.class changed (status text). Runtime protocol resources are byte-identical. See [archived evidence](/docs/zh/evidence/2026-11-15-classic.html).
+Final package: `target/classic-final-unit-package.log`2 SDK +63 core/API passes,0fail/error/skip; UI20 passes. Current145723617-byte release SHA256290adcc746a64c427ccefc6de712b8fbb7bbdc7ed4d48fcd2757485e99b6c2fe. All65091 class files were compared with the accepted pipeline release; only AdapterCatalog.class changed (status text). Runtime protocol resources are byte-identical. See [archived evidence](/docs/zh/evidence/baseline.html).

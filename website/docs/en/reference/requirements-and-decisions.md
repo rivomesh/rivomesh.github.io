@@ -9,7 +9,7 @@ sourcePath: docs/en/requirements-and-decisions.md
 
 Updated: 2026-11-16. 中文：[需求与决策](/docs/zh/reference/requirements-and-decisions.html).
 
-This document records scope and implementation status. **Accepted requirements are not released features.** See the [README](https://github.com/rivomesh/rivomesh/blob/main/README.md) for current operation and [platform design](/docs/en/reference/platform-design.html) for capabilities and scenarios.
+This document records scope and implementation status. **Accepted requirements are not released features.** See the [README](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/README.md) for current operation and [platform design](/docs/en/reference/platform-design.html) for capabilities and scenarios.
 
 New/clarified scope and gaps use [SDD baseline RM-SDD-001](/docs/en/sdd/spec.html):48traceable requirements,tasks and acceptance contracts. Current behavior remains governed by [implementation status](/docs/en/reference/implementation-status.html) and evidence.
 
@@ -24,21 +24,21 @@ New/clarified scope and gaps use [SDD baseline RM-SDD-001](/docs/en/sdd/spec.htm
 | D05 | Broad MySQL,PostgreSQL,openGauss,distributed GaussDB,DM,Kingbase,OceanBase and GBase product/version/mode scope | Specified initial MySQL/PG/openGauss/DM/Kingbase/GBase8c profiles exist;distributed GaussDB,full OceanBase recovery,GBase8a/8s and more modes remain |
 | D06 | Relax Gauss business secondary UNIQUE to ordinary indexes, avoiding GSI solely for those indexes; permit relaxation for compatibility issues on other targets | V3 ordinary secondary indexes/business UNIQUE downgrade implemented; GSI has model plans; distributed hardware acceptance pending |
 | D07 | Only the synchronization service writes subscribed target tables; validate and restore required constraints before takeover | Exclusive writes currently required; takeover workflow planned |
-| D08 | Automatic recovery does not skip;manual skip/compensation requires review,original evidence and gaps;database promotion stays external | Some ASYNC/MGR/worker takeover and original-transaction retry pass;manual skip/failed-transaction compensation are not implemented |
+| D08 | Automatic recovery does not skip;manual skip/compensation requires review,original evidence and gaps;database promotion stays external | Some ASYNC/MGR/worker takeover and original-transaction retry pass;reviewed skip and compensation have bounded SQL acceptance |
 | D09 | Linux manual, Docker, Kubernetes Helm Chart and native manifests, comprehensive bilingual manuals/FAQ | Deployment files and bilingual operations manual provided; live K8s/full-platform acceptance remain |
-| D10 | Final name Rivomesh, directory `rivomesh`, Java package/Maven groupId `io.rivomesh` | Renamed in this change; no claim of domain/trademark clearance or Apache status |
+| D10 | Final name Rivomesh, directory `rivomesh`, Java package/Maven groupId `io.github.rivomesh` | Renamed in this change; no claim of domain/trademark clearance or Apache status |
 | D11 | Include no-PK tables, JSON, and STORED/VIRTUAL generated columns in first-release scope | V3 keyless multisets, JSON, STORED and whitelisted VIRTUAL materialization implemented/tested |
 | D12 | Optional independent log storage; deployment with or without it | V3 H2 local and PostgreSQL/openGauss/MySQL external journals with independent ACKs/safe reclamation implemented |
 | D13 | Broad support for existing nonempty targets, object differences, and takeover | Initial targets must be empty;COMMON_CUT repair exists while nonempty adoption/merge remains pending |
 | D14 | Publish reproducible hardware/workload/performance standards instead of universal TPS promises | Benchmark tooling and small SQL/JDK smoke evidence exist;representative capacity standards and soak remain |
-| D15 | Complete bilingual UI,wizards,diagnostics and guided recovery | Local workbench,grants,configuration,validation and MySQL/PG COMMON_CUT repair exist;global control,persistent login,skip/patch and cutover remain |
+| D15 | Complete bilingual UI,wizards,diagnostics and guided recovery | Local workbench,grants,configuration,validation and MySQL/PG COMMON_CUT repair exist;shared sessions, fixed-owner controls and reviewed SQL recovery have scoped profiles. Cutover remains open |
 | D16 | Government/enterprise domestic-database migration, staged switching, and parallel environments | One-way mirroring is the foundation; ownership/takeover/failback boundaries in platform design |
 | D17 | ClickHouse,Apache Doris,Apache Hive and extensible analytical destinations | All three have initial materialization/recovery profiles;cluster/security/capacity/all-JDK gates remain without relational-transaction promises |
 | D18 | Kafka,Pulsar,RabbitMQ,RocketMQ,ActiveMQ Classic/Artemis,Redis Streams and NATS JetStream | All have initial transport/recovery evidence;complete cluster/TLS/capacity and new skip/compensation protocols need per-adapter acceptance |
 | D19 | PostgreSQL and Oracle sources are committed implementation scope,with neutral SPI/events/positions retained | Actual sources remain MySQL;PG/Oracle SOURCE is PLANNED and native snapshot/CDC/recovery remains |
 | D20 | Unified multi-node inventory/control;any entry manages remote tasks | Worker lease/owner foundations exist;global registry,remote command plane and control HA do not |
 | D21 | Login survives reload with logout,expiry,revocation and cross-controller policy | Current token is page-memory-only;server sessions/reload restoration remain |
-| D22 | Reviewed transaction skip,controlled source-gap recovery and guided manual corrective data | COMMON_CUT repair is not failed-transaction compensation;new modes,gap ledger and UI/API remain |
+| D22 | Reviewed transaction skip,controlled source-gap recovery and guided manual corrective data | Bounded SQL profiles have reviewed transaction skip, gap verification and manual corrections |
 | D23 | Java8/11/17/21/25 require real current-release profile evidence | Java8 baseline and an older ten-profile SQL matrix exist;complete current-platform/driver/recovery matrix remains |
 | D24 | Use SDD specification/design/task/acceptance tracing and complete bilingual docs | RM-SDD-001 v0.2 closes4single-controller session requirements;44remain tracked |
 

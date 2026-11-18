@@ -9,7 +9,7 @@ sourcePath: docs/zh-CN/execution-lifecycle.md
 
 [English](/docs/en/reference/execution-lifecycle.html) · [全局控制](/docs/zh/reference/global-control.html) · [SDD合同](/docs/zh/sdd/design-execution-lifecycle.html)
 
-协议4分离档案已通过348项应用构建/发布包优先测试、76项DOM及五JDK各152项专项；PG/MySQL控制库、真实多库双目标、管理全停、控制库中断、接收入口死亡后原命令恢复、非root三进程和SQL并发角色切换均已验收。自动跨Agent接管、完整日志/适配器/JDK矩阵仍待完成。 [Evidence](/docs/zh/evidence/2026-11-17-execution-lifecycle.html).
+协议4分离档案已通过348项应用构建/发布包优先测试、76项DOM及五JDK各152项专项；PG/MySQL控制库、真实多库双目标、管理全停、控制库中断、接收入口死亡后原命令恢复、非root三进程和SQL并发角色切换均已验收。自动跨Agent接管、完整日志/适配器/JDK矩阵仍待完成。 [Evidence](/docs/zh/evidence/baseline.html).
 
 | 配置 role | 节点目录角色 | 职责 |
 |---|---|---|

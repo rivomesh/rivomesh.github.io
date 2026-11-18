@@ -1,20 +1,14 @@
 ---
 kind: docs
 locale: en
-title: Domestic database adaptation
+title: Database compatibility validation
 ---
 
-# Domestic database adaptation
+# Database compatibility validation
 
-RivoMesh can copy existing MySQL data and subsequent changes into an independent domestic database environment for Xinchuang adaptation, parallel validation and migration preparation.
+Use a MySQL snapshot and continuous changes to evaluate database compatibility, run parallel checks and prepare a migration in an independent target environment.
 
-| Target | Current profile |
-| --- | --- |
-| openGauss / GaussDB | openGauss 7.0.0-RC3 partially verified; commercial/distributed GaussDB requires separate verification |
-| DM | Experimental DM8 UTF8 profile with snapshot, CDC and recovery records |
-| Kingbase | Experimental V9 PG/UTF8 profile with snapshot, CDC and recovery records |
-| GBase 8c | Experimental PG/UTF8 profile; 8a and 8s remain separately planned |
-| OceanBase | Experimental MySQL-mode tenant; full mixed recovery acceptance remains incomplete |
+<ConnectorCatalog adaptation />
 
 See the [connector catalog](connectors) for product manuals and exact boundaries. These are target adapters, not capture sources or vendor certification.
 
@@ -22,6 +16,6 @@ Start with an empty target and representative business tables. Validate Chinese 
 
 ## Source expansion
 
-MySQL is the implemented capture source. PostgreSQL and Oracle sources are planned and are not currently runnable. The source adapter interface allows additional database types to be added with their own snapshot, transaction-log and recovery-position semantics. Other products, including domestic database sources, require separate implementation and acceptance; no delivery date is promised.
+MySQL is the implemented capture source. PostgreSQL and Oracle sources are planned and are not currently runnable. The source adapter interface allows additional database types to be added with their own snapshot, transaction-log and recovery-position semantics. Each additional source requires its own implementation and validation.
 
 [Multi-node deployment](multi-node) · [Compatibility](compatibility) · [Roadmap](roadmap) · [Platform design](../reference/platform-design)

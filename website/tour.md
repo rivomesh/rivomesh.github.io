@@ -15,7 +15,7 @@ description: 查看 RivoMesh 真实任务工作台、配置向导和连接器目
 
 ## 真实产品截图
 
-<ProductGallery />
+<ProductGallery full :initial="0" />
 
 [下载讲解视频](/media/rivomesh-tour.mp4) · [中文字幕](/media/tour.zh-CN.vtt) · [英文字幕](/media/tour.en.vtt) · [完整文字稿](/media/transcript.txt)
 

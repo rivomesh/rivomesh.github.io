@@ -1,0 +1,124 @@
+{
+  "capturedAt": "2026-11-18T00:58:55.789Z",
+  "productCommit": "5c54522",
+  "productJarSha256": "33a1d4dca6a381664855c0ae96100fa9da004a61070155b0ed7a646c6a2c4f25",
+  "browser": "Google Chrome, Playwright",
+  "source": "Unmodified RivoMesh JAR, isolated disposable MySQL 8.4 and PostgreSQL 17 fixtures",
+  "recovery": "A conflicting primary key in the isolated PostgreSQL target produced a real SQL apply failure. Capture shows the generation-bound target recovery action.",
+  "captures": [
+    {
+      "name": "console-overview",
+      "locale": "zh",
+      "viewport": [
+        1800,
+        912
+      ],
+      "sha256": "b3b1d87eda10d08aaa0ff8954b985a9034a9b2c4438e3ee8501a24ce4beacbc4"
+    },
+    {
+      "name": "task-wizard",
+      "locale": "zh",
+      "viewport": [
+        1800,
+        912
+      ],
+      "sha256": "05ea8dbd5172f65c512acd0d68cf4285b8dfd4f1c3ff059c4a43db39f22285ab"
+    },
+    {
+      "name": "connector-catalog",
+      "locale": "zh",
+      "viewport": [
+        1800,
+        912
+      ],
+      "sha256": "2f06db1a687e1e61ac9f79f7fefed48405da3bb2b4dfbdd8bddb41c0e24964ed"
+    },
+    {
+      "name": "console-overview-en",
+      "locale": "en",
+      "viewport": [
+        1800,
+        912
+      ],
+      "sha256": "a9302961dcc83840f82fcf3dffdcbbcd8c102e49291bd5b7d13c2a665117f718"
+    },
+    {
+      "name": "task-wizard-en",
+      "locale": "en",
+      "viewport": [
+        1800,
+        912
+      ],
+      "sha256": "9d6315c62f9f96ab9f73d29377d102869d3f71e32e1d89897d48d9aa035171f3"
+    },
+    {
+      "name": "connector-catalog-en",
+      "locale": "en",
+      "viewport": [
+        1800,
+        912
+      ],
+      "sha256": "432ff622fc75ecef6bb4f4a885041cebc259eddcbfcac4a90121b0b02dbac470"
+    },
+    {
+      "name": "target-recovery",
+      "locale": "zh",
+      "viewport": [
+        1800,
+        912
+      ],
+      "sha256": "d4bcda18b4fb7c2101f559dd9b9c108d905b5a925fa1cac1e9a5eaf508086c81",
+      "scroll": "Centered the actual per-target recovery control in the console viewport."
+    },
+    {
+      "name": "target-recovery-en",
+      "locale": "en",
+      "viewport": [
+        1800,
+        912
+      ],
+      "sha256": "5f2f67baa49685cc2229ea7430964f454ed04bc2f15ecbf4a800f588130580c3",
+      "scroll": "Centered the actual per-target recovery control in the console viewport."
+    },
+    {
+      "name": "data-validation-en",
+      "locale": "en",
+      "viewport": [
+        1800,
+        912
+      ],
+      "scope": "Matching COMMON_CUT report from real source and destination rows after replay.",
+      "sha256": "b0a15008725a7235f75d98a98103756091a8e06cf7e581f545499628265912f2"
+    },
+    {
+      "name": "node-registry-en",
+      "locale": "en",
+      "viewport": [
+        1800,
+        912
+      ],
+      "scope": "Standalone registry with one observed node.",
+      "sha256": "e7a9d4e2983e6efe4db710e67b25c7a6abd53904a00cb86bbd56a5ef9e837d96"
+    },
+    {
+      "name": "data-validation",
+      "locale": "zh",
+      "viewport": [
+        1800,
+        912
+      ],
+      "scope": "Matching COMMON_CUT report from real source and destination rows after replay.",
+      "sha256": "4345b4070bbc9fe2dcda409c5f4ac8ecb87afa5328010f8b8521410044687837"
+    },
+    {
+      "name": "node-registry",
+      "locale": "zh",
+      "viewport": [
+        1800,
+        912
+      ],
+      "scope": "Standalone registry with one observed node.",
+      "sha256": "6360283fd33886520ffbc8a089bd32af5f10851e51ac6f54e51e25e9ee5ab351"
+    }
+  ]
+}

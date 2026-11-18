@@ -22,3 +22,9 @@ Temporary connectivity, locking and serialization errors may retry under policy.
 If logs or state are lost, restore a coordinated backup or create an explicit rebuild plan. Never delete controller or journal state and reuse a nonempty target as if it were a new task.
 
 [Recovery rules](../reference/recovery) · [Backup and restore](backup) · [Global control](../reference/global-control) · [Report an issue](/en/community.html)
+
+## Review a persisted transaction failure
+
+For supported transactional PostgreSQL/MySQL profiles, an administrator can retain and inspect [failure evidence](../reference/failure-review), check [whether the destination already committed](../reference/commit-acknowledgement), and then choose [before-image compensation](../reference/transaction-compensation) or [typed row corrections](../reference/manual-correction). These paths require a whole-task pause, a confirmed destination fence and fresh evidence. Approval keeps the task paused. After checking the result, explicitly resume delivery of the original transaction.
+
+[Whole-transaction skip](../reference/transaction-skip) is a separate approval that records a durable data gap. [Gap verification](../reference/gap-verification) reviews equality at a common historical cut. It preserves skip history and the contiguous applied watermark. See the [first-release gates](../reference/first-release) before enabling these controls.

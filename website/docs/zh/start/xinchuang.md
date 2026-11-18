@@ -12,13 +12,7 @@ RivoMesh 可在信创改造过程中，将 MySQL 业务数据同步到国产数�
 
 ## 选择适配目标
 
-| 目标数据库 | 当前范围 | 使用说明 |
-| --- | --- | --- |
-| openGauss / GaussDB | openGauss 7.0.0-RC3 部分验证；商业 GaussDB、分布式形态待独立验证 | [索引与约束策略](../reference/gaussdb-index-policy) |
-| 达梦 DM | DM8.1.4.80 指定 UTF8 模式，实验性；已有全量、增量及故障恢复记录 | [达梦连接说明](../reference/dm-v3) |
-| 金仓 Kingbase | V9 指定 PG/UTF8 模式，实验性；已有全量、增量及故障恢复记录 | [金仓连接说明](../reference/kingbase-v3) |
-| GBase 8c | V6 S1.3.0B19 指定 PG/UTF8 模式，实验性；8a、8s 仍在规划 | [GBase 8c 连接说明](../reference/gbase8c-v3) |
-| OceanBase | MySQL 兼容业务租户，实验性；已有原生事务及部分同步记录，完整联合恢复尚未通过 | [OceanBase 连接说明](../reference/oceanbase-v3) |
+<ConnectorCatalog adaptation />
 
 这些状态对应指定版本与模式。驱动、编码、数据库集群和安全配置需要按实际环境验证；本项目的适配记录不等同于厂商认证。完整目录见[数据源与同步目标](connectors)。
 

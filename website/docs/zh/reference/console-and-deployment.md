@@ -11,9 +11,9 @@ sourcePath: docs/zh-CN/console-and-deployment.md
 
 ## 运行边界
 
-平台可以加载多份独立 MySQL 任务配置，每份任务运行在独立 JVM 中，限制堆大小和同时运行数量。V3 已接通多库显式映射、SQL/消息多目标、无主键/JSON/受支持生成列及可选日志；向导提供 Gauss/PostgreSQL/MySQL、已实现的八种消息目标、ClickHouse 和 Doris。V2 单库任务继续保留，剩余连接器在能力页单独标记。详见 [V3 手册](/docs/zh/reference/pipeline-v3.html) 和[消息投递协议](/docs/zh/reference/messaging-v3.html)。
+各任务以隔离 JVM 运行，可限制堆内存和并发。多库多目标向导可配置关系数据库、分析系统和八种消息目标，并支持本地或外部日志。各产品的版本与验证范围见[连接器目录](/docs/zh/start/connectors.html)。旧单库单目标任务格式仍可运行。
 
-Web 工作台支持中英文切换、创建向导、连接/源对象检查、启停、共享暂停/恢复、运行/全量/积压状态及操作记录。已提供独立 VIEWER/OPERATOR/ADMIN 令牌身份；ADMIN 可编辑配置、轮换凭据及恢复版本。已提供逐行校验和共同暂停点的审阅修复；失败事务手工补丁/跳过、映射迁移和业务切换向导仍未完成。详见[校验](/docs/zh/reference/managed-validation.html)、[修复](/docs/zh/reference/managed-repair.html)。
+Web 工作台支持中英文切换、创建向导、连接/源对象检查、启停、共享暂停/恢复、运行/全量/积压状态及操作记录。已提供独立 VIEWER/OPERATOR/ADMIN 令牌身份；ADMIN 可编辑配置、轮换凭据及恢复版本。已提供逐行校验和共同暂停点的审阅修复。PostgreSQL / MySQL 指定事务型目标已提供[提交确认](/docs/zh/reference/commit-acknowledgement.html)、[事务跳过](/docs/zh/reference/transaction-skip.html)、[缺口复核](/docs/zh/reference/gap-verification.html)、[补偿](/docs/zh/reference/transaction-compensation.html)和[手工修正](/docs/zh/reference/manual-correction.html)。按[首版部署基线](/docs/zh/reference/first-release.html)启用对应能力。业务切换需独立规划。详见[校验](/docs/zh/reference/managed-validation.html)、[修复](/docs/zh/reference/managed-repair.html)。
 
 默认控制范围为本机；可选 `cluster.sharedAccess=true`、`cluster.sharedTasks=true` 启用固定owner全局任务控制。任一入口可管理授权的远程任务，并区分持久接受、实际结果和未知状态。启用、独立目录/密钥、升级拒绝及Helm/原生双节点配置见[全局控制手册](/docs/zh/reference/global-control.html)。自动跨节点执行接管仍未完成。
 
@@ -167,3 +167,5 @@ ClickHouse V3 目标使用原生版本物化和 FINAL 查询视图，事务内�
 Doris向导分别配置SQL和Stream Load HTTP入口、重定向白名单、副本/分桶及索引策略。默认3副本，单BE测试显式选1；展开检查结果的 `dorisIndexPlans` 查看索引差异。暂停显示物化在途未确认，不能作为业务切换屏障。首批身份检查需Doris ADMIN账号，完整范围见[Doris手册](/docs/zh/reference/doris-v3.html)。
 
 上述引导 Secret/环境重启说明适用于 CONFIG 或托管前的初始身份。启用托管后使用账号界面/API轮换；若移除引导凭据，请使用 accessMode: MANAGED 并保留匹配的控制/审计持久卷，见[账号管理](/docs/zh/reference/account-management.html)。
+
+事务证据审阅采用可选控制协议5，支持管理员保存历史证据、原始/规范化事件分页及表格镜像；启用/升级及四类部署示例见[审阅手册](/docs/zh/reference/failure-review.html)。默认旧档案不自动升级。限定恢复档案见[当前实施状态](/docs/zh/reference/implementation-status.html)。

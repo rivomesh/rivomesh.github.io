@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/reconciliation-workflow.md
 
 # 数据校验、修复与共同屏障
 
-当前已实现共同屏障、MySQL 跨表一致性视图、私有磁盘行存储、事务型 SQL 目标逐行比对及 CLI。共同屏障的 LOCAL/H2、外部 PostgreSQL/MySQL/openGauss 四种日志配置已通过真实库验收；新增逐行比对的验收范围单独记录。**共同校验点修复CLI首版已完成指定场景验收，详见修复手册；修复界面首版见管理端修复手册，其他补偿模式和业务切换尚未完成。**
+当前已实现共同屏障、MySQL 跨表一致性视图、私有磁盘行存储、事务型 SQL 目标逐行比对及 CLI。共同屏障的 LOCAL/H2、外部 PostgreSQL/MySQL/openGauss 四种日志配置已通过真实库验收；新增逐行比对的验收范围单独记录。**共同校验点修复CLI首版已完成指定场景验收，详见修复手册；修复界面首版见管理端修复手册，失败事务另有[补偿手册](/docs/zh/reference/transaction-compensation.html)，业务切换仍待完成。**
 
 ## 已实现的基础契约
 
@@ -93,4 +93,4 @@ MySQL 的 TIME 读取在 SQL 中显式转为 CHAR，包括源快照、一致性�
 
 管理端校验首版已接入选择目标、后台作业、取消、继续目标比对和分表摘要；操作与恢复边界见[管理界面校验](/docs/zh/reference/managed-validation.html)。管理员原始差异行界面已实现；修复界面首版已接入，业务切换界面仍待完成。
 
-[共同校验点修复CLI](/docs/zh/reference/common-cut-repair.html)首版已通过四种日志、MySQL/PostgreSQL指定场景真实验收。它独立于只读校验操作，带认证的管理端修复已另行完成指定场景验收，见[管理端修复](/docs/zh/reference/managed-repair.html)；失败事务补偿或业务切换仍未完成。
+[共同校验点修复CLI](/docs/zh/reference/common-cut-repair.html)首版已通过四种日志、MySQL/PostgreSQL指定场景真实验收。它独立于只读校验操作，带认证的管理端修复已另行完成指定场景验收，见[管理端修复](/docs/zh/reference/managed-repair.html)；失败事务补偿见[独立手册](/docs/zh/reference/transaction-compensation.html)，业务切换仍待完成。

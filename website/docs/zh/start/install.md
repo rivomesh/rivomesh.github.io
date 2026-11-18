@@ -61,3 +61,11 @@ HTTPS、容器持久目录、Linux 服务及 Kubernetes 参数见[部署配置�
 ## 接下来
 
 控制台可以正常登录后，进入[创建同步任务](create-task)。启动失败或页面无法打开时，查看[常见故障处理](troubleshooting)。
+
+## 部署模式与探针
+
+单机把控制数据保存在本地持久目录，任务默认使用本地 H2 日志。外部日志可使用 PostgreSQL、openGauss 或独立的 MySQL 实例。共享控制库有 PostgreSQL 17 和 MySQL 8.4 验收记录。控制库与日志各自使用独立命名空间和权限。
+
+`GET /healthz` 检查进程存活，`GET /readyz` 在已配置的控制服务不可用时可返回 503。同步链路应在工作台检查。Dockerfile 默认使用 Java 8 构建及运行，并包含探针。原生 Kubernetes YAML 和 Helm 模板使用预先构建的镜像，真实 Kubernetes / CSI 验收仍待完成。
+
+共享控制示例使用 `RIVOMESH_NODE_ID`、`RIVOMESH_CONTROL_USERNAME`、`RIVOMESH_CONTROL_PASSWORD`。共享任务还需 `RIVOMESH_TASK_KEY`。初始化前选定控制模式，详见[首版部署基线](../reference/first-release)与[部署手册](../reference/console-and-deployment)。

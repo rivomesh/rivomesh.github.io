@@ -20,7 +20,7 @@ RivoMesh is a Java-based database synchronization platform. It reads existing My
 | Create a synchronization pipeline | [Create a task](create-task) |
 | Check progress or recover after an error | [Monitoring](monitoring), [troubleshooting](troubleshooting) and [backup](backup) |
 | Compare data and review a repair | [Validation and reviewed repair](data-validation) |
-| Evaluate domestic database targets | [Database adaptation](xinchuang) |
+| Evaluate database compatibility | [Database adaptation](xinchuang) |
 | Deploy multiple nodes and shared access | [Multi-node deployment](multi-node) |
 | Manage user access | [Accounts and permissions](access) |
 

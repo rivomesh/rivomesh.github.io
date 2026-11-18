@@ -90,9 +90,9 @@ modes, sustained soak, consumer backpressure, capacity exhaustion and recovery
 under backlog. An individual passing smoke run is evidence that this harness
 works for that dataset, not completion of that matrix.
 
-## Recorded harness smoke acceptance
+## Harness validation scope
 
-[Raw report](/files/docs/benchmarks/2026-11-15-mysql84-postgres17-smoke.json): 1,000 initial rows / 256-byte payload, 1,200 CDC changes, both exact row-stream SHA-256 comparisons matched and isolated cleanup succeeded. Actual MySQL 8.4.13 / PostgreSQL 17.12 / Temurin 8u512; one CPU and 1 GiB per container, worker heap 256 MiB. Host Apple M1 Pro / 16 GiB; shared Docker VM and other workloads, start load average 66.59. Recorded startup-inclusive snapshot visibility 23.08 s and write-inclusive CDC catch-up 1.94 s. This verifies the harness, **not** a representative capacity result or a hardware standard. No repeated-run or saturation claim follows from it.
+Small snapshot/CDC checks and a five-JDK/two-journal matrix previously passed;bounded provenance is consolidated in the [verification baseline](/files/docs/verification/baseline.json). Duplicate old-candidate reports are removed. These historical results do not certify the current candidate,every connector or a hardware capacity standard.
 
 ## Runtime and journal profiles
 
@@ -113,9 +113,3 @@ python3 tests/runtime-matrix.py --rows 1000 \
 ```
 
 The matrix retains progress and per-profile logs in `target/runtime-matrix/<id>/matrix.json`, links each raw benchmark report, and continues independent profiles after a failed profile. A passing profile requires source/target byte checks, observed journal backend, successful cleanup, the expected actual JVM version and the same release SHA-256. Changing the release aborts the matrix. These remain small SQL runtime checks; they do not validate every adapter on every JRE. Do not run other integration suites or rebuild concurrently.
-
-## Accepted SQL runtime matrix
-
-The ten-profile [matrix](/files/docs/benchmarks/2026-11-15-runtime/matrix.json) passed on Temurin 8u512, 11.0.33, 17.0.21, 21.0.13 and 25.0.5, each with LOCAL and PostgreSQL EXTERNAL journals. Every run loaded 1,000 rows, applied 1,200 row changes and matched both full ordered byte-stream digests. Actual journal storage and JVM version were checked; every isolated cleanup succeeded. All used release SHA-256 `2985bbbb51b84ec8de97d8a9b44c88d5a5a1d737032b1e13263d03d4a9134aa0`.
-
-The [archive index](/files/docs/benchmarks/2026-11-15-runtime/archive-index.json) identifies every unmodified raw profile report and its SHA-256; the raw matrix retains original workspace report paths. These are small runtime checks on a busy shared host, with no cross-JRE throughput comparison or all-adapter compatibility claim. The first cold JVM runs varied substantially, reinforcing why these results are not a hardware capacity standard.

@@ -48,3 +48,9 @@ title: 常见故障处理
 ## 仍无法解决
 
 向[核心项目提交问题](https://github.com/rivomesh/rivomesh/issues)，附上版本、部署方式、数据库产品与版本、复现步骤、脱敏后的错误和配置。仅网站排版或文档问题请提交到[网站仓库](https://github.com/rivomesh/rivomesh.github.io/issues)。
+
+## 审阅已留存的事务故障
+
+在 PostgreSQL / MySQL 指定事务型目标中，管理员可以[留存并审阅故障证据](../reference/failure-review)、[检查目标是否已提交](../reference/commit-acknowledgement)，并选择[按前镜像补偿](../reference/transaction-compensation)或[按类型手工修正](../reference/manual-correction)。先暂停整个任务、确认目标隔离并留存新证据。审批执行后任务仍暂停，核对结果后显式恢复原事务投递。
+
+[整事务跳过](../reference/transaction-skip)单独审批并记录持久数据缺口。[缺口复核](../reference/gap-verification)核对共同历史截面，保留跳过记录与连续应用水位。启用前查看[首版部署基线](../reference/first-release)。

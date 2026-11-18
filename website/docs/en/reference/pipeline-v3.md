@@ -5,24 +5,24 @@ title: "Multi-database pipelines"
 sourcePath: docs/en/pipeline-v3.md
 ---
 
-# Multi-database, multi-target pipelines
+# multi-database, multi-target pipelines
 
 This manual covers multi-database, multi-target synchronization. `formatVersion: 3` (V3 in some console labels) identifies the task configuration format, not a database version or development phase. Keep the default for new tasks; changing the number does not migrate an existing task.
 
-中文：[多库、多目标运行手册](/docs/zh/reference/pipeline-v3.html). Updated 2026-11-15. Pipelines run through the CLI and Web console. The wizard defaults to the multi-database, multi-target format and retains the older single-database format. Formats/metadata are isolated; automatic migration of old state is not implemented.
+中文：[V3 运行手册](/docs/zh/reference/pipeline-v3.html). Updated 2026-11-15. V3 runs through the CLI and Web console. The wizard defaults to v3 and retains v2 single-database tasks. Formats/metadata are isolated; automatic v2 state migration is not implemented.
 
 ## Web wizard and recovery
 
 After signing in, create a task:
 
-1. Keep the default task format, enter the logical source, comma-separated databases, replication serverId and credentials.
+1. Keep V3 selected, enter the logical source, comma-separated databases, replication serverId and credentials.
 2. Map each database explicitly. Add target instances with distinct IDs and their mappings. Select local or external transactional journals and quota. The plan masks every password, including JDBC URL passwords. Saving leaves the task stopped; check before starting.
 3. Inspect snapshot/backlog and each subscriber's ACK. “Resume this target” uses its own error generation; global “Resume after repair” uses the pipeline generation. They are distinct operations.
 4. Local stop only stops this worker. Shared pause blocks standby claims and attempts target-local fence confirmation. Unreachable targets remain unconfirmed, not falsely declared settled. Global resume does not clear independent target SQL pauses.
 
 Web local journals use the controller's private `journals/<pipelineId>` directory. New YAML omits `journal.path`; imports selecting an existing CLI journal path are rejected until a journal/target migration plan is prepared. Do not delete old state to bypass this check. External journals can be imported directly. Controller restart retains task/pause intent and the same managed journal/checkpoints.
 
-VIEWER/OPERATOR/ADMIN, local accounts/token rotation, exact task grants, configuration editing/history restore and durable audit are implemented. Managed row validation and planned repair have initial MySQL/PostgreSQL acceptance; see [validation](/docs/en/reference/managed-validation.html) and [repair](/docs/en/reference/managed-repair.html). Manual patch/skip and automated cutover remain unfinished. DOM and real HTTP/database controls passed; visual and live Kubernetes UI acceptance remain pending.
+VIEWER/OPERATOR/ADMIN,local accounts/token rotation,exact task grants,configuration editing/history restore and durable audit are implemented. [Managed validation](/docs/en/reference/managed-validation.html) and [report-driven repair](/docs/en/reference/managed-repair.html) have explicit accepted profiles. Transactional PostgreSQL and MySQL have scoped profiles for [commit confirmation](/docs/en/reference/commit-acknowledgement.html), [transaction skipping](/docs/en/reference/transaction-skip.html), [gap verification](/docs/en/reference/gap-verification.html), [compensation](/docs/en/reference/transaction-compensation.html) and [manual correction](/docs/en/reference/manual-correction.html). Configure the corresponding gates in the [first-release baseline](/docs/en/reference/first-release.html). Plan business cutover separately. See [failed transactions](/docs/en/reference/failed-transactions.html) for phase diagnostics and recovery boundaries. DOM and real HTTP/database controls passed;visual and live Kubernetes UI acceptance remain pending.
 
 ## Configure and start
 
@@ -51,13 +51,13 @@ Keyless tables preserve every duplicate occurrence using `_rivomesh_row_id`; sou
 
 Stored generated values come from the log. Whitelisted deterministic virtual expressions use versioned expressions and historical logged inputs, never current source rows. Destination columns are ordinary materialized columns. Evaluation pins the snapshot SQL mode and UTC. Unlisted functions, missing base images, or historical schema mismatches stop progress. This does not promise arbitrary client-session SQL-mode query semantics. Plan native generated columns and application writes before takeover.
 
-Each transactional target commits data and its checkpoint together under an epoch fence. Targets acknowledge independently; one paused target does not stop others. An uncertain commit is resolved by checking the destination transaction ID/content hash before acknowledging the journal. Multiple targets are not one distributed atomic transaction. Table snapshots can have different baselines; cross-table takeover requires a common catch-up point. The MySQL+transactional-SQL common-cut Java service passed initial native acceptance; see [Reconciliation foundation](/docs/en/reference/reconciliation-workflow.html). Managed row comparison and planned repair are covered by the [validation](/docs/en/reference/managed-validation.html) and [repair](/docs/en/reference/managed-repair.html) manuals; business cutover remains pending.
+Each transactional target commits data and its checkpoint together under an epoch fence. Targets acknowledge independently; one paused target does not stop others. An uncertain commit is resolved by checking the destination transaction ID/content hash before acknowledging the journal. Multiple targets are not one distributed atomic transaction. Table snapshots can have different baselines; cross-table takeover requires a common catch-up point. The MySQL+transactional-SQL common-cut Java service passed initial native acceptance; see [Reconciliation foundation](/docs/en/reference/reconciliation-workflow.html). See [managed validation](/docs/en/reference/managed-validation.html) and [reviewed repair](/docs/en/reference/managed-repair.html) for the initial SQL profiles. Business cutover remains open.
 
 Retention follows the slowest subscriber, including paused ones. Snapshot parts are reclaimed only after every target confirms completion; manifests, baselines and keyless identities remain. Losing target metadata after artifact reclamation requires a rebuild plan. `maxBytes` covers logical event, normalized event, snapshot and identity payloads, including unconsumed normalization workspace reservations. Database indexes, WAL, metadata and free pages need additional capacity; reclamation does not immediately shrink physical files. Large-catalog pagination, physical headroom alerts, receipt compaction and oversized-transaction staging remain unfinished. Logical quotas are not total disk quotas.
 
 Raw capture reserves its normalization copy, keyless row IDs and potential identity additions. Normalization consumes that reservation atomically, preventing raw backlog from using the space needed to drain itself. When a slow destination exhausts available capacity, capture waits without advancing unpersisted GTIDs; deliveries, GC and lease heartbeats continue. Recovering consumers free space and capture resumes automatically. Local backpressure does not trigger the source-idle watchdog. Close/pause cancels the blocked receiver before waiting for the dump connection to finish.
 
-If one transaction and workspace exceed the entire quota, `TRANSACTION_EXCEEDS_JOURNAL_QUOTA` preserves the old position. Insufficient snapshot/identity workspace, or old unreserved history that cannot be normalized after upgrade, raises `JOURNAL_WORKSPACE_REQUIRES_QUOTA_PLAN`. Source snapshots are currently all built before delivery; streaming reclamation across a large table, partial snapshot rebasing and oversized-transaction staging are unfinished. Expand capacity or use an explicit plan; never delete journal parts to make room. Quota is excluded from semantic identity: stop affected workers, change/reload configuration, then resume with the current global error generation. UI configuration editing remains pending.
+If one transaction and workspace exceed the entire quota, `TRANSACTION_EXCEEDS_JOURNAL_QUOTA` preserves the old position. Insufficient snapshot/identity workspace, or old unreserved history that cannot be normalized after upgrade, raises `JOURNAL_WORKSPACE_REQUIRES_QUOTA_PLAN`. Source snapshots are currently all built before delivery; streaming reclamation across a large table, partial snapshot rebasing and oversized-transaction staging are unfinished. Expand capacity or use an explicit plan; never delete journal parts to make room. Quota is excluded from semantic identity: stop affected workers, change/reload configuration, then resume with the current global error generation. See [configuration revisions](/docs/en/reference/configuration-editor.html) for supported console changes.
 
 ## Journal choices
 
@@ -84,10 +84,12 @@ java -jar sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar pause config/pipeline-
 java -jar sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar resume-pipeline config/pipeline-v3.yml 1
 ```
 
-Replace `1` with the relevant subscriber or pipeline error generation. Stale requests are rejected. Permanent source errors persist as ERROR and block standby claims; pause reports each fence confirmation. RBAC/local accounts/configuration editing/audit are implemented. Managed validation/repair use the dedicated manuals and their limited acceptance profile. Manual patch/skip, cutover/failback and their Web workflows remain unfinished.
+Replace `1` with the relevant subscriber or pipeline error generation. Stale requests are rejected. Permanent source errors persist as ERROR and block standby claims; pause reports each fence confirmation. RBAC/local accounts/configuration editing/audit are implemented. See [implementation status](/docs/en/reference/implementation-status.html) for scoped recovery.
 
 ### LOCAL connection lifetime and controller memory
 
 The controller retains a stable connection to each opened LOCAL journal, including paused/stopped tasks, until configuration replacement or controller shutdown. On restart it opens existing files; inspecting a never-started task does not create its journal. Same-host CLI/certificate/repair operations therefore share a stable H2 automatic-server endpoint.
 
 Each opened journal has a 4 MiB page-cache setting plus schema/index metadata and connection-thread overhead. Worker heaps, control-store connections and IAM/audit state consume additional memory. Docker/Linux/Helm controller defaults now use a 512 MiB maximum heap; Helm exposes `controllerHeapMiB`. Size by initialized LOCAL journal count, schema volume and measured heap use; `maxTasks` limits task count. External transactional journals are available for larger installations.
+
+Optional protocol5 adds administrator evidence creation,raw/normalized pages and typed image review. See [review operations](/docs/en/reference/failure-review.html) for activation/upgrade and deployment profiles. Default legacy profiles do not upgrade automatically. See [implementation status](/docs/en/reference/implementation-status.html) for scoped recovery.

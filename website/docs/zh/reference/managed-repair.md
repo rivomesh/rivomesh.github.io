@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/managed-repair.md
 
 # 管理界面数据修复
 
-首版已通过 LOCAL/H2、外部 MySQL/PostgreSQL/openGauss 日志下的真实 HTTP/Worker/数据库验收，业务目标为 MySQL8.4/PostgreSQL17，详见[验收证据](/docs/zh/evidence/2026-11-16-managed-repair.html)。完整厂商、集群、容量及安全验收仍未完成。
+首版已通过 LOCAL/H2、外部 MySQL/PostgreSQL/openGauss 日志下的真实 HTTP/Worker/数据库验收，业务目标为 MySQL8.4/PostgreSQL17，详见[验收证据](/docs/zh/evidence/baseline.html)。完整厂商、集群、容量及安全验收仍未完成。
 
 ## 操作顺序
 
@@ -58,7 +58,7 @@ MySQL 的触发器查询需要 `TRIGGER` 权限，权限不足时空结果不等
 - **计划已生成，为什么执行失败？** 数据、结构、配置或暂停状态可以在审阅后变化，执行必须重新检查。计划不是永久有效的写入许可。
 - **错误摘要或旧版本页面会写入吗？** 摘要不匹配在执行器中拒绝；旧修订号在接受作业前拒绝。
 - **取消后显示失败，如何判断哪些表提交了？** 使用同一计划重试，凭据会解析已提交表。完整实时逐表进度目录、独立凭据浏览和报告保留/清理仍待补齐。
-- **SQL 错误导致目标尚未追平，能直接修复吗？** 当前为共同校验点修复。失败事务前镜像补偿、手工跳过、一致性缺口、非空接管、约束恢复和切换仍属于后续工作。
+- **SQL 错误导致目标尚未追平，能直接修复吗？** 当前为共同校验点修复。失败事务可以按对应条件使用[前镜像补偿](/docs/zh/reference/transaction-compensation.html)或[审阅跳过](/docs/zh/reference/transaction-skip.html)。非空接管、约束恢复和业务切换仍待实现。
 - **预算可以在界面修改吗？** 首版计划沿用 CLI 默认预算，显示供审阅；界面编辑修复预算尚未开放。完整厂商/版本/集群/容量、安全和控制器 HA 矩阵仍未完成。
 
 [共同校验点修复基础](/docs/zh/reference/common-cut-repair.html) · [数据校验界面](/docs/zh/reference/managed-validation.html)

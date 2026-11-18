@@ -1,18 +1,31 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { createHash } from 'node:crypto'
+import { execFileSync } from 'node:child_process'
 import { documentCopy } from './document-copy.mjs'
 const source = path.resolve(process.argv[2] || '../rivomesh')
 const root = path.resolve('website')
 const repo = 'https://github.com/rivomesh/rivomesh'
 const slug = '001-control-recovery-compatibility'
-async function walk(dir) { const result=[];for(const e of await fs.readdir(dir,{withFileTypes:true})){const f=path.join(dir,e.name);if(e.isDirectory())result.push(...await walk(f));else result.push(f)}return result.sort() }
+const baselineRoute = '/docs/zh/evidence/baseline.html'
+const registry = path.join(root, '.vitepress/data')
 async function write(file,text){await fs.mkdir(path.dirname(file),{recursive:true});await fs.writeFile(file,text)}
-// Capture all source documents and the SDD inventory before generating any output.
-const sourceFiles=(await walk(path.join(source,'docs'))).filter(f=>f.endsWith('.md'))
-const inputs=new Map(await Promise.all(sourceFiles.map(async f=>[f,await fs.readFile(f,'utf8')])))
-const requirements=JSON.parse(await fs.readFile(path.join(source,'docs/sdd',slug,'requirements.json'),'utf8'))
-const catalogSource=await fs.readFile(path.join(source,'sync-app/src/main/java/io/rivomesh/platform/AdapterCatalog.java'),'utf8')
+// Pin all imported documents, attachments and catalog data to one committed source tree.
+// In-progress product changes can coexist with a reproducible documentation refresh.
+const git=(...args)=>execFileSync('git',['-C',source,...args],{encoding:'utf8',maxBuffer:16*1024*1024})
+const sourceCommit=git('rev-parse','HEAD').trim()
+const sourcePaths=new Set(git('ls-tree','-r','--name-only','-z',sourceCommit).split('\0').filter(Boolean))
+const sourceDirectories=new Set()
+for(const file of sourcePaths){
+ for(let dir=path.posix.dirname(file);dir!=='.';dir=path.posix.dirname(dir))sourceDirectories.add(dir)
+}
+const readSource=file=>git('show',sourceCommit+':'+file)
+const sourceFiles=[...sourcePaths].filter(f=>f.startsWith('docs/')&&f.endsWith('.md')).sort()
+const inputs=new Map(sourceFiles.map(f=>[path.join(source,f),readSource(f)]))
+const requirements=JSON.parse(readSource('docs/sdd/'+slug+'/requirements.json'))
+const catalogSource=readSource('sync-app/src/main/java/io/github/rivomesh/platform/AdapterCatalog.java')
+const previousPages=JSON.parse(await fs.readFile(path.join(registry,'pages.json'),'utf8'))
+const previousRedirects=JSON.parse(await fs.readFile(path.join(registry,'redirects.json'),'utf8'))
 const manualNames={
  'pipeline-v3':['多库、多目标同步配置','Multi-database pipelines'], 'console-and-deployment':['控制台与部署','Console & deployment'],
  'configuration-editor':['配置编辑与版本恢复','Configuration revisions'], 'development-preview':['开发预览','Development preview'],
@@ -28,6 +41,15 @@ const manualNames={
  'requirements-and-decisions':['需求与决策','Requirements & decisions'], 'implementation-status':['当前实施状态','Implementation status'],
  'rename-migration':['版本与更名迁移','Rename migration'], 'gaussdb-index-policy':['GaussDB 索引策略','GaussDB index policy'],
  'messaging-v3':['消息目标与投递协议','Messaging targets'], 'classic-v3':['ActiveMQ Classic','ActiveMQ Classic'],
+ 'first-release':['首版部署基线','First-release configuration'],
+ 'failed-transactions':['失败事务诊断','Failed transaction diagnostics'],
+ 'failure-evidence':['失败事务证据','Failed transaction evidence'],
+ 'failure-review':['证据留存与审阅','Retain and review failure evidence'],
+ 'commit-acknowledgement':['提交确认与断点恢复','Commit acknowledgement recovery'],
+ 'transaction-skip':['受控事务跳过','Controlled transaction skipping'],
+ 'gap-verification':['数据缺口复核','Data-gap verification'],
+ 'transaction-compensation':['失败事务补偿','Failed transaction compensation'],
+ 'manual-correction':['手工修正目标行','Manual target corrections'],
  ...Object.fromEntries([['clickhouse','ClickHouse'],['doris','Apache Doris'],['hive','Apache Hive'],['dm','达梦 DM'],['kingbase','金仓 Kingbase'],['gbase8c','GBase 8c'],['oceanbase','OceanBase']].map(([id,name])=>[id+'-v3',[name,name]]))
 }
 const groups={
@@ -37,10 +59,10 @@ const groups={
 }
 const order=Object.keys(groups)
 const assignments={
- sync:['pipeline-v3','console-and-deployment','configuration-editor','development-preview'],
+ sync:['pipeline-v3','console-and-deployment','first-release','configuration-editor','development-preview'],
  connectors:['gaussdb-index-policy','messaging-v3','classic-v3','clickhouse-v3','doris-v3','hive-v3','dm-v3','kingbase-v3','gbase8c-v3','oceanbase-v3'],
  security:['account-management','browser-sessions','shared-access','task-authorization','security-audit'],
- operations:['reconciliation-workflow','managed-validation','common-cut-repair','managed-repair','recovery','performance','rename-migration'],
+ operations:['reconciliation-workflow','managed-validation','common-cut-repair','managed-repair','failed-transactions','failure-evidence','failure-review','commit-acknowledgement','transaction-skip','gap-verification','transaction-compensation','manual-correction','recovery','performance','rename-migration'],
  architecture:['platform-design','global-control','requirements-and-decisions','implementation-status'],
  reference:['node-registry','execution-lifecycle']
 }
@@ -57,6 +79,7 @@ for(const [file,raw]of inputs){
   locale=rel.endsWith('.en.md')?'en':'zh';const stem=path.basename(rel).replace(/\.en\.md$|\.md$/,'');sub='sdd/'+(stem==='README'?'index':stem);group='sdd'
   const labels={README:['SDD 文档索引','SDD overview'],spec:['需求规格','Requirements'],plan:['实施计划','Implementation plan'],tasks:['任务清单','Task inventory'],acceptance:['验收矩阵','Acceptance matrix'],'design-control-store':['共享控制库设计','Control store design'],'design-sessions':['会话设计','Session design'],'design-global-control':['全局控制设计','Global control design'],'design-shared-access':['共享访问设计','Shared access design']}
   title=labels[stem]?.[locale==='zh'?0:1]||title;rank=Object.keys(labels).indexOf(stem)
+ }else if(rel==='verification/README.md'){sub='evidence/baseline';title='首版验证基线 / Verification baseline';rank=0
  }else if(rel.startsWith('verification/')){sub='evidence/'+rel.slice('verification/'.length).replace(/\/README\.md$|\.md$/,'').replaceAll('/','-');title=rel.split('/')[1].replace(/^2026-11-/,'11-')+' · '+title;rank=1
  }else{sub='reference/'+path.basename(rel,'.md');group='architecture';rank=99}
  if(['sync','operations','security'].includes(group))group='reference'
@@ -77,10 +100,13 @@ async function resolveLink(file,href){
  if(map.has(full))return map.get(full).route+fragment
  if(!full.startsWith(source+path.sep))return href
  const rel=path.relative(source,full).split(path.sep).join('/')
- let stat;try{stat=await fs.stat(full)}catch{warnings.push(rel);return repo+'/blob/main/'+rel+fragment}
- const downloadable=stat.isFile()&&/\.(ya?ml|xml|json)$/.test(rel)&&!/(credentials|controller|secrets)\.json$/i.test(rel)
- if(downloadable){const dest=path.join(root,'public/files',rel);if(!attachments.has(rel)){await fs.mkdir(path.dirname(dest),{recursive:true});await fs.copyFile(full,dest);attachments.set(rel,true)}return '/files/'+rel+fragment}
- return repo+(stat.isDirectory()?'/tree/main/':'/blob/main/')+rel+fragment
+ if(!sourcePaths.has(rel)&&!sourceDirectories.has(rel)){
+  if(rel.startsWith('docs/verification/'))return baselineRoute
+  warnings.push(rel);return repo+'/blob/'+sourceCommit+'/'+rel+fragment
+ }
+ const downloadable=sourcePaths.has(rel)&&/\.(ya?ml|xml|json)$/.test(rel)&&!/(credentials|controller|secrets)\.json$/i.test(rel)
+ if(downloadable){const dest=path.join(root,'public/files',rel);if(!attachments.has(rel)){await write(dest,readSource(rel));attachments.set(rel,true)}return '/files/'+rel+fragment}
+ return repo+(sourceDirectories.has(rel)?'/tree/':'/blob/')+sourceCommit+'/'+rel+fragment
 }
 const hashes=[]
 for(const [file,raw]of inputs){
@@ -111,7 +137,7 @@ const authored={
  'zh/start/index':{title:'使用指南',rank:0},'zh/start/introduction':{title:'项目介绍',rank:1},'zh/start/quick-start':{title:'快速开始',rank:2},'zh/start/compatibility':{title:'兼容性与能力边界',rank:3},'zh/start/scenarios':{title:'场景与试点指南',rank:4},'zh/start/faq':{title:'常见问题',rank:5},'zh/start/connectors':{title:'连接器目录',rank:-1,group:'connectors'},'zh/start/roadmap':{title:'项目路线图',rank:6,group:'start'},
  'en/start/install':{title:'Installation and sign-in',group:'sync',rank:0},'en/start/create-task':{title:'Create a synchronization task',group:'sync',rank:1},'en/start/monitoring':{title:'Progress and daily operations',group:'sync',rank:2},
  'en/start/troubleshooting':{title:'Troubleshooting',group:'operations',rank:0},'en/start/data-validation':{title:'Validate data and review repairs',group:'operations',rank:1},'en/start/backup':{title:'Backup and recovery',group:'operations',rank:2},'en/start/access':{title:'Accounts and permissions',group:'security',rank:0},'en/start/scenarios':{title:'Use cases and evaluation',rank:4},'en/start/faq':{title:'Frequently asked questions',rank:5},
- 'en/start/multi-node':{title:'Multi-node deployment',group:'sync',rank:3},'en/start/xinchuang':{title:'Domestic database adaptation',group:'start',rank:4},
+ 'en/start/multi-node':{title:'Multi-node deployment',group:'sync',rank:3},'en/start/xinchuang':{title:'Database compatibility validation',group:'start',rank:4},
  'en/start/index':{title:'User guide',rank:0},'en/start/introduction':{title:'Introduction',rank:1},'en/start/quick-start':{title:'Quick start',rank:2},'en/start/compatibility':{title:'Compatibility',rank:3},'en/start/connectors':{title:'Connector catalog',rank:-1,group:'connectors'},'en/start/roadmap':{title:'Roadmap',rank:6,group:'start'}
 }
 for(const [key,meta]of Object.entries(authored))records.push({locale:key.split('/')[0],route:'/docs/'+key+'.html',title:meta.title,rank:meta.rank,group:meta.group||'start'})
@@ -122,7 +148,7 @@ for(const record of records){let content;try{content=await fs.readFile(path.join
  const body=content.replace(/^---\n[\s\S]*?\n---\n/,'').replace(/```[\s\S]*?```/g,' ').replace(/\[([^\]]+)\]\([^)]+\)/g,'$1').replace(/[<#>*_`|{}]/g,' ').replace(/\s+/g,' ').trim()
  search.push({route:record.route,title:record.title,locale:record.locale,audience:['architecture','sdd','evidence'].includes(record.group)?'project':'user',group:groups[record.group][record.locale==='zh'?0:1],text:body})
 }
-const snapshot={capturedAt:new Date().toISOString(),version:'0.1.0-SNAPSHOT',sourceRepository:repo,documents:hashes,attachments:[...attachments.keys()],sourceCatalogSha256:createHash('sha256').update(catalogSource).digest('hex'),sdd:{version:requirements.version,date:requirements.date,state:requirements.state,counts:Object.fromEntries(['DONE','PARTIAL','NEW'].map(s=>[s,requirements.requirements.filter(r=>r.status===s).length]))}}
+const snapshot={capturedAt:new Date().toISOString(),version:'0.1.0-SNAPSHOT',sourceRepository:repo,sourceCommit,documents:hashes,attachments:[...attachments.keys()],sourceCatalogSha256:createHash('sha256').update(catalogSource).digest('hex'),sdd:{version:requirements.version,date:requirements.date,state:requirements.state,counts:Object.fromEntries(['DONE','PARTIAL','NEW'].map(s=>[s,requirements.requirements.filter(r=>r.status===s).length]))}}
 await write(path.join(root,'.vitepress/data/navigation.json'),JSON.stringify(navigation,null,2)+'\n')
 await write(path.join(root,'.vitepress/data/pages.json'),JSON.stringify(records,null,2)+'\n')
 await write(path.join(root,'.vitepress/data/requirements.json'),JSON.stringify(requirements,null,2)+'\n')
@@ -130,6 +156,17 @@ await write(path.join(root,'.vitepress/data/connectors.json'),JSON.stringify(con
 await write(path.join(root,'public/search-index.json'),JSON.stringify(search)+'\n')
 await write(path.join(root,'public/source-snapshot.json'),JSON.stringify(snapshot,null,2)+'\n')
 const redirects=Object.fromEntries([...map.entries()].map(([file,r])=>['/reference/'+path.relative(path.join(source,'docs'),file).replace(/\.md$/,'.html').split(path.sep).join('/'),r.route]))
+function replacement(route){
+ if(route.startsWith('/docs/zh/evidence/'))return baselineRoute
+ const retired=route.match(/^\/docs\/(zh|en)\/reference\/development-(?:preview|v3)\.html$/)
+ return retired?`/docs/${retired[1]}/reference/implementation-status.html`:undefined
+}
+for(const page of previousPages)if(page.sourcePath&&!routes.has(page.route)&&replacement(page.route))redirects[page.route]=replacement(page.route)
+for(const [from,to] of Object.entries(previousRedirects)){
+ if(redirects[from]||routes.has(from))continue
+ const target=routes.has(to)?to:replacement(to)
+ if(target)redirects[from]=target
+}
 Object.assign(redirects,{'/guide/':'/docs/zh/start/index.html','/guide/introduction.html':'/docs/zh/start/introduction.html','/guide/quick-start.html':'/docs/zh/start/quick-start.html','/guide/compatibility.html':'/docs/zh/start/compatibility.html','/guide/faq.html':'/docs/zh/start/faq.html','/guide/scenarios.html':'/docs/zh/start/scenarios.html','/roadmap.html':'/docs/zh/start/roadmap.html','/ecosystem/':'/docs/zh/start/connectors.html','/community/':'/community.html','/community/brand.html':'/brand.html'})
 await write(path.join(root,'.vitepress/data/redirects.json'),JSON.stringify(redirects,null,2)+'\n')
 console.log(`Imported ${hashes.length} source documents; registered ${records.length} docs in one navigation tree per language; ${connectors.length} catalog entries; ${requirements.requirements.length} SDD requirements.`)

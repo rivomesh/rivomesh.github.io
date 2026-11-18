@@ -7,7 +7,7 @@ sourcePath: docs/sdd/001-control-recovery-compatibility/design-shared-access.md
 
 # SE-04 / CP-05：共享身份、会话和审计合同
 
-[English](/docs/en/sdd/design-shared-access.html)。此合同的SE-04范围已验收，CP-05部分完成；见[证据](/docs/zh/evidence/2026-11-16-shared-access.html)。
+[English](/docs/en/sdd/design-shared-access.html)。此合同的SE-04范围已验收，CP-05部分完成；见[证据](/docs/zh/evidence/baseline.html)。
 
 通过显式 `cluster.sharedAccess` 选项启用SQL共享账号权威、会话与审计。默认单机/目录档案不改变；该选项并不把本机任务页自动变为全局控制。全局任务与命令另由CP-02/03实现。
 

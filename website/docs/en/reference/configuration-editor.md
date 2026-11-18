@@ -12,7 +12,7 @@ sourcePath: docs/en/configuration-editor.md
 The console edits configuration, rotates credentials and restores revisions without
 resetting checkpoints. The actual Java 8 release passed a MySQL 8.4 → PostgreSQL 17
 pipeline covering target password rotation, revision restore and controller restart.
-See the [acceptance record](/docs/zh/evidence/2026-11-15-configuration.html) for its scope.
+See the [acceptance record](/docs/zh/evidence/baseline.html) for its scope.
 
 Only ADMIN can read/edit configuration or its history. GET responses replace
 passwords, tokens and credential-bearing URLs/options with opaque references;

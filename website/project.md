@@ -12,6 +12,8 @@ title: 项目资料
 
 ## 架构与技术说明
 
+<PipelineFlow />
+
 [平台架构](/docs/zh/reference/platform-design.html) · [恢复与一致性](/docs/zh/reference/recovery.html) · [多节点部署](/docs/zh/start/multi-node.html) · [跨节点控制进展](/docs/zh/reference/global-control.html) · [当前实现范围](/docs/zh/reference/implementation-status.html)
 
 ## SDD 计划与交付
@@ -22,7 +24,7 @@ title: 项目资料
 
 ## 验证资料
 
-[验证记录汇总](/docs/zh/reference/validation.html) · [性能与运行时记录](/docs/zh/reference/performance.html) · [文档来源清单](/source-snapshot.json)
+[验证记录汇总](/docs/zh/reference/validation.html) · [性能与运行时记录](/docs/zh/reference/performance.html) · [首版验证基线](/docs/zh/evidence/baseline.html) · [文档来源清单](/source-snapshot.json)
 
 这些资料用于核对特定环境和版本下的行为。实际部署需要结合自己的数据库版本、数据类型、负载和运维流程进行验证。
 

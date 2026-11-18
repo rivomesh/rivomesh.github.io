@@ -8,5 +8,7 @@ import UsagePaths from './components/UsagePaths.vue'
 import ProductGallery from './components/ProductGallery.vue'
 import QuickStart from './components/QuickStart.vue'
 import BrandShowcase from './components/BrandShowcase.vue'
+import PipelineFlow from './components/PipelineFlow.vue'
+import ScreenshotPreview from './components/ScreenshotPreview.vue'
 import './style.css'
-export default {Layout,enhanceApp({app}){app.component('BrandShowcase',BrandShowcase);app.component('ProductGallery',ProductGallery);app.component('QuickStart',QuickStart);app.component('UsagePaths',UsagePaths);app.component('ProjectHome',Home);app.component('ConnectorCatalog',ConnectorCatalog);app.component('Roadmap',Roadmap);app.component('ProductTour',ProductTour)}} satisfies Theme
+export default {Layout,enhanceApp({app}){app.component('PipelineFlow',PipelineFlow);app.component('ScreenshotPreview',ScreenshotPreview);app.component('BrandShowcase',BrandShowcase);app.component('ProductGallery',ProductGallery);app.component('QuickStart',QuickStart);app.component('UsagePaths',UsagePaths);app.component('ProjectHome',Home);app.component('ConnectorCatalog',ConnectorCatalog);app.component('Roadmap',Roadmap);app.component('ProductTour',ProductTour)}} satisfies Theme

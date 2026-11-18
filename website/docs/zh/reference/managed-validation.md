@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/managed-validation.md
 
 # 管理界面数据校验
 
-管理端已接入逐行校验作业：选择事务型 SQL 目标、设置时间/暂存预算、后台执行、请求取消、继续已密封源数据的目标比对，以及查看分表摘要。校验本身不修改业务数据；后续审阅修复见[管理端修复](/docs/zh/reference/managed-repair.html)。手工跳过、约束重建或业务切换仍未完成。 管理端真实 HTTP/数据库联合验收单独记录；旧 CLI 屏障/比对验收不能代替它。
+管理端已接入逐行校验作业：选择事务型 SQL 目标、设置时间/暂存预算、后台执行、请求取消、继续已密封源数据的目标比对，以及查看分表摘要。校验本身不修改业务数据；后续审阅修复见[管理端修复](/docs/zh/reference/managed-repair.html)。约束重建与业务切换待实现。[事务跳过](/docs/zh/reference/transaction-skip.html)有独立的 SQL 恢复档案。 管理端真实 HTTP/数据库联合验收单独记录；旧 CLI 屏障/比对验收不能代替它。
 
 ## 页面操作
 
@@ -70,7 +70,7 @@ stateDiagram-v2
 ```
 
 
-首批真实管理端联合验收已通过 LOCAL/H2、外部 PostgreSQL/MySQL/openGauss 四种日志模式，目标为 MySQL8.4/PostgreSQL17，包含真实表锁等待中的取消、同源密封重试及控制器重启报告/审计。完整范围和失败修正见[验收记录](/docs/zh/evidence/2026-11-16-managed-validation.html)。
+首批真实管理端联合验收已通过 LOCAL/H2、外部 PostgreSQL/MySQL/openGauss 四种日志模式，目标为 MySQL8.4/PostgreSQL17，包含真实表锁等待中的取消、同源密封重试及控制器重启报告/审计。完整范围和失败修正见[验收记录](/docs/zh/evidence/baseline.html)。
 
 
 ## 管理员差异详情

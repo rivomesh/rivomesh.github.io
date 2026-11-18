@@ -19,7 +19,7 @@ Each controller needs its own persistent control, task, configuration, key and r
 
 The control database and external transaction journal have different responsibilities. A shared control database does not make local synchronization events available on another machine. Cross-host continuation requires the external journal profile in the [pipeline manual](../reference/pipeline-v3). One task has one active owner, rather than being split across workers for parallel processing.
 
-For shared access, stop all old members normally before migration, back up local directories and the control database, initialize from the selected bootstrap node, review account/node permissions, and then start other nodes. Use consistent session/audit policies and HTTPS. Read the [shared access manual](../reference/shared-access) before changing an existing installation.
+Configure the chosen access and task mode before namespace initialization. The current candidate refuses mismatched modes even when all members are stopped. Read the [first-release baseline](../reference/first-release) and [shared access manual](../reference/shared-access), and use consistent session/audit policies and HTTPS.
 
 Stopping a local worker does not stop every standby. Pausing the shared pipeline prevents ordinary takeover; inspect target isolation results separately. A healthy heartbeat does not prove business synchronization is healthy, and an expired lease does not prove a process has stopped.
 
@@ -29,10 +29,16 @@ Helm provides [cluster values](/files/deploy/helm/rivomesh/values-cluster.yaml) 
 
 ## Enable optional fixed-owner global mode
 
-In addition to shared access, set `cluster.sharedTasks: true` and configure the same protected 32-byte Base64 `taskKey` on all members. Each node needs a stable ID and its original independent persistent directory. See the [global profile](/files/config/platform-global.example.yml) and [global control manual](../reference/global-control). Initial activation requires task-free directories; old local tasks have no automatic import tool.
+In addition to shared access, set `cluster.sharedTasks: true` and configure the same protected 32-byte Base64 `taskKey` on all members. Each node needs a stable ID and its original independent persistent directory. See the [global profile](/files/config/platform-global.example.yml) and [global control manual](../reference/global-control). Use fresh task directories for initial activation. Existing local task data needs a separately assessed plan.
 
 HTTP 202 means accepted, not finished. An offline owner keeps a command pending/unknown until it provides a reliable receipt. This mode does not automatically move execution to another owner.
 
 ## Separate management and execution
 
 The explicit controller/Agent profile has acceptance records for PostgreSQL17/MySQL8.4 control storage, LOCAL/H2 journals, MySQL8.4 capture and PostgreSQL17/MySQL8.4 targets. Existing Workers continue in tested all-controller-loss scenarios; this does not relocate execution to another Agent. Default combined deployment remains coupled. See [execution lifecycle](../reference/execution-lifecycle) for roles, upgrade conditions and exact evidence.
+
+## Node registry in the console
+
+<ScreenshotPreview name="node-registry" locale="en" alt="The RivoMesh 5c54522 English console showing the standalone node profile." />
+
+The RivoMesh 5c54522 English console showing the standalone node profile.

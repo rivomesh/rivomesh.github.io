@@ -17,3 +17,7 @@ title: 连接器目录
 事务型数据库通过本地事务保存业务结果与断点；分析目标按物化与回执协议工作；消息目标为确认后的至少一次投递。多目标独立确认，消费者仍需按消息协议去重。
 
 完整边界见[兼容性说明](compatibility)和各连接器手册。
+
+## 控制台中的连接器能力
+
+<ScreenshotPreview name="connector-catalog" locale="zh" alt="RivoMesh 5c54522 开发候选版的中文连接器目录实拍。" />

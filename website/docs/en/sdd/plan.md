@@ -7,41 +7,29 @@ sourcePath: docs/sdd/001-control-recovery-compatibility/plan.en.md
 
 # Design boundaries,decisions and delivery order
 
-RM-SDD-001 · v0.5 · 2026-11-17 · IMPLEMENTING: single-controller sessions accepted
+RM-SDD-001 · v0.9 · 2026-11-17 · IMPLEMENTING: transaction skip and gap recovery
 
 [Spec](/docs/en/sdd/spec.html) · [Tasks](/docs/en/sdd/tasks.html) · [Acceptance](/docs/en/sdd/acceptance.html) · [中文](/docs/zh/sdd/plan.html)
 
-## Baseline
+Current authority: [requirements.json](/files/docs/sdd/001-control-recovery-compatibility/requirements.json),[tasks](/docs/en/sdd/tasks.html) and [acceptance](/docs/en/sdd/acceptance.html). **13 DONE,30 PARTIAL,5 NEW;35 open**. [RC-05](/docs/en/sdd/design-checkpoint-recovery.html) and[RC-03](/docs/zh/evidence/baseline.html)passed bounded profiles;Bounded gap verification and compensation have passed. Bounded manual correction has passed. Distributed recovery jobs are next.
 
-The v0.1 inventory is retained as the historical starting baseline. v0.2 implements single-controller sessions;the current candidate and limited five-JDK session matrix are in [session evidence](/docs/zh/evidence/2026-11-16-browser-sessions.html). Docker preview is updated;original TODO stays unchanged.
+## Current baseline
 
-v0.1 historical SHA256:`10d95a3990835f2286f036b962d88fc8533ade427753ad9961ef1429988a88e2`.207root cases (205app+2SDK),205actual-JAR-first app and49DOM pass. Repair profiles use LOCAL/H2 and external MySQL/PostgreSQL/openGauss journals with MySQL8.4/PostgreSQL17 business destinations. Full LOCAL and focused external coverage differ;see [evidence](/docs/zh/evidence/2026-11-16-managed-repair.html). These results do not establish cluster control,persistent sessions,skipping or new source adapters.
-
-| Area | Existing foundation | Remaining |
-|---|---|---|
-| Cluster | Worker leases/epochs,owner,isolated tasks,some takeover evidence | Global authority,node inventory,remote commands,shared access/session and control HA |
-| Login | Local accounts,Bearer tokens,grants/audit | Reload recovery and server-session lifecycle;current startup clears token/session |
-| Recovery | Retry,COMMON_CUT reconciliation/reviewed repair,native SQL receipts | Failed-transaction compensation,manual patches,skip and gap ledger |
-| MySQL | Basic5.7,historical8.0 V2/HA,representative8.4 V3 | Current four-version profiles,especially dedicated8.2 work |
-| PG/Oracle sources | Neutral interfaces and planned catalog entries | Native snapshot/CDC handoff,recovery,UI/API and evidence |
-| Java | Java8 baseline,old ten-profile SQL matrix | Current complete platform,drivers/SDKs and fault profiles on five JDKs |
-| Docs | Bilingual guides/FAQ/archives | New workflows,unified matrices and release gates |
-
-The historical JDK matrix uses SHA256 `2985bbbb51b84ec8de97d8a9b44c88d5a5a1d737032b1e13263d03d4a9134aa0`,not the current binary. It covers one keyed ASCII MySQL-to-PG path with two journal modes,not all connectors. [Original matrix](/files/docs/benchmarks/2026-11-15-runtime/matrix.json).
+Maintain the current first-release specification and [verification baseline](/docs/zh/evidence/baseline.html). Superseded candidate inventories, permanent previews and old-binary upgrade procedures are removed. Accepted scope and limitations remain explicit; historical tests do not certify new changes.
 
 ## Request traceability
 
 | User item | SDD range | Incomplete items |
 |---|---|---|
-| 1 Unified cluster control | CP-01–CP-07 | 7 |
-| 2 Persistent login | SE-01–SE-05 | 5 |
-| 3 Skip and corrective data | RC-01–RC-10 | 10 |
+| 1 Unified cluster control | CP-01–CP-07 | 5 |
+| 2 Persistent login | SE-01–SE-05 | 0 |
+| 3 Skip and corrective data | RC-01–RC-10 | 5 |
 | 4 Source versions/PG/Oracle | SO-01–SO-07 | 7 |
 | 5 Five Java versions | JV-01–JV-04 | 4 |
 | 6 Complete docs | DO-01–DO-05 | 5 |
 | Preserved previous scope | LG-01–LG-10 | 10 |
 
-48items total:6DONE,9NEW and33PARTIAL;42remain open. PARTIAL means foundations exist but the whole requirement is incomplete,not that accepted features must be rebuilt.
+Currentv0.9:48items total,13DONE,5NEW and30PARTIAL;35remain open. PARTIAL means foundations exist but the whole requirement is incomplete,not that accepted features must be rebuilt.
 
 ## Confirmed scope
 
@@ -71,7 +59,7 @@ Restore session/grants before loading tasks;controllers share authority. Logout,
 | Existing COMMON_CUT repair | Correct historical differences | Remain paused;old report retains differences |
 | Pending failed-transaction compensation | Restore initial affected identity state | Preserve original event,occurrence IDs,PK moves and ordering;do not prematurely count source transaction as applied |
 | Pending manual patch | Reviewed typed destination edits | No implicit source writes;review before/after/counts and refuse drift/dependency violations |
-| Pending destination skip | Omit one complete known transaction for selected targets | Native SKIP receipt plus gap ledger;coverage may advance while applied progress remains honest |
+| Bounded destination skip | Omit one complete known transaction for selected targets | Native SKIP receipt plus gap ledger;coverage may advance while applied progress remains honest |
 | Pending capture-range quarantine/exclusion | Separate plan before complete event formation | Identify every affected subscriber and retain raw logs;unprovable boundaries are refused with log/valid-source/rebaseline recovery alternatives |
 
 Replica-like operation is a UX/recovery requirement,not a command-copy requirement. MySQL differentiates GTID and non-GTID skipping:[official guidance](https://dev.mysql.com/doc/refman/8.4/en/replication-administration-skip.html). Rivomesh needs its own audited heterogeneous receipt/gap protocol,not source empty-transaction injection,gtid_executed editing or a universal sql_replica_skip_counter wrapper.
@@ -116,11 +104,3 @@ Control-store product/HA,agent enrollment/auth and standalone upgrade;session ex
 ## Definition of done
 
 A requirement closes only with linked design/task/API/UI,positive/refusal/duplicate/crash tests,state/config migration,bilingual docs and the same candidate artifact evidence. Build success is not connector acceptance;static YAML is not liveK8s;DOM/HTTP is not visual/accessibility acceptance. This inventory does not mark48runtime requirements implemented.
-
-Current increment: SE-01/02/03/04/05 complete; CP-05 partial. Global tasks/remote execution and the remainder of M1/M2 are open. See [session design](/docs/en/sdd/design-sessions.html),[operations](/docs/en/reference/browser-sessions.html) and [evidence](/docs/zh/evidence/2026-11-16-browser-sessions.html).
-
-CP-01 registry now passes native PostgreSQL/MySQL two-node and outage profiles. Global task/command/identity/session authority remain open. [Registry evidence](/docs/zh/evidence/2026-11-16-node-registry.html).
-
-v0.5 closes SE-04; shared sessions do not depend on global task configuration, so its dependency changes to CP-01. Temporary native/Docker acceptance replaces a persistent preview. [Evidence](/docs/zh/evidence/2026-11-16-shared-access.html).
-
-v0.5: CP-02/03 PARTIAL · [Internal foundations evidence](/docs/zh/evidence/2026-11-17-global-control-foundations.html). Public runtime integration remains open.

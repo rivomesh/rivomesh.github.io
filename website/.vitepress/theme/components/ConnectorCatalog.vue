@@ -2,25 +2,26 @@
 import {computed,ref} from 'vue'
 import {useData} from 'vitepress'
 import {products,connectorName,connectorNote,connectorHref,statusLabels} from '../data/connectors.mjs'
-const props=defineProps({compact:Boolean})
+const props=defineProps({compact:Boolean,adaptation:Boolean})
 const {frontmatter}=useData(),locale=computed(()=>frontmatter.value.locale==='en'?'en':'zh'),english=computed(()=>locale.value==='en')
 const role=ref('ALL'),status=ref('ALL'),family=ref('ALL'),query=ref('')
-const families={DOMESTIC:['信创数据库','Domestic databases'],RELATIONAL:['其他关系数据库','Other relational databases'],ANALYTICS:['分析系统','Analytics'],MESSAGING:['消息系统','Messaging']}
-const priority=['MYSQL','GAUSS_POSTGRESQL','DM','KINGBASE','GBASE_8C','OCEANBASE','POSTGRESQL','CLICKHOUSE','DORIS','KAFKA','PULSAR']
+const families={DOMESTIC:['信创数据库','Compatibility profiles'],RELATIONAL:['其他关系数据库','Relational databases'],ANALYTICS:['分析系统','Analytics'],MESSAGING:['消息系统','Messaging']}
+const priority=['MYSQL','GAUSS_POSTGRESQL','GAUSSDB','DM','KINGBASE','GBASE_8C','OCEANBASE','POSTGRESQL','CLICKHOUSE','DORIS','KAFKA','PULSAR']
 const rows=computed(()=>products.map(product=>({...product,entries:product.entries.filter(row=>(role.value==='ALL'||(role.value==='BOTH'?product.entries.every(e=>e.status!=='PLANNED')&&product.entries.length>1:row.role===role.value))&&(status.value==='ALL'||row.status===status.value))})).filter(p=>p.entries.length&&(family.value==='ALL'||p.family===family.value)&&`${connectorName(p.id,locale.value)} ${p.id} ${families[p.family].join(' ')} ${p.family==='DOMESTIC'?'信创 国产':''}`.toLowerCase().includes(query.value.trim().toLowerCase())).sort((a,b)=>(priority.includes(a.id)?priority.indexOf(a.id):100)-(priority.includes(b.id)?priority.indexOf(b.id):100)))
 const featured=['MYSQL','POSTGRESQL','GAUSS_POSTGRESQL','DM','KINGBASE','CLICKHOUSE']
-const visible=computed(()=>props.compact?featured.map(id=>products.find(product=>product.id===id)).filter(Boolean).map(product=>({...product,entries:product.entries.filter(entry=>entry.status!=='PLANNED')})):rows.value)
+const adaptationTargets=['GAUSS_POSTGRESQL','GAUSSDB','DM','KINGBASE','GBASE_8C','OCEANBASE']
+const visible=computed(()=>props.adaptation?adaptationTargets.map(id=>products.find(product=>product.id===id)):props.compact?featured.map(id=>products.find(product=>product.id===id)).filter(Boolean).map(product=>({...product,entries:product.entries.filter(entry=>entry.status!=='PLANNED')})):rows.value)
 function reset(){role.value='ALL';status.value='ALL';family.value='ALL';query.value=''}
 </script>
 <template>
   <div class="connector-directory" :class="{compact}">
-    <div v-if="!compact" class="catalog-controls">
+    <div v-if="!compact&&!adaptation" class="catalog-controls">
       <label>{{english?'Direction':'连接方向'}}<select v-model="role"><option value="ALL">{{english?'All directions':'全部方向'}}</option><option value="SOURCE">{{english?'Source':'采集源'}}</option><option value="SINK">{{english?'Sink':'同步目标'}}</option><option value="BOTH">{{english?'Source & Sink':'源与目标均有实现'}}</option></select></label>
       <label>{{english?'Status':'支持状态'}}<select v-model="status"><option value="ALL">{{english?'All statuses':'全部状态'}}</option><option v-for="(label,key) in statusLabels" :key="key" :value="key">{{label[english?1:0]}}</option></select></label>
       <label>{{english?'Category':'系统类型'}}<select v-model="family"><option value="ALL">{{english?'All categories':'全部类型'}}</option><option v-for="(label,key) in families" :key="key" :value="key">{{label[english?1:0]}}</option></select></label>
       <label class="grow">{{english?'Find a connector':'查找连接器'}}<input v-model="query" type="search" :placeholder="english?'MySQL, PostgreSQL, DM…':'MySQL、达梦、金仓…'"></label>
     </div>
-    <p v-if="!compact" class="directory-summary" aria-live="polite">{{rows.length}} {{english?'products · support is recorded per direction and profile':'种产品 · 按连接方向及指定环境分别标注状态'}}</p>
+    <p v-if="!compact&&!adaptation" class="directory-summary" aria-live="polite">{{rows.length}} {{english?'products · support is recorded per direction and profile':'种产品 · 按连接方向及指定环境分别标注状态'}}</p>
     <div class="connector-products">
       <article v-for="product in visible" :key="product.id" class="connector-product">
         <div class="product-name"><span class="connector-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 4 16 4 16 0V5M4 12c0 4 16 4 16 0"/></svg></span><div><component :is="compact?'h3':'h2'">{{connectorName(product.id,locale)}}</component><small>{{families[product.family][english?1:0]}}</small></div></div>
@@ -28,7 +29,7 @@ function reset(){role.value='ALL';status.value='ALL';family.value='ALL';query.va
         <a v-if="compact" class="compact-profile-link" :href="connectorHref(product.entries[0],locale)">{{english?'Version profile':'版本范围'}} →</a>
       </article>
     </div>
-    <div v-if="!rows.length" class="directory-empty"><p>{{english?'No matching profiles. Try another direction or category.':'没有匹配项，请调整连接方向或系统类型。'}}</p><button @click="reset">{{english?'Reset filters':'重置筛选'}}</button></div>
+    <div v-if="!compact&&!adaptation&&!rows.length" class="directory-empty"><p>{{english?'No matching profiles. Try another direction or category.':'没有匹配项，请调整连接方向或系统类型。'}}</p><button @click="reset">{{english?'Reset filters':'重置筛选'}}</button></div>
     <div v-if="compact" class="compact-directory-footer"><p>{{english?'Check source and sink support separately for each product.':'请按采集源与同步目标分别核对支持范围。'}}</p><p class="directory-more"><a :href="`/docs/${locale}/start/connectors.html`">{{english?'Browse every connector and version profile':'查看全部连接器与版本范围'}} →</a></p></div>
   </div>
 </template>

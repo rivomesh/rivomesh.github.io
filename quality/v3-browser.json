@@ -1,0 +1,130 @@
+{
+  "viewports": [
+    320,
+    375,
+    390,
+    768,
+    1024,
+    1440,
+    1920
+  ],
+  "checks": [
+    {
+      "name": "320px Chrome horizontal bounds",
+      "routes": 12
+    },
+    {
+      "name": "375px Chrome horizontal bounds",
+      "routes": 12
+    },
+    {
+      "name": "390px Chrome horizontal bounds",
+      "routes": 12
+    },
+    {
+      "name": "768px Chrome horizontal bounds",
+      "routes": 12
+    },
+    {
+      "name": "1024px Chrome horizontal bounds",
+      "routes": 12
+    },
+    {
+      "name": "1440px Chrome horizontal bounds",
+      "routes": 12
+    },
+    {
+      "name": "1920px Chrome horizontal bounds",
+      "routes": 12
+    },
+    {
+      "name": "Light and dark mark, keyboard menu, gallery and clipboard"
+    },
+    {
+      "name": "Connector details, filters and locale counterpart"
+    },
+    {
+      "name": "Chrome zh video",
+      "mediaRequests": 2,
+      "chapterSeconds": 42,
+      "tracks": [
+        "zh-CN",
+        "en"
+      ],
+      "fullscreen": "entered/exited"
+    },
+    {
+      "name": "Chrome en video",
+      "mediaRequests": 2,
+      "chapterSeconds": 40,
+      "tracks": [
+        "en",
+        "zh-CN"
+      ],
+      "fullscreen": "entered/exited"
+    },
+    {
+      "name": "Chrome Android viewport zh video",
+      "mediaRequests": 2,
+      "chapterSeconds": 42,
+      "tracks": [
+        "zh-CN",
+        "en"
+      ],
+      "fullscreen": "entered/exited"
+    },
+    {
+      "name": "Chrome Android viewport en video",
+      "mediaRequests": 2,
+      "chapterSeconds": 40,
+      "tracks": [
+        "en",
+        "zh-CN"
+      ],
+      "fullscreen": "entered/exited"
+    },
+    {
+      "name": "WebKit zh video",
+      "mediaRequests": 2,
+      "chapterSeconds": 42,
+      "tracks": [
+        "zh-CN",
+        "en"
+      ],
+      "fullscreen": "entered/exited"
+    },
+    {
+      "name": "WebKit en video",
+      "mediaRequests": 2,
+      "chapterSeconds": 40,
+      "tracks": [
+        "en",
+        "zh-CN"
+      ],
+      "fullscreen": "entered/exited"
+    },
+    {
+      "name": "WebKit iPhone viewport zh video",
+      "mediaRequests": 2,
+      "chapterSeconds": 42,
+      "tracks": [
+        "zh-CN",
+        "en"
+      ],
+      "fullscreen": "API unavailable in this context"
+    },
+    {
+      "name": "WebKit iPhone viewport en video",
+      "mediaRequests": 2,
+      "chapterSeconds": 40,
+      "tracks": [
+        "en",
+        "zh-CN"
+      ],
+      "fullscreen": "API unavailable in this context"
+    }
+  ],
+  "issues": [],
+  "chrome": "157.0.8103.79",
+  "webkit": "27.2"
+}

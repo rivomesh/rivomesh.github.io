@@ -67,4 +67,4 @@ A failed destination transaction rolls back completely and retains the queue hea
 
 Database operators repair source replication SQL errors. The service does not execute SQL_SLAVE_SKIP_COUNTER, inject empty GTIDs or RESET. A failed replica does not interrupt capture from a healthy primary; promotion of that unhealthy replica is rejected until repaired and caught up.
 
-V1 file-position tasks lack complete GTIDs and read dependencies. Automatic in-place upgrade is refused and old state is preserved. Consult [validation](/docs/en/reference/validation.html) for accepted versions and fault profiles; manual repair/skip, v2-to-v3 migration and automated business cutover remain unfinished.
+V1 file-position tasks lack complete GTIDs and read dependencies. Automatic in-place upgrade is refused and old state is preserved. Consult [validation](/docs/en/reference/validation.html) for accepted versions and fault profiles; current-format transactional SQL targets have separate [reviewed recovery](/docs/en/reference/failure-review.html) profiles. Configuration-format migration and automated business cutover remain open.

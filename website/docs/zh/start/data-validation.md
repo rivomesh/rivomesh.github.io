@@ -45,3 +45,13 @@ title: 核对数据与修复差异
 取消校验不等于恢复同步。完整来源数据已经保存时，可以使用“继续目标比对”；尚未完成来源读取且读取视图已经丢失时，需要检查并恢复任务后重新校验。
 
 详细限制和操作参数见[校验参考](../reference/managed-validation)与[修复参考](../reference/managed-repair)。业务切换需要独立方案，不能仅凭校验或修复成功直接接管写入。
+
+## 在审阅跳过后复核缺口
+
+在 PostgreSQL / MySQL 指定档案中，修正差异后重新运行完整共同点校验，从结果匹配的报告选定缺口并生成计划。管理员审批后重新扫描，回执只覆盖已审阅历史截面，任务继续保持暂停。详见[数据缺口复核](../reference/gap-verification)。
+
+## 已完成的校验报告
+
+<ScreenshotPreview name="data-validation" locale="zh" alt="RivoMesh 5c54522 中文控制台实拍，展示隔离环境中的共同点校验结果。" />
+
+RivoMesh 5c54522 中文控制台实拍，展示隔离环境中的共同点校验结果。

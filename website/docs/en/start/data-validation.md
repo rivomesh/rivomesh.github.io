@@ -26,3 +26,13 @@ Keep the task paused, explicitly select targets/tables, generate a plan, and rev
 Canceling cannot roll back tables already committed. After an interrupted operation, recover the original request/report/plan and inspect committed results rather than assuming nothing happened. Optional global mode supports cross-entry workflows within its documented fixed-owner acceptance profile; it is not automatic owner migration.
 
 [Managed validation](../reference/managed-validation) · [Managed repair](../reference/managed-repair) · [Global maintenance](../reference/global-control)
+
+## Verify a gap after a reviewed skip
+
+On the scoped PostgreSQL/MySQL profile, run a fresh complete common-cut comparison after correcting the differences. From its matching report, select gaps and prepare a verification plan for administrator approval and a fresh scan. The receipt covers the reviewed historical cut and leaves the task paused. See [data-gap verification](../reference/gap-verification).
+
+## A completed validation report
+
+<ScreenshotPreview name="data-validation" locale="en" alt="Common-cut comparison from the RivoMesh 5c54522 English test console." />
+
+Common-cut comparison from the RivoMesh 5c54522 English test console.

@@ -7,7 +7,7 @@ sourcePath: docs/en/managed-validation.md
 
 # Managed data validation
 
-The first management workflow supports SQL destination selection, time/staging budgets, durable background jobs, cancellation, sealed-source target retries and per-table summaries. Validation does not change business rows; see [managed repair](/docs/en/reference/managed-repair.html) for the subsequent reviewed workflow. Manual skip, constraint rebuilding and cutover remain open. Managed HTTP/database acceptance is separate; earlier CLI/barrier acceptance cannot establish it.
+The first management workflow supports SQL destination selection, time/staging budgets, durable background jobs, cancellation, sealed-source target retries and per-table summaries. Validation does not change business rows; see [managed repair](/docs/en/reference/managed-repair.html) for the subsequent reviewed workflow. Constraint rebuilding and business cutover remain open. Consult [transaction skipping](/docs/en/reference/transaction-skip.html) for its separate SQL recovery profile. Managed HTTP/database acceptance is separate; earlier CLI/barrier acceptance cannot establish it.
 
 ## Use the console
 
@@ -68,7 +68,7 @@ stateDiagram-v2
 ```
 
 
-First native managed acceptance passed LOCAL/H2 and external PostgreSQL/MySQL/openGauss journals with MySQL8.4/PostgreSQL17 destinations, including cancellation during an actual relation-lock wait, sealed-source retry and report/audit persistence across controller restart. See [evidence and failure corrections](/docs/zh/evidence/2026-11-16-managed-validation.html).
+First native managed acceptance passed LOCAL/H2 and external PostgreSQL/MySQL/openGauss journals with MySQL8.4/PostgreSQL17 destinations, including cancellation during an actual relation-lock wait, sealed-source retry and report/audit persistence across controller restart. See [evidence and failure corrections](/docs/zh/evidence/baseline.html).
 
 
 ## Administrator difference details

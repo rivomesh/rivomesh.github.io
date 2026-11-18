@@ -28,3 +28,11 @@ Docker Compose builds from source. Use addresses reachable from the container, a
 4. For several nodes, read [multi-node deployment](multi-node) before sharing any storage.
 
 [Create a task](create-task) · [Deployment reference](../reference/console-and-deployment) · [Browser sessions](../reference/browser-sessions)
+
+## Deployment profiles and probes
+
+Standalone uses persistent local control data. The default task journal uses H2. An external journal can use PostgreSQL, openGauss or a separate MySQL instance. Shared control profiles have PostgreSQL 17 and MySQL 8.4 records. Keep the control database and journal namespaces and credentials distinct.
+
+`GET /healthz` checks process liveness. `GET /readyz` can return 503 when a configured control service is unavailable. Check end-to-end replication in the task workspace. The Dockerfile builds and runs on Java 8 by default and provides its own probe. Native Kubernetes YAML and Helm templates are available for a prebuilt image. Live Kubernetes/CSI acceptance remains open.
+
+Shared control examples use `RIVOMESH_NODE_ID`, `RIVOMESH_CONTROL_USERNAME`, `RIVOMESH_CONTROL_PASSWORD` and, for shared tasks, `RIVOMESH_TASK_KEY`. Set the control mode before initialization. See [first-release configuration](../reference/first-release) and [deployment commands and profiles](../reference/console-and-deployment).

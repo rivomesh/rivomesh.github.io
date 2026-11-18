@@ -22,28 +22,86 @@ export function documentCopy(meta, raw) {
 `
 
   let text = raw
-  if (meta.locale === 'zh' && meta.group !== 'evidence') text = text.replaceAll('服务政企信创迁移', '服务信创迁移').replaceAll('Rivomesh 面向政企的数据库迁移', 'RivoMesh 支持信创改造中的数据库迁移').replaceAll('政企迁移目标', '信创改造目标')
-  if (meta.sourcePath.endsWith('/pipeline-v3.md')) {
-    const replacements = meta.locale === 'zh' ? [
-      ['English: [V3 pipelines]', 'English: [Multi-database pipelines]'],
-      ['V3 可从 CLI 或 Web 运行；向导默认 v3，也保留 v2 单库单目标配置。两种格式和管理表隔离，尚未自动迁移旧任务。', '可从 CLI 或 Web 运行，向导默认使用多库、多目标任务格式，并保留旧的单库单目标任务格式。两种格式和管理表隔离，尚未自动迁移旧任务。'],
-      ['使用默认 V3，', '保留默认任务格式，'],
-      ['手工补数/跳过、行级校验修复及自动切换工作台仍待完成。', '管理界面的逐行校验与计划修复已提供 MySQL / PostgreSQL 首批验证，见[数据核对流程](../start/data-validation.md)；手工补数/跳过及自动切换工作台仍待完成。'],
-      ['行级对账、修复及界面/接管工作流仍待完成。', '行级校验与计划修复的当前范围见[管理界面校验](managed-validation.md)和[管理界面修复](managed-repair.md)，业务接管工作流仍待完成。'],
-      ['手工补数/跳过、行级校验修复、切换回退及其 Web 操作仍在实现范围内。', '行级校验与计划修复按专门手册的限定范围使用；手工补数/跳过、切换回退及其 Web 工作流仍待完成。']
-    ] : [
-      ['# multi-database, multi-target pipelines', '# Multi-database, multi-target pipelines'],
-      ['[V3 运行手册]', '[多库、多目标运行手册]'],
-      ['V3 runs through the CLI and Web console. The wizard defaults to v3 and retains v2 single-database tasks. Formats/metadata are isolated; automatic v2 state migration is not implemented.', 'Pipelines run through the CLI and Web console. The wizard defaults to the multi-database, multi-target format and retains the older single-database format. Formats/metadata are isolated; automatic migration of old state is not implemented.'],
-      ['Keep V3 selected,', 'Keep the default task format,'],
-      ['Manual repair/skip, row reconciliation and automated cutover remain unfinished.', 'Managed row validation and planned repair have initial MySQL/PostgreSQL acceptance; see [validation](managed-validation.md) and [repair](managed-repair.md). Manual patch/skip and automated cutover remain unfinished.'],
-      ['Row comparison/repair, UI and cutover workflows remain pending.', 'Managed row comparison and planned repair are covered by the [validation](managed-validation.md) and [repair](managed-repair.md) manuals; business cutover remains pending.'],
-      ['Manual repair/skip, row reconciliation, cutover/failback and their Web workflows remain in scope.', 'Managed validation/repair use the dedicated manuals and their limited acceptance profile. Manual patch/skip, cutover/failback and their Web workflows remain unfinished.']
-    ]
-    for (const [from, to] of replacements) text = text.replaceAll(from, to)
-    // Authored website pages do not exist in the core checkout; resolve directly.
-    text = text.replaceAll('../start/data-validation.md', '/docs/zh/start/data-validation.html')
+  if (meta.sourcePath.endsWith('/implementation-status.md')) {
+    text = text.replace(/^.*\[progress-reports\.json\].*\n?/gm, '').trimEnd() + '\n'
   }
+  if (meta.locale === 'zh' && meta.group !== 'evidence') text = text.replaceAll('服务政企信创迁移', '服务信创迁移').replaceAll('Rivomesh 面向政企的数据库迁移', 'RivoMesh 支持信创改造中的数据库迁移').replaceAll('政企迁移目标', '信创改造目标')
+  if (/\/(pipeline-v3|console-and-deployment)\.md$/.test(meta.sourcePath)) {
+    // These manuals predate the bounded SQL recovery acceptance. Keep commands and evidence verbatim.
+    const zh = meta.locale === 'zh'
+    const recovery = zh
+      ? 'PostgreSQL / MySQL 指定事务型目标已提供[提交确认](commit-acknowledgement.md)、[事务跳过](transaction-skip.md)、[缺口复核](gap-verification.md)、[补偿](transaction-compensation.md)和[手工修正](manual-correction.md)。按[首版部署基线](first-release.md)启用对应能力。业务切换需独立规划。'
+      : 'Transactional PostgreSQL and MySQL have scoped profiles for [commit confirmation](commit-acknowledgement.md), [transaction skipping](transaction-skip.md), [gap verification](gap-verification.md), [compensation](transaction-compensation.md) and [manual correction](manual-correction.md). Configure the corresponding gates in the [first-release baseline](first-release.md). Plan business cutover separately.'
+    const recoveryParagraph = zh
+      ? /(?:已提供逐行校验和共同暂停点的审阅修复；失败事务手工补丁\/跳过、映射迁移和业务切换向导仍未完成。|独立手工补数\/跳过和自动切换工作台仍待完成。|手工补数\/跳过、行级校验修复、切换回退及其 Web 操作仍在实现范围内。|手工跳过、补偿和缺口台账仍未完成。)/g
+      : /(?:Row validation and reviewed repairs at a common paused cut are available; failed-transaction patches\/skips, mapping migration and business cutover remain open\.|independent corrective entry\/skip and automated cutover remain open\.|Manual repair\/skip, row reconciliation, cutover\/failback and their Web workflows remain in scope\.|manual skip,compensation and gaps remain open\.)/g
+    let reused = false
+    text = text.replace(recoveryParagraph, (match) => {
+      const open = match.startsWith('Row validation') ? 'Row validation and reviewed repairs at a common paused cut are available. '
+        : match.startsWith('已提供逐行') ? '已提供逐行校验和共同暂停点的审阅修复。' : ''
+      if (reused) return open + (zh ? '限定恢复档案见[当前实施状态](implementation-status.md)。' : 'See [implementation status](implementation-status.md) for scoped recovery.')
+      reused = true
+      return open + recovery
+    })
+    text = text
+      .replace('have explicit accepted profiles;', 'have explicit accepted profiles. ')
+      .replace('Default legacy profiles do not upgrade automatically;', 'Default legacy profiles do not upgrade automatically. ')
+      .replace('Row comparison/repair, UI and cutover workflows remain pending.', 'See [managed validation](managed-validation.md) and [reviewed repair](managed-repair.md) for the initial SQL profiles. Business cutover remains open.')
+      .replace('UI configuration editing remains pending.', 'See [configuration revisions](configuration-editor.md) for supported console changes.')
+      .replace('行级对账、修复及界面/接管工作流仍待完成。', '行级校验与审阅修复见[管理界面校验](managed-validation.md)和[管理界面修复](managed-repair.md)，业务接管需另行规划。')
+    if (meta.sourcePath.endsWith('/console-and-deployment.md')) {
+      text = text.replace(/^.*(?:The wizard supports Gauss|向导提供 Gauss).*$/m, zh
+        ? '各任务以隔离 JVM 运行，可限制堆内存和并发。多库多目标向导可配置关系数据库、分析系统和八种消息目标，并支持本地或外部日志。各产品的版本与验证范围见[连接器目录](/docs/zh/start/connectors.html)。旧单库单目标任务格式仍可运行。'
+        : 'Independent tasks run in isolated JVMs with bounded heap and concurrency. The multi-database wizard configures relational, analytical and eight messaging destinations plus local or external journals. See the [connector catalog](/docs/en/start/connectors.html) for product profiles. Legacy single-target tasks remain supported.')
+        .replace('Process probes without database side effects or authentication','Unauthenticated process probes. Readiness returns 503 if configured control services are unavailable.')
+    }
+  }
+  // These guide sentences predate the recovery operations accepted in RC-03 and RC-05–08.
+  const recentRecovery = {
+    'transaction-skip': [
+      ['RC-08 verified gap closure remains open.', 'RC-08 has bounded [data-gap verification](gap-verification.md) acceptance.'],
+      ['RC-08验证关闭缺口仍未完成。', 'RC-08 已验收指定 SQL 档案的[数据缺口复核](gap-verification.md)。']
+    ],
+    'commit-acknowledgement': [
+      ['Skipping,before-image compensation,manual data correction and gap ledgers remain separate unfinished features.', 'Use the separate guides for [skipping](transaction-skip.md), [compensation](transaction-compensation.md), [row correction](manual-correction.md) and [gap verification](gap-verification.md).'],
+      ['跳过、前镜像补偿、手工补数据和缺口台账是其他尚未完成的功能。', '[跳过](transaction-skip.md)、[补偿](transaction-compensation.md)、[手工修正](manual-correction.md)及[缺口复核](gap-verification.md)各有独立流程。']
+    ],
+    'failure-review': [
+      ['Editing/skipping,native SKIP/compensation receipts and gap tracking remain open.', 'Administrators can use separate reviewed operations for [whole-transaction skip](transaction-skip.md), [compensation](transaction-compensation.md) and [target corrections](manual-correction.md).'],
+      ['跳过和补偿仍未实现。', '指定 SQL 目标可通过独立审批执行[事务跳过](transaction-skip.md)或[补偿](transaction-compensation.md)。'],
+      ['修改/跳过、原生 SKIP/补偿凭据及缺口台账仍待实现。', '指定 SQL 目标的[跳过](transaction-skip.md)、[补偿](transaction-compensation.md)和[目标行修正](manual-correction.md)需要单独审批。']
+    ],
+    'managed-validation': [
+      ['Manual skip, constraint rebuilding and cutover remain open.', 'Constraint rebuilding and business cutover remain open. Consult [transaction skipping](transaction-skip.md) for its separate SQL recovery profile.'],
+      ['手工跳过、约束重建或业务切换仍未完成。', '约束重建与业务切换待实现。[事务跳过](transaction-skip.md)有独立的 SQL 恢复档案。']
+    ],
+    'managed-repair': [
+      ['Failed-transaction before-image compensation,manual skip/consistency gaps,nonempty adoption,constraint restoration and cutover are separate pending workflows.', 'For a failed transaction, see [compensation](transaction-compensation.md) or [reviewed skip](transaction-skip.md). Nonempty adoption, constraint restoration and cutover remain open.'],
+      ['失败事务前镜像补偿、手工跳过、一致性缺口、非空接管、约束恢复和切换仍属于后续工作。', '失败事务可以按对应条件使用[前镜像补偿](transaction-compensation.md)或[审阅跳过](transaction-skip.md)。非空接管、约束恢复和业务切换仍待实现。']
+    ],
+    'reconciliation-workflow': [
+      ['failed-transaction compensation and cutover remain pending.', 'see [transaction compensation](transaction-compensation.md) for the separate SQL workflow. Business cutover remains open.'],
+      ['其他补偿模式和业务切换尚未完成。', '失败事务另有[补偿手册](transaction-compensation.md)，业务切换仍待完成。'],
+      ['失败事务补偿或业务切换仍未完成。', '失败事务补偿见[独立手册](transaction-compensation.md)，业务切换仍待完成。']
+    ],
+    'requirements-and-decisions': [
+      ['manual skip/failed-transaction compensation are not implemented', 'reviewed skip and compensation have bounded SQL acceptance'],
+      ['人工跳过和失败事务补偿尚未实现', '受控跳过和失败事务补偿有 SQL 限定验收'],
+      ['global control,persistent login,skip/patch and cutover remain', 'shared sessions, fixed-owner controls and reviewed SQL recovery have scoped profiles. Cutover remains open'],
+      ['跨节点、登录保持、跳过补数据、切换仍待完成', '共享会话、固定 Agent 控制及审阅恢复有指定档案，业务切换仍待完成'],
+      ['COMMON_CUT repair is not failed-transaction compensation;new modes,gap ledger and UI/API remain', 'Bounded SQL profiles have reviewed transaction skip, gap verification and manual corrections'],
+      ['共同点修复不等于失败事务补偿；新模式、缺口台账及相关UI/API尚未完成', '受控事务跳过、缺口复核与目标行修正有 SQL 限定验收']
+    ],
+    'rename-migration': [
+      ['Transaction-skip UI integration and the full compatibility matrix remain open in SDD.', 'See [implementation status](implementation-status.md) for current recovery evidence and outstanding compatibility profiles.'],
+      ['待开发的事务跳过界面及完整兼容矩阵仍按 SDD 跟踪，不因本次更名变为已完成。', '当前恢复验收与待验证环境见[实施状态](implementation-status.md)。']
+    ],
+    'recovery': [
+      ['manual repair/skip, v2-to-v3 migration and automated business cutover remain unfinished.', 'current-format transactional SQL targets have separate [reviewed recovery](failure-review.md) profiles. Configuration-format migration and automated business cutover remain open.']
+    ]
+  }
+  const stem = meta.sourcePath.split('/').at(-1).replace(/\.md$/, '')
+  for (const [from, to] of recentRecovery[stem] || []) text = text.replace(from, to)
   if (meta.sourcePath.endsWith('/global-control.md')) {
     text=text.replace('控制器关闭目前仍会停止其 Worker，独立执行生命周期、自动迁移、排空、调度和旧 Worker 隔离属于 CP-04/07。','默认组合模式的控制器退出仍会停止本机 Worker。显式管理/Agent 分离的已验收范围见[独立执行生命周期](execution-lifecycle.md)；自动迁移、排空、调度和跨 Agent 隔离仍单独推进。')
     text=text.replace('下一阶段按[独立执行生命周期合同](../sdd/001-control-recovery-compatibility/design-execution-lifecycle.md)实现；该合同尚未完成，不能把管理实例退出时Worker仍可独立运行写成现有能力。','显式管理/Agent 分离的指定档案已经验收，见[独立执行生命周期](execution-lifecycle.md)。默认组合模式仍耦合，不能将分离档案的结果套用到全部部署。')

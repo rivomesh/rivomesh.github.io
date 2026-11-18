@@ -15,7 +15,7 @@ sourcePath: docs/zh-CN/global-control.md
 
 所有节点使用相同的控制库、cluster.id、namespace、sharedAccess=true、sharedTasks=true 和 taskKey；各节点使用不同且稳定的 nodeId，以及独立持久化的任务/数据目录。taskKey 必须是规范 Base64 编码的 32 字节随机密钥，通过受保护环境变量提供。不要放入任务 YAML，不要共用 controller.json。首次启用必须使用没有既有任务的目录；已有本机任务或 YAML 会以 GLOBAL_TASK_IMPORT_REQUIRED 拒绝，目前没有自动导入工具。
 
-[平台示例](/files/config/platform-global.example.yml)给出 Linux 启动配置。先备份控制库、私有目录及密钥。旧成员必须正常停止并登记 STOPPED 后才升级共享协议；失联或租约过期不等于停止。协议升级后，本机/仅共享登录模式的旧成员会被拒绝。禁用 sharedTasks、换节点 ID、丢失目录身份或错误密钥也不会回退到本机任务权威。
+[平台示例](/files/config/platform-global.example.yml)支持Linux。首次部署按[首版基线](/docs/zh/reference/first-release.html)固定全部节点的模式、身份与密钥；控制模式不匹配拒绝，不再自动升级。更换节点ID、目录身份或错误密钥不会回退为本机任务权威。
 
 ```sh
 java -jar rivomesh-app-0.1.0-SNAPSHOT.jar serve config/platform-global.example.yml
@@ -69,11 +69,3 @@ owner 失联期间 STOP 保持等待。必须恢复原节点的私有目录/卷�
 **哪些证据已经具备？** 先前候选已有真实 PostgreSQL/MySQL 控制库、两个独立 JVM、HTTPS 共享登录、A 创建 B 任务和离线命令测试；配置专项还有实际 TaskService 加夹具 Worker 验证。新启动修正和真实跨节点业务 CDC 正在补验，不能把这些测试当作全部集群、连接器和硬件性能验收。
 
 **为什么没有常驻预览？** 按用户要求，验收仅启动临时资源并清理自己的容器/卷；其他项目资源不受影响。
-
-## 多目标维护回执与升级恢复
-
-中间候选463994bca812在真实双目标校验中暴露集合归一化差异：校验已完成、任务保持PAUSED，但恢复请求签名不一致而记录UNKNOWN/OWNER_RECEIPT_MISMATCH。修正统一使用本机接受时的输入校验和集合排序规则，保留原请求、修订、操作者及报告身份，不改写结果为猜测成功。多个目标及重试显式null目标范围已有专项回归。候选b2b9a078已通过339项发布包优先测试、五JDK各143项专项、真实双目标校验/修复和旧UNKNOWN原报告升级恢复，见[证据](/docs/zh/evidence/2026-11-17-global-maintenance.html)。不要手工修改共享表状态或重新发起另一份校验来掩盖未知结果。
-
-显式管理/Agent 分离的指定档案已经验收，见[独立执行生命周期](/docs/zh/reference/execution-lifecycle.html)。默认组合模式仍耦合，不能将分离档案的结果套用到全部部署。
-
-2026-11-17: explicit protocol4 controller/Agent separation is accepted for the declared profile;default combined mode remains coupled. [Operations](/docs/zh/reference/execution-lifecycle.html) · [Evidence](/docs/zh/evidence/2026-11-17-execution-lifecycle.html).

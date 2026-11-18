@@ -11,3 +11,7 @@ Check the direction, availability state and exact product profile before selecti
 <ConnectorCatalog />
 
 Relational, analytical and messaging targets have different acknowledgement and recovery protocols. Multiple targets acknowledge independently; messaging consumers still need protocol-level deduplication.
+
+## Connector capabilities in the console
+
+<ScreenshotPreview name="connector-catalog" locale="en" alt="English RivoMesh connector catalog captured from the 5c54522 development preview." />

@@ -11,7 +11,7 @@ sourcePath: docs/en/doris-v3.md
 
 ## Current scope
 
-Native MySQL-protocol DDL/metadata and HTTP Stream Load are implemented. Independent native recovery and the actual MySQL+PostgreSQL mixed failure pipeline passed; see [archived evidence](/docs/zh/evidence/2026-11-15-doris.html). The first environment uses official `apache/doris:all-in-one-4.1.3` ARM64, internally reporting `doris-4.1.3-rc02-7126cf65d96`. This is not acceptance of every Doris release, cluster or production capacity.
+Native MySQL-protocol DDL/metadata and HTTP Stream Load are implemented. Independent native recovery and the actual MySQL+PostgreSQL mixed failure pipeline passed; see [archived evidence](/docs/zh/evidence/baseline.html). The first environment uses official `apache/doris:all-in-one-4.1.3` ARM64, internally reporting `doris-4.1.3-rc02-7126cf65d96`. This is not acceptance of every Doris release, cluster or production capacity.
 
 Doris is an analytical materializer, separate from transactional relational sinks. It is neither a generic transactional MySQL Sink nor an external Journal. Sources remain MySQL; explicit database mappings and fan-out apply.
 
@@ -80,8 +80,8 @@ Design references: [Stream Load](https://doris.apache.org/docs/4.x/data-operate/
 
 ## SQL modes and text validation
 
-Catalog, receipt and row-verification values use binary server-prepared MySQL parameters. The adapter forces `useServerPrepStmts=true` and `emulateUnsupportedPstmts=false`; an unsupported protocol fails instead of silently reverting to literal interpolation. DDL comments contain safe internal identifiers only. Actual Doris4.1.3/Java8 EMPTY and `NO_BACKSLASH_ESCAPES` profiles passed quoted/backslash names, Unicode/emoji text, snapshot, CDC and session reconstruction. Malformed UTF-16 fails deterministically with `DORIS_TEXT_ENCODING_INVALID`, rather than retrying invalid text indefinitely; see [additional evidence](/docs/zh/evidence/2026-11-15-doris-hardening.html).
+Catalog, receipt and row-verification values use binary server-prepared MySQL parameters. The adapter forces `useServerPrepStmts=true` and `emulateUnsupportedPstmts=false`; an unsupported protocol fails instead of silently reverting to literal interpolation. DDL comments contain safe internal identifiers only. Actual Doris4.1.3/Java8 EMPTY and `NO_BACKSLASH_ESCAPES` profiles passed quoted/backslash names, Unicode/emoji text, snapshot, CDC and session reconstruction. Malformed UTF-16 fails deterministically with `DORIS_TEXT_ENCODING_INVALID`, rather than retrying invalid text indefinitely; see [additional evidence](/docs/zh/evidence/baseline.html).
 
 Sources: [Doris prepared statements](https://doris.apache.org/docs/4.x/key-features/prepared-statement/), [string literals](https://doris.apache.org/docs/3.x/sql-manual/basic-element/literal/string-literal/).
 
-After the binding change, current release9a087 also passed an actual MySQL8.4.13→PostgreSQL17.12+Doris4.1.3 pipeline with outage catch-up, worker kill, SQL repair/retry and missing-view isolation. The native mode/old-backup case used11667063; all14Doris adapter classes match9a byte-for-byte. See [additional evidence](/docs/zh/evidence/2026-11-15-doris-hardening.html) for artifact and scope distinctions.
+After the binding change, current release9a087 also passed an actual MySQL8.4.13→PostgreSQL17.12+Doris4.1.3 pipeline with outage catch-up, worker kill, SQL repair/retry and missing-view isolation. The native mode/old-backup case used11667063; all14Doris adapter classes match9a byte-for-byte. See [additional evidence](/docs/zh/evidence/baseline.html) for artifact and scope distinctions.

@@ -11,7 +11,7 @@ sourcePath: docs/en/oceanbase-v3.md
 
 ## Current scope
 
-V3 configuration, CLI, fan-out workers and the bilingual wizard are implemented. Native OceanBase CE 4.3.5.6 ARM64/Java 8 transactions, cross-database rollback, ownership/epoch fences, snapshots/types and partial CDC passed. **Full mixed restart/recovery acceptance has not passed; the adapter remains EXPERIMENTAL.** See the [evidence](/docs/zh/evidence/2026-11-15-oceanbase.html). This does not claim all versions, clusters or Oracle-mode support.
+V3 configuration, CLI, fan-out workers and the bilingual wizard are implemented. Native OceanBase CE 4.3.5.6 ARM64/Java 8 transactions, cross-database rollback, ownership/epoch fences, snapshots/types and partial CDC passed. **Full mixed restart/recovery acceptance has not passed; the adapter remains EXPERIMENTAL.** See the [evidence](/docs/zh/evidence/baseline.html). This does not claim all versions, clusters or Oracle-mode support.
 
 `product: OCEANBASE` uses MySQL Connector/J 8.4.0 and `jdbc:mysql://`, normally port 2881. Connect to a **MySQL-mode user tenant**, usually with `rivomesh@business`, rather than `root@sys`. Every new connection verifies OceanBase identity, mode and a non-system tenant, then forces `ob_read_consistency=STRONG`. A MySQL wire version is not the OceanBase product version. Oracle mode, seekdb and other compatible products are outside this verified profile.
 

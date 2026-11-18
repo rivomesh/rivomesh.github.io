@@ -33,4 +33,4 @@ Two controller JVMs plus an independent Agent/Worker and real SQL business data:
 
 [中文](/docs/zh/sdd/design-execution-lifecycle.html) · [Current global control](/docs/en/reference/global-control.html)
 
-2026-11-17: protocol4 implementation and declared LOCAL-journal lifecycle accepted. [Evidence](/docs/zh/evidence/2026-11-17-execution-lifecycle.html). Current deployment instructions and remaining limits are in the operations guide.
+2026-11-17: protocol4 implementation and declared LOCAL-journal lifecycle accepted. [Evidence](/docs/zh/evidence/baseline.html). Current deployment instructions and remaining limits are in the operations guide.

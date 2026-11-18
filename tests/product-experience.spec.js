@@ -92,7 +92,7 @@ describe('product roadmap and engineering details',()=>{
 describe('product media and trial commands',()=>{
  it('uses English PNG and responsive images for every English gallery view',async()=>{
   state.frontmatter.value.locale='en'
-  const wrapper=create(ProductGallery),names=['console-overview','task-wizard','connector-catalog']
+  const wrapper=create(ProductGallery,{props:{full:true}}),names=['console-overview','task-wizard','connector-catalog','target-recovery']
   for(const [i,name]of names.entries()){
    await wrapper.findAll('.gallery-controls button')[i].trigger('click')
    expect(wrapper.get('picture img').attributes('src')).toBe(`/media/${name}-en.png`)
@@ -147,8 +147,9 @@ describe('product media and trial commands',()=>{
  it('switches original screenshots with keyboard-usable buttons',async()=>{
   const wrapper=create(ProductGallery)
   const controls=wrapper.findAll('.gallery-controls button')
-  await controls[1].trigger('click')
-  expect(controls[1].attributes('aria-pressed')).toBe('true')
+  expect(wrapper.get('picture img').attributes('src')).toBe('/media/task-wizard.png')
+  await controls[0].trigger('click')
+  expect(controls[0].attributes('aria-pressed')).toBe('true')
   expect(wrapper.get('picture img').attributes('src')).toBe('/media/task-wizard.png')
   expect(wrapper.get('picture img').attributes('width')).toBe('1800')
   expect(wrapper.get('picture img').attributes('height')).toBe('912')
