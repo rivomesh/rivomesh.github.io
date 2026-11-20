@@ -7,13 +7,13 @@ sourcePath: docs/zh-CN/browser-sessions.md
 
 # 浏览器登录保持与会话恢复
 
-English：[Browser sessions](/docs/en/reference/browser-sessions.html)。规格：RM-SDD-001 的 SE-01/02/03/05；跨控制节点共享会话 SE-04 仍未完成。
+English：[Browser sessions](/docs/en/reference/browser-sessions.html)。
 
 ## 登录和恢复
 
 仍使用部署令牌或托管账号令牌登录。页面用一次 `POST /api/session` 将 Bearer 令牌换成服务器会话，立即清空输入框；后续通过 HttpOnly Cookie 认证。页面脚本不保存长期令牌，不把会话写入 URL、localStorage 或 sessionStorage。刷新、新标签页和重新打开同一站点时，先 `GET /api/session` 恢复身份、任务范围和 CSRF 凭证，再加载任务；失效时回到登录页。语言偏好仍可写 localStorage。
 
-会话存储有 Store 接口，目前只有有界内存实现。**控制服务重启会清空全部浏览器会话，需要重新登录**；任务、账号和审计仍按各自持久化协议恢复。此功能不代表多控制实例登录连续性，也不能把多个独立控制器放到负载均衡后当成已支持集群。共享控制/会话权威状态将在后续阶段实现。
+单机模式使用有界内存会话存储，重启 Controller 后需重新登录。多 Controller 可通过[共享访问存储](/docs/zh/reference/shared-access.html)保持会话。
 
 退出立即清空界面、配置草稿、原始差异及权限，并向服务端撤销当前会话。其他标签页通过 BroadcastChannel 收到退出通知；不支持该接口的浏览器在下次 API 请求/轮询发现失效。登录和退出请求在同一页面串行，避免晚到的登录响应留下有效 Cookie。旧 API 响应不能恢复已清除的界面。刷新发现 Cookie 已换为另一会话时，先清空旧身份草稿及详情，再恢复新身份权限。服务端未确认退出时显示失败提示，可再次点击退出重试；只清空界面不能当成已经撤销服务器凭证。
 

@@ -7,7 +7,7 @@ sourcePath: docs/en/shared-access.md
 
 # Shared accounts, sessions and audit
 
-中文：[共享身份](/docs/zh/reference/shared-access.html). [Contract](/docs/en/sdd/design-shared-access.html). Acceptance follows [implementation status](/docs/en/reference/implementation-status.html) and candidate evidence.
+中文：[共享身份](/docs/zh/reference/shared-access.html). Acceptance follows [implementation status](/docs/en/reference/implementation-status.html) and candidate evidence.
 
 Set`cluster.sharedAccess: true`consistently before first deployment,following the[first-release baseline](/docs/en/reference/first-release.html). Shared identity uses one SQL authority;restart recovery remains supported. Existing namespace modes are not automatically migrated. Global tasks additionally require sharedTasks.
 
@@ -21,12 +21,33 @@ A login at A resumes at B and survives A shutdown/kill/restart. Logout revokes i
 
 Members must agree on enabled/Secure/remember policy, idle/absolute expiry, session capacity and audit retention. publicOrigin can differ by direct endpoint; a common HTTPS frontend uses the same external origin. Limits:200accounts,10000task grants per account and4MiB serialized directory. Capacity rejects a change without changing prior state. Sessions share one global maximum. Audit uses auditMaxEvents; non-HTTP idempotency receipts are retained separately without automatic cleanup yet, so monitor disk growth. Retention governance remains LG-09.
 
-Worker JVMs receive essential OS variables and explicitly referenced task variables. Unreferenced parent variables/JAVA_TOOL_OPTIONS and management/control-store credential variables are withheld; referencing protected names returns WORKER_ENVIRONMENT_DENIED. Use task-specific source/target/journal settings and explicit approved TLS/Kerberos driver configuration. Workers remain trusted SDK processes under the installation user; filesystem isolation, dedicated containers/Vault and finer task-secret distribution remain CP-05 work.
+Organization sign-in with an explicitly bound OIDC identity uses this same session and access authority. [Configure organization sign-in](/docs/en/reference/oidc-login.html)
 
-Deployment: enable the field in [platform-cluster.yml](/files/config/platform-cluster.yml), keeping independent local directories. Helm has [values-shared-access.yaml](/files/deploy/helm/rivomesh/values-shared-access.yaml); native YAML has [shared-a](/files/deploy/kubernetes/rivomesh-shared-a.yaml) / [shared-b](/files/deploy/kubernetes/rivomesh-shared-b.yaml). Supply dedicated store credentials through Secret. Live Kubernetes/CSI/controller HA remain separate acceptance.
+## Worker credential references
+
+An Agent can opt in to a task-scoped environment allowlist in its platform configuration:
+
+```yaml
+workerSecretReferences:
+  orders: [ORDERS_SOURCE_PASSWORD, ORDERS_WAREHOUSE_PASSWORD]
+  billing: [BILLING_SOURCE_PASSWORD]
+```
+
+Provision the named variables in that Agent deployment and reference them in the corresponding task's existing source (including Oracle root and PDB), destination or journal password fields or messaging token field. A task accepts only its assigned names in those fields. The Worker receives only the names actually referenced by that task, plus essential OS variables. Names assigned to another task, references used as a task or node identity and missing values return a typed refusal. Management, control-store and process override variables remain protected. An omitted allowlist keeps the existing deployment behavior. An empty map allows no task environment references. Set and maintain grants on the execution Agent, because the Controller sends the task configuration with unresolved references.
+
+Configuration responses show opaque, field-bound retain references in place of credential values and original variable names. Workers run as trusted SDK processes under the installation user. Keep Agent access and private data directories under the corresponding deployment identity.
+
+## Correlate a remote operation
+
+Export the shared audit window from either Controller. Compute SHA-256 of the operation's request ID and match it to `clientRequestHash` and `taskId`. In a `GLOBAL_COMMAND_OUTCOME` row, `subjectId` identifies the executing Agent. For a repair, the matching owner `OPERATION_COMMITTED` row carries the repair plan ID as its `subjectId`. Both records are available in the same shared audit chain.
+
+## Deployment
+
+Enable the field in [platform-cluster.yml](/files/config/platform-cluster.yml), keeping independent local directories. Helm has [values-shared-access.yaml](/files/deploy/helm/rivomesh/values-shared-access.yaml); native YAML has [shared-a](/files/deploy/kubernetes/rivomesh-shared-a.yaml) / [shared-b](/files/deploy/kubernetes/rivomesh-shared-b.yaml). Supply dedicated store credentials through Secret. Live Kubernetes/CSI/controller HA remain separate acceptance.
 
 ## Recovery and FAQ
 
+- `WORKER_SECRET_REFERENCE_DENIED` or `WORKER_SECRET_REFERENCE_UNSET`: check the task ID, credential field, Agent-local grant and provisioned variable. After changing the deployment policy, restart the Agent to load it and retry the task.
 - Lost all admin tokens: stop one local controller and use the existing access-recover command with a protected configured ADMIN seed. Shared mode updates SQL authority, revokes sessions and audits recovery atomically. Verify and rotate temporary credentials.
 - SHARED_ACCESS_QUIESCENCE_REQUIRED: stop all old members gracefully; STALE is not confirmed stopped. If isolation is uncertain, plan/verify it before switching, without editing STOPPED records directly.
 - SHARED_ACCESS_REQUIRED: restore the bound cluster/sharedAccess configuration; disabling it cannot revive old local tokens.

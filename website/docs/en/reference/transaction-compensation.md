@@ -21,3 +21,16 @@ A preview covers one destination and one complete transaction with up to 1,000 a
 Execution checks the reviewed rows and checkpoint again. Generate a fresh preview after drift. Reconcile acknowledgment first when the original transaction has committed. Triggers, foreign keys or unsupported table shapes require separate dependency handling. The connection needs the same dependency visibility as reconciliation repair.
 
 Send `COMPENSATION_PLAN` or `COMPENSATION_EXECUTE` to `POST /api/tasks/{task}/actions`. Supply `X-Request-ID`, `expectedRevision`, `subscriptionId`, the subscriber's `errorCount`, `compensation.evidenceId` and `compensation.evidenceHash`. Execute also requires `compensation.approvedHash` from the preview result and `compensation.reason`. If the response is lost, inspect operation history or retry with the same request ID and original payload. Rows and the receipt commit together in one destination transaction. The task stays paused.
+
+## Cross-node cancellation and recovery
+
+Open the task from any management entry and select “Request recovery cancellation” under “Transaction recovery and data gaps”. Each button identifies the original compensation preview, compensation write or manual correction write. Administrators can also send `RECOVERY_CANCEL` to the task actions endpoint with the current `expectedRevision` and the original `parentRequestId`. Give the cancellation its own `X-Request-ID`. A successful response acknowledges the request. Check the original operation for the final outcome.
+
+| Original operation code | Action |
+|---|---|
+| `CANCELLED_BEFORE_DISPATCH` | The request was still queued. Inspect the cancellation audit and original request. |
+| `RECOVERY_CANCELLED` | The preview stopped or the destination confirmed the absence of a commit receipt. Address the original fault before previewing and approving again. |
+| `RECOVERY_CANCEL_RESOLVING` | The Agent is checking the original receipt using a read-only path. Restore destination connectivity and wait for the original outcome. |
+| `COMPENSATION_COMPLETED` or `CORRECTION_COMPLETED` | The destination committed. Inspect the original receipt for scope, digest and checkpoint. |
+
+Cancellation and restart preserve the paused state and journal acknowledgment. If a controller goes offline, inspect the original request through another entry. Restart a failed Agent with its original private directory to recover pending requests automatically. Committed rows and the receipt come from the same destination transaction. The Agent reads that receipt under the original request ID. The database rolls back an uncommitted transaction, then the Agent retries the original approval or checks the receipt for an accepted cancellation. Manage gaps and cutover approvals through their own workflows.

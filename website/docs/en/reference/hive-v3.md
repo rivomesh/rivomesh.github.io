@@ -13,7 +13,7 @@ sourcePath: docs/en/hive-v3.md
 
 **The first independent native and actual mixed recovery profiles passed; the catalog retains an experimental label.** CLI/Web V3 configuration, isolated JDBC, native HiveServer2 checks, ACID ORC history and latest-version views are implemented. Hive4.0.1/Java8 independent acceptance covered PK moves, keyless multiplicity, precision, lost-confirmation replay, case-folding, restart and older nonempty backup refusal. Actual MySQL8.4.13→PostgreSQL17.12+Hive passed snapshot/CDC, independent Hive outage and catch-up, worker SIGKILL resume, SQL constraint repair/retry, missing-view isolation and truthful pause fences. The final artifact/worktree-assets gate passed too; see [evidence](/docs/zh/evidence/baseline.html). This does not accept every Hive version, cluster or production capacity profile.
 
-The first fixture is official `apache/hive:4.0.1` ARM64, one HiveServer2, persistent embedded Derby and local warehouse. It is not a production/HA deployment. HDFS/S3, external Metastore, Tez, Kerberos, TLS, clusters and other JDKs remain unverified.
+The first fixture used the official `apache/hive:4.0.1` ARM64 image, one HiveServer2, embedded Derby and a local warehouse. The Temurin 21 fixture also verifies a standalone Hive Metastore backed by PostgreSQL. HDFS/S3, Tez, Kerberos, TLS and clustered failover require separate acceptance. [External PostgreSQL Metastore fixture](#external-postgresql-metastore-fixture)
 
 ## Layout and consistency
 
@@ -86,3 +86,23 @@ The fixture uses `HIVESERVER2_PID_DIR` on a dedicated ephemeral runtime mount to
 The mixed fixture returned three detail rows but a cached COUNT0. A fresh session with only query-results cache disabled returned COUNT3 while stats optimization remained enabled. This observation does not establish the same problem for every Hive release/deployment. The first supported profile requires the server default and all reader sessions to use `hive.query.results.cache.enabled=false`; the writer session must also disable it. Read-only preflight and write-time checks refuse enabled cache with `HIVE_QUERY_CACHE_DISABLED_REQUIRED`, without silently changing global settings.
 
 Disabling cache only on the writer cannot protect other readers. Do not re-enable it in application connections or manually add rows based on stale cached counts. Correct server/reader settings before check/resume; this does not require resetting data, task identity or checkpoints. The original cache-enabled mixed run was explicitly aborted and is not accepted complete recovery. The cache-disabled profile passed independent materialization/restart/older-backup refusal; the frozen-release complete mixed run passed too; see [evidence](/docs/zh/evidence/baseline.html).
+
+## Java 21 outage and batch verification
+
+The ARM64 fixture uses MySQL 8.4.13 with PostgreSQL 17.12 and HiveServer2 4.0.1 destinations. When Hive stops, PostgreSQL continues and Hive keeps its journal acknowledgement and exact batch receipt. The fixture reads the original and later receipts directly from Hive and checks the same owner, resource UUID and warehouse location after HiveServer2 and Worker restart. Worker restart reuses the original snapshot. After a PostgreSQL constraint violation, replay to that subscription leaves the Hive receipt unchanged.
+
+Run `RIVOMESH_TEST_PREBUILT=1 bash tests/hive-pipeline-run.sh` after compiling the Java 21 JAR and test classes. The fixture restarts a single HiveServer2 with its embedded Derby Metastore and local warehouse volumes. [Hive transactions](https://hive.apache.org/docs/latest/user/hive-transactions/) · [Verification record](/docs/zh/evidence/baseline.html)
+
+## External PostgreSQL Metastore fixture
+
+Supply the PostgreSQL JDBC driver separately to run the Java 21 pipeline against HiveServer2 4.0.1, a standalone Hive Metastore and a dedicated PostgreSQL 17.12 catalog. The stock Hive schema tool initializes and validates the disposable catalog. The port probe waits for HiveServer2 to accept connections and Rivomesh then runs its normal JDBC checks.
+
+The completed native run passed seven checks. HiveServer2, Metastore and the catalog stopped together while the separate PostgreSQL business destination advanced. After restart, the PostgreSQL system identifier, Hive table ID, resource UUID, owner and warehouse location matched the original catalog. Worker SIGKILL resumed the original snapshot and four Hive batch receipts remained tied to the same resource. Replaying an independent PostgreSQL constraint error preserved the Hive receipts. [Verification record](/docs/zh/evidence/baseline.html#hive-external-postgresql-metastore-full-restart-and-recovery)
+
+```sh
+RIVOMESH_TEST_PREBUILT=1 bash tests/hive-pipeline-run.sh --postgres-metastore /path/to/postgresql-42.7.14.jar
+```
+
+HiveServer2 and Metastore share a local warehouse volume in this fixture. The restart retains the same PostgreSQL catalog and warehouse volumes. Distributed warehouse storage and automatic Metastore or PostgreSQL failover require their own tests. [Apache Hive Docker setup](https://hive.apache.org/docs/latest/admin/setting-up-hive-with-docker/)
+
+The isolated Metastore's Hadoop `core-site.xml` grants its notification API to the `hive` identity from the HiveServer2 Compose hostname. Without that entry, HiveServer2 can fail at startup with `get_current_notificationEventId` authorization errors even when the PostgreSQL schema has passed validation. [Hive 4.0.1 notification authorization](https://github.com/apache/hive/blob/rel/release-4.0.1/standalone-metastore/metastore-server/src/main/java/org/apache/hadoop/hive/metastore/HMSHandler.java#L8993-L9027)

@@ -6,7 +6,7 @@ title: Backup and recovery
 
 # Preserve state for recovery
 
-A recovery plan must retain task configuration and identity, journal events/checkpoints, target business and management state, and the controller's private data. Keep source binlogs long enough for the outage and catch-up window.
+A recovery plan must retain task configuration and identity, journal events and checkpoints, destination business and management state, and private Controller and Agent data. Retain the source logs through the outage and catch-up window. Keep the MySQL binlog and GTID, the PostgreSQL slot, WAL and LSN, or the Oracle archives and SCN for the saved cut.
 
 ## Back up together
 
@@ -17,10 +17,12 @@ A recovery plan must retain task configuration and identity, journal events/chec
 
 Choose a coordinated backup/restore plan. Restoring a checkpoint alone cannot reconstruct already removed events, and an old consistent backup can reintroduce old permissions that need review.
 
+Stop the task and close all connections before copying an H2 journal. For separated deployments, also preserve original Agent directory identity, keys, receipts and private evidence. See [first-release operations](../reference/first-release) and [capture recovery](../reference/capture-recovery).
+
 ## Rehearse recovery
 
 Stop according to the operation plan, preserve directories/volumes, reopen the original identities and verify snapshot/CDC content and target acknowledgements. For global mode, inspect the original command/report receipt and restore the fixed owner's matching directory and key. An empty directory cannot impersonate that owner.
 
-Cross-host synchronization continuation uses the external journal profile. Source database promotion, worker journal ownership and global controller relocation are separate concerns. Explicit separated controller/Agent deployment has its own initial acceptance profile. Automatic owner relocation and the full HA matrix remain open.
+Cross-host continuation uses an external journal. For a global task, use the documented handoff if its original writer was durably frozen before the Agent became unavailable. Otherwise recover the original Agent and its private state. Treat database source promotion and Worker ownership as separate operations.
 
 [Multi-node guide](multi-node) · [Pipeline journal requirements](../reference/pipeline-v3) · [Recovery reference](../reference/recovery)

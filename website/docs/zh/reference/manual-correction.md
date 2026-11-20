@@ -48,3 +48,5 @@ sourcePath: docs/zh-CN/manual-correction.md
 | 列值包含精确小数或超出 JavaScript 安全整数范围 | 使用字符串录入，避免先经过浮点转换 |
 
 前后值通过管理员预览接口返回。任务列表和已提交凭据展示表范围、计数和摘要。修改只写目标，提交后源日志、GTID 和确认进度保持原状。
+
+修正执行等待期间，可以从任一管理入口[取消原请求并核对提交结果](/docs/zh/reference/transaction-compensation.html#跨节点取消与恢复)。

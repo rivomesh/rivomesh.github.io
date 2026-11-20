@@ -10,9 +10,9 @@ title: 快速开始
 
 ## 1. 准备环境
 
-- Java 8 与 Maven；其他 JDK 的验证档案见[性能与运行时手册](../reference/performance)。
+- Eclipse Temurin 21 LTS 与 Maven。运行 `mvn -version` 和 `java -version`，确认构建和运行使用同一个 Temurin 21。
 - 一个符合 GTID、ROW/FULL 行镜像等要求的 MySQL 测试源。
-- 一个独立 PostgreSQL / openGauss 测试目标，使用空业务表或空 schema。
+- 一个独立 PostgreSQL 17 测试目标，使用空业务表或空 schema。
 - 数据库连接账号、网络访问与持久存储。管理 schema 与业务 schema 分开，目标业务表由同步服务独占写入。
 
 ::: warning 数据库准备
@@ -33,7 +33,7 @@ mvn -s build/settings.xml verify
 
 ```bash
 export RIVOMESH_TOKEN="$(openssl rand -hex 32)"
-java -Xmx128m -jar sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar serve config/platform.yml
+java -Xmx512m -jar sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar serve config/platform.yml
 ```
 
 打开 <http://127.0.0.1:8080>，使用 `RIVOMESH_TOKEN` 登录。此配置适合本机试用；生产访问请按[浏览器会话手册](../reference/browser-sessions)配置 HTTPS、Cookie 与 Origin。不要把令牌提交到 Git、放入 URL 或填写到本站。
@@ -64,5 +64,7 @@ docker compose -f deploy/docker-compose.yml up -d --build
 ## 6. 保存恢复所需资料
 
 备份控制器目录、任务配置、日志和目标状态，给源 binlog 留出足够的停机与积压保留窗口。删除本地日志或目标管理表，可能使已有任务无法安全恢复。
+
+其他采集端请分别阅读 [PostgreSQL 逻辑复制](../reference/postgresql-source)和 [Oracle 归档采集](../reference/oracle-source)的实验性配置。
 
 [完整部署手册](../reference/console-and-deployment) · [多库、多目标配置与恢复](../reference/pipeline-v3) · [常见问题](faq)

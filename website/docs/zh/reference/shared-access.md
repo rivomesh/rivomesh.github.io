@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/shared-access.md
 
 # 共享账号、会话与审计
 
-English：[Shared access](/docs/en/reference/shared-access.html)。设计合同：[SE-04 / CP-05](/docs/zh/sdd/design-shared-access.html)。验收状态以[实施状态](/docs/zh/reference/implementation-status.html)及候选包证据为准。
+English：[Shared access](/docs/en/reference/shared-access.html)。验收状态以[实施状态](/docs/zh/reference/implementation-status.html)及候选包证据为准。
 
 ## 启用和迁移
 
@@ -43,11 +43,29 @@ cluster:
 
 共享账号最多200；单账号任务授权上限10000，共享目录序列化总量限制4MiB，超过时拒绝本次修改并保留旧目录。会话容量是整个共享目录的总量。审计保留事件数按现有auditMaxEvents设置；非HTTP操作的幂等回执独立保留，目前没有自动清理，需监控SQL磁盘增长，活跃回执/历史节点的治理继续归LG-09。
 
+组织账号可通过明确绑定的 OIDC 身份登录，沿用同一共享会话和权限目录。[配置组织账号登录](/docs/zh/reference/oidc-login.html)
+
 ## Worker凭据边界
 
 任务JVM只接收基础OS变量及任务YAML显式引用的变量；未引用的父进程变量、JAVA_TOOL_OPTIONS、管理令牌和控制库凭据不再自动继承。平台加载配置时记住管理凭据变量名，任务引用这些变量会被拒绝（WORKER_ENVIRONMENT_DENIED）。请为来源/目标/日志配置独立的任务变量，不用管理凭据变量作别名；若任务确需Java TLS/Kerberos设置，应按已验收驱动配置显式提供任务专用设置。
 
-此边界减少进程间非必要凭据传递。Worker仍是可信SDK代码及同一安装用户下的进程；操作系统文件隔离、专用容器/Vault下发和更细的任务密钥权限还需在CP-05后续落实。
+### 按任务授权 Worker 凭据引用
+
+可在执行 Agent 的平台配置中启用按任务划分的环境变量授权：
+
+```yaml
+workerSecretReferences:
+  orders: [ORDERS_SOURCE_PASSWORD, ORDERS_WAREHOUSE_PASSWORD]
+  billing: [BILLING_SOURCE_PASSWORD]
+```
+
+在该 Agent 部署中提供这些变量，并在对应任务已有的源（含 Oracle root 和 PDB）、目标或日志密码字段，或消息目标令牌字段中引用。任务只能在这些字段使用分配给自己的变量。Worker 仅收到该任务实际用到的变量及基本操作系统环境。引用其他任务的变量、以凭据作为任务或节点标识以及变量未提供时，系统返回相应错误代码。管理、控制库及进程启动参数变量始终受保护。省略授权映射时沿用既有部署行为。空映射禁止任务使用环境变量引用。授权由执行 Agent 管理，Controller 发送的任务配置保留未解析的引用。
+
+配置接口用绑定字段的不透明保留引用替代凭据值和原变量名。Worker 以安装用户运行可信 SDK。请由对应部署身份管理 Agent 和私有数据目录。
+
+### 关联远端操作的审计记录
+
+从任一 Controller 导出共享审计窗口。对操作请求 ID 计算 SHA-256，以 `clientRequestHash` 和 `taskId` 匹配记录。`GLOBAL_COMMAND_OUTCOME` 的 `subjectId` 是执行 Agent。修复操作的对应 `OPERATION_COMMITTED` 记录中，`subjectId` 是修复计划 ID。两条记录位于同一共享审计链。
 
 ## 部署
 
@@ -57,6 +75,7 @@ Linux/Docker在[platform-cluster.yml](/files/config/platform-cluster.yml)基础�
 
 | 现象 | 处理 |
 |---|---|
+| `WORKER_SECRET_REFERENCE_DENIED` 或 `WORKER_SECRET_REFERENCE_UNSET` | 核对任务 ID、凭据字段、执行 Agent 的授权及实际注入的变量。修改部署授权后重启 Agent 加载配置，再重试任务。 |
 | 所有管理员令牌丢失 | 在一个节点停止本地控制器，按既有access-recover命令提供受保护的部署ADMIN引导令牌。共享模式会事务更新共享目录、撤销全部会话并记录恢复审计；其他节点不使用旧本地授权。核验后轮换临时令牌。 |
 | SHARED_ACCESS_QUIESCENCE_REQUIRED | 先正常停止所有旧成员，不能把STALE当成已停止；无法确认旧入口已隔离时拒绝切换。保留备份并制定隔离/迁移方案，禁止直接把记录改为STOPPED。 |
 | SHARED_ACCESS_REQUIRED | 本地格式3已绑定共享权威。恢复正确cluster/sharedAccess设置；不能关闭选项强行使用旧令牌。 |

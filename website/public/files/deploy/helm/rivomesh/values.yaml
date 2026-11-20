@@ -24,6 +24,10 @@ platform:
   pollMillis: 3000
   autoStart: false
   auditMaxEvents: 1000000
+  kafkaPhysicalOwnershipEvidence: false # Opt in on a shared-task member that runs Workers.
+  validationRetentionMinimumDays: 0
+  validationArchiveDirectory: ""
+  validationArchiveReclaim: false
 sessions:
   enabled: true
   secureCookie: true
@@ -32,6 +36,16 @@ sessions:
   absoluteSeconds: 28800
   maximum: 1000
   publicOrigin: "" # Set https://console.example when TLS terminates upstream.
+oidc:
+  enabled: false
+  issuer: ""
+  authorizationEndpoint: ""
+  tokenEndpoint: ""
+  clientId: ""
+  keyId: ""
+  rsaPublicKey: "" # Canonical base64 of DER SubjectPublicKeyInfo.
+  existingSecret: ""
+  clientSecretKey: client-secret
 # Use separate Helm releases/PVCs per node; sharedTasks opts into fixed-owner global control.
 cluster:
   enabled: false
@@ -42,6 +56,7 @@ cluster:
   recoverySkip: false # Configure consistently before first deployment; namespace mode is fixed.
   separateExecution: false # Configure consistently before first deployment; namespace mode is fixed.
   role: COMBINED # COMBINED, CONTROLLER (no Workers), or AGENT (probes only).
+  handoffEvidenceClaim: "" # Existing private RWX claim shared by the participating Agents.
   taskKeyKey: task-key # Canonical base64-encoded 32-byte key in existingSecret, shared by all members.
   maximumTasks: 10000
   maximumCommands: 1000

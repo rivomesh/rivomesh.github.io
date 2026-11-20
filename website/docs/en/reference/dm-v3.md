@@ -67,4 +67,18 @@ Business changes and the destination checkpoint commit in one DML transaction, u
 
 Run `bash tests/dm-pipeline-run.sh` with a locally supplied lawful image, or override `RIVOMESH_DM_IMAGE` for the same-layout build. The test creates an isolated project and removes only its own containers/volumes, without privileged mode/host parameter changes. Different images/versions require acceptance; fixture resource limits are not hardware capacity standards.
 
+### Native Dameng connection with an external Java 21 driver
+
+The external-vendor candidate ran on Temurin 21.0.13 with operator-provided Dameng JDBC 8.1.3.140 against Dameng 8.1.4.80 ARM64 in native UTF-8 mode. The test confirmed both external driver origins, missing-driver refusal and the real Dameng missing-table error. MySQL 8.4.13 delivered exact DECIMAL(65,30), UINT64, JSON, binary and keyless data to Dameng and PostgreSQL 17.12. Dameng reconnected on its original endpoint after a database restart. Worker termination preserved the snapshot and progress, and each destination retried its original failed SQL transaction independently.
+
+Run with a Java 21 JDK, a locally available compatible Dameng image and the two separately obtained driver files.
+
+```bash
+python3 tests/dm-external-jdbc-native.py --artifact "$candidate" \
+  --mysql-driver "$mysql_driver" --dm-driver "$dameng_driver" \
+  --java "$JAVA_HOME/bin/java" --output target/dm-external-jdbc-native
+```
+
+See the [external vendor JDBC build and classpath](/docs/en/reference/release-inventory.html#candidate-with-external-vendor-jdbc-drivers).
+
 Official references: [JDBC](https://eco.dameng.com/document/dm/zh-cn/pm/jdbc-rogramming-guide.html), [initialization](https://eco.dameng.com/document/dm/zh-cn/pm/dminit-parameters), [SQL definitions](https://eco.dameng.com/document/dm/zh-cn/pm/definition-statement.html), [storage/commit settings](https://eco.dameng.com/document/dm/zh-cn/pm/physical-storage).

@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/commit-acknowledgement.md
 
 # 确认目标已提交的事务
 
-状态：RC-05 限定档案已验收：界面、API、协议6准入、原子 ACK/回执与跨入口恢复。[验收证据](/docs/zh/evidence/baseline.html)。[SDD](/docs/zh/sdd/design-checkpoint-recovery.html) · [English](/docs/en/reference/commit-acknowledgement.html)
+状态：RC-05 限定档案已验收：界面、API、协议6准入、原子 ACK/回执与跨入口恢复。[验收证据](/docs/zh/evidence/baseline.html)。[English](/docs/en/reference/commit-acknowledgement.html)
 
 适用于 MySQL 源、事务型 PostgreSQL/MySQL 目标、完整增量事务已经保留原始和规范化内容的场景。目标只由同步服务写入。其他产品、全量快照故障、尚未形成完整事务的采集/解码故障均不能使用此操作。
 

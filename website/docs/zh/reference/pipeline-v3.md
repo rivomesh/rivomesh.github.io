@@ -55,15 +55,82 @@ java -jar sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar run config/pipeline-v3
 
 日志以最慢目标为回收边界，暂停目标也保留未确认历史。所有目标确认全量后回收快照分片，保留清单、基线和无主键身份；目标管理状态丢失后不能假装从已回收快照恢复，需要重建计划。运行参数中的 `maxBytes` 包含事件、标准化事件、快照及身份数据的逻辑负载，还包含尚未消耗的标准化工作空间预留。数据库索引、事务日志、元数据和空闲页另占空间。回收不等于物理文件立即缩小。超大目录分页、物理容量预警、历史去重回执压缩及超大事务分片仍待完成，不能把逻辑配额当作磁盘总上限。
 
+未关闭的[事务缺口](/docs/zh/reference/transaction-skip.html)和待决跳过计划会保留该笔事务的原始和标准化事件。所有目标已确认的其他事务仍可回收。共同校验点的核验回执验证通过后，缺口解除保留。若需保留的事件占满日志，采集暂停等待，源断点保持，Worker 记录 `JOURNAL_BACKPRESSURE`。若建立新的共同校验点还需采集更多事务，应先增加逻辑配额。核验已有且有效的暂停校验点无需向日志增加事件负载。恢复时应同时保留原始证据和日志。
+
 新采集事务在持久化原始事件时，同时预留其标准化副本、无主键身份及可能新增的身份负载；标准化与预留消耗在同一事务中提交，防止原始日志占满后无法再标准化。空间被慢目标占满时，采集等待，不推进未持久化 GTID；投递、回收、租约心跳继续。消费者恢复后自动释放空间并续传。等待期间不把本地主动背压误判为源心跳超时；暂停/关闭会先取消阻塞回调，再等待复制连接退出。
 
 若单个事务及其工作空间本身超过总配额，报 `TRANSACTION_EXCEEDS_JOURNAL_QUOTA` 并保留旧源断点。快照/身份构建空间不足，或升级前没有预留的旧日志无法标准化时，报 `JOURNAL_WORKSPACE_REQUIRES_QUOTA_PLAN`。当前全量先构建所有源快照，单表跨配额流式释放、部分全量重基线和超大事务分片仍未实现；这些情况需要扩容或专项计划。不能删表/分片来“腾空间”。配额调整不改变任务语义指纹：停止相关 Worker，调整并重载配置，再按当前全局错误版本恢复。UI 配置编辑流程仍待实现。
 
+在配置和 Web 新建向导中使用 `source.type: MYSQL`。用 `source.clusterId` 标识逻辑源集群，`databases` 列出同步范围。需要固定版本时，可填写 `source.expectedVersion: "8.2.0"`；填写 `"8.2"` 匹配同一主次版本。连接候选源时校验服务版本，版本冲突会在预检阶段报告。留空时由服务探测版本。
+
 ## 日志部署选择
 
-`LOCAL` 使用 Java 8 兼容的 H2 2.2.224，`path` 是私有目录，相对路径以配置文件目录为基准。目录内保存敏感行数据，权限设为 0700。自动服务模式允许同机 CLI 读取状态和恢复；它不是跨机器数据库部署。保留整个目录及卷，不要只复制运行中的 `.mv.db`。跨主机自动接管使用 `EXTERNAL` 事务数据库；不要把共享文件系统上的 H2 当作已验收的集群日志。
+`LOCAL` 使用 Java 8 兼容的 H2 2.2.224，`path` 是私有目录，相对路径以配置文件目录为基准。目录内保存敏感行数据，权限设为 0700。自动服务默认绑定回环地址，Worker 与同机 CLI 共享日志，无需外部主机名解析；它不是跨机器数据库部署。保留整个目录及卷，不要只复制运行中的 `.mv.db`。跨主机自动接管使用 `EXTERNAL` 事务数据库；不要把共享文件系统上的 H2 当作已验收的集群日志。
 
 `EXTERNAL` 可用 PostgreSQL、openGauss 或独立 MySQL。所有 Worker 使用相同日志实例/namespace/pipelineId 和目标配置，不同 nodeId；数据库时钟租约与 epoch 管理所有权。MySQL 日志需 InnoDB，服务重启不可丢失已确认提交。源与目标数据库的提升/隔离由外部高可用系统负责，Rivomesh 不提升数据库主库。V3 已通过 Worker 强制终止恢复、8.4 普通主从提升及 MGR 全量中途选主测试；其他版本/长稳矩阵仍需补验，不能直接套用 v2 的测试结论。
+
+### MySQL 8.2.0 源端回归
+
+运行 `tests/matrix.sh --v3 8.2.0`，逐一测试 V3 单机、GTID 主从和单主组复制。测试要求 Docker Compose，源镜像为 `mysql:8.2.0`，报告保存在 `target/matrix-v3/8.2.0/`。源端使用 GTID、ROW binlog 和 FULL 行镜像。主从场景由夹具提升追平的副本，Rivomesh 校验所需历史并从原位置续传。
+
+### MySQL 8.4 日志档案
+
+MySQL 8.4 使用无标签 GTID、ROW binlog 和 FULL 行镜像。预检拒绝匿名事务模式、带标签的历史、部分 JSON 和事务压缩。采集中遇到部分 JSON 或压缩事件会在失败事务前停住。先检查所需历史日志及候选源，再决定恢复原日志还是建立新基线。
+
+使用 `tests/mysql84-profile-run.sh` 复验日志准入和停止行为。该夹具创建带标签的测试事务并在结束时清理独立数据库容器。
+
+[MySQL GTID format](https://dev.mysql.com/doc/refman/8.4/en/replication-gtids-concepts.html) · [Binary log options](https://dev.mysql.com/doc/refman/8.4/en/replication-options-binary-log.html)
+
+### MySQL 8.4 主库故障后自动续传
+
+设置 `source.topology: ASYNC`，在 `source.nodes` 中配置同一 GTID 复制拓扑的主库与备库。由数据库高可用服务隔离故障主库，提升已追平的备库。Rivomesh 核验新主可用的 GTID 历史并从持久断点恢复连接。备库仍为只读或复制出现 I/O 错误时，排查数据库拓扑并保留原日志和目标断点。
+
+Java 21 实库档案使用 MySQL 8.4.13 异步 GTID 主备、外部 PostgreSQL 日志、两个管理入口和 PostgreSQL、MySQL 目标。强杀原主后，两入口显示采集中断，两个目标断点保持原值。外部流程完成提升后，Rivomesh 把新主的 GTID 自动投递到两个目标，并复用配置修订、日志代次和快照 ID。复现命令为 `python3 tests/global-control-pipeline.py --separate-execution --mysql-async-failover --source-expected-version 8.4.13 --artifact <发布包> --output target/mysql-async-proof`。[验收归档](/docs/zh/evidence/baseline.html)
+
+另一组 Temurin 21 实测使用同一发行包，以 PostgreSQL 17.12 为目标和日志库，分别运行 MySQL 5.7.44、8.0.46、8.2.0 和 8.4.13。用例终止原 Worker、制造真实复制 SQL 线程 1032 错误并拒绝不健康副本，再恢复复制并关停原主。外部提升后，核对原快照 ID 和新写入目标的行。清除尚未采集的 binlog 区间时，采集停在原日志断点。构建发行 JAR 和测试类后，用 `RIVOMESH_TEST_PREBUILT=1 SYNC_V3_HA_POSTGRES_ONLY=1 SYNC_MYSQL_IMAGE=mysql:8.2.0 bash tests/v3-ha-run.sh` 复现。5.7 另设 `SYNC_MYSQL57=1 SYNC_MYSQL57_IMAGE=mysql:5.7`。
+
+### MySQL 8.4 单主组复制故障恢复
+
+设置 `source.topology: GROUP_REPLICATION`，在 `source.nodes` 中配置同一个单主组的成员。MySQL 选举可写主库。Rivomesh 核验候选节点在线、可写且保留所需的 GTID 历史。旧主重启后应保持 MySQL 超级只读，直到重新入组。组复制要求被复制的表具备主键或等效唯一键。[单主模式](https://dev.mysql.com/doc/refman/8.4/en/group-replication-single-primary-mode.html) · [组复制要求](https://dev.mysql.com/doc/refman/8.4/en/group-replication-requirements.html)
+
+Java 21 实库测试使用 MySQL 8.4.13、外部 PostgreSQL 日志和 PostgreSQL 17.12 目标。强杀主库后，MySQL 选出不同 UUID 的主库，同一个 Worker 自动投递后续两个事务。日志代次、两个快照 ID 和目标全表数据均核对一致。旧主以只读方式启动，缺少新主的组 GTID。MySQL 拒绝写入。发布包通过原地址连接旧主，核实服务器 UUID 和两个只读标志后，源端预检返回 `SOURCE_NO_PRIMARY`。旧主作为备库追平后，Worker 继续从已选主库采集。
+
+使用 Java 21 JDK、Docker Compose 和本地 `mysql:8.4`、`postgres:17` 镜像复现。
+
+```bash
+python3 tests/mysql-group-failover-native.py --artifact rivomesh.jar \
+  --java "$JAVA_HOME/bin/java" --output target/mysql-group-failover-proof
+```
+
+另一组 Temurin 21 档案用同一发布包验收 MySQL 5.7.44、8.0.46、8.2.0 和 8.4.13。原主在快照构建中途关闭。MySQL 选出新主后，Rivomesh 重建未完成快照。两个 SQL 目标收到切主前的更新和切主后的插入、删除及更新，两路 ACK 追平共享日志。编译好发布包和测试类后运行 `RIVOMESH_TEST_PREBUILT=1 SYNC_V3_GROUP_SQL_TARGETS=1 SYNC_MYSQL_IMAGE=mysql:8.2.0 bash tests/v3-group-run.sh`。MySQL 5.7 使用 `SYNC_MYSQL57=1 SYNC_MYSQL57_IMAGE=mysql:5.7`。 [分版本验收记录](/files/docs/verification/baseline.json)
+
+### MySQL 采集和投递的 TLS 验证
+
+在 `source.sslMode` 设置 `VERIFY_IDENTITY` 供 binlog 采集使用，在 `source.jdbcOptions` 加入 `sslMode=VERIFY_IDENTITY` 供发现和快照读取使用。每个 MySQL 目标单独设置 JDBC URL 和 TLS 参数。把签发证书的 CA 根证书加入执行 JDK 信任库，Agent 和它启动的 Worker 都应能读取。源候选节点和目标 URL 使用与证书匹配的 DNS 名称。binlog 的证书验证模式由 JDK 协商协议，可连接仅启用 TLS 1.3 的 MySQL。[Connector/J TLS 参数](https://dev.mysql.com/doc/connector-j/en/connector-j-connp-props-security.html)
+
+MySQL 8.4.13 实测 binlog 和目标 JDBC 会话使用 TLS 1.3，预检拒绝错误的源域名。强杀重启后从原 GTID 和快照续传，目标数据逐行一致。复现命令为 `python3 tests/mysql-tls-run.py --java-home <Temurin 21 目录> --artifact <发布包> --output target/mysql-tls-proof`。[验收归档](/docs/zh/evidence/baseline.html)
+
+## 使用 PostgreSQL 日志接管独立 Worker
+
+新建独立 MySQL 同步任务时，将 `journal.mode` 设为 `EXTERNAL`，`journal.product` 设为 `POSTGRESQL`，并为 `journal.writerAssignment` 生成新的 UUID。该流程支持最多八个 PostgreSQL/MySQL 目标和 256 张源表。两个 Worker 都应能连接原日志库、目标元数据和源日志。单独生成的校验报告保存在自己的私有目录中。
+
+```bash
+java -jar rivomesh.jar init-writer original.yml
+java -jar rivomesh.jar run original.yml
+```
+
+`init-writer` 为新任务登记初始写入归属。重启时，Worker 打开已登记的日志。日志或归属记录缺失时需要恢复原状态。命令拒绝给此前创建的普通日志补登记。较早的程序版本会拒绝使用新格式的日志。
+
+等待原快照及各目标确认位点追平，停止原 Worker，或者在故障后等数据库时钟判定其租约过期。用 `status original.yml` 查询 `generation`、`epoch` 和 `writerPlacement.assignment`。新 Worker 使用同一任务及目标配置，换主机时配置新 `nodeId`，并为 `journal.writerAssignment` 生成新的 UUID。确认新 Worker 可以读取原源日志及目标原生元数据。
+
+```bash
+java -jar rivomesh.jar transfer-writer candidate.yml "$previous_assignment" "$journal_generation" "$expected_epoch"
+java -jar rivomesh.jar run candidate.yml
+```
+
+转移前会检查 GTID 历史、原快照 ID 和目标事务回执。租约仍有效、快照未完成、目标落后或暂停、跳过操作尚未结案时会拒绝执行。如果命令结果丢失，原样重试可读取持久回执。转移成功后，源位点和各目标确认位点保持原值。新 Worker 以更高的租约代次续传，原配置无法重新领取或续期。每次转移都使用新的 UUID，回到原主机也一样。暂停或未完成的任务应先在当前归属 Worker 上恢复。
+
+集群控制台的 Agent 归属有独立管理流程。这个命令适用于独立 Worker、原外部日志和事务型目标。报告文件及 Agent 归属保留在原位置。
 
 ## 错误与恢复 FAQ
 

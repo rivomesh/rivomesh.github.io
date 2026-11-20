@@ -16,11 +16,11 @@ It identifies the task configuration format, `formatVersion: 3`, for multi-datab
 
 ## Are other capture sources available?
 
-MySQL is implemented. PostgreSQL and Oracle sources are planned; the source adapter interface allows other database types to be added with independent log, snapshot and recovery acceptance. Support as a target does not imply source capture support.
+Yes. [PostgreSQL 17/18 logical replication](../reference/postgresql-source) and [Oracle 26ai archived capture](../reference/oracle-source) have experimental profiles. Check each source’s log, destination and recovery requirements.
 
 ## Can I start with a populated target?
 
-First-use target business tables must be empty. Nonempty takeover is a separate migration concern; RivoMesh does not silently clear or merge existing business data.
+Start an ordinary new task with empty business tables. For data already copied to PostgreSQL, run the [read-only adoption preview](../reference/nonempty-target-preview). The bounded single-table adoption flow requires a write freeze, reviewed plan and durable receipt.
 
 ## Does recovery skip failed transactions?
 
@@ -28,7 +28,7 @@ No. Fix the cause, then retry the original transaction. Reviewed data repair is 
 
 ## Is global task control available?
 
-An optional fixed-owner global mode supports shared task views, durable commands, configuration and read-only queries. Default operation is local. An explicit separated controller/Agent profile has initial acceptance. Automatic owner relocation and the full HA matrix remain open. See [multi-node deployment](multi-node).
+Optional global mode provides shared task views and durable commands. Eligible new tasks can select an Agent automatically. Administrators can approve the transfer of a stopped task after preparing and durably freezing the original writer. See [multi-node deployment](multi-node) for the supported profiles.
 
 ## Does this website collect database credentials?
 

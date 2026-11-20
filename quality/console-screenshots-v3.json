@@ -1,10 +1,9 @@
 {
-  "capturedAt": "2026-11-18T00:58:55.789Z",
-  "productCommit": "5c54522",
-  "productJarSha256": "33a1d4dca6a381664855c0ae96100fa9da004a61070155b0ed7a646c6a2c4f25",
-  "browser": "Google Chrome, Playwright",
-  "source": "Unmodified RivoMesh JAR, isolated disposable MySQL 8.4 and PostgreSQL 17 fixtures",
-  "recovery": "A conflicting primary key in the isolated PostgreSQL target produced a real SQL apply failure. Capture shows the generation-bound target recovery action.",
+  "capturedAt": "2026-11-20T00:22:48.641Z",
+  "productCommit": "48aa0ac91b07e071e84209bbfeb13395cde3c2c0",
+  "productJarSha256": "7e3d2603e49fd53079e2fd95003d7a85894eef6b5e335a5d16a8f342a2407893",
+  "browser": "Google Chrome 157.0.8103.79, Playwright",
+  "source": "Unmodified RivoMesh JAR built and run with Eclipse Temurin 21 against isolated disposable MySQL 8.4 and PostgreSQL 17 fixtures.",
   "captures": [
     {
       "name": "console-overview",
@@ -13,7 +12,8 @@
         1800,
         912
       ],
-      "sha256": "b3b1d87eda10d08aaa0ff8954b985a9034a9b2c4438e3ee8501a24ce4beacbc4"
+      "scope": "Live running task with MySQL snapshot and change delivery to PostgreSQL.",
+      "sha256": "4718c35506a5f6add1f30b6a869a614a48118901693d85b189b8855130f2ad50"
     },
     {
       "name": "task-wizard",
@@ -22,7 +22,8 @@
         1800,
         912
       ],
-      "sha256": "05ea8dbd5172f65c512acd0d68cf4285b8dfd4f1c3ff059c4a43db39f22285ab"
+      "scope": "Native pipeline wizard with the experimental PostgreSQL capture profile selected.",
+      "sha256": "9803c8dc917195c0355d138863623ad7b566155dacdcfc1ff75e18bfcd3091b8"
     },
     {
       "name": "connector-catalog",
@@ -31,84 +32,8 @@
         1800,
         912
       ],
-      "sha256": "2f06db1a687e1e61ac9f79f7fefed48405da3bb2b4dfbdd8bddb41c0e24964ed"
-    },
-    {
-      "name": "console-overview-en",
-      "locale": "en",
-      "viewport": [
-        1800,
-        912
-      ],
-      "sha256": "a9302961dcc83840f82fcf3dffdcbbcd8c102e49291bd5b7d13c2a665117f718"
-    },
-    {
-      "name": "task-wizard-en",
-      "locale": "en",
-      "viewport": [
-        1800,
-        912
-      ],
-      "sha256": "9d6315c62f9f96ab9f73d29377d102869d3f71e32e1d89897d48d9aa035171f3"
-    },
-    {
-      "name": "connector-catalog-en",
-      "locale": "en",
-      "viewport": [
-        1800,
-        912
-      ],
-      "sha256": "432ff622fc75ecef6bb4f4a885041cebc259eddcbfcac4a90121b0b02dbac470"
-    },
-    {
-      "name": "target-recovery",
-      "locale": "zh",
-      "viewport": [
-        1800,
-        912
-      ],
-      "sha256": "d4bcda18b4fb7c2101f559dd9b9c108d905b5a925fa1cac1e9a5eaf508086c81",
-      "scroll": "Centered the actual per-target recovery control in the console viewport."
-    },
-    {
-      "name": "target-recovery-en",
-      "locale": "en",
-      "viewport": [
-        1800,
-        912
-      ],
-      "sha256": "5f2f67baa49685cc2229ea7430964f454ed04bc2f15ecbf4a800f588130580c3",
-      "scroll": "Centered the actual per-target recovery control in the console viewport."
-    },
-    {
-      "name": "data-validation-en",
-      "locale": "en",
-      "viewport": [
-        1800,
-        912
-      ],
-      "scope": "Matching COMMON_CUT report from real source and destination rows after replay.",
-      "sha256": "b0a15008725a7235f75d98a98103756091a8e06cf7e581f545499628265912f2"
-    },
-    {
-      "name": "node-registry-en",
-      "locale": "en",
-      "viewport": [
-        1800,
-        912
-      ],
-      "scope": "Standalone registry with one observed node.",
-      "sha256": "e7a9d4e2983e6efe4db710e67b25c7a6abd53904a00cb86bbd56a5ef9e837d96"
-    },
-    {
-      "name": "data-validation",
-      "locale": "zh",
-      "viewport": [
-        1800,
-        912
-      ],
-      "scope": "Matching COMMON_CUT report from real source and destination rows after replay.",
-      "sha256": "4345b4070bbc9fe2dcda409c5f4ac8ecb87afa5328010f8b8521410044687837"
+      "scope": "Native console catalog exposes source and target direction and recovery capabilities.",
+      "sha256": "b02e60d085b4fb83ed000f6ee396b0cf2692b465f6b658e27d6d2155ae1be9c9"
     },
     {
       "name": "node-registry",
@@ -118,7 +43,87 @@
         912
       ],
       "scope": "Standalone registry with one observed node.",
-      "sha256": "6360283fd33886520ffbc8a089bd32af5f10851e51ac6f54e51e25e9ee5ab351"
+      "sha256": "d065c9ea7b30e785d02dcba9d6185a650f5804762f9aefddd4adc7d83822840f"
+    },
+    {
+      "name": "console-overview-en",
+      "locale": "en",
+      "viewport": [
+        1800,
+        912
+      ],
+      "scope": "Live running task with MySQL snapshot and change delivery to PostgreSQL.",
+      "sha256": "1b08826add00a2fe752ac577f4fe3c1e609b12a404df60e8197a6ad402316654"
+    },
+    {
+      "name": "task-wizard-en",
+      "locale": "en",
+      "viewport": [
+        1800,
+        912
+      ],
+      "scope": "Native pipeline wizard with the experimental PostgreSQL capture profile selected.",
+      "sha256": "ea02c7869b3d182e8d43f84b48a35ac8cc4da9d48274669958b7130881e7b373"
+    },
+    {
+      "name": "connector-catalog-en",
+      "locale": "en",
+      "viewport": [
+        1800,
+        912
+      ],
+      "scope": "Native console catalog exposes source and target direction and recovery capabilities.",
+      "sha256": "b036b7d64da34c60ae06f1177b238d9517a88fe435ada393fd9d8d495a8d86e8"
+    },
+    {
+      "name": "node-registry-en",
+      "locale": "en",
+      "viewport": [
+        1800,
+        912
+      ],
+      "scope": "Standalone registry with one observed node.",
+      "sha256": "ce56332aea4a614c8e75deef0cd1c4d2069d5dc5ec1818e738fa5358dee838a7"
+    },
+    {
+      "name": "target-recovery",
+      "locale": "zh",
+      "viewport": [
+        1800,
+        912
+      ],
+      "scope": "Real PostgreSQL duplicate-key apply failure with generation-bound recovery controls.",
+      "sha256": "e76c2791c7bc98907047af113caff3cc8eeaaf2094f2a981bad1c386dcf78096"
+    },
+    {
+      "name": "target-recovery-en",
+      "locale": "en",
+      "viewport": [
+        1800,
+        912
+      ],
+      "scope": "Real PostgreSQL duplicate-key apply failure with generation-bound recovery controls.",
+      "sha256": "36bd93fde6f381689266e3988e317fb184ecb62bb189c113b5d36e203d122672"
+    },
+    {
+      "name": "data-validation",
+      "locale": "zh",
+      "viewport": [
+        1800,
+        912
+      ],
+      "scope": "Native COMMON_CUT report for three matching MySQL/PostgreSQL rows after replay.",
+      "sha256": "7d51f03838eb5f7c115b24e0aa3d09299d7b3d053e12a9c858cc7fb8e99c2766"
+    },
+    {
+      "name": "data-validation-en",
+      "locale": "en",
+      "viewport": [
+        1800,
+        912
+      ],
+      "scope": "Native COMMON_CUT report for three matching MySQL/PostgreSQL rows after replay.",
+      "sha256": "7bc8c3fa19b3c696f00affba3eac57ff5f5bde5204da0137aee7c29effa8be88"
     }
   ]
 }

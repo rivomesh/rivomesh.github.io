@@ -2,7 +2,7 @@
 kind: docs
 locale: zh
 title: 项目路线图
-description: 了解 RivoMesh 当前可用能力、多节点与恢复改进方向，以及更多数据库采集源的后续计划。
+description: 查看 RivoMesh 已验证的使用范围、实验性采集档案和后续验证方向。
 ---
 
 # 产品路线图
@@ -15,4 +15,4 @@ description: 了解 RivoMesh 当前可用能力、多节点与恢复改进方向
 
 欢迎通过 [GitHub Issues](https://github.com/rivomesh/rivomesh/issues) 反馈使用场景、兼容性需求和实际阻碍。
 
-[需求规格](../sdd/spec) · [实施计划](../sdd/plan) · [任务清单](../sdd/tasks) · [验收矩阵](../sdd/acceptance) · [当前实施状态](../reference/implementation-status)
+[当前实施状态](../reference/implementation-status) · [兼容性与能力边界](compatibility)

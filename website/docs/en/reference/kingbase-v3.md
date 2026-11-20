@@ -43,7 +43,7 @@ MySQL TIME is a signed duration, not a java.sql.Time/LocalTime wall clock. V3 sn
 
 The real pipeline compares integer microseconds for positive/negative25hours, every fractional precision and negative1microsecond. Boundaries/malformed binary have unit coverage. Source reference SQL uses `TIMESTAMPDIFF(MICROSECOND,...,ADDTIME(...))`; this environment's integer TIME_TO_SEC result and default four-place SQL division are unsuitable microsecond oracles. This Kingbase version returns float8 from EXTRACT(EPOCH), so readback first casts to NUMERIC(20,6), then compares integer microseconds. A generic duration-text mapping does not imply native TIME acceptance for every other adapter.
 
-The same actual release also passed cross-schema business/checkpoint rollback, replay, alias ownership, old-epoch refusal, writable checks, PostgreSQL masquerade refusal, snapshot/CDC, target outage while PostgreSQL continues and subsequent catchup, worker SIGKILL preserving generation/snapshot, separate SQL constraint repair/retry on both targets, persistent SQL pause through restart, missing-table isolation and final transactional fences. Other versions/modes, primary/replica clusters/routing, TLS, other JDKs, old nonempty physical backup restore, power loss, soak and hardware capacity remain pending. Existing custom column collations and application takeover require separate assessment.
+The same actual release also passed cross-schema business/checkpoint rollback, replay, alias ownership, old-epoch refusal, writable checks, PostgreSQL masquerade refusal, snapshot/CDC, target outage while PostgreSQL continues and subsequent catchup, worker SIGKILL preserving generation/snapshot, separate SQL constraint repair/retry on both targets, persistent SQL pause through restart, missing-table isolation and final transactional fences. Other versions/modes, primary/replica clusters/routing, TLS, old nonempty physical backup restore, power loss, soak and hardware capacity remain pending. Existing custom column collations and application takeover require separate assessment.
 
 ## FAQ
 
@@ -59,6 +59,18 @@ The same actual release also passed cross-schema business/checkpoint rollback, r
 ## Reproducible native fixture and references
 
 With a lawful compatible image available, run `bash tests/kingbase-pipeline-run.sh`; override `RIVOMESH_KINGBASE_IMAGE` for the same-layout build. The test uses actual release-JAR workers with isolated MySQL8.4/PostgreSQL17/Kingbase services and removes only its own project/volumes. Initialization explicitly selects PG/UTF8 without case-insensitive initialization, running the native server as the image's kingbase user, without sudo/systemd/privileged. Different image layouts require fixture changes; replacing a version tag alone is not acceptance.
+
+### Native Kingbase connection with an external Java 21 driver
+
+The external-vendor candidate on Temurin 21.0.13 loads the operator-provided `kingbase8-9.0.1.jar` and connects to KingbaseES V009R001C001B0025 ARM64 in PG/UTF8 mode. The test checks the driver's JAR origin and verifies that an invalid password returns SQLSTATE `28P01`. It uses synthetic row inputs through the packaged transactional sink to verify UINT64, DECIMAL(65,30), JSON and atomic rollback. After the same endpoint restarts, the sink keeps its snapshot and receipt, fences the old epoch and applies the next transaction once.
+
+Use a Java 21 JDK, the compatible local image and the [external vendor JDBC candidate](/docs/en/reference/release-inventory.html#candidate-with-external-vendor-jdbc-drivers).
+
+```bash
+python3 tests/kingbase-external-jdbc-native.py --artifact "$candidate" \
+  --kingbase-driver "$kingbase_driver" --java "$JAVA_HOME/bin/java" \
+  --output target/kingbase-external-jdbc-native
+```
 
 - [Official JDBC guide](https://docs.kingbase.com.cn/cn/KES-V9R1C10/quick_start/access_tool/java/jdbc/)
 - [Official Docker guide](https://help.kingbase.com.cn/v8/install-updata/install-docker/install-docker-1.html)

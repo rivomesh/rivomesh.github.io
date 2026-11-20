@@ -8,6 +8,8 @@ title: Progress and daily operations
 
 Check both the synchronization phase and each target's confirmed position. A running process does not mean all destinations are caught up.
 
+<ScreenshotPreview name="console-overview" locale="en" alt="Task workspace in the RivoMesh English-language console." />
+
 | State | Meaning |
 | --- | --- |
 | Snapshot | Existing data is being read/prepared or delivered; target data may be incomplete |
@@ -19,7 +21,7 @@ Check both the synchronization phase and each target's confirmed position. A run
 
 ## Daily checks
 
-Watch phase, backlog trends, per-target acknowledgements, SQL errors, connectivity, disk space and source binlog retention. The slowest destination determines retained journal history; a healthy fast target cannot free another target's unacknowledged events.
+Watch phase, backlog trends, per-target acknowledgements, SQL errors, connectivity and disk space. Check binlog, WAL or archive retention against the outage and catch-up window. For PostgreSQL, watch disk space used by WAL retained for the logical slot. Journal retention is governed by the slowest destination.
 
 ## Stop, pause or recover
 

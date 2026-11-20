@@ -1,0 +1,47 @@
+x-runtime: &runtime
+  image: rivomesh:0.1.0-SNAPSHOT
+  restart: unless-stopped
+  stop_grace_period: 90s
+  mem_limit: 2g
+x-control-environment: &control-environment
+  RIVOMESH_TOKEN: ${RIVOMESH_TOKEN:?Provide the shared bootstrap token}
+  RIVOMESH_TASK_KEY: ${RIVOMESH_TASK_KEY:?Provide canonical Base64 text encoding 32 random bytes}
+  RIVOMESH_CONTROL_URL: ${RIVOMESH_CONTROL_URL:?Provide the PostgreSQL JDBC control-store URL}
+  RIVOMESH_CONTROL_USERNAME: ${RIVOMESH_CONTROL_USERNAME:?Provide the control-store username}
+  RIVOMESH_CONTROL_PASSWORD: ${RIVOMESH_CONTROL_PASSWORD:?Provide the control-store password}
+  JAVA_TOOL_OPTIONS: -Xmx512m
+services:
+  controller-a:
+    <<: *runtime
+    command: [serve, /app/config/controller.yml]
+    ports: ["127.0.0.1:8080:8080"]
+    environment:
+      <<: *control-environment
+      RIVOMESH_NODE_ID: controller-a
+    volumes:
+      - controller-a-data:/app/data
+      - ./container-controller.yml:/app/config/controller.yml:ro
+  controller-b:
+    <<: *runtime
+    command: [serve, /app/config/controller.yml]
+    ports: ["127.0.0.1:8082:8080"]
+    environment:
+      <<: *control-environment
+      RIVOMESH_NODE_ID: controller-b
+    volumes:
+      - controller-b-data:/app/data
+      - ./container-controller.yml:/app/config/controller.yml:ro
+  agent-a:
+    <<: *runtime
+    command: [agent, /app/config/agent.yml]
+    ports: ["127.0.0.1:8081:8080"]
+    environment:
+      <<: *control-environment
+      RIVOMESH_NODE_ID: agent-a
+    volumes:
+      - agent-a-data:/app/data
+      - ./container-agent.yml:/app/config/agent.yml:ro
+volumes:
+  controller-a-data:
+  controller-b-data:
+  agent-a-data:

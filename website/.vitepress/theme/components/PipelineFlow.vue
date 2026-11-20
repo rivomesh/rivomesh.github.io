@@ -8,10 +8,11 @@ const {frontmatter}=useData(),en=computed(()=>frontmatter.value.locale==='en')
 <template>
   <figure class="pipeline-flow" :aria-label="en?'RivoMesh data and control flow':'RivoMesh 数据流与控制流'">
     <div class="flow-source">
-      <small>{{en?'Capture source':'采集源'}}</small>
+      <small>{{en?'Capture example':'采集示例'}}</small>
       <h3>MySQL</h3>
       <p>{{en?'InnoDB snapshots':'InnoDB 全量快照'}}</p>
       <p>{{en?'GTID / row binlog capture':'GTID / 行级 binlog 采集'}}</p>
+      <p><a :href="`/docs/${en?'en':'zh'}/start/compatibility.html`">{{en?'See all source profiles':'查看所有采集源'}}</a></p>
     </div>
     <div class="flow-arrow" aria-hidden="true"><svg viewBox="0 0 48 24" fill="none"><path d="M1 12h44m-8-7 8 7-8 7"/></svg></div>
     <div class="flow-engine">
@@ -34,7 +35,7 @@ const {frontmatter}=useData(),en=computed(()=>frontmatter.value.locale==='en')
         <div><strong>{{en?'Management and execution':'管理与执行'}}</strong><p>{{en?'Web console and API control local Workers or send durable commands to a fixed Agent.':'Web 控制台与 API 管理本机 Worker，或向固定 Agent 提交持久化命令。'}}</p></div>
         <div><strong>{{en?'Optional shared control database':'可选共享控制库'}}</strong><p>{{en?'Node registry, shared access and command state. Replication events stay in the journal.':'保存节点目录、共享访问和控制命令状态。同步事件保存在持久日志。'}}</p></div>
       </div>
-      <TechnicalBoundary :summary="en?'Deployment and recovery boundaries':'部署与恢复边界'" :href="`/docs/${en?'en':'zh'}/start/multi-node.html`"><p>{{en?'Controller/Agent separation is opt-in with a fixed execution owner. Check the accepted profile before deploying. Automatic cross-Agent relocation remains open.':'管理与 Agent 分离需显式启用，任务由固定执行节点持有。部署前请核对已验收组合；自动跨 Agent 接管仍待实现。'}}</p></TechnicalBoundary>
+      <TechnicalBoundary :summary="en?'Deployment and recovery boundaries':'部署与恢复边界'" :href="`/docs/${en?'en':'zh'}/start/multi-node.html`"><p>{{en?'Enable Controller/Agent separation explicitly. The documented profiles cover initial Agent selection and administrator-approved handoff of a frozen task.':'管理与 Agent 分离需显式启用。指定部署组合支持新任务选择 Agent，以及管理员审批移交已冻结任务。'}}</p></TechnicalBoundary>
     </figcaption>
   </figure>
 </template>

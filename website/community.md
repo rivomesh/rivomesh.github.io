@@ -32,11 +32,7 @@ title: 社区与贡献
 
 小的修正可以直接提交 Pull Request；涉及新连接器、恢复机制或部署方式的变更，建议先通过 Issue 讨论使用场景和范围。说明修改后的行为、测试方式和兼容性影响，并更新对应文档。
 
-<details><summary>开发贡献的详细流程</summary>
-
-在[产品路线图](/docs/zh/start/roadmap.html)查看相关方向，再参考[需求规格](/docs/zh/sdd/spec.html)、[任务清单](/docs/zh/sdd/tasks.html)和[验收条件](/docs/zh/sdd/acceptance.html)。涉及已有需求时，请关联相应编号，并记录测试环境、故障恢复及迁移影响。
-
-</details>
+在[产品路线图](/docs/zh/start/roadmap.html)查看当前能力和待验证场景。涉及现有问题时请关联对应 Issue，提供测试环境、恢复行为与迁移影响。
 
 ## 官网与文档维护
 

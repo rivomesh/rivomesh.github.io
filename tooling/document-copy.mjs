@@ -23,7 +23,28 @@ export function documentCopy(meta, raw) {
 
   let text = raw
   if (meta.sourcePath.endsWith('/implementation-status.md')) {
-    text = text.replace(/^.*\[progress-reports\.json\].*\n?/gm, '').trimEnd() + '\n'
+    text = text
+      .replace(/^(?:The SDD contains the current totals and requirements\. |进度总数和逐项状态以 SDD 为准。)/gm, '')
+      .replace(/^\| DO-01 \|.*\n/gm, '')
+      .replace(/^\[(?:Complete task list|完整任务清单)\].*\n\n/gm, '')
+      .replace(/^.*\[progress-reports\.json\].*\n?/gm, '').trimEnd() + '\n'
+  }
+  if (meta.sourcePath.endsWith('/browser-sessions.md')) {
+    text = text
+      .replace(/ Specification: RM-SDD-001.*|规格：RM-SDD-001.*/g, '')
+      .replace(/^A Store interface.*$/m, 'Standalone uses a bounded in-memory session store and requires sign-in after restart. Multiple Controllers can keep sessions with the configured [shared access store](shared-access.md).')
+      .replace(/^会话存储有 Store 接口.*$/m, '单机模式使用有界内存会话存储，重启 Controller 后需重新登录。多 Controller 可通过[共享访问存储](shared-access.md)保持会话。')
+  }
+  if (meta.sourcePath.endsWith('/node-registry.md')) {
+    text = text
+      .replace(/ This feature shares observations;.*$/m, ' See [global task control](global-control.md) and [shared access](shared-access.md) for the corresponding deployment requirements.')
+      .replace(/本页描述共享节点观察.*$/m, '[全局任务控制](global-control.md)和[共享访问](shared-access.md)各有独立部署条件。')
+  }
+  if (meta.sourcePath.endsWith('/validation.md')) {
+    text = text.replace(/ · \[SDD验收\]\((?:\.\.\/)?sdd\/[^)]+\)/g, '')
+  }
+  if (meta.sourcePath.endsWith('/release-inventory.md')) {
+    text = text.replace('SDD status and evidence, local links', 'acceptance evidence, local links').replace('SDD 状态与证据、文档链接', '验收证据、文档链接')
   }
   if (meta.locale === 'zh' && meta.group !== 'evidence') text = text.replaceAll('服务政企信创迁移', '服务信创迁移').replaceAll('Rivomesh 面向政企的数据库迁移', 'RivoMesh 支持信创改造中的数据库迁移').replaceAll('政企迁移目标', '信创改造目标')
   if (/\/(pipeline-v3|console-and-deployment)\.md$/.test(meta.sourcePath)) {
@@ -84,14 +105,6 @@ export function documentCopy(meta, raw) {
       ['其他补偿模式和业务切换尚未完成。', '失败事务另有[补偿手册](transaction-compensation.md)，业务切换仍待完成。'],
       ['失败事务补偿或业务切换仍未完成。', '失败事务补偿见[独立手册](transaction-compensation.md)，业务切换仍待完成。']
     ],
-    'requirements-and-decisions': [
-      ['manual skip/failed-transaction compensation are not implemented', 'reviewed skip and compensation have bounded SQL acceptance'],
-      ['人工跳过和失败事务补偿尚未实现', '受控跳过和失败事务补偿有 SQL 限定验收'],
-      ['global control,persistent login,skip/patch and cutover remain', 'shared sessions, fixed-owner controls and reviewed SQL recovery have scoped profiles. Cutover remains open'],
-      ['跨节点、登录保持、跳过补数据、切换仍待完成', '共享会话、固定 Agent 控制及审阅恢复有指定档案，业务切换仍待完成'],
-      ['COMMON_CUT repair is not failed-transaction compensation;new modes,gap ledger and UI/API remain', 'Bounded SQL profiles have reviewed transaction skip, gap verification and manual corrections'],
-      ['共同点修复不等于失败事务补偿；新模式、缺口台账及相关UI/API尚未完成', '受控事务跳过、缺口复核与目标行修正有 SQL 限定验收']
-    ],
     'rename-migration': [
       ['Transaction-skip UI integration and the full compatibility matrix remain open in SDD.', 'See [implementation status](implementation-status.md) for current recovery evidence and outstanding compatibility profiles.'],
       ['待开发的事务跳过界面及完整兼容矩阵仍按 SDD 跟踪，不因本次更名变为已完成。', '当前恢复验收与待验证环境见[实施状态](implementation-status.md)。']
@@ -121,5 +134,11 @@ export function documentCopy(meta, raw) {
       text = text.replace(/^(# .+)$/m, '$1\n\nFor current deployment, see the [multi-node guide](/docs/en/start/multi-node.html). Accounts, sessions and audit can now be shared by explicitly enabling [shared access](shared-access.md). Registry-only installations keep them local. Task operations are local by default. Optional fixed-owner [global control](global-control.md) is integrated; explicit controller/Agent separation has initial acceptance, while automatic relocation and the full HA matrix remain open.')
     }
   }
+  // Keep public manuals and acceptance records focused on the operating procedures.
   return text
+    .replace(/Follow \[RC-05 design\]\(\.\.\/sdd\/[^)]+\)\. |实现与验收追踪见 \[RC-05 设计\]\(\.\.\/sdd\/[^)]+\)。/g, '')
+    .replace(/ See \[SDD\]\(\.\.\/sdd\/[^)]+\) for acceptance progress\.|，完整验收进度见\[SDD\]\(\.\.\/sdd\/[^)]+\)/g, '')
+    .replace(/ Contract: \[CP-01\]\(\.\.\/sdd\/[^)]+\)\.|设计合同：\[[^\]]+\]\(\.\.\/sdd\/[^)]+\)。/g, '')
+    .replace(/\s*· \[[^\]\n]+\]\(\.\.\/sdd\/[^)]+\)|\s*\[[^\]\n]+\]\(\.\.\/sdd\/[^)]+\) · |[ 	]+\[Contract\]\(\.\.\/sdd\/[^)]+\)\./g, '')
+    .replace(/and\[SDD\]\(\.\.\/sdd\/[^)]+\)|与\[SDD\]\(\.\.\/sdd\/[^)]+\)/g, '')
 }

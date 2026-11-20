@@ -1,8 +1,8 @@
 formatVersion: 3
 pipelineId: mysql-to-hive
 nodeId: worker-1
-sourceType: MYSQL
 source:
+  type: MYSQL
   clusterId: business-mysql
   host: 127.0.0.1
   port: 3306

@@ -18,11 +18,11 @@ describe('persistent documentation navigation',()=>{
  it('keeps project resources and detailed references closed on first user-guide visit',async()=>{
   const wrapper=create(DocSidebar,{props:{groups:navigation.zh,active:'/docs/zh/start/index.html',locale:'zh'}});await flushPromises()
   expect(wrapper.get('[data-group="reference"] .sidebar-group-heading').attributes('aria-expanded')).toBe('false')
-  expect(wrapper.get('[data-group="sdd"]').isVisible()).toBe(false)
+  expect(wrapper.get('[data-group="architecture"]').isVisible()).toBe(false)
   await wrapper.setProps({active:'/docs/zh/start/create-task.html'})
-  expect(wrapper.get('[data-group="sdd"]').isVisible()).toBe(false)
+  expect(wrapper.get('[data-group="architecture"]').isVisible()).toBe(false)
   await wrapper.get('.project-nav-divider>button').trigger('click')
-  expect(wrapper.get('[data-group="sdd"]').isVisible()).toBe(true)
+  expect(wrapper.get('[data-group="architecture"]').isVisible()).toBe(true)
  })
  it('keeps the same sidebar DOM, order and scroll position across all Chinese pages and back navigation',async()=>{
   const wrapper=create(Layout,{global:{stubs:{Content:{template:'<div class="test-content">Current article</div>'}}}})
@@ -40,7 +40,7 @@ describe('persistent documentation navigation',()=>{
   await wrapper.setProps({active:'/docs/zh/reference/pipeline-v3.html'});await nextTick()
   expect(wrapper.get('[data-group="operations"] .sidebar-group-heading').attributes('aria-expanded')).toBe('false');expect(panel.scrollTop).toBe(377)
   wrapper.unmount();wrappers=wrappers.filter(w=>w!==wrapper)
-  wrapper=create(DocSidebar,{props:{...props,active:'/docs/zh/sdd/plan.html'}});await flushPromises();await nextTick()
+  wrapper=create(DocSidebar,{props:{...props,active:'/docs/zh/reference/platform-design.html'}});await flushPromises();await nextTick()
   expect(wrapper.get('[data-sidebar-scroll]').element.scrollTop).toBe(377)
   expect(wrapper.get('[data-group="operations"] .sidebar-group-heading').attributes('aria-expanded')).toBe('false')
  })

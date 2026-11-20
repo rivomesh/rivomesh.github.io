@@ -8,7 +8,6 @@ import ScreenshotPreview from '../website/.vitepress/theme/components/Screenshot
 import QuickStart from '../website/.vitepress/theme/components/QuickStart.vue'
 import SiteHeader from '../website/.vitepress/theme/components/SiteHeader.vue'
 import Roadmap from '../website/.vitepress/theme/components/Roadmap.vue'
-import requirements from '../website/.vitepress/data/requirements.json'
 import media from '../website/.vitepress/data/tour-media.json'
 import englishChapters from '../website/.vitepress/data/tour-en.json'
 import englishMedia from '../website/.vitepress/data/tour-en-media.json'
@@ -19,12 +18,12 @@ function create(component,options={}){const wrapper=mount(component,{attachTo:do
 beforeEach(()=>{state={frontmatter:ref({locale:'zh'}),isDark:ref(false)};document.body.innerHTML='';document.body.className='';Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:vi.fn().mockResolvedValue(undefined)}})})
 afterEach(()=>{for(const wrapper of wrappers)wrapper.unmount();wrappers=[];document.body.innerHTML='';document.body.className='';vi.useRealTimers()})
 describe('direction-specific connector profiles',()=>{
- it('keeps the homepage to six shared profiles without directory filters or planned source badges',()=>{
+ it('keeps the homepage to six shared profiles without directory filters and with independent source profiles',()=>{
   const wrapper=create(ConnectorCatalog,{props:{compact:true}})
   expect(wrapper.findAll('.connector-product')).toHaveLength(6)
   expect(wrapper.findAll('select,input')).toHaveLength(0)
   const postgres=wrapper.findAll('.connector-product').find(row=>row.get('h3').text()==='PostgreSQL')
-  expect(postgres.text()).toContain('同步目标');expect(postgres.text()).not.toContain('采集源')
+  expect(postgres.text()).toContain('同步目标');expect(postgres.text()).toContain('采集源');expect(postgres.text()).toContain('实验性')
   expect(wrapper.text()).toContain('请按采集源与同步目标分别核对支持范围')
  })
  it('groups a product once and retains distinct source and sink support',()=>{
@@ -33,18 +32,17 @@ describe('direction-specific connector profiles',()=>{
   expect(postgres.findAll('.connector-profile')).toHaveLength(2)
   expect(postgres.findAll('.connector-profile')[0].text()).toContain('已验证')
   const source=postgres.findAll('.connector-profile')[1]
-  expect(source.text()).toContain('采集源');expect(source.text()).toContain('暂不支持')
-  expect(source.get('a').attributes('href')).toBe('/docs/zh/start/roadmap.html')
+  expect(source.text()).toContain('采集源');expect(source.text()).toContain('实验性')
+  expect(source.get('a').attributes('href')).toBe('/docs/zh/reference/postgresql-source.html')
  })
  it('filters runnable source-and-sink support without counting planned sources',async()=>{
   const wrapper=create(ConnectorCatalog)
   await wrapper.findAll('select')[0].setValue('BOTH')
-  expect(wrapper.findAll('.connector-product')).toHaveLength(1)
-  expect(wrapper.get('h2').text()).toBe('MySQL')
+  expect(wrapper.findAll('h2').map(x=>x.text()).sort()).toEqual(['MySQL','PostgreSQL'])
   await wrapper.findAll('select')[0].setValue('SOURCE')
-  await wrapper.findAll('select')[1].setValue('PLANNED')
+  await wrapper.findAll('select')[1].setValue('EXPERIMENTAL')
   expect(wrapper.findAll('h2').map(x=>x.text()).sort()).toEqual(['Oracle','PostgreSQL'])
-  expect(wrapper.findAll('.connector-profile a').every(x=>x.attributes('href').endsWith('/start/roadmap.html'))).toBe(true)
+  expect(wrapper.findAll('.connector-profile a').map(x=>x.attributes('href')).sort()).toEqual(['/docs/zh/reference/oracle-source.html','/docs/zh/reference/postgresql-source.html'])
  })
  it('combines category/search filters and provides an empty-state reset',async()=>{
   const wrapper=create(ConnectorCatalog)
@@ -62,31 +60,23 @@ describe('direction-specific connector profiles',()=>{
   expect(wrapper.findAll('.connector-profile a').every(x=>x.attributes('href').startsWith('/docs/en/'))).toBe(true)
  })
 })
-describe('product roadmap and engineering details',()=>{
- it('separates planned sources from available capabilities and keeps all requirement records collapsed',async()=>{
+describe('product roadmap',()=>{
+ it('distinguishes experimental capture from new verification priorities',()=>{
   const wrapper=create(Roadmap)
-  expect(wrapper.get('.roadmap-current').text()).toContain('MySQL')
-  expect(wrapper.get('.roadmap-current').text()).not.toMatch(/PostgreSQL|Oracle/)
-  expect(wrapper.get('[data-phase="NEW"]').text()).toContain('PostgreSQL 与 Oracle')
-  expect(wrapper.get('[data-phase="PARTIAL"]').text()).toContain('多节点任务管理')
-  expect(wrapper.get('#engineering-details').attributes('open')).toBeUndefined()
-  expect(wrapper.findAll('.requirement-item')).toHaveLength(requirements.requirements.length)
-  wrapper.get('#engineering-details').element.open=true
-  await wrapper.get('input').setValue('SO-06')
-  expect(wrapper.findAll('.requirement-item')).toHaveLength(1)
-  expect(wrapper.get('.requirement-item').text()).toContain('PostgreSQL 源适配器')
+  const available=wrapper.get('[data-phase="available"]')
+  const experimental=wrapper.get('[data-phase="experimental"]')
+  expect(available.text()).toContain('MySQL 全量与增量同步')
+  expect(experimental.text()).toContain('PostgreSQL 逻辑复制')
+  expect(experimental.text()).toContain('Oracle 归档采集')
+  expect(wrapper.get('[data-phase="next"]').text()).toContain('未能预先冻结的 Agent 故障')
+  expect(wrapper.find('details').exists()).toBe(false)
  })
- it('localizes the product overview and preserves English links and requirement filters',async()=>{
-  state.frontmatter.value.locale='en';const wrapper=create(Roadmap)
-  expect(wrapper.get('.roadmap-current').text()).toContain('Available today')
-  expect(wrapper.get('[data-phase="NEW"]').text()).toContain('Additional source databases')
-  expect(wrapper.findAll('.roadmap-capabilities a,.roadmap-directions a').every(link=>link.attributes('href').startsWith('/docs/en/'))).toBe(true)
-  wrapper.get('#engineering-details').element.open=true
-  await wrapper.findAll('select')[0].setValue('SOURCE')
-  await wrapper.findAll('select')[1].setValue('NEW')
-  const expected=requirements.requirements.filter(row=>row.epic==='SOURCE'&&row.status==='NEW')
-  expect(wrapper.findAll('.requirement-item').map(row=>row.get('code').text())).toEqual(expected.map(row=>row.id))
-  expect(wrapper.get('input').attributes('placeholder')).not.toMatch(/会话/)
+ it('localizes the product roadmap and all documentation links',()=>{
+  state.frontmatter.value.locale='en'
+  const wrapper=create(Roadmap)
+  expect(wrapper.get('[data-phase="available"]').text()).toContain('Available today')
+  expect(wrapper.get('[data-phase="experimental"]').text()).toContain('Oracle archived capture')
+  expect(wrapper.findAll('.roadmap-directions a').every(link=>link.attributes('href').startsWith('/docs/en/'))).toBe(true)
  })
 })
 describe('product media and trial commands',()=>{

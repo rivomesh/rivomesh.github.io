@@ -4,7 +4,7 @@
 
 核心项目：[rivomesh/rivomesh](https://github.com/rivomesh/rivomesh)。官网仓库：[rivomesh/rivomesh.github.io](https://github.com/rivomesh/rivomesh.github.io)。
 
-本站根据同级 RivoMesh 核心源码重新生成，采用全新页面、主题、文档路由、固定导航和品牌素材。VitePress 负责 Markdown 编译、客户端路由与静态输出；布局、侧栏、搜索、连接器目录和 SDD 展示使用本仓库自有组件。
+本站根据同级 RivoMesh 核心源码重新生成，采用全新页面、主题、文档路由、固定导航和品牌素材。VitePress 负责 Markdown 编译、客户端路由与静态输出；布局、侧栏、搜索、连接器目录和产品导览使用本仓库自有组件。
 
 本轮产品对照、品牌设计与浏览器验收见 [V3.0 交付记录](quality/v3-brand-product-sync.md)。[此前的验证记录](quality/verification.md)继续保留。
 
@@ -31,9 +31,9 @@ npm run preview
 ## 面向用户的内容与统一导航
 
 - 中文主目录按安装、创建任务、查看状态、多节点部署、故障处理、数据核对、备份和权限组织。
-- 首页与信创指南优先介绍国产数据库目标，明确当前 MySQL 源及 PostgreSQL / Oracle 等源端扩展计划。
-- 多节点指南分别说明节点观察、共享访问与同步主备恢复；跨节点任务控制按实际接入状态展示。
-- 架构、SDD 与验收资料放在独立项目入口，搜索默认聚焦使用文档；详细配置默认折叠。
+- 首页与信创指南介绍国产数据库目标，标明 MySQL、实验性 PostgreSQL 与实验性 Oracle 的采集范围。
+- 多节点指南说明节点观察、共享访问、跨节点持久命令、新任务自动分配与限定条件下的 Agent 移交。
+- 使用指南提供双语架构图和采集原理，项目资料收录技术设计与验收记录，详细配置默认折叠。
 - 所有文档使用 `/docs/zh/…` 或 `/docs/en/…` 路径。
 - 每种语言只有一棵导航树，由源码导入清单生成，不按文章路径切换不同侧栏。
 - `Layout.vue` 在文档路由之间保留同一个 `DocSidebar` 实例。
@@ -50,8 +50,8 @@ npm run preview
 | --- | --- |
 | `website/.vitepress/theme/` | 全新自有布局、侧栏、搜索、首页与组件 |
 | `website/docs/zh/start/`、`website/docs/en/start/` | 面向使用者的原创入门说明 |
-| `website/docs/*/reference/`、`sdd/`、`evidence/` | 从核心源码导入的手册、规格与验收快照 |
-| `website/.vitepress/data/` | 导航、文档、连接器与 SDD 注册数据 |
+| `website/docs/*/reference/`、`evidence/` | 从核心源码导入的手册、规格与验收快照 |
+| `website/.vitepress/data/` | 导航、文档和连接器注册数据 |
 | `website/public/source-snapshot.json` | 文档原始 SHA-256、目录状态与捕获时间 |
 | `website/public/search-index.json` | 按需加载的静态全文索引 |
 | `website/public/files/` | 手册引用的配置和结构化附件 |
@@ -68,9 +68,11 @@ npm test
 npm run build
 ```
 
-导入器固定读取核心项目同一 Git 提交的 Markdown、SDD `requirements.json` 与 `AdapterCatalog.java`，为全部手册建立唯一文档路由和两棵语言导航树。它只重建生成目录，保留 `start/` 原创文档；旧地址规范化到 `rivomesh` 组织，源码外链统一指向核心仓库。
+导入器从同一 Git 提交读取核心项目的中英文公开手册、验收资料和 `AdapterCatalog.java`。默认使用源仓库的 `HEAD`，也可在源仓库路径后传入 Git 提交。导入保留 `start/` 原创文档。旧规格、计划和任务清单页面跳转到对应语言的实施状态。
 
-SDD 状态取自实际清单，DONE、PARTIAL、NEW 分开计算。不要把新增操作手册自动当作全部需求已经完成。快照清单的原始哈希对应源文件，站内链接与纯文本占位符会在导入时转换。`tooling/document-copy.mjs` 维护网站用语及已被新手册取代的旧状态说明，不修改命令、配置字段或证据原文；配置格式编号只在必要的技术说明中保留。嵌套验收目录生成独立路由，导入前拒绝重复路由，避免覆盖正式验收记录。
+快照清单保存原始文件的 SHA-256。导入时转换站内文档链接，并将源码外链固定到对应提交。`tooling/document-copy.mjs` 维护站点用语与手册中的过时状态。生成前检查路由唯一性。
+
+中英文交互架构图的 Archify 源在 `tooling/architecture/`，生成的 HTML 放在 `website/public/architecture/`。两种语言的架构页都嵌入简版预览，并可打开完整交互图。
 
 ## 品牌与视频
 
@@ -118,7 +120,7 @@ npm run video:generate:en # 生成并应用独立英文视频
 - `theme/data/home-copy.mjs`：分别维护中文产品价值与英文 replication / CDC 文案。
 - `theme/data/connectors.mjs`：共用源码导入的连接能力登记，按产品合并展示，源端和目标端状态单独保留。
 - `site-routes.mjs`：统一非文档语言对应关系；导航、语言切换、canonical 和 hreflang 共用。没有翻译的原始验收档案不生成虚假的语言对应页。
-- `ScreenshotPreview`、`ProductGallery`：按页面语言复用三张真实产品截图，支持原图弹窗、Escape 关闭与焦点恢复。缺少的校验/诊断截图以文档说明。
+- `ScreenshotPreview`、`ProductGallery`：按页面语言使用真实产品截图，支持原图弹窗、Escape 关闭与焦点恢复。校验报告与节点目录截图分别出现在操作手册中。
 - `QuickStart`：源码 Java 与 Docker Compose 命令切换及复制；命令来自核心源码部署文件，不承诺公共镜像。
 - `npm run media:optimize`：从原始 PNG 生成 900 / 1800 宽 WebP，不裁剪、不伪造产品内容。原图保留供下载/放大。
 - `npm run build`：除原链接与导航检查外，校验主要双语页面及全部文档的唯一 SEO 标签、canonical、hreflang、HTML lang 和双语 sitemap。

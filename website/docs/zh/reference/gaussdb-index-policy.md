@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/gaussdb-index-policy.md
 
 # Gauss 目标的索引转换、正确性与业务接管
 
-更新日期：2026-11-14。English: [Gauss index policy](/docs/en/reference/gaussdb-index-policy.html)。范围及待确认事项见[需求与决策](/docs/zh/reference/requirements-and-decisions.html)。
+更新日期：2026-11-14。English: [Gauss index policy](/docs/en/reference/gaussdb-index-policy.html)。范围及待确认事项见[需求与决策](/docs/zh/reference/implementation-status.html)。
 
 **状态：v3 已实现普通次级索引及业务 UNIQUE 降级，v2 仍仅建字段/主键。** `IndexPolicy` 生成明确转换动作，`JdbcSink` 在新建表时执行支持的普通索引；表达式/前缀/倒序/特殊方法及既有 UNIQUE/GSI 要求单独计划，不自动 DROP。业务 GSI 模型可转普通索引，身份 GSI 不降级；商业分布式 GaussDB 仍待实机验收。操作与边界见 [V3 手册](/docs/zh/reference/pipeline-v3.html)。
 
@@ -28,6 +28,35 @@ MySQL 是数据权威源。同步期间目标仅由同步服务写入，业务�
 普通索引不能代替主键。不能把原来的全局 UNIQUE 擅自改成 `UNIQUE(email, distribution_key)` 并宣称等价：这允许不同分布键下重复 email，且仍然保留同步过程中可能不需要的约束。
 
 本专题适用于 openGauss/分布式 GaussDB。其他目标在约束不兼容时也已允许降级业务次级 UNIQUE，具体方式由各适配器声明；主键/候选定位键和内部正确性约束不能降级。分析引擎的 Unique Key/物化键也不属于可任意降级的次级约束，详见[平台设计](/docs/zh/reference/platform-design.html)。
+
+## 启动前审阅索引计划
+
+在 v3 控制台执行**检查连接与对象**，然后展开该次操作的**检查结果与操作详情**。v3 CLI 的 `check` 命令返回同一份 `gaussIndexReview`。预检读取每个 Gauss 目标所映射 MySQL 库的源索引元数据。PostgreSQL 和 Oracle 的源端发现目前不提供次级索引定义，对应检查结果为 `SOURCE_INDEX_METADATA_UNAVAILABLE`。
+
+| 动作 | 预期结果 |
+|---|---|
+| `CREATE` | 写入端计划按列序及唯一性属性创建普通索引。 |
+| `DOWNGRADE_UNIQUE` | 写入端计划将业务 UNIQUE 转为非唯一普通索引。业务应用接管写入前需恢复必要约束。 |
+| `REPLACE_GSI` | 写入端计划将已建模的业务 GSI 转为非唯一普通索引，失去全局路由及唯一性。MySQL 源端发现不会返回 Gauss 原生 GSI 定义。 |
+| `REQUIRES_PLAN` | 启动前须处理对应索引。原因 `GLOBAL_IDENTITY_REQUIRES_DISTRIBUTION_PLAN` 表示分布方案须保留行身份。表达式、前缀、倒序列和其他不支持的定义另有原因。 |
+
+计数覆盖全部 Gauss 映射中的索引决策，同一源对象可按不同目标分别计数。分布计划项 `distributionPlanRequired` 包含在 `requiresPlan` 内。普通主键独立建表，不计入此次审阅。详情优先展示阻断项，阻断与可执行计划两组各最多 24 条且紧凑 UTF-8 JSON 各不超过 8 KiB。`omittedEntries` 表示未展示的详情条数。详情仅包含标识符、动作、原因与计划索引属性，排除源表达式、SQL 和连接凭据。
+
+连接检查成功时仍可能返回 `REQUIRES_PLAN`。实际写入端启动时按同一策略重新判断，遇到阻断索引会在业务 DDL 前停止。预检不执行 DDL、不读取既有目标索引，也不验证分布能力。请单独验收 openGauss 的目录与写入行为。商业分布式 GaussDB 需用准备部署的确切版本、兼容模式、GTM 模式及 JDBC 驱动完成下文的多 CN/DN 实机验收。
+
+### 复现 openGauss 目录检查
+
+临时实库夹具比对 v3 `check` 的索引方案和 openGauss 系统目录，覆盖名称、列顺序和唯一性。夹具验证 `UNIQUE(email)` 在目标成为普通索引并在 MySQL 保持原约束，也检查复合业务主键、原生收据主键，以及基于原目标数据和日志续传。恢复必要约束之前，所选目标表仅由同步 Worker 写入。[openGauss PG_INDEX](https://docs.opengauss.org/en/docs/latest/database_reference/pg_index.html)
+
+原生验收使用 MySQL 8.4.13、ARM64 openGauss 7.0.0-RC3 构建 `f08516a2` 的 A 兼容模式，以及 Temurin 21 和内置 Gauss JDBC。目标和 Worker 重启后保留原快照、原收据和五个索引 OID，下一源事务使原生断点推进一次。独立的前缀索引场景返回 `REQUIRES_PLAN`，写入端在创建业务映射 schema 前停止。
+
+```bash
+python3 tests/opengauss-index-native.py --artifact /path/to/rivomesh.jar \
+  --gauss-image opengauss/opengauss-server:latest --gauss-version 7.0.0-RC3 \
+  --output target/opengauss-index-native
+```
+
+夹具使用本地 Docker 镜像，记录镜像 ID、数据库版本和制品内 JDBC 驱动。商业分布式 GaussDB 和真实 GSI 另行验收。
 
 ## UNIQUE(email) 的含义
 
@@ -88,6 +117,7 @@ CREATE INDEX ix_customer_email ON app.customer (email);
 - 普通索引不提供跨 DN 的全局唯一性，也不保留 GSI 独立分布/覆盖列设计；替换索引不会改变基表分布。
 - 保留索引列不表示查询计划、覆盖查询或 JOIN 性能等价，需要真实查询与 `EXPLAIN` 验证。
 - 主键若只能依赖某种全局唯一结构才能正确成立，不能把它降级。优先规划与主键相容的分布键；无法满足则拒绝建表并报告原因。
+- 显式声明的全局主键，或列集合与主键或候选定位键完全相同的 GSI，需要分布方案，列顺序不同也一样。包含额外列的业务 GSI 仍可转为普通索引。普通 UNIQUE 的列集合与声明的定位键完全相同时保留唯一性。
 - 现存 GSI 可能承载约束或其他依赖，迁移要识别索引所有权、依赖、有效状态和回滚路径，不能盲目 DROP。
 
 注意：分区表的 GLOBAL/LOCAL 索引表示索引覆盖分区的范围，不能与分布式 GSI 混为一谈。openGauss 的分区索引语法也不能直接当成 GaussDB GSI 能力证明。[openGauss 索引文档](https://docs.opengauss.org/zh/docs/latest/database_administration_guide/creating_and_managing_indexes.html)。
@@ -145,6 +175,8 @@ CREATE INDEX ix_customer_email ON app.customer (email);
 - 索引 DDL 前后杀进程、目标连接丢失、提交响应不确定、同名异定义、无效索引和旧 owner 均正确处理。
 - 分布式 GaussDB 在真实多 CN/DN 环境验证分布键兼容、全局行身份、事务顺序和普通索引查询计划；openGauss 单独验证。
 - 接管前验证排序规则、空字符串/NULL、目标唯一约束和冻结屏障；故意制造冲突时阻止切换并保留全部数据。
+
+商用验收要记录分布式 GaussDB 的确切版本、兼容模式、GTM 模式、CN/DN 拓扑及 JDBC 驱动。在一次性测试库用实际写入端分别验证普通业务 `UNIQUE(email)`、建模的业务 GSI、键列换序的复合定位 GSI 和显式全局主键。通过 JDBC 目录核对两类业务索引均为非唯一普通索引，名称和列顺序符合计划，并确认两类身份 GSI 均在建表前停止。对声明分布上的代表查询留存 `EXPLAIN`。随后执行断连重放，同时核验真实主键约束与写入断点。[GaussDB CREATE GLOBAL INDEX](https://support.huaweicloud.com/intl/zh-cn/distributed-devg-v8-gaussdb/gaussdb-12-0546.html) · [GaussDB GSI 查询计划](https://support.huaweicloud.com/intl/zh-cn/distributed-devg-v8-gaussdb/gaussdb-12-1729.html)
 
 当前 [验证记录](/docs/zh/reference/validation.html) 不包含以上新增能力；不能据此标记索引转换或商业分布式 GaussDB 已通过验收。
 

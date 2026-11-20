@@ -1,0 +1,12 @@
+# Separate agent profile. Protocol4; private persistent directory per release.
+# Use empty task directories for first activation; existing local tasks need reviewed import.
+cluster:
+  enabled: true
+  sharedAccess: true
+  sharedTasks: true
+  id: migration-control
+  url: jdbc:postgresql://control-db:5432/rivomesh_control
+  existingSecret: rivomesh-control-store
+  taskKeyKey: task-key
+  separateExecution: true
+  role: AGENT

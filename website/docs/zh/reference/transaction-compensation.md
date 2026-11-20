@@ -21,3 +21,16 @@ sourcePath: docs/zh-CN/transaction-compensation.md
 确认后会复查目标行和断点。数据变化时重新预览。若原事务已在目标提交，先恢复该提交的日志确认。表有触发器、外键或受限制的结构时，需要独立处理依赖后再评估。目标连接使用已有对账修复所需的依赖可见权限。
 
 通过 `POST /api/tasks/{task}/actions` 提交 `COMPENSATION_PLAN` 或 `COMPENSATION_EXECUTE`。请求带 `X-Request-ID`、`expectedRevision`、`subscriptionId`、目标的 `errorCount`，以及 `compensation.evidenceId` 和 `compensation.evidenceHash`。执行还需 `compensation.approvedHash` 与 `compensation.reason`，摘要取自预览操作结果的 `hash`。响应未知时，查询操作历史，或使用同一请求 ID 和原始请求体重试。目标行和凭据在同一事务提交，随后任务保持暂停。
+
+## 跨节点取消与恢复
+
+在任一管理入口打开任务，从「事务恢复与数据缺口」选择「请求取消恢复操作」。按钮关联一条原请求，适用于补偿预览、补偿执行和手工修正执行。管理员也可以向同一操作接口提交 `RECOVERY_CANCEL`，请求体包含当前 `expectedRevision` 和原操作的 `parentRequestId`，请求头使用独立的 `X-Request-ID`。取消接口的成功响应表示已受理。最终状态以原操作为准。
+
+| 原操作状态 | 处理 |
+|---|---|
+| `CANCELLED_BEFORE_DISPATCH` | 任务尚未下发。查阅取消审计和原请求。 |
+| `RECOVERY_CANCELLED` | 运行中的预览已停止，或目标库已确认原写入没有提交回执。修复原故障后可以重新预览并审批。 |
+| `RECOVERY_CANCEL_RESOLVING` | 执行节点正在只读核对原回执。恢复目标连接，等待原请求给出结果。 |
+| `COMPENSATION_COMPLETED` 或 `CORRECTION_COMPLETED` | 目标已经提交。打开原操作的回执检查范围、摘要和断点。 |
+
+取消和重启都保留任务的暂停状态及日志 ACK。控制节点断开后，可在另一入口查阅原请求。执行节点异常退出后，使用原 Agent 私有目录启动，服务自动恢复挂起的请求。已提交的业务变更和目标回执出自同一事务，重启按原请求读取原凭据。未提交的事务由目标库回滚，随后按原审批内容重试，或按已接受的取消请求核对回执。缺口记录和接管审批仍按各自流程处理。

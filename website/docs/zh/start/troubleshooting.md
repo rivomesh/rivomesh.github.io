@@ -54,3 +54,15 @@ title: 常见故障处理
 在 PostgreSQL / MySQL 指定事务型目标中，管理员可以[留存并审阅故障证据](../reference/failure-review)、[检查目标是否已提交](../reference/commit-acknowledgement)，并选择[按前镜像补偿](../reference/transaction-compensation)或[按类型手工修正](../reference/manual-correction)。先暂停整个任务、确认目标隔离并留存新证据。审批执行后任务仍暂停，核对结果后显式恢复原事务投递。
 
 [整事务跳过](../reference/transaction-skip)单独审批并记录持久数据缺口。[缺口复核](../reference/gap-verification)核对共同历史截面，保留跳过记录与连续应用水位。启用前查看[首版部署基线](../reference/first-release)。
+
+## 审阅采集失败
+
+在任务故障卡片中打开“采集恢复审阅”，核对原始检查点、源端准入状态和受影响目标。若源日志缺失，先保留任务日志、坐标和仍可取得的源日志。MySQL 恢复查 GTID 与 binlog；PostgreSQL 恢复查原逻辑槽、时间线与 WAL；Oracle 恢复核对原 SCN、源身份与归档覆盖。无法恢复原检查点时，评估受影响目标并重新建立受审阅的基线。
+
+指定 MySQL 档案可以校验并留存原事务的 binlog 内容。由管理员另行审批排除一个已验证的源事务后，任务仍处于暂停状态，受影响的目标会保留缺口记录。见[采集恢复手册](../reference/capture-recovery)。
+
+## 核对上一次目标提交
+
+Kafka 通知档案要求在首次发送前登记业务 Topic UUID，并使用支持 Produce v13、已启用事务版本 2 的 Kafka 4.1 或以上。暂停任务后审阅上一笔已确认回执，核对原故障并审批通知，发送前再检查发送者与控制 Topic。响应丢失时使用原请求 ID 查原生回执。通知不推进失败事务或消费者偏移，见[消息目标手册](../reference/messaging-v3)。
+
+ClickHouse、Doris、Hive、ActiveMQ Artemis、ActiveMQ Classic、RocketMQ、Redis Streams、NATS JetStream 和 Pulsar 在指定档案中可执行只读的前序回执核对。暂停任务，选择失败订阅的“检查目标回执”。需要保留失败的完整增量事务、上一次已确认的提交、原目标资源和相符的错误代次。匹配结果记录上一次已完成的提交，失败事务仍按自己的恢复流程处理。Classic 的旧格式回执可用于原任务续传，下一笔已确认的 COMMIT 才具备精确核对所需的摘要。Redis Streams 按保存的条目 ID 读取，JetStream 核对原流身份和序号，Pulsar 读取保存的账本条目。核对前保留原记录。RabbitMQ 已确认消费的消息需依据留存的消费者证据核对。[回执核对的界面、API 与 CLI](../reference/failed-transactions)

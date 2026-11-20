@@ -6,7 +6,7 @@ title: Documentation
 
 # RivoMesh documentation
 
-RivoMesh is a Java-based database synchronization platform. It reads existing MySQL data and binlog changes, delivering them to databases, analytical systems and message brokers with a web console for task management.
+RivoMesh is a Java-based database synchronization platform. It delivers snapshots and ongoing changes to databases, analytics systems and message brokers. MySQL is the primary source, with experimental profiles for PostgreSQL and Oracle.
 
 ## Start here
 
@@ -23,7 +23,10 @@ RivoMesh is a Java-based database synchronization platform. It reads existing My
 | Evaluate database compatibility | [Database adaptation](xinchuang) |
 | Deploy multiple nodes and shared access | [Multi-node deployment](multi-node) |
 | Manage user access | [Accounts and permissions](access) |
+| Understand snapshots, change logs and restart positions | [MySQL, PostgreSQL and Oracle capture](replication) |
+| Trace the control plane, execution and storage | [Architecture and data flow](architecture) |
+| Evaluate an experimental capture source | [PostgreSQL](../reference/postgresql-source) or [Oracle](../reference/oracle-source) |
 
 Start with a small test source and an empty, dedicated target. Check inserts, updates, deletes and restart behavior before expanding the scope.
 
-Detailed configuration is available in the reference section. Architecture, delivery plans and contribution material have a separate [project resources](/project.html) entry.
+Detailed configuration is available in the reference section. Find architecture, verification and contribution material in [project resources](/en/project.html).

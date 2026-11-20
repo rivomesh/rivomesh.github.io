@@ -13,7 +13,7 @@ English：[Hive V3](/docs/en/reference/hive-v3.html)。配置：[hive-v3.yml](/f
 
 **首批独立原生与真实联合恢复已通过，仍保留实验标记。** 已接通 CLI/Web V3 配置、隔离 JDBC、原生 HiveServer2 检查、ACID ORC 历史表与最新版本视图。Hive 4.0.1 / Java 8 的独立用例通过主键移动、无主键重复行、精度、确认丢失重放、大小写、服务重启及旧非空备份拒绝；真实 MySQL 8.4.13→PostgreSQL 17.12＋Hive 联合用例通过全量/增量、Hive 停机时 PostgreSQL 继续、自动追平、Worker 强杀续传、SQL 约束修复重试、视图丢失隔离和暂停结果检查。最终发布包一致性检查也通过，见[证据](/docs/zh/evidence/baseline.html)。这不代表所有 Hive 版本、集群或生产容量验收完成。
 
-首批测试使用官方 `apache/hive:4.0.1` ARM64、单 HiveServer2、持久嵌入式 Derby 和本地 warehouse。这是隔离验收夹具，不是生产部署或高可用方案；HDFS/S3、外部 Metastore、Tez、Kerberos、TLS、集群和其他 JDK 尚未验收。
+首批测试使用官方 `apache/hive:4.0.1` ARM64、单 HiveServer2、嵌入式 Derby 和本地 warehouse。Temurin 21 档案还验收了由 PostgreSQL 支持的独立 Hive Metastore。HDFS/S3、Tez、Kerberos、TLS 和集群切换需单独验收。[外置 PostgreSQL Metastore 夹具](#外置-postgresql-metastore-夹具)
 
 ## 数据布局与一致性
 
@@ -86,3 +86,23 @@ Journal 按目标 ACK 回收不等于 Hive 历史自动清理。历史、墓碑�
 联合夹具实测出现：明细查询有3行，但缓存的COUNT返回0；新会话仅关闭查询结果缓存后COUNT返回3，且统计优化仍开启。这是该配置的实际观测，不推断所有Hive版本都有同一问题。首个支持配置要求服务端默认和所有读取会话 `hive.query.results.cache.enabled=false`，同步账号会话也必须关闭；预检查及写入前校验会以 `HIVE_QUERY_CACHE_DISABLED_REQUIRED` 拒绝开启的设置，不会静默修改全局配置。
 
 只在同步连接关闭缓存不能保护其他业务读者。不要在应用连接上重新开启，或把旧缓存结果解释为数据丢失后手工补写。修复服务端及读者设置后再检查/恢复；表中数据、任务身份和断点无需因此重置。首轮默认缓存联合用例已因该问题中止，不计为完整恢复通过；关闭缓存的新配置已通过独立物化/重启/旧备份拒绝及冻结发布包的完整联合链路，见[证据](/docs/zh/evidence/baseline.html)。
+
+## Java 21 停机与批次验证
+
+ARM64 夹具从 MySQL 8.4.13 同步到 PostgreSQL 17.12 和 HiveServer2 4.0.1。Hive 停机期间 PostgreSQL 继续同步，Hive 保留 Journal 确认位点和精确批次回执。HiveServer2 和 Worker 重启后，夹具直接从 Hive 核对原回执和后续回执，并确认元数据所有者、资源 UUID 和仓库位置一致。Worker 重启复用原快照。修复 PostgreSQL 约束错误后，单独重放该订阅不会改变 Hive 回执。
+
+构建 Java 21 JAR 和测试类后，运行 `RIVOMESH_TEST_PREBUILT=1 bash tests/hive-pipeline-run.sh`。本场景使用单个 HiveServer2、嵌入式 Derby Metastore 和本地仓库数据卷。[Hive 事务](https://hive.apache.org/docs/latest/user/hive-transactions/) · [验收记录](/docs/zh/evidence/baseline.html)
+
+## 外置 PostgreSQL Metastore 夹具
+
+另行提供 PostgreSQL JDBC 驱动，使用 Java 21 流水线验收 HiveServer2 4.0.1、独立 Hive Metastore 和专用 PostgreSQL 17.12 目录库。夹具使用 Hive 自带的工具初始化并校验临时目录库。HiveServer2 端口可连接后，Rivomesh 执行正常的 JDBC 预检查。
+
+完整实库复验通过七项检查。HiveServer2、Metastore 和目录库同时停机期间，独立的 PostgreSQL 业务目标继续推进。重启后复用原 PostgreSQL 系统标识、Hive 表 ID、资源 UUID、所有者和仓库位置。Worker 强制终止后沿用原快照，四批 Hive 回执均与原目录资源一致。修复并重放独立 PostgreSQL 订阅的约束错误后，Hive 回执保持原值。[验收记录](/docs/zh/evidence/baseline.html#hive-external-postgresql-metastore-full-restart-and-recovery)
+
+```sh
+RIVOMESH_TEST_PREBUILT=1 bash tests/hive-pipeline-run.sh --postgres-metastore /path/to/postgresql-42.7.14.jar
+```
+
+本夹具的 HiveServer2 和 Metastore 共用本地仓库卷，重启复用原 PostgreSQL 目录库和仓库卷。分布式仓库、Metastore 或 PostgreSQL 自动故障切换需单独验收。[Apache Hive Docker 配置](https://hive.apache.org/docs/latest/admin/setting-up-hive-with-docker/)
+
+隔离夹具在 Metastore 的 Hadoop `core-site.xml` 中，只给来自 HiveServer2 Compose 主机名的 `hive` 身份授予通知接口所需的权限。缺少此配置时，PostgreSQL 目录结构即使校验通过，HiveServer2 仍可能因 `get_current_notificationEventId` 授权失败而无法启动。[Hive 4.0.1 通知接口授权](https://github.com/apache/hive/blob/rel/release-4.0.1/standalone-metastore/metastore-server/src/main/java/org/apache/hadoop/hive/metastore/HMSHandler.java#L8993-L9027)

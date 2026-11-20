@@ -1,0 +1,36 @@
+formatVersion: 3
+pipelineId: oracle-finance
+nodeId: oracle-worker
+source:
+  type: ORACLE
+  clusterId: finance-oracle
+  database: FREEPDB1
+  expectedVersion: "23.26"
+  topology: SINGLE
+  oracle:
+    root:
+      url: jdbc:oracle:thin:@//oracle-source:1521/FREE
+      username: C##RIVOMESH_REDO
+      password: ${RIVOMESH_ORACLE_ROOT_PASSWORD}
+    pdb:
+      url: jdbc:oracle:thin:@//oracle-source:1521/FREEPDB1
+      username: C##RIVOMESH_REDO
+      password: ${RIVOMESH_ORACLE_PDB_PASSWORD}
+    tables:
+      - RIVO_APP.RIVO_ORDERS
+      - RIVO_APP.RIVO_KEYLESS
+    archivePollMillis: 2000
+    # allowVirtualNumericColumns: true
+databases: [RIVO_APP]
+journal:
+  mode: LOCAL
+  path: ../data/oracle-finance
+targets:
+  - id: postgres
+    product: POSTGRESQL
+    url: jdbc:postgresql://postgres-target:5432/warehouse
+    username: rivomesh_writer
+    password: ${RIVOMESH_TARGET_PASSWORD}
+    metadataSchema: rivomesh_oracle
+    mappings:
+      RIVO_APP: finance

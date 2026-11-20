@@ -7,7 +7,7 @@ sourcePath: docs/en/console-and-deployment.md
 
 # Console, multiple tasks, and deployment
 
-Updated: 2026-11-17. 中文：[控制台与部署](/docs/zh/reference/console-and-deployment.html). This page describes implemented behavior; see [platform design](/docs/en/reference/platform-design.html) for the full roadmap.
+Updated: 2026-11-18. 中文：[控制台与部署](/docs/zh/reference/console-and-deployment.html). This page describes implemented behavior; see [platform design](/docs/en/reference/platform-design.html) for the full roadmap.
 
 ## Runtime scope
 
@@ -18,6 +18,8 @@ The bilingual workbench provides creation, connection/source-object checks, star
 Local task control is the default. Opt in with `cluster.sharedAccess=true` and `cluster.sharedTasks=true` for fixed-owner global tasks. Any entry manages authorized remote tasks while distinguishing durable admission, actual outcomes and uncertainty. See [global control](/docs/en/reference/global-control.html) for private directories/keys, upgrade refusal, Helm and native two-node deployment. Automatic execution takeover remains open.
 
 ## Local startup
+
+Use Eclipse Temurin 21 LTS for Maven, the Controller, the Agent and each Worker.
 
 ```bash
 mvn -s build/settings.xml verify
@@ -56,6 +58,10 @@ Unexpected exits restart with backoff; after five exits CRASH_LOOP requires repa
 
 No queues are deleted or GTIDs changed. Database administrators still repair source replication errors. Failed status reads show the last successful time and an explicit stale-data indication.
 The workbench shows at most 100 tables/task with the total count; other tables continue syncing. Full table status remains available through CLI; paginated search will follow.
+
+V3 task details show the Worker process and capture lease separately. `captureLeaseState` is `CLAIMED`, `EXPIRED`, or `UNCLAIMED` as observed using the journal's clock. The console shows an unknown lease when it cannot read fresh journal state. Consult the source failure stage and checkpoint to diagnose a Worker that is running while capture is stalled.
+
+An administrator can open **Capture diagnostics** in a V3 task from either management entry. The owner supplies timestamped capture-start, phase-failure, retry and journal backpressure events. It scans at most two 64 KiB segments and returns up to 25 records per page using opaque cursors. Endpoint `GET /api/tasks/{id}/diagnostics?limit=20&after={cursor}` uses the existing authorization and owner-query limits. A lost owner returns an unavailable query. An expired cursor requires reopening the first page. Phase events omit driver messages, SQL, row values and credentials. The raw Worker logs remain private.
 
 ## Durable files and APIs
 
@@ -125,10 +131,12 @@ Manifests include persistence, restricted privileges, read-only root filesystem,
 
 ## Development verification
 
-Maven verify runs unit/API tests; tests/matrix.sh covers platform and existing failover behavior on MySQL 8.0/8.4 with openGauss.
+Maven verify runs unit and API tests. With Eclipse Temurin 21 LTS, `tests/matrix.sh` defaults to the V3 standalone, asynchronous GTID failover and Group Replication profiles for MySQL 5.7.44, 8.0.46, 8.2.0 and 8.4.13.
 Optionally run npm ci --prefix tests/ui --ignore-scripts and npm test --prefix tests/ui for the actual HTML/JavaScript DOM interactions. Node is a development-test dependency only, not a service requirement.
 After building, python3 tests/deployment-check.py --image rivomesh:0.1.0-SNAPSHOT checks Helm/native parity, nonroot image, authentication, file permissions, request replay, and volume recovery. It removes only its own containers/volumes and never deploys into user Kubernetes clusters.
-DOM tests do not replace real-browser visual, keyboard, and accessibility acceptance. Browser automation windows were unavailable here; that acceptance remains pending.
+A Chrome smoke test opens the real console, signs in with the keyboard, verifies session restoration after reload and checks the accessible diagnostics dialog and mobile viewport. Broader workflows and browsers have separate acceptance. [Browser record](/docs/zh/evidence/baseline.html#worker-diagnostic-events-and-chrome-smoke)
+
+The console uses the Rivomesh website wordmark and its light and dark palettes. It follows the browser's system preference until you choose an appearance with the moon or sun control in the navigation. Your browser remembers that choice. Keyboard users can use the first link, **Skip to main content**, to bypass navigation.
 
 ## Individual access roles
 
@@ -169,3 +177,35 @@ tasks; omitting the new field retains NONE automatically. See the [ClickHouse ha
 The Doris wizard configures SQL/Stream Load HTTP origins, redirect allowlist, replicas/buckets and index policy. Default3 replicas; one-BE tests explicitly select1. Expand `dorisIndexPlans` in check results. Pause leaves materialization in flight unconfirmed, not a cutover barrier. Initial identity checks require a Doris ADMIN account; see the [Doris handbook](/docs/en/reference/doris-v3.html).
 
 Optional protocol5 adds administrator evidence creation,raw/normalized pages and typed image review. See [review operations](/docs/en/reference/failure-review.html) for activation/upgrade and deployment profiles. Default legacy profiles do not upgrade automatically. See [implementation status](/docs/en/reference/implementation-status.html) for scoped recovery.
+
+### Two-node live verification
+
+The same ARM64 build passed Helm and native YAML on two-node Kubernetes v1.31.0. Each format verified cookie login after refresh, initial delivery, remount of the same RWO CSI volume, incremental recovery, configuration rollout and Secret rotation. The node-local profile uses `hostpath.csi.k8s.io`. The shared NFS CSI profile also verified a replacement application image and same-claim relocation to another live node without resnapshot or manual START.
+
+Load the candidate image on every node of a disposable cluster and enable `csi-hostpath-driver`. The runner creates and deletes namespaces with unique names.
+
+```sh
+python3 tests/kubernetes-csi-runtime.py --context rivomesh-test \
+  --image rivomesh:0.1.0-SNAPSHOT --output target/kubernetes-proof
+```
+
+For the shared volume profile, provide a StorageClass that can attach a ReadWriteOnce volume to either node sequentially. Load both images on every node. The isolated [NFS fixture](/files/tests/kubernetes-nfs-fixture.yaml) uses a Ganesha service and temporary storage. Install the [NFS CSI driver](https://github.com/kubernetes-csi/csi-driver-nfs) and create a StorageClass with provisioner `nfs.csi.k8s.io`, the Service ClusterIP as `parameters.server`, `parameters.share: /` and the tested mount option `nfsvers=4.0`.
+
+```sh
+python3 tests/kubernetes-csi-runtime.py --context rivomesh-test \
+  --storage-class rivomesh-shared --csi-driver nfs.csi.k8s.io \
+  --image rivomesh:before --upgrade-image rivomesh:after --cross-node \
+  --output target/kubernetes-shared-proof
+```
+
+For a planned move, confirm the old Pod has exited before attaching its claim on the new node. Keep the claim UID, PV backing volume and application configuration. Verify the original snapshot ID, a newer lease and incremental delivery before declaring recovery. An external journal can fence concurrent Workers. Agent handoff to a different private directory has separate requirements.
+
+See the [verification record](/docs/zh/evidence/baseline.html#lg-06-live-kubernetes-rwo-csi).
+
+The worker-outage profile stops a worker in a disposable Minikube cluster while the database remains on the control plane. CDC resumes with the same volume and a newer lease when the worker returns. Add `--worker-outage-node <test worker>` to run the native YAML outage profile.
+
+### Java 21 deployment
+
+The Docker build defaults to the Temurin 21 Maven image and the Temurin 21 JRE. Helm and native Kubernetes use the built application image. For Linux, confirm that the service's Java executable reports Java 21. For a rolling application update, keep one management entry available and follow the durable task checkpoints and owner lease through each replacement. Record the deployed image digest, Java version and application SHA in the deployment evidence.
+
+Before replacing a Java 21 application image, record the exact JAR and image IDs, confirm the old version's intended task state and take consistent backups of the Agent directory, control store and external journal where used. Keep the same persistent volume on a rolling restart. If restoration is necessary, stop writers, restore a coordinated point and reconcile target-native receipts before restarting from the saved position. A prior development-format application is outside the first-release rollback scope. [Live evidence](/docs/zh/evidence/baseline.html#java-21-exact-release-candidate)

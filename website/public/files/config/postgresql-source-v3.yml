@@ -1,0 +1,32 @@
+formatVersion: 3
+pipelineId: postgres-sales
+nodeId: postgres-worker
+source:
+  type: POSTGRESQL
+  clusterId: sales-postgresql
+  database: accounting
+  topology: SINGLE
+  expectedVersion: "17"
+  username: rivomesh_capture
+  password: ${RIVOMESH_SOURCE_PASSWORD}
+  postgresql:
+    url: jdbc:postgresql://postgres-source:5432/accounting
+    publication: rivomesh_sales
+    slotPrefix: rivomesh_sales
+    # Set true for a new task routed through a writer endpoint with synchronized standby slots.
+    failoverSlot: false
+databases:
+  - sales
+  - billing
+journal:
+  mode: LOCAL
+targets:
+  - id: warehouse
+    product: POSTGRESQL
+    url: jdbc:postgresql://postgres-target:5432/warehouse
+    username: rivomesh_writer
+    password: ${RIVOMESH_TARGET_PASSWORD}
+    metadataSchema: rivomesh_meta
+    mappings:
+      sales: migrated_sales
+      billing: migrated_billing

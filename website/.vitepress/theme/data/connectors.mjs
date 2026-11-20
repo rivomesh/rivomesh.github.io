@@ -2,12 +2,20 @@ import catalog from '../../data/connectors.json'
 
 const profiles = {
  MYSQL_SOURCE: [
-  '5.7.44 与 8.4 有多库档案中的全量、CDC 和恢复记录。8.0 有旧版单目标主备记录，8.2.0 有开发环境集成记录，尚未纳入首版验收基线。需 InnoDB、GTID、ROW/FULL 日志与快照读取权限。',
-  'Snapshot, CDC and recovery records exist for 5.7.44 and 8.4 with the current pipeline format. 8.0 has legacy single-target failover evidence. 8.2.0 has a development integration run and awaits baseline acceptance. Requires InnoDB, GTID, ROW/FULL binlogs and snapshot privileges.'
+  'Temurin 21 已验证 5.7.44、8.0.46、8.2.0 和 8.4.13 的单机、异步 GTID 提升及三节点单主组复制档案。需要 InnoDB、GTID 与 ROW/FULL 日志。',
+  'Scoped Temurin 21 tests cover all four MySQL versions from 5.7.44 to 8.4.13 in standalone, asynchronous GTID promotion and three-member single-primary groups. Requires InnoDB, GTID and ROW/FULL binlogs.'
  ],
  MYSQL_SINK: [
   '独立 MySQL 8.4 实例。全量、CDC 与重启续传有验证记录，业务写入和目标断点在同一事务提交。',
   'Separate MySQL 8.4 instance. Verified snapshot, CDC and restart recovery. Business rows and target checkpoints commit together.'
+ ],
+ POSTGRESQL_SOURCE: [
+  '实验性。17.12 / 18.7 使用 pgoutput。已验证指定 17.12 同步槽提升、18.7 存储型生成列，以及 17.12 BYTEA / TOAST 重启后继续写入两类 SQL 目标。',
+  'Experimental pgoutput profiles on 17.12 and 18.7. Scoped tests cover 17.12 synchronized-slot promotion, 18.7 stored generated columns, and 17.12 BYTEA/TOAST restart into both SQL targets.'
+ ],
+ ORACLE_SOURCE: [
+  '实验性。Oracle Free 26ai 单 PDB，Flashback 全量与归档 LogMiner 增量写入 PostgreSQL。已验证原 SCN 重启和 DDL 停驻。需另备 Oracle JDBC。',
+  'Experimental Oracle Free 26ai single-PDB profile. Flashback snapshots and archived LogMiner deliver to PostgreSQL. Original-SCN restart and DDL refusal verified. Requires a separately supplied Oracle JDBC driver.'
  ],
  POSTGRESQL: [
   '17.12 已验证全量、增量、重启与 JSON，按事务提交目标断点。受控恢复另有 PostgreSQL 17 专项记录。',
@@ -34,8 +42,8 @@ const profiles = {
   'V6_S1.3.0B19 in PG/UTF8 mode with JDBC 3.0.0B02. Initial snapshot, CDC, keyless rows and recovery are verified. 8a and 8s are tracked independently.'
  ],
  OCEANBASE: [
-  'CE 4.3.5.6 ARM64，MySQL 兼容业务租户。已有原生事务、快照和部分 CDC 记录。完整联合恢复尚未通过，Oracle 兼容模式不在当前范围。',
-  'CE 4.3.5.6 ARM64, MySQL-mode user tenant. Native transactions, snapshots and partial CDC have evidence. Full mixed recovery has not passed and Oracle mode is unavailable.'
+  'CE 4.3.5.6 ARM64 的 MySQL 兼容租户通过指定原生事务、快照、CDC、Worker 重启和 SQL 故障修复。Oracle 兼容模式和集群待验收。',
+  'The CE 4.3.5.6 ARM64 MySQL-mode tenant passed scoped transaction, snapshot, CDC, Worker restart and SQL recovery tests. Oracle mode and cluster profiles remain open.'
  ],
  CLICKHOUSE: [
   '25.8.33.6 单节点，原生 HTTP/RowBinary、版本化物化及 FINAL 视图。已演练独立停机和重启续传，集群另验。',
@@ -50,36 +58,36 @@ const profiles = {
   '4.0.1 ARM64 with one HiveServer2, ACID ORC history and views. Mixed recovery tested. Disable query result caching for readers and writers. Cross-table atomic visibility and clustered deployment are outside this profile.'
  ],
  KAFKA: [
-  '3.9.2，专用单分区 Topic，acks=all 和幂等生产者。已验证 Broker 和 Worker 重启；未覆盖生产集群及 SASL/TLS 组合。',
-  '3.9.2 with a dedicated single-partition topic, acks=all and an idempotent producer. Broker and Worker restarts verified. Cluster and SASL/TLS acceptance is pending.'
+  '3.9.2 单分区专用 Topic 有 KRaft Leader 切换、ISR 不足拒绝及原消费位点恢复记录。Kafka 4.1.2 的物理 Topic ID 缺口通知与回执采用独立配置。',
+  'Kafka 3.9.2 dedicated single-partition topics have KRaft leader election, insufficient ISR refusal and consumer offset recovery evidence. Physical Topic ID gap notices and receipts on 4.1.2 use a separate profile.'
  ],
  RABBITMQ: [
-  '4.1.4 quorum 队列，持久消息、强制路由和发布确认。已验证 Broker 和 Worker 重启；集群及 TLS 另验。',
-  '4.1.4 quorum queue with persistent messages, mandatory routing and publisher confirms. Broker and Worker restarts verified. Cluster and TLS acceptance is pending.'
+  '4.1.4 三成员 quorum 队列已验证 Leader 故障、少数派拒绝、重放和消费者确认。TLS 与容量待验收。',
+  'The 4.1.4 three-member quorum queue has leader-loss, minority refusal, replay and consumer acknowledgement evidence. TLS and capacity remain open.'
  ],
  PULSAR: [
-  '4.0.14 持久非分区 Topic，按 BookKeeper 确认副本数投递。已有全量、CDC 和反复重启验证；集群、令牌与 TLS 另验。',
-  '4.0.14 persistent non-partitioned topic with BookKeeper acknowledgment quorum. Snapshot, CDC and repeated restarts verified. Cluster, token and TLS acceptance is pending.'
+  '4.0.14 持久非分区 Topic 有全量、CDC 和重启记录。另有指定双 Broker、三 BookKeeper、TLS/JWT 和原账本回执核对档案。',
+  '4.0.14 persistent non-partitioned topics have snapshot, CDC and restart evidence. Scoped profiles cover two brokers, three BookKeepers, TLS/JWT and original-ledger receipt review.'
  ],
  ROCKETMQ: [
-  'Broker 5.5.0 / 客户端 5.5.1，单队列、同步刷盘和原生回执。有联合恢复及旧备份拒绝记录，ACL/TLS/复制另验。',
-  'Broker 5.5.0 / client 5.5.1 with one queue, synchronous disk flush and native receipts. Mixed recovery and stale-backup refusal tested. ACL, TLS and replication remain open.'
+  'Broker 5.5.0 / 客户端 5.5.1。指定档案支持原生提交回执与只读核对，可选 Controller 提升使用三个数据副本并要求至少两个同步副本。',
+  'Broker 5.5.0 / client 5.5.1. Scoped profiles cover native commit receipt review and opt-in Controller promotion with three data replicas and at least two in sync.'
  ],
  NATS_JETSTREAM: [
-  '2.11.8，File 存储与 JetStream 发布确认。已验证 Broker 和 Worker 重启；集群及 TLS 另验。',
-  '2.11.8 using File streams and JetStream publish ACKs. Broker and Worker restarts verified. Cluster and TLS acceptance is pending.'
+  '2.11.8 File 存储。有三副本、客户端 TLS、Leader 故障、失去多数派拒绝、恢复后重试及原流回执核对记录。',
+  '2.11.8 File streams. Tests cover three replicas, client TLS, leader loss, majority-loss refusal, retry after recovery and original-stream receipt review.'
  ],
  REDIS_STREAMS: [
-  '7.4.2 直连单主，AOF、noeviction、同连接 WAITAOF。已验证重启；Sentinel、Cluster 和 TLS 组合另验。',
-  '7.4.2 standalone direct primary with AOF, noeviction and same-connection WAITAOF. Restarts verified. Sentinel, Cluster and TLS profiles remain open.'
+  '7.4.2 直连档案有外部提升、WAITAOF 和消费者确认记录。8.0.2 有私有 CA、ACL 和原 AOF 冷重启记录。回执核对读取保存的条目 ID。',
+  'The 7.4.2 direct profile covers operator promotion, WAITAOF and consumer acknowledgements. A separate 8.0.2 profile covers a private CA, ACL and original-AOF cold restart. Receipt review reads the retained entry ID.'
  ],
  ACTIVEMQ_CLASSIC: [
-  '单 Broker 5.19.12，KahaDB、原生持久事务和指定消费者 ACK。有原生及联合恢复验收，TLS/集群/容量另验。',
-  'One 5.19.12 KahaDB broker with persistent local transactions and selected consumer ACKs. Native and mixed recovery verified. TLS, clustering and capacity remain open.'
+  '5.19.12 KahaDB。已验证原生事务、指定消费者确认、共享存储主备及旧非空备份拒绝。精确故障核对需已确认的新格式回执。',
+  '5.19.12 KahaDB. Native transactions, selected consumer acknowledgement, shared-store failover and stale nonempty backup refusal have evidence. Exact failure review requires the current receipt format.'
  ],
  ACTIVEMQ_ARTEMIS: [
-  'Broker 2.57.0 / Core 客户端 2.19.1，持久非破坏性队列。原生传输、消费者 ACK、重启和旧备份拒绝已有记录，完整联合链路另验。',
-  'Broker 2.57.0 / Core client 2.19.1 with a persistent non-destructive queue. Native transport, consumer ACK, restart and stale-backup refusal verified. Mixed pipeline acceptance remains open.'
+  '2.57.0 / Core 客户端 2.19.1，持久非破坏性队列。有共享存储主备、旧备份拒绝以及原队列回执核对记录。',
+  '2.57.0 / Core client 2.19.1 with a persistent non-destructive queue. Evidence covers shared-store failover, stale backup refusal and receipt lookup in the original queue.'
  ]
 }
 const names = {
@@ -107,7 +115,12 @@ export function connectorNote(row,locale){
  if(row.status==='PLANNED')return localized(['目前没有可运行的连接器。','A runnable connector is planned.'],locale)
  return localized(profiles[row.id+'_'+row.role]||profiles[row.id],locale)
 }
-export function connectorHref(row,locale){return row.status==='PLANNED'? `/docs/${locale}/start/roadmap.html`:`/docs/${locale}/reference/${manuals[row.id]||(messaging.includes(row.id)?'messaging-v3':'pipeline-v3')}.html`}
+export function connectorHref(row,locale){
+ if(row.status==='PLANNED')return `/docs/${locale}/start/roadmap.html`
+ const sourceManual=row.role==='SOURCE'?{POSTGRESQL:'postgresql-source',ORACLE:'oracle-source'}[row.id]:undefined
+ const manual=sourceManual||manuals[row.id]||(messaging.includes(row.id)?'messaging-v3':'pipeline-v3')
+ return `/docs/${locale}/reference/${manual}.html`
+}
 // The Java catalog groups GAUSS targets. Present the verified openGauss and unverified commercial profile separately.
 const rows = catalog.flatMap(row=>row.id==='GAUSS_POSTGRESQL'?[row,{id:'GAUSSDB',role:'SINK',status:'LIMITED_IMPLEMENTATION'}]:[row])
 export const products = [...new Set(rows.map(row=>row.id))].map(id=>({id,family:familyOf(id),entries:rows.filter(row=>row.id===id)}))

@@ -24,7 +24,7 @@ title: 创建同步任务
 
 登录控制台，在任务工作台点击“新建任务”，保留默认任务格式（支持多库、多目标）。任务标识创建后应保持稳定，便于查找配置、进度和恢复记录。
 
-![新建任务向导](/media/task-wizard.png)
+<ScreenshotPreview name="task-wizard" locale="zh" alt="RivoMesh 中文控制台中的新建同步任务向导。" />
 
 ## 3. 填写来源和目标
 
@@ -50,3 +50,18 @@ title: 创建同步任务
 在来源测试表新增一条记录，修改其中一个字段，再删除该记录，分别检查目标实际值。然后查看[运行状态与日常操作](monitoring)，验证暂停、故障恢复和重启后的行为。
 
 任务创建失败时，保留错误摘要，按[常见故障处理](troubleshooting)排查。不要通过修改断点或清空日志绕过失败。
+
+快照与增量如何衔接、重启时使用哪个位置，见 [MySQL 采集原理](replication#mysql)。各节点与日志的职责见[架构图](architecture)。
+
+## 使用其他采集源
+
+- **PostgreSQL 17/18**。选择 V3 格式和 PostgreSQL 源。配置一个源库、发布表、源 schema、复制槽前缀和 `REPLICA IDENTITY FULL`，目标选 MySQL 或 PostgreSQL。确认 `wal_level=logical`、槽容量和 WAL 保留，再在所属 Agent 上完成检查。见[逻辑复制配置](../reference/postgresql-source)。
+- **Oracle 26ai Free**。选择 V3 格式和 Oracle 源。分别填 CDB 根与可写 PDB 的服务名、PDB 名称以及大写的 `OWNER.TABLE`，将各 owner 映射到 PostgreSQL schema。部署时向运行 Worker 的服务提供 Oracle JDBC 驱动；启动前验证 Flashback 权限、全列补充日志和归档窗口。见[归档采集配置](../reference/oracle-source)。
+
+进一步了解 [PostgreSQL 的槽、WAL 与 LSN](replication#postgresql)及 [Oracle 的快照、归档与 SCN](replication#oracle)。
+
+## 评估已填充的 PostgreSQL 目标
+
+如果 MySQL 历史数据已通过其他工具复制到 PostgreSQL，从 [`preview-adoption`](../reference/nonempty-target-preview) 开始。预览只读取映射表，报告相同、缺失、多余和内容变更的行数。预览期间建立共同读取视图会短暂限制 MySQL 写入，请安排窗口。
+
+已比较的数据相同后，可为限定的 MySQL 8.4 到 PostgreSQL 17 单表档案运行 `plan-adoption` 并核对摘要。正式接管时保持源端写入冻结，停止应用和 Worker，审批计划并确认原请求的持久回执。接管后的任务处于暂停状态；应用写入权切换需要另行审批。

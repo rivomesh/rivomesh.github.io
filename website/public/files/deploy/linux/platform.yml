@@ -1,0 +1,18 @@
+bind: 127.0.0.1
+port: 8080
+authToken: ${RIVOMESH_TOKEN}
+tasksDirectory: /var/lib/rivomesh/tasks
+dataDirectory: /var/lib/rivomesh/controller
+maxTasks: 20
+maxRunningTasks: 2
+workerHeapMiB: 256
+controlThreads: 4
+pollMillis: 3000
+autoStart: false
+
+# Logical audit retention; protect/monitor the persistent data directory.
+auditMaxEvents: 1000000
+
+# Local HTTP preview only. Use secureCookie: true behind production HTTPS.
+sessions:
+  secureCookie: false

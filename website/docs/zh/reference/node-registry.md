@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/node-registry.md
 
 # 共享节点目录与心跳
 
-English：[Node registry](/docs/en/reference/node-registry.html)。设计合同：[CP-01](/docs/zh/sdd/design-control-store.html)。本页描述共享节点观察。账号、会话与审计可显式启用[共享访问](/docs/zh/reference/shared-access.html)；默认任务页和操作针对本机；可选固定执行节点的[全局模式](/docs/zh/reference/global-control.html)已接入 HTTP 与管理界面，显式管理与 Agent 分离已有首批验收，自动跨 Agent 接管及其他高可用档案需另验。
+English：[Node registry](/docs/en/reference/node-registry.html)。[全局任务控制](/docs/zh/reference/global-control.html)和[共享访问](/docs/zh/reference/shared-access.html)各有独立部署条件。
 
 ## 使用界面
 

@@ -7,7 +7,7 @@ sourcePath: docs/en/platform-design.md
 
 # Rivomesh complete product and technical design
 
-Updated: 2026-11-15. 中文：[完整方案](/docs/zh/reference/platform-design.html). See [requirements](/docs/en/reference/requirements-and-decisions.html) for decisions and status.
+Updated: 2026-11-15. 中文：[完整方案](/docs/zh/reference/platform-design.html). See [requirements](/docs/en/reference/implementation-status.html) for decisions and status.
 
 **This is the full design, not a claim that every feature is complete.** V3 now supports multiple explicitly mapped databases within one logical MySQL source, fan-out, multiple configurations with isolated workers, optional durable journals and Web management. The v2 single-database/single-target mode remains compatible. See [implementation status](/docs/en/reference/implementation-status.html) and [validation](/docs/en/reference/validation.html) for each adapter's accepted scope, and the [console manual](/docs/en/reference/console-and-deployment.html) for operations. Remaining capabilities follow the phases below.
 

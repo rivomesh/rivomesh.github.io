@@ -80,6 +80,18 @@ HTTP 200 本身不能证明查询成功。客户端检查异常头、完整 JSON
 
 共享暂停返回 `UNCONFIRMED_IN_FLIGHT_MATERIALIZATION`：日志已隔离旧租约，但无法撤回服务端已在执行的 HTTP 写入。业务切换前需要确认在途请求结束并完成对账，不能据此宣称已获得事务目标的精确 SQL 写入隔离。
 
+### 核对失败事务之前的目标回执
+
+ClickHouse 因一笔完整增量事务的应用故障暂停后，先暂停整个任务。将该目标的错误代次传入只读核对命令。
+
+```bash
+java -jar rivomesh.jar review-clickhouse-recovery config.yml clickhouse 1
+```
+
+`PRECEDING_RECEIPT_VERIFIED` 表示当前目标回执表仍保存上一笔已确认事务的最后一个原生 `COMMIT` 回执。命令核对原回执表身份、回执摘要、ClickHouse 发布断点及日志中的失败事务摘要，返回确认序号和失败序号。目标读取结束后再次核对日志状态。返回结果只证明前一笔回执，失败事务是否已部分写入仍须另行核实。
+
+保存的投递位置指向其他批次或后续批次时，命令返回 `CLICKHOUSE_RECOVERY_PUBLICATION_UNCERTAIN`。原生回执丢失或变化时，应恢复一致的历史，或规划新基线。保留原状态，修复可恢复的故障后使用 **恢复此目标**。ClickHouse 暂不支持事务跳过和前镜像补偿。[目标恢复方式](/docs/zh/reference/failed-transactions.html)
+
 ## 运维 FAQ
 
 **为什么既有元数据表又有物理数据表？** 服务保存任务代次/指纹归属、对象 UUID、结构和原生批次回执，必须与数据一起保留，它们不是可随意删除的临时表。回执保留/压缩及大目录容量治理仍属于平台后续工作。
@@ -102,6 +114,8 @@ HTTP 200 本身不能证明查询成功。客户端检查异常头、完整 JSON
 
 `target/clickhouse-pipeline-first.log`：24 项执行通过，包含实际 MySQL 8.4 → ClickHouse＋PostgreSQL 发布包链路（LOCAL H2 日志），JSON/无符号/小数/二进制/生成列、目标停机时 SQL 继续、自动追平、Worker 强杀恢复及视图丢失隔离。
 
-`target/ui-clickhouse-first.log`：18 项 DOM 通过。上述结果不代表集群/副本/TLS/断电、大目录/长期运行或 ClickHouse 全 JRE 矩阵验收。
+`target/ui-clickhouse-first.log`：18 项 DOM 通过。上述结果不代表集群/副本/TLS/断电及大目录或长期运行验收。
 
-最终兼容验收：`target/clickhouse-index-compat-unit.log`58项通过，0失败/错误/跳过；`target/ui-clickhouse-index-compat.log`19项通过。`target/clickhouse-index-native-compat.log` 当前实际发布包/Java8验收通过：NONE布局不建跳数索引且重开保留数据，以及索引FINAL、重放、重启和恢复旧非空卷保护。旧配置省略新字段时保留NONE及旧指纹，新向导/示例显式启用DATA_SKIPPING。当前产物144098892bytes，SHA25695dbdbb462929ed1a262072e80d1db885696fa53007d5315c38c4d951c193212。此前28项联合链路验收先于这次仅默认兼容策略调整。全部本次测试资源已清理。
+Temurin 21 使用真实 ClickHouse 25.8.33.6 和 LOCAL H2 日志通过了物化验收。服务沿用原数据卷重启后确认第 3 笔提交。还原旧非空卷后，较新的业务行消失，适配器以 `CLICKHOUSE_CONFIRMED_HISTORY_MISSING_REBUILD_REQUIRED` 拒绝写入，日志侧仍保留第 3 笔断点。测试还核对了 NONE 重开、BTREE/GSI 转换后的跳数索引、FINAL、无主键和重复重放。构建后运行 `bash tests/clickhouse-materializer-run.sh`。[确切验收记录](/files/docs/verification/baseline.json)
+
+历史兼容验收：`target/clickhouse-index-compat-unit.log`58项通过，0失败/错误/跳过；`target/ui-clickhouse-index-compat.log`19项通过。`target/clickhouse-index-native-compat.log` 历史 Java 8 发布包验收通过：NONE布局不建跳数索引且重开保留数据，以及索引FINAL、重放、重启和恢复旧非空卷保护。旧配置省略新字段时保留NONE及旧指纹，新向导/示例显式启用DATA_SKIPPING。归档产物 144098892 字节，SHA25695dbdbb462929ed1a262072e80d1db885696fa53007d5315c38c4d951c193212。此前28项联合链路验收先于这次仅默认兼容策略调整。全部本次测试资源已清理。

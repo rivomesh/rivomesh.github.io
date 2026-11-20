@@ -11,7 +11,7 @@ English：[Account management](/docs/en/reference/account-management.html)。任
 
 ## 当前能力与管理入口
 
-管理员登录后打开“账号与授权”。界面支持新增账号、修改角色和任务范围、停用/重新启用、轮换访问令牌、删除账号。VIEWER/OPERATOR 无权调用账号管理 API。这里是本地 Bearer 令牌身份，不是密码登录或 OIDC；外部身份提供商仍待实现。
+管理员登录后打开“账号与授权”。界面支持新增账号、修改角色和任务范围、停用或重新启用账号、轮换访问令牌及删除账号。VIEWER 和 OPERATOR 无权调用账号管理 API。本页适用于本地 Bearer 令牌账号。部署多个 Controller 时使用共享账号及会话。[共享身份](/docs/zh/reference/shared-access.html)
 
 角色继续使用 VIEWER（查看授权任务）、OPERATOR（查看并操作授权任务）、ADMIN（全局管理）。指定任务列表为空意味着没有任务权限；“所有当前及未来任务”对应 `taskIds: null`。ADMIN 必须全局授权，不能加任务范围。界面保留暂未加载的任务 ID，允许提前授权；不接受通配符。
 
@@ -25,7 +25,7 @@ English：[Account management](/docs/en/reference/account-management.html)。任
 
 如需去掉旧引导凭据，初始化后可换用 [platform-managed.yml](/files/config/platform-managed.yml)：`accessMode: MANAGED`，省略 `authToken/users`，保持原控制/任务目录。空数据目录没有管理员时会拒绝启动，不会创建匿名管理员；不能把它当首次安装配置。
 
-Linux/Docker 继续使用原持久目录。Helm 已提供 [values-managed.yaml](/files/deploy/helm/rivomesh/values-managed.yaml)，对应[原生 Kubernetes 清单](/files/deploy/kubernetes/rivomesh-managed.yaml)。该配置不再注入引导令牌 Secret，需要已初始化的控制目录及匹配审计库；新建空 PVC 不能恢复身份。真实 Kubernetes/CSI 验收尚未完成。
+Linux 和 Docker 部署继续使用原持久目录。托管模式的 Helm 和原生 Kubernetes 示例使用已初始化的控制目录及匹配的审计库。替换 Pod 时复用已初始化的 PVC。存储和滚动部署的已验收范围见部署证据。[Helm 配置](/files/deploy/helm/rivomesh/values-managed.yaml) · [原生 YAML](/files/deploy/kubernetes/rivomesh-managed.yaml) · [部署验收](/docs/zh/evidence/baseline.html#lg-06-live-kubernetes-rwo-csi)
 
 ## 令牌的生成、轮换与不确定结果
 
@@ -43,7 +43,7 @@ Linux/Docker 继续使用原持久目录。Helm 已提供 [values-managed.yaml](
 
 账号变更、版本和审计待写事件原子保存到控制状态，再写入审计链及独立账号版本锚点。审计不可用时管理请求失败，已提交事件通过待写记录恢复，不返回虚假的回滚承诺。账号审计记录包含操作者、动作、目标账号与版本，不含令牌。审计界面“任务 / 账号”显示变更对象。
 
-旧审计记录导出保留原载荷与哈希，不因新增字段改写历史。这里的版本2只指 controller.json 格式，与任务配置 formatVersion 或同步数据检查点版本无关。启用托管目录后控制状态升级为版本2，旧程序会拒绝读取；不能简单替换旧 JAR 回滚。账号目录缺失，或与审计版本锚点不匹配，会拒绝启动，不回退为旧配置身份。完整备份应协调控制状态、审计库及配置版本存储；同时回退全部存储可能恢复旧权限，当前没有外部不可变锚点来识别任意一致旧备份，恢复后需复核撤销与令牌状态。
+本地托管账号使用 Controller 格式 2 存储账号目录。Rivomesh 启动时核对目录和审计版本锚点。状态缺失或不匹配时会拒绝启动。备份时一起备份控制目录、审计库和配置版本。一致的早期备份可能恢复已撤销的身份或凭据。恢复后核对授权、撤销和令牌状态，已有独立保存的审计检查点时同时核对审计链。[审计检查点](/docs/zh/reference/security-audit.html)
 
 ## 全部管理员令牌丢失时
 
@@ -85,8 +85,8 @@ Linux/Docker 继续使用原持久目录。Helm 已提供 [values-managed.yaml](
 
 **如何撤销所有任务权限？** 选择“指定任务”，清空全部勾选和其他任务 ID，保存。不要选择“所有当前及未来任务”。
 
-**能滚回旧程序吗？** 托管控制状态版本2不供旧程序读取；旧程序拒绝是保护措施。同步数据检查点格式没有因账号功能改变，但控制平台回滚需要单独迁移方案。
+**登录时以哪个存储为准？** 本地托管模式检查 Controller 持久目录和审计锚点。共享模式可以从任一 Controller 查询共享 SQL 权威状态。[共享身份](/docs/zh/reference/shared-access.html)
 
-Java8实际发布包已通过旧版本审计升级/哈希、强杀续存、旧/缺失账号目录拒绝、旧程序拒绝、离线恢复与独占锁；真实 MySQL→PostgreSQL 用例通过运行期间撤销授权、轮换令牌及控制器重启后不复活权限，且流代次/快照/CDC保持，见[验收记录](/docs/zh/evidence/baseline.html)。这不代表 OIDC、密码/MFA、分布式身份目录、多控制器同时写入或真实K8s集群已经完成。
+账号授权、会话保持、撤销和部署的实测范围见验收归档。[验收归档](/docs/zh/evidence/baseline.html)
 
 浏览器登录保持、退出及目录变更后所有会话失效的策略见[浏览器会话](/docs/zh/reference/browser-sessions.html)。

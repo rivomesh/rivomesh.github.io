@@ -37,6 +37,14 @@
         {
           "route": "/docs/zh/start/roadmap.html",
           "title": "项目路线图"
+        },
+        {
+          "route": "/docs/zh/start/architecture.html",
+          "title": "同步平台架构"
+        },
+        {
+          "route": "/docs/zh/start/replication.html",
+          "title": "源端同步原理"
         }
       ]
     },
@@ -73,6 +81,18 @@
         {
           "route": "/docs/zh/start/connectors.html",
           "title": "连接器目录"
+        },
+        {
+          "route": "/docs/zh/reference/compatibility.html",
+          "title": "连接器、运行时与 API 兼容矩阵"
+        },
+        {
+          "route": "/docs/zh/reference/postgresql-source.html",
+          "title": "PostgreSQL 源端"
+        },
+        {
+          "route": "/docs/zh/reference/oracle-source.html",
+          "title": "Oracle 源端"
         },
         {
           "route": "/docs/zh/reference/gaussdb-index-policy.html",
@@ -195,8 +215,8 @@
           "title": "首版部署基线"
         },
         {
-          "route": "/docs/zh/reference/shared-access.html",
-          "title": "共享账号、会话与审计"
+          "route": "/docs/zh/reference/oidc-login.html",
+          "title": "OIDC 单点登录"
         },
         {
           "route": "/docs/zh/reference/configuration-editor.html",
@@ -207,6 +227,18 @@
           "title": "管理界面数据修复"
         },
         {
+          "route": "/docs/zh/reference/shared-access.html",
+          "title": "共享账号、会话与审计"
+        },
+        {
+          "route": "/docs/zh/reference/capture-recovery.html",
+          "title": "源端采集故障恢复"
+        },
+        {
+          "route": "/docs/zh/reference/nonempty-target-preview.html",
+          "title": "非空目标接管预览"
+        },
+        {
           "route": "/docs/zh/reference/task-authorization.html",
           "title": "按任务授权"
         },
@@ -215,16 +247,16 @@
           "title": "失败事务诊断"
         },
         {
+          "route": "/docs/zh/reference/recovery.html",
+          "title": "恢复与一致性"
+        },
+        {
           "route": "/docs/zh/reference/security-audit.html",
           "title": "安全审计"
         },
         {
           "route": "/docs/zh/reference/failure-evidence.html",
           "title": "失败事务证据"
-        },
-        {
-          "route": "/docs/zh/reference/recovery.html",
-          "title": "恢复与一致性"
         },
         {
           "route": "/docs/zh/reference/failure-review.html",
@@ -275,80 +307,12 @@
           "title": "跨节点任务控制"
         },
         {
-          "route": "/docs/zh/reference/requirements-and-decisions.html",
-          "title": "需求与决策"
-        },
-        {
           "route": "/docs/zh/reference/implementation-status.html",
           "title": "当前实施状态"
-        }
-      ]
-    },
-    {
-      "id": "sdd",
-      "audience": "project",
-      "defaultClosed": true,
-      "title": "SDD 规格与计划",
-      "items": [
-        {
-          "route": "/docs/zh/sdd/design-checkpoint-recovery.html",
-          "title": "RC-05：失败事务原生断点核对"
         },
         {
-          "route": "/docs/zh/sdd/design-execution-lifecycle.html",
-          "title": "CP-07：管理入口与执行生命周期分离（分离档案已验收）"
-        },
-        {
-          "route": "/docs/zh/sdd/design-failed-transactions.html",
-          "title": "失败事务恢复契约"
-        },
-        {
-          "route": "/docs/zh/sdd/design-failure-evidence.html",
-          "title": "失败事务持久证据"
-        },
-        {
-          "route": "/docs/zh/sdd/design-gap-verification.html",
-          "title": "缺口核验：共同校验点与原子记录"
-        },
-        {
-          "route": "/docs/zh/sdd/design-native-skip.html",
-          "title": "RC-03 / RC-08：事务跳过与缺口记录设计"
-        },
-        {
-          "route": "/docs/zh/sdd/index.html",
-          "title": "SDD 文档索引"
-        },
-        {
-          "route": "/docs/zh/sdd/spec.html",
-          "title": "需求规格"
-        },
-        {
-          "route": "/docs/zh/sdd/plan.html",
-          "title": "实施计划"
-        },
-        {
-          "route": "/docs/zh/sdd/tasks.html",
-          "title": "任务清单"
-        },
-        {
-          "route": "/docs/zh/sdd/acceptance.html",
-          "title": "验收矩阵"
-        },
-        {
-          "route": "/docs/zh/sdd/design-control-store.html",
-          "title": "共享控制库设计"
-        },
-        {
-          "route": "/docs/zh/sdd/design-sessions.html",
-          "title": "会话设计"
-        },
-        {
-          "route": "/docs/zh/sdd/design-global-control.html",
-          "title": "全局控制设计"
-        },
-        {
-          "route": "/docs/zh/sdd/design-shared-access.html",
-          "title": "共享访问设计"
+          "route": "/docs/zh/reference/release-inventory.html",
+          "title": "发布包与驱动依赖清单"
         }
       ]
     },
@@ -407,6 +371,14 @@
         {
           "route": "/docs/en/start/roadmap.html",
           "title": "Roadmap"
+        },
+        {
+          "route": "/docs/en/start/architecture.html",
+          "title": "Replication architecture"
+        },
+        {
+          "route": "/docs/en/start/replication.html",
+          "title": "How source replication works"
         }
       ]
     },
@@ -443,6 +415,18 @@
         {
           "route": "/docs/en/start/connectors.html",
           "title": "Connector catalog"
+        },
+        {
+          "route": "/docs/en/reference/compatibility.html",
+          "title": "Connector, runtime & API compatibility"
+        },
+        {
+          "route": "/docs/en/reference/postgresql-source.html",
+          "title": "PostgreSQL source"
+        },
+        {
+          "route": "/docs/en/reference/oracle-source.html",
+          "title": "Oracle source"
         },
         {
           "route": "/docs/en/reference/gaussdb-index-policy.html",
@@ -565,8 +549,8 @@
           "title": "First-release configuration"
         },
         {
-          "route": "/docs/en/reference/shared-access.html",
-          "title": "Shared access"
+          "route": "/docs/en/reference/oidc-login.html",
+          "title": "OIDC sign-in"
         },
         {
           "route": "/docs/en/reference/configuration-editor.html",
@@ -575,6 +559,18 @@
         {
           "route": "/docs/en/reference/managed-repair.html",
           "title": "Managed repair"
+        },
+        {
+          "route": "/docs/en/reference/shared-access.html",
+          "title": "Shared access"
+        },
+        {
+          "route": "/docs/en/reference/capture-recovery.html",
+          "title": "Source capture recovery"
+        },
+        {
+          "route": "/docs/en/reference/nonempty-target-preview.html",
+          "title": "Nonempty target adoption preview"
         },
         {
           "route": "/docs/en/reference/task-authorization.html",
@@ -645,76 +641,12 @@
           "title": "Global task control"
         },
         {
-          "route": "/docs/en/reference/requirements-and-decisions.html",
-          "title": "Requirements & decisions"
-        },
-        {
           "route": "/docs/en/reference/implementation-status.html",
           "title": "Implementation status"
-        }
-      ]
-    },
-    {
-      "id": "sdd",
-      "audience": "project",
-      "defaultClosed": true,
-      "title": "SDD specifications",
-      "items": [
-        {
-          "route": "/docs/en/sdd/design-checkpoint-recovery.html",
-          "title": "RC-05: failed-transaction native checkpoint reconciliation"
         },
         {
-          "route": "/docs/en/sdd/design-execution-lifecycle.html",
-          "title": "CP-07: management and execution lifecycle separation (separated profile accepted)"
-        },
-        {
-          "route": "/docs/en/sdd/design-failed-transactions.html",
-          "title": "Failed-transaction recovery contract"
-        },
-        {
-          "route": "/docs/en/sdd/design-failure-evidence.html",
-          "title": "Durable failed-transaction evidence"
-        },
-        {
-          "route": "/docs/en/sdd/design-gap-verification.html",
-          "title": "Gap verification: common cut and atomic records"
-        },
-        {
-          "route": "/docs/en/sdd/design-native-skip.html",
-          "title": "RC-03 / RC-08: transaction skipping and durable gaps"
-        },
-        {
-          "route": "/docs/en/sdd/spec.html",
-          "title": "Requirements"
-        },
-        {
-          "route": "/docs/en/sdd/plan.html",
-          "title": "Implementation plan"
-        },
-        {
-          "route": "/docs/en/sdd/tasks.html",
-          "title": "Task inventory"
-        },
-        {
-          "route": "/docs/en/sdd/acceptance.html",
-          "title": "Acceptance matrix"
-        },
-        {
-          "route": "/docs/en/sdd/design-control-store.html",
-          "title": "Control store design"
-        },
-        {
-          "route": "/docs/en/sdd/design-sessions.html",
-          "title": "Session design"
-        },
-        {
-          "route": "/docs/en/sdd/design-global-control.html",
-          "title": "Global control design"
-        },
-        {
-          "route": "/docs/en/sdd/design-shared-access.html",
-          "title": "Shared access design"
+          "route": "/docs/en/reference/release-inventory.html",
+          "title": "Release packages & driver inventory"
         }
       ]
     },

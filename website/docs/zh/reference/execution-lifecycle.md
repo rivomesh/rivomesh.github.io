@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/execution-lifecycle.md
 
 # 管理入口与执行 Agent 分离
 
-[English](/docs/en/reference/execution-lifecycle.html) · [全局控制](/docs/zh/reference/global-control.html) · [SDD合同](/docs/zh/sdd/design-execution-lifecycle.html)
+[English](/docs/en/reference/execution-lifecycle.html) · [全局控制](/docs/zh/reference/global-control.html)
 
 协议4分离档案已通过348项应用构建/发布包优先测试、76项DOM及五JDK各152项专项；PG/MySQL控制库、真实多库双目标、管理全停、控制库中断、接收入口死亡后原命令恢复、非root三进程和SQL并发角色切换均已验收。自动跨Agent接管、完整日志/适配器/JDK矩阵仍待完成。 [Evidence](/docs/zh/evidence/baseline.html).
 
@@ -60,6 +60,28 @@ helm upgrade --install rivomesh-agent-a deploy/helm/rivomesh -n rivomesh -f depl
 
 不使用Helm时，修改并应用原生清单 [A](/files/deploy/kubernetes/rivomesh-controller-a.yaml)、[B](/files/deploy/kubernetes/rivomesh-controller-b.yaml)、[Agent](/files/deploy/kubernetes/rivomesh-agent-a.yaml)。每个release单副本和独立PVC；增加Agent采用不同release/nodeId/卷，不共享本机状态。静态渲染与非法配置检查已有，真实K8s/CSI与节点故障验收单独登记。
 
+## 四种部署路径
+
+| 部署 | 单实例 | 多管理入口与 Agent |
+|---|---|---|
+| Linux | [systemd 服务](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/deploy/linux/rivomesh.service)与[平台配置](/files/deploy/linux/platform.yml) | 上文独立的[管理入口](/files/config/platform-controller.example.yml)和[执行 Agent](/files/config/platform-agent.example.yml) |
+| Docker | [单实例 Compose](/files/deploy/docker-compose.yml) | [分离式 Compose](/files/deploy/docker-compose-execution.yml) |
+| Kubernetes Helm | [Chart 默认配置](/files/deploy/helm/rivomesh/values.yaml) | [管理入口参数](/files/deploy/helm/rivomesh/values-controller.yaml)和[执行 Agent 参数](/files/deploy/helm/rivomesh/values-agent.yaml) |
+| Kubernetes 原生 YAML | [单实例清单](/files/deploy/kubernetes/rivomesh.yaml) | [管理 A](/files/deploy/kubernetes/rivomesh-controller-a.yaml)、[管理 B](/files/deploy/kubernetes/rivomesh-controller-b.yaml)、[Agent A](/files/deploy/kubernetes/rivomesh-agent-a.yaml) |
+
+两种 Kubernetes 路径都先建[命名空间](/files/deploy/kubernetes/namespace.yaml)，准备 Pod 可访问的控制库，从受保护的文件创建 `rivomesh-auth`（键 `token`）和 `rivomesh-control-store`（键 `username`、`password`、`task-key`）。Linux 和 Docker 用环境变量传入对应配置。同一 HTTPS 入口后的管理服务统一启用 `sessions.secureCookie: true` 并填写 `sessions.publicOrigin`。Agent 探针保留在部署网络内。数据库 TLS 与 CA 按所选 JDBC 档案设置。[会话部署](/docs/zh/reference/browser-sessions.html) · [共享凭据](/docs/zh/reference/shared-access.html)
+
+缺少独立控制库时采用单实例和私有目录。LOCAL 日志位于原 Agent 的私有目录或 PVC。EXTERNAL 日志把采集事务、快照片段和订阅断点放在独立数据库命名空间。共享任务、账号、会话和命令元数据保存在控制库。Agent 本地校验或修复报告、审计副本、密钥与 Worker 配置也属于恢复范围。[日志配置](/docs/zh/reference/pipeline-v3.html) · [共享控制](/docs/zh/reference/global-control.html)
+
+## 节点注册、维护和恢复
+
+1. 使用唯一稳定的 `nodeId` 和各自私有目录注册管理入口与 Agent。在**节点**页面或 `GET /api/nodes` 核对角色和最近注册状态。创建任务时选定执行 Agent，记录任务归属以及目录或 PVC 的身份。
+2. 计划维护前暂停向该 Agent 分配新任务，通过任一管理入口逐个发出 STOP，等原请求回执和 Worker 停止。需要共同点时先暂停并核对目标确认进度。采集租约失效后停止 Agent 服务。维护后用原节点和同一卷启动，再显式启动已停止的任务。
+3. 协调备份时先停止任务和管理写入。对控制库、各节点私有目录与密钥、启用时的外部日志、目标业务和断点做一致的备份，保留文件权限和卷身份。在隔离环境恢复同一批备份，核对节点、配置和目标回执后恢复工作。[故障恢复与切换](/docs/zh/reference/reconciliation-workflow.html)
+4. 更换发布包、JDK 或驱动前记录原包、活动配置和断点。演练时保留节点、目录、密钥和卷的身份。混合版本、跨节点更换存储要单独验证。首版按计划停机后启动新版本。[首版配置](/docs/zh/reference/first-release.html) · [兼容矩阵](/docs/zh/reference/compatibility.html)
+
+已在双节点 Kubernetes 上实测 Helm 和原生 YAML、配置及 Secret 替换、节点本地 CSI 同卷重挂与 Worker 节点中断。跨节点 CSI 和自动迁移 Agent 另行验收。[Kubernetes 实库记录](/docs/zh/evidence/baseline.html)
+
 ## 故障与恢复FAQ
 
 **管理入口全部退出时怎么办？** Agent独立运行并从共享队列读取命令。已测试的LOCAL/H2日志档案可继续CDC；入口恢复后重新读取相同owner和任务权威。这不是自动迁移到另一个Agent。
@@ -74,4 +96,4 @@ helm upgrade --install rivomesh-agent-a deploy/helm/rivomesh -n rivomesh -f depl
 
 **重启时NODE_ID_IN_USE？** 强杀后旧租约需要到期，不能跳过检查。Docker/Kubernetes或独立服务监督器按正常重试策略恢复；若另一个同名节点仍在续租，应修正重复配置。
 
-**恢复配置后立即校验报VALIDATION_BARRIER_MOVED？** Worker进程存活不代表已经取得日志租约；已有行相等也不能证明新Worker启动完成。检查共享运行状态和实际增量追平后重试，保护检查不会放行一个已经移动的校验点。相关就绪展示改进仍属CP-06。
+**恢复配置后立即校验报VALIDATION_BARRIER_MOVED？** Worker进程存活不代表已经取得日志租约；已有行相等也不能证明新Worker启动完成。检查共享运行状态和实际增量追平后重试，任务详情分别显示采集租约和 Worker 进程。

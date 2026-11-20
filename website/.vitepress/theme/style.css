@@ -34,3 +34,13 @@
 
 @media(max-width:960px){.mobile-docbar button{min-height:44px}}
 .catalog-controls select,.catalog-controls input{min-height:44px}
+
+.architecture-diagram {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1220 / 638;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+}

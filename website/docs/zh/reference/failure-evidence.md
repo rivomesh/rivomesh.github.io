@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/failure-evidence.md
 
 # 失败事务证据存储
 
-[English](/docs/en/reference/failure-evidence.html) · [实施契约](/docs/zh/sdd/design-failure-evidence.html) · [故障处理](/docs/zh/reference/failed-transactions.html)
+[English](/docs/en/reference/failure-evidence.html) · [故障处理](/docs/zh/reference/failed-transactions.html)
 
 存储与捕获接口已接入[管理界面审阅](/docs/zh/reference/failure-review.html)，包含管理员/任务权限、审计及协议5门禁；本页解释底层文件与限额。保存成功不代表目标未提交，也不构成跳过、补偿或业务接管批准。早期内部接口验收不等于当前全部界面档案，最新范围见[验证记录](/docs/zh/evidence/baseline.html)。
 
@@ -33,12 +33,20 @@ sourcePath: docs/zh-CN/failure-evidence.md
 
 事务读取仍受原始与规范化合计4MiB预算，历史结构合计2MiB预算；大事务流式审阅尚未完成。文件预算与事件页预算是不同限制，不能通过增大分页绕过事务读取限制。
 
+## 交接 Agent 时保留故障历史
+
+受管理写入者的日志与控制状态位于同一个 PostgreSQL 数据库且停机切点已核验时，原 Agent 使用私有 HMAC 密钥验证故障记录。候选核验同一归档后，将签名权威记录、原故障记录、校验报告和已办结操作回执写入私有暂存。使用同一个准备记录在界面批准归属切换。归属提交同时绑定候选已核验的暂存、日志切点和继任配置。Worker 保持停止。
+
+管理员需要任务和两个 Agent 的访问权限，可从任一 Controller 请求 `GET /api/tasks/{taskId}/handoff/failure-history`。接口返回接收摘要，以及每份证据的 ID、字节数和 SHA-256。受支持的已办结操作回执仍可用请求 ID 通过 `/api/tasks/{taskId}/recovery-receipts/{requestId}` 查询。界面显示暂存和接收数量。历史查询会核验候选副本，候选重启后，即使共享归档和暂存目录不可用，也可继续查询。
+
+原 Agent 保管 HMAC 密钥。候选把原签名字节保存在 `handoff-adopted/<id>/historical-failures`，与在线故障证据目录分开。接口只返回摘要和元数据。补数、跳过、写入目标和启动 Worker 各自使用原有审批流程。若归属提交前 Controller 中断，可从任一入口重试同一归属请求。任务同时保留两类历史时，用同一份准备暂存 MySQL 原始采集 ZIP 和签名故障记录。归属提交按同一批准切点核验两份私有暂存，缺失或损坏任一份都会拒绝。正式接收后，两个历史接口返回相同的准备 ID 和接收摘要。对于旧版本未保存故障记录的暂存，先释放准备，再重新评估和暂存。 [受管理交接](/docs/zh/reference/global-control.html)
+
 ## FAQ
 
 **密钥丢失能生成一个新的继续读取吗？** 不能。存在证据/权威记录时丢失密钥会拒绝初始化；错误密钥也无法通过签名检查。恢复时需要一起恢复密钥、权威记录、证据和原目录身份，并恢复私有权限。
 
-**能复制到另一个Agent自动接管吗？** 不能。原owner及目录身份变化会拒绝。明确的数据迁移、授权和断点接管协议仍待实现。
+**交接任务时怎样保留证据？** 使用经审阅的交接，将原签名文件保留为只读历史。直接复制到其他 Agent 的在线故障证据目录会被归属及目录身份检查拒绝。
 
 **保存证据是否固定了目标提交状态？** 没有。当前捕获不连接或激活业务目标；不会假设目标未提交。原生断点核对与提交领先ACK的人工处理属于RC-05。
 
-**文件可以直接作为跳过计划吗？** 不可以。还需要原生SKIP/补偿凭据、当前状态重验、审批、缺口台账和幂等恢复。当前没有人工跳过或独立补数据入口。
+**拿到证据后如何跳过或补数据？** 在管理界面按目标能力发起对应恢复流程。系统会重新核验当前断点、原生回执和审批范围，并记录缺口及恢复凭据。交接后的历史摘要可用来关联原事件和已办结回执。 [事务跳过](/docs/zh/reference/transaction-skip.html) · [目标修复](/docs/zh/reference/managed-repair.html)

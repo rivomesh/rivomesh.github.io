@@ -58,7 +58,7 @@ sourcePath: docs/zh-CN/failure-review.md
 
 这是保存证据时的历史观察；重新保存证据才会重新核对，不会因打开旧证据而查询目标。核对只读，不激活目标、不推进 ACK；目标 epoch 落后会明确提示后续写入需要围栏。旧节点没有返回核对字段时，界面显示不可用，不冒充已核对。符合条件的管理员可使用[已提交事务确认](/docs/zh/reference/commit-acknowledgement.html)；指定 SQL 目标可通过独立审批执行[事务跳过](/docs/zh/reference/transaction-skip.html)或[补偿](/docs/zh/reference/transaction-compensation.html)。
 
-实现与验收追踪见 [RC-05 设计](/docs/zh/sdd/design-checkpoint-recovery.html)。只读核对的[限定验收](/docs/zh/evidence/baseline.html)已通过；[人工确认限定档案](/docs/zh/evidence/baseline.html)也已验收；跳过与补偿继续追踪，不扩大 RC-02 历史档案。
+只读核对的[限定验收](/docs/zh/evidence/baseline.html)已通过；[人工确认限定档案](/docs/zh/evidence/baseline.html)也已验收；跳过与补偿继续追踪，不扩大 RC-02 历史档案。
 
 ## FAQ与当前边界
 

@@ -15,7 +15,7 @@ The current version is **0.1.0-SNAPSHOT, a preview**. The trial setup builds fro
 
 <QuickStart />
 
-Docker Compose needs Git, Docker and openssl. Java deployment needs Git, Java 8, Maven and openssl. Run commands from the cloned core repository. Open <http://127.0.0.1:8080> and sign in with your own `RIVOMESH_TOKEN`.
+Docker Compose needs Git, Docker and openssl. Install Eclipse Temurin 21 LTS and Maven to build and run locally. Use `mvn -version` and `java -version` to confirm the active JDK, then run the commands from the cloned core repository. Open <http://127.0.0.1:8080> and sign in with your own `RIVOMESH_TOKEN`.
 
 [Full quick start](/docs/en/start/quick-start.html) · [Deployment reference](/docs/en/reference/console-and-deployment.html) · [GitHub source](https://github.com/rivomesh/rivomesh)
 
@@ -29,4 +29,4 @@ The Java build produces `sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar`. Docke
 
 Find release assets and version notes in [GitHub Releases](https://github.com/rivomesh/rivomesh/releases). Consult the [core repository](https://github.com/rivomesh/rivomesh) for licensing terms.
 
-[Implementation status](/docs/en/reference/implementation-status.html) · [Known limitations](/docs/en/start/compatibility.html) · [Multi-node deployment](/docs/en/start/multi-node.html)
+[Implementation status](/docs/en/reference/implementation-status.html) · [Known limitations](/docs/en/start/compatibility.html) · [Multi-node deployment](/docs/en/start/multi-node.html) · [Release inventory](/docs/en/reference/release-inventory.html)

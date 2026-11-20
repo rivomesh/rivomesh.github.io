@@ -53,7 +53,7 @@ New review operations attempt a read-only native checkpoint comparison for trans
 
 This is a historical observation made while retaining evidence. Opening old evidence does not query the destination; retain new evidence to compare again. Inspection neither activates targets nor advances ACK. A lagging target epoch is explicitly reported as requiring fencing before a later mutation. Older members returning no observation are shown as unavailable. Eligible administrators can use [proven-commit confirmation](/docs/en/reference/commit-acknowledgement.html);skip and compensation remain unimplemented.
 
-Follow [RC-05 design](/docs/en/sdd/design-checkpoint-recovery.html). The [bounded read-only profile](/docs/zh/evidence/baseline.html) passed. The [managed confirmation bounded profile](/docs/zh/evidence/baseline.html) also passed;skip and compensation remain separate,and RC-02 historical scope is unchanged.
+The [bounded read-only profile](/docs/zh/evidence/baseline.html) passed. The [managed confirmation bounded profile](/docs/zh/evidence/baseline.html) also passed;skip and compensation remain separate,and RC-02 historical scope is unchanged.
 
 ## FAQ and limits
 

@@ -24,6 +24,8 @@ Deliver one logical source to independently acknowledged targets. Rehearse a slo
 
 Populate an independent environment while preserving the original business database. Review actual values, object differences, restarts and recovery. Application SQL, write cutover, rollback and business constraints require their own plan.
 
+For data already copied to PostgreSQL, use the [existing target preview](../reference/nonempty-target-preview) to compare keyed tables and review business UNIQUE constraints separately. The bounded MySQL 8.4 to PostgreSQL 17 single-table profile can bind a reviewed adoption plan to the write freeze and a durable receipt. Rehearse application writer preparation, activation and failback before the first committed destination write.
+
 For openGauss, DM, KingbaseES, GBase 8c and OceanBase, use the [database compatibility guide](xinchuang). Managed row validation/repair has a MySQL/PostgreSQL acceptance profile; do not assume all target profiles support the same maintenance workflow.
 
 [Performance measurement](../reference/performance) · [Multi-node evaluation](multi-node) · [Compatibility boundaries](compatibility)

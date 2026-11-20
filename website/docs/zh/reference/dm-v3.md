@@ -67,4 +67,18 @@ Linux、Docker、Helm和原生K8s共用该任务配置；清单不部署达梦�
 
 原生测试入口为 `bash tests/dm-pipeline-run.sh`，使用本机合法镜像或 `RIVOMESH_DM_IMAGE` 指定的同布局版本。脚本创建独立项目，仅清理自己的容器和卷，不修改宿主机参数。不同镜像/版本必须重新验证，测试资源配额不是硬件性能标准。
 
+### Java 21 外置达梦驱动实库验收
+
+外置厂商驱动候选包在 Temurin 21.0.13 上运行，由部署方单独提供达梦 JDBC 8.1.3.140，连接原生 UTF-8 模式的达梦 8.1.4.80 ARM64。测试核验了两个外置驱动的加载来源、缺少驱动时的预检拒绝和达梦原生缺表错误。MySQL 8.4.13 向达梦及 PostgreSQL 17.12 同步时，DECIMAL(65,30)、UINT64、JSON、二进制和无主键数据均核对一致。达梦重启后从同一地址重连，Worker 强制终止后保留快照和断点，两个目标分别重试各自原先失败的 SQL 事务。
+
+使用 Java 21 JDK、本地兼容的达梦镜像及单独取得的两个驱动文件复现。
+
+```bash
+python3 tests/dm-external-jdbc-native.py --artifact "$candidate" \
+  --mysql-driver "$mysql_driver" --dm-driver "$dameng_driver" \
+  --java "$JAVA_HOME/bin/java" --output target/dm-external-jdbc-native
+```
+
+参见[外置厂商 JDBC 构建和 classpath](/docs/zh/reference/release-inventory.html#外置厂商-jdbc-驱动的候选包)。
+
 官方参考：[JDBC](https://eco.dameng.com/document/dm/zh-cn/pm/jdbc-rogramming-guide.html)、[建库参数](https://eco.dameng.com/document/dm/zh-cn/pm/dminit-parameters)、[SQL定义](https://eco.dameng.com/document/dm/zh-cn/pm/definition-statement.html)、[存储与提交参数](https://eco.dameng.com/document/dm/zh-cn/pm/physical-storage)。

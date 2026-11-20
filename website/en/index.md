@@ -2,7 +2,7 @@
 kind: home
 locale: en
 title: Reliable Database Replication & CDC
-description: RivoMesh combines snapshots, change data capture, independent multi-destination delivery and durable recovery in a web-managed database replication platform.
+description: RivoMesh combines snapshots, CDC, independent destination recovery and web management. Capture from MySQL, or evaluate experimental PostgreSQL and Oracle source profiles.
 ---
 
 <ProjectHome />

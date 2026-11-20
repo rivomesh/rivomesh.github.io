@@ -45,7 +45,7 @@ MySQL TIME 是带符号时长，不能用 java.sql.Time/LocalTime 当成一天�
 
 首批实际链路验证源值与目标的整数微秒，覆盖正负25小时、全部小数精度和负1微秒；边界/非法二进制由单元检查覆盖。MySQL参考SQL使用 `TIMESTAMPDIFF(MICROSECOND,...,ADDTIME(...))`，不把本次环境返回整数的 TIME_TO_SEC 或默认四位除法当作微秒基准。金仓本版 EXTRACT(EPOCH) 返回 float8，先转 NUMERIC(20,6) 再比较整数微秒。其他目标的全部 TIME 类型矩阵尚未验收，不把通用文本映射视为已跑过全部连接器。
 
-同一实际发布包还验证了跨schema业务/断点整事务回滚、重放、别名归属保护、旧epoch拒绝、可写入口检查、PG伪装产品拒绝、全量/增量、目标停机时PG继续且重启追平、Worker SIGKILL保持generation/snapshot、两端分别SQL约束修复重试、重启保持暂停、缺失目标表隔离和最终事务写入隔离。不同版本/模式、主备集群/路由、TLS、其他JDK、旧非空物理备份恢复、掉电、长稳和硬件吞吐仍需独立验收。既有列自定义排序规则与业务接管需单独评估。
+同一实际发布包还验证了跨schema业务/断点整事务回滚、重放、别名归属保护、旧epoch拒绝、可写入口检查、PG伪装产品拒绝、全量/增量、目标停机时PG继续且重启追平、Worker SIGKILL保持generation/snapshot、两端分别SQL约束修复重试、重启保持暂停、缺失目标表隔离和最终事务写入隔离。不同版本/模式、主备集群/路由、TLS、旧非空物理备份恢复、掉电、长稳和硬件吞吐仍需独立验收。既有列自定义排序规则与业务接管需单独评估。
 
 ## FAQ
 
@@ -61,6 +61,18 @@ MySQL TIME 是带符号时长，不能用 java.sql.Time/LocalTime 当成一天�
 ## 原生验证入口与官方参考
 
 已有合法镜像后执行 `bash tests/kingbase-pipeline-run.sh`，可用 `RIVOMESH_KINGBASE_IMAGE` 指定同布局镜像。脚本创建独立 MySQL8.4、PostgreSQL17 和金仓测试环境，使用真实发布包；结束仅清理自身项目及测试卷，不操作生产库。初始化脚本明确 PG/UTF8、不启用大小写不敏感选项，并直接以镜像 kingbase 用户运行原生服务。其他镜像布局需适配脚本，不能只换版本号就视为通过。
+
+### Java 21 外置金仓驱动实库验收
+
+外置厂商驱动候选包在 Temurin 21.0.13 上加载部署方提供的 `kingbase8-9.0.1.jar`，连接 PG/UTF8 模式的 KingbaseES V009R001C001B0025 ARM64。测试核对驱动 JAR 来源，错误密码返回 SQLSTATE `28P01`。使用合成行数据经发布包的事务型目标写入，核对 UINT64、DECIMAL(65,30)、JSON 和失败事务的原子回滚。同一地址重启后，保留原快照和事务回执，拒绝旧租约代次写入，下一事务只提交一次。
+
+采用 Java 21 JDK、兼容的本地镜像和[外置厂商驱动候选包](/docs/zh/reference/release-inventory.html#外置厂商-jdbc-驱动的候选包)复现。
+
+```bash
+python3 tests/kingbase-external-jdbc-native.py --artifact "$candidate" \
+  --kingbase-driver "$kingbase_driver" --java "$JAVA_HOME/bin/java" \
+  --output target/kingbase-external-jdbc-native
+```
 
 - [官方 JDBC 使用说明](https://docs.kingbase.com.cn/cn/KES-V9R1C10/quick_start/access_tool/java/jdbc/)
 - [官方 Docker 部署说明](https://help.kingbase.com.cn/v8/install-updata/install-docker/install-docker-1.html)

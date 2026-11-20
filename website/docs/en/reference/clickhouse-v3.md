@@ -152,6 +152,18 @@ application journal but cannot retract an HTTP write already running on the
 server. A business cutover must establish quiescence and reconciliation first.
 Do not infer a transactional target's exact local SQL fence here.
 
+### Review a failed transaction's preceding receipt
+
+Pause the whole pipeline when ClickHouse is already paused on a complete incremental apply failure. Use its subscription error generation in the read-only review command.
+
+```bash
+java -jar rivomesh.jar review-clickhouse-recovery config.yml clickhouse 1
+```
+
+`PRECEDING_RECEIPT_VERIFIED` confirms that the current native receipt table contains the saved last COMMIT receipt of the acknowledged preceding transaction. The review checks the original table identity, receipt hash, ClickHouse publication checkpoint and retained failed-head hashes. It reports acknowledgment and failed sequence, then rechecks the journal cut after native I/O. The result covers the preceding receipt. Whether the failed transaction partially materialized remains a separate recovery question.
+
+If saved transport progress refers to a different or later batch, the command reports `CLICKHOUSE_RECOVERY_PUBLICATION_UNCERTAIN`. Missing or changed native receipts require restoring consistent history or planning a new baseline. Keep all original state and use **Resume this target** after correcting a recoverable fault. ClickHouse transaction skip and before-image compensation are unavailable. [Recovery modes](/docs/en/reference/failed-transactions.html)
+
 ## Operational FAQ
 
 **Why are both metadata and physical data tables present?** The service owns
@@ -204,6 +216,8 @@ MySQL 8.4 → ClickHouse + PostgreSQL release-JAR pipeline with LOCAL H2 journal
 binary/generated columns, target outage with SQL continuing, automatic catch-up,
 worker kill/restart, and missing-view isolation. `target/ui-clickhouse-first.log`:
 18 DOM cases passed. These do not establish replicated/cluster/TLS/power-loss,
-large-catalog/soak or all-JRE ClickHouse acceptance.
+large-catalog and soak acceptance.
 
-Final compatibility acceptance: `target/clickhouse-index-compat-unit.log`58PASS/0fail/error/skip and `target/ui-clickhouse-index-compat.log`19PASS. `target/clickhouse-index-native-compat.log` actual-release Java8 native acceptance passed explicit NONE create/reopen without indexes plus indexed FINAL/replay/restart/old-volume rollback protection. Omitted config options retain NONE and the old fingerprint; new wizard/example explicitly opt into DATA_SKIPPING. Current artifact144098892bytes SHA25695dbdbb462929ed1a262072e80d1db885696fa53007d5315c38c4d951c193212. Earlier28-pipeline acceptance predates this default-only compatibility adjustment. All own test resources cleaned.
+Temurin 21 passed the ClickHouse 25.8.33.6 materializer against a real server with a LOCAL H2 journal. After restarting from its original volume, it confirmed sequence 3. Restoring an older nonempty volume removed a later visible row. The adapter refused to write with `CLICKHOUSE_CONFIRMED_HISTORY_MISSING_REBUILD_REQUIRED` and kept the journal-backed checkpoint at sequence 3. The test also covered NONE reopen, BTREE/GSI-derived skipping indexes, FINAL, keyless rows and duplicate replay. Run `bash tests/clickhouse-materializer-run.sh` with the packaged JAR. [Exact acceptance](/files/docs/verification/baseline.json)
+
+Historical compatibility acceptance: `target/clickhouse-index-compat-unit.log`58PASS/0fail/error/skip and `target/ui-clickhouse-index-compat.log`19PASS. `target/clickhouse-index-native-compat.log` actual-release Java8 native acceptance passed explicit NONE create/reopen without indexes plus indexed FINAL/replay/restart/old-volume rollback protection. Omitted config options retain NONE and the old fingerprint; new wizard/example explicitly opt into DATA_SKIPPING. Archived artifact 144098892 bytes, SHA25695dbdbb462929ed1a262072e80d1db885696fa53007d5315c38c4d951c193212. Earlier28-pipeline acceptance predates this default-only compatibility adjustment. All own test resources cleaned.

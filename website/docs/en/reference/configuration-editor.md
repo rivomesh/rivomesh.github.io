@@ -10,7 +10,7 @@ sourcePath: docs/en/configuration-editor.md
 中文：[配置编辑](/docs/zh/reference/configuration-editor.html).
 
 The console edits configuration, rotates credentials and restores revisions without
-resetting checkpoints. The actual Java 8 release passed a MySQL 8.4 → PostgreSQL 17
+resetting checkpoints. An earlier Java 8 candidate passed a MySQL 8.4 → PostgreSQL 17
 pipeline covering target password rotation, revision restore and controller restart.
 See the [acceptance record](/docs/zh/evidence/baseline.html) for its scope.
 

@@ -14,7 +14,7 @@ title: 下载与构建
 
 <QuickStart />
 
-Docker Compose 需要 Git、Docker 与 openssl，从源码构建本地镜像。Java 服务需要 Git、Java 8、Maven 与 openssl。
+Docker Compose 需要 Git、Docker 与 openssl，从源码构建本地镜像。本机构建与运行需要 Eclipse Temurin 21 LTS 和 Maven。先运行 `mvn -version` 与 `java -version` 核对实际使用的 JDK。
 
 ## 源码构建
 
@@ -41,6 +41,6 @@ java -Xmx512m -jar sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar serve config/
 
 ## 版本与演进
 
-[当前实施状态](/docs/zh/reference/implementation-status.html) · [兼容性说明](/docs/zh/start/compatibility.html) · [产品路线图](/docs/zh/start/roadmap.html)
+[当前实施状态](/docs/zh/reference/implementation-status.html) · [兼容性说明](/docs/zh/start/compatibility.html) · [产品路线图](/docs/zh/start/roadmap.html) · [发布包审查](/docs/zh/reference/release-inventory.html)
 
 发行资源与版本说明请查阅 [GitHub Releases](https://github.com/rivomesh/rivomesh/releases)，许可条款以[核心仓库](https://github.com/rivomesh/rivomesh)的说明为准。

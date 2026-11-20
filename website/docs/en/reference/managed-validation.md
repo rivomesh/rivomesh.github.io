@@ -7,7 +7,7 @@ sourcePath: docs/en/managed-validation.md
 
 # Managed data validation
 
-The first management workflow supports SQL destination selection, time/staging budgets, durable background jobs, cancellation, sealed-source target retries and per-table summaries. Validation does not change business rows; see [managed repair](/docs/en/reference/managed-repair.html) for the subsequent reviewed workflow. Constraint rebuilding and business cutover remain open. Consult [transaction skipping](/docs/en/reference/transaction-skip.html) for its separate SQL recovery profile. Managed HTTP/database acceptance is separate; earlier CLI/barrier acceptance cannot establish it.
+Use the validation workflow to select SQL destinations, set time and storage budgets, run or cancel background checks, retry destination comparisons against a sealed source, and review per-table results. To correct differences reported at a common cut, use [managed repair](/docs/en/reference/managed-repair.html). To review a stalled MySQL source transaction, see [capture recovery](/docs/en/reference/capture-recovery.html).
 
 ## Use the console
 
@@ -34,7 +34,7 @@ ADMIN starts/cancels/retries; OPERATOR/VIEWER read summaries only for granted ta
 
 Audit records actor, task, report ID, request hash and acceptance/completion/cancellation/read events. Corresponding audit writes are required before the HTTP response. Raw business values are excluded from summaries/history.
 
-Reports live under `platform.dataDirectory/validations/<taskId>/<reportId>`. Private plaintext H2 files need protected persistent disk/PVC and coordinated backup; no encryption/external immutable anchor is provided. The console retains approximately40recent operations per task. Older files remain and known report IDs are readable through the API; full report catalogs/retention, large-directory pagination and controller HA remain pending. Local file locking is not cluster HA.
+Reports live under `platform.dataDirectory/validations/<taskId>/<reportId>`. The H2 files contain unencrypted row values. Put them on a protected persistent volume and include them in coordinated backups. The console keeps approximately 40 recent operations per task. Reports can still be opened by ID or browsed in the historical directory. A restarted Agent must have access to the original report directory.
 
 ## API
 
@@ -80,3 +80,51 @@ POST `/api/tasks/<taskId>/validations/<reportId>/differences` with `{"target":"p
 Before releasing values, the server checks difference hashes, raw-row checksums and row identity and requires report/scope-linked audit. Business values never enter audit/controller operations. The API checks total UTF-8 raw JSON lengths before fetching CLOBs and refuses more than1MiB with VALIDATION_DETAIL_TOO_LARGE; it never truncates or substitutes an empty row. Large-row chunking/streaming export remains pending; complete private report data is retained. Values remain in page memory and are cleared on logout. These are historical cut values, not live queries or repair.
 
 Repair is separate from read-only validation. The new [managed repair workflow](/docs/en/reference/managed-repair.html) requires plan review and explicit confirmation;validation itself never changes destination data.
+
+### Historical report directory
+
+In **Data validation**, choose **Browse historical reports** to open reports retained in the task owner's data directory, newest first. Open a report to read its summary. It remains readable after the original operation leaves recent history and after the Agent reopens its original directory. Detailed differences and row values require administrator permissions for the task.
+
+Report cards show the creation time. Expand **Report ID** to copy the identifier. When you already have an identifier, select **Open by report ID** from the directory. This opens one report for the current task using the same summary grants. **Back to report directory** restores the page you were browsing. While you navigate with the keyboard, background status updates keep focus on the same available report control.
+
+Clients can page metadata using `GET /api/tasks/{id}/validations?limit=20` and pass `nextCursor` as `after`. The task owner removes abandoned summary staging files when it next acquires the report lock. Include retained reports and review evidence in the task's protected backup policy.
+
+The catalog lists report metadata without opening the H2 database or reading row values. Opening a report that is currently in use returns `VALIDATION_REPORT_BUSY`. Wait for the operation to finish and open it again. Use **Previous** and **Next** to page through identities for the selected destination and table. An administrator can explicitly reveal raw values for a selected difference.
+
+There is no automatic expiration of report or recovery evidence. Budget for the retained files in addition to the current job's quota. Keep a report while a retry, repair plan, gap verification, or audit relies on it. Removal from recent operation history does not release any report storage.
+
+### Check report storage
+
+An administrator can select **View storage** on a report card, or use `GET /api/tasks/{taskId}/validations/{reportId}/storage`. The response contains observed byte lengths for the report database and the known summary and diagnostic files. **Protected** means the owning Agent observed the report in use in its process. **Activity unknown** covers other processes. Use the observations for storage and backup planning. File lengths can change during an active operation.
+
+### Review a report's minimum retention
+
+Set `validationRetentionMinimumDays` on the Agent that owns the report, or on the standalone server. The default `0` disables new reviews. Values from 1 to 3650 enable the workflow and set its minimum duration. Apply the setting to the platform configuration for Linux, Docker or native Kubernetes. With Helm, set `platform.validationRetentionMinimumDays` for the Agent release.
+
+In **View storage**, enter the minimum number of days to retain the completed report and confirm the review. The server checks the current task revision, the last review ID and the original report lock. Reviews can extend the existing minimum date. Active or incomplete reports return an explicit refusal. Once accepted, watch the request in the task's operation history and reopen **View storage** to see the committed date and reviewer.
+
+The equivalent request is `POST /api/tasks/{taskId}/validations/{reportId}/retention` with the usual request ID and session protection. Pass `expectedRevision`, `minimumDays`, and `approved: true`. Include `expectedReviewId` from the previous review when one exists. A retry with the same request ID and body keeps the original result. The Agent stores the review alongside the report and links its outcome to the report ID and actor in the audit trail. Back up the attachment with the original report. Reaching the minimum date keeps the files in place until an eligible reclamation is approved.
+
+### Recover a report from a sealed copy
+
+Set `validationArchiveDirectory` on the report's owning Agent or standalone server to a private persistent directory. Keep that directory outside the validation report tree and restrict access to the server account. For Linux, Docker and native Kubernetes, configure and mount the directory in the server's platform configuration. Helm exposes `platform.validationArchiveDirectory`; provision the mount independently. Use separate storage if the copy must survive loss of the live report volume.
+
+For a completed report with a submitted retention review, select **View storage** and confirm **Create recovery copy**. The Agent holds the original report lock, copies the report database and summary, and verifies byte lengths and SHA-256 before sealing the descriptor. One copy may be sealed per report. The database limit is 128 MiB and the summary limit is 1 MiB. This copy contains the same sensitive data as the report. Preserve the original report directory, its archive descriptor, the Agent owner identity, retention and repair records in coordinated backups.
+
+If the live report database is missing, the report remains in the directory and live reads return `VALIDATION_REPORT_ARCHIVE_RESTORE_REQUIRED`. Select **View storage** and confirm **Restore report**. The Agent verifies the copy and scope again, preserves every existing file with differing content, and restores missing files under the original lock. An interrupted restore blocks live readers and handoff custody until recovery completes. During normal operation the archive and original files both occupy storage.
+
+For API clients, `POST /api/tasks/{taskId}/validations/{reportId}/archive` accepts `operation: "COPY"` and `expectedReviewId`, or `operation: "RESTORE"` and `expectedArchiveId`. Both require the current `expectedRevision`, confirmation with `approved: true`, and an authenticated request ID.
+
+### Reclaim a verified duplicate of the live report database
+
+Set `validationArchiveReclaim: true` on the report's Agent or standalone server to enable reviewed reclamation. Helm exposes `platform.validationArchiveReclaim`. Stop the task, wait until its Worker has exited, open **View storage**, and review the recovery copy SHA-256 before approving **Reclaim live report storage**. The API uses the same archive endpoint with `operation: "RECLAIM"`, `expectedArchiveId`, `expectedArchiveSha256` and `expectedReviewId`, along with the current revision, request ID and confirmation.
+
+The Agent requires an elapsed retention hold, an exact private archive, and a completed differences report with at least one mismatched table at every compared destination. This preserves reports eligible for gap checks or UNIQUE restoration. The presence of repair or recovery plans or scratch space also prevents reclamation. If any check fails, preserve the report and review the displayed outcome.
+
+The Agent audits the exact approval and commits a durable reader fence before reclaiming the duplicate `rows.mv.db`. Report summaries, repair plans, operation receipts, archive files and business databases stay in place. The report remains searchable. Restore the report from the copy before using its row-level evidence. Keep both the owner identity and the original report directory. An interrupted request retains its fence and can resume under the original command. A later explicit restore can also reconcile an interrupted reclamation.
+
+### Find a recovery operation receipt
+
+In global task control, an administrator can choose **Find receipt by request ID** in the task details. A current recovery operation also has a **View receipt** shortcut. The exact lookup `GET /api/tasks/{taskId}/recovery-receipts/{requestId}` reads the persisted control-plane result after the request has left recent history, including while its Agent is unavailable.
+
+The response includes the recorded operation state, actor, owner, time and available report or plan identifiers. For example, a correction receipt can show its associated failure evidence ID. A report ID assigned only on the Agent may be available through the historical report directory. Destination commit and gap evidence remains in its native ledger. The receipt lookup uses both task and node grants and returns the same absence response for unrelated request IDs.

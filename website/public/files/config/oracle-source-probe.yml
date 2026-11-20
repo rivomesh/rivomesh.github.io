@@ -1,0 +1,13 @@
+sourceId: finance-oracle
+pdbName: FREEPDB1
+root:
+  url: jdbc:oracle:thin:@//oracle-source:1521/FREE
+  username: C##RIVOMESH_PROBE
+  password: ${RIVOMESH_ORACLE_ROOT_PASSWORD}
+pdb:
+  url: jdbc:oracle:thin:@//oracle-source:1521/FREEPDB1
+  username: C##RIVOMESH_PROBE
+  password: ${RIVOMESH_ORACLE_PDB_PASSWORD}
+tables:
+  - RIVO_APP.RIVO_ORDERS
+  - RIVO_APP.RIVO_KEYLESS

@@ -48,3 +48,5 @@ Send `expectedRevision`, `subscriptionId`, the subscriber's `errorCount`, `corre
 | A decimal or integer exceeds browser precision | Enter the value as a string before any floating point conversion |
 
 The administrator preview returns row values. Task summaries and durable receipts expose table scope, counts and the digest. The destination transaction preserves the source log, GTID and acknowledgment position.
+
+While a correction write is pending, use any management entry to [cancel the original request and check the commit outcome](/docs/en/reference/transaction-compensation.html#cross-node-cancellation-and-recovery).

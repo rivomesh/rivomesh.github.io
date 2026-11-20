@@ -11,7 +11,7 @@ English：[OceanBase V3](/docs/en/reference/oceanbase-v3.html)。示例：[ocean
 
 ## 当前范围
 
-已接入 V3 配置、CLI、多目标 Worker 和中英文向导，OceanBase CE4.3.5.6 ARM64/Java8 的原生事务、跨 database 回滚、归属冲突、epoch隔离、全量/类型及部分增量已实测。**完整联合重启恢复验收尚未通过，当前保持 EXPERIMENTAL。** 证据见[验收记录](/docs/zh/evidence/baseline.html)。本页不是全部版本、集群或 Oracle 兼容模式的完成声明。
+V3 配置、CLI、多目标 Worker 和中英文向导均支持 OceanBase。历史档案使用 OceanBase CE 4.3.5.6 ARM64 和 Java 8，通过原生事务以及 MySQL 同时写入 OceanBase 与 PostgreSQL 的全量、增量和恢复验收。MySQL 模式租户档案保持 EXPERIMENTAL。Oracle 模式、OBProxy、多节点和更多 Temurin 21 组合另行验收。[实测记录](/docs/zh/evidence/baseline.html#oceanbase-mysql-tenant-recovery)
 
 `product: OCEANBASE` 使用 MySQL Connector/J8.4.0 和 `jdbc:mysql://`，默认端口2881。必须连接 **MySQL 兼容的业务租户**，用户名通常为 `rivomesh@business`；不是 `root@sys`。启动和每次重新连接均核对 OceanBase 产品、兼容模式及非系统租户，并强制 `ob_read_consistency=STRONG`。MySQL 线协议版本号不代表 OceanBase 产品版本。Oracle 模式、seekdb 和其他兼容数据库不在本配置的已验证范围内。
 
@@ -64,10 +64,10 @@ java -jar sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar run config/oceanbase-v
 
 ## 测试镜像启动诊断
 
-官方 all-in-one 镜像仅用于测试，不等于生产部署方案。当前验收夹具使用实例 `memory_limit=5G`、`system_memory=1G`，业务资源单元 `memory_size=2G`、`log_disk_size=2G`，实例日志盘5G/数据盘2G，容器内存上限6G、CPU配额6核。它们是测试设置，不是生产容量推荐或性能标准。
+通过验收的官方 all-in-one 夹具使用 8 GiB 实例上限、1 GiB 系统内存、3 GiB 租户资源单元、10 GiB 容器上限和 6 CPU。实例日志盘 5 GiB，数据盘 2 GiB。这些设置用于复现正确性档案，生产容量以实际工作负载测量为准。
 
 资源单元内存不等于业务租户独占内存：实际探针曾显示2GiB单元拆给元租户和业务租户后，业务租户约1GiB。其他租户/缓存及主机负载同样影响恢复。`boot success!` 也不保证数据库已启动；本镜像在 OBD 内存检查失败时仍可能打印该文本。应同时检查实际 observer 进程、业务租户连接、容器 health 和 OBD 日志。不要删除旧数据或跳过同步断点来解决启动资源不足，不要盲目使用 `obd cluster start -f`，该版本的 `-f` 是 force-delete，而非跳过资源检查。
 
-## 当前未通过的恢复验收
+## 复现实库恢复
 
-四轮联合用例均保留失败结果：首轮15秒管理DDL超时发生在已通过停机追平、Worker强杀和PG约束隔离之后；调整超时及目录检查后的5GiB实例/2GiB单元场景，在重启后业务租户持续初始化并超出用例时限，提高CPU后仍未通过。探针显示业务租户实际约1GiB，但仅凭该观察不能认定根因。6GiB实例/3GiB单元场景则被OBD可用内存预检查拒绝，observer未启动，镜像仍打印了成功文本。没有绕过检查、跳过源事务或重置断点。此记录不证明完整自动恢复可用，也不代表全部故障均由同步端或数据库端引起；需继续定位并补齐完整验收。
+构建当前发布包，运行 `tests/oceanbase-pipeline-run.sh`。用例检查租户、事务隔离与 epoch，再实测全量、增量、目标停机追平、Worker 强杀、两边独立 SQL 错误、修复和缺表隔离，结束后清理夹具数据库资源。`RIVOMESH_TEST_ARTIFACT` 可以指定仓库相对路径的冻结 JAR。早期 6 GiB 容器场景曾遇到 OBD 内存准入、租户恢复以及管理 DDL 超时。此次通过使用上面的资源档案和原事务断点。

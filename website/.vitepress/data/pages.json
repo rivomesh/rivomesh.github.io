@@ -17,10 +17,18 @@
   },
   {
     "locale": "en",
+    "route": "/docs/en/reference/capture-recovery.html",
+    "title": "Source capture recovery",
+    "group": "reference",
+    "rank": 4,
+    "sourcePath": "docs/en/capture-recovery.md"
+  },
+  {
+    "locale": "en",
     "route": "/docs/en/reference/classic-v3.html",
     "title": "ActiveMQ Classic",
     "group": "connectors",
-    "rank": 2,
+    "rank": 5,
     "sourcePath": "docs/en/classic-v3.md"
   },
   {
@@ -28,7 +36,7 @@
     "route": "/docs/en/reference/clickhouse-v3.html",
     "title": "ClickHouse",
     "group": "connectors",
-    "rank": 3,
+    "rank": 6,
     "sourcePath": "docs/en/clickhouse-v3.md"
   },
   {
@@ -36,7 +44,7 @@
     "route": "/docs/en/reference/commit-acknowledgement.html",
     "title": "Commit acknowledgement recovery",
     "group": "reference",
-    "rank": 7,
+    "rank": 8,
     "sourcePath": "docs/en/commit-acknowledgement.md"
   },
   {
@@ -46,6 +54,14 @@
     "group": "reference",
     "rank": 2,
     "sourcePath": "docs/en/common-cut-repair.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/compatibility.html",
+    "title": "Connector, runtime & API compatibility",
+    "group": "connectors",
+    "rank": 0,
+    "sourcePath": "docs/en/compatibility.md"
   },
   {
     "locale": "en",
@@ -68,7 +84,7 @@
     "route": "/docs/en/reference/dm-v3.html",
     "title": "达梦 DM",
     "group": "connectors",
-    "rank": 6,
+    "rank": 9,
     "sourcePath": "docs/en/dm-v3.md"
   },
   {
@@ -76,7 +92,7 @@
     "route": "/docs/en/reference/doris-v3.html",
     "title": "Apache Doris",
     "group": "connectors",
-    "rank": 4,
+    "rank": 7,
     "sourcePath": "docs/en/doris-v3.md"
   },
   {
@@ -92,7 +108,7 @@
     "route": "/docs/en/reference/failed-transactions.html",
     "title": "Failed transaction diagnostics",
     "group": "reference",
-    "rank": 4,
+    "rank": 5,
     "sourcePath": "docs/en/failed-transactions.md"
   },
   {
@@ -100,7 +116,7 @@
     "route": "/docs/en/reference/failure-evidence.html",
     "title": "Failed transaction evidence",
     "group": "reference",
-    "rank": 5,
+    "rank": 6,
     "sourcePath": "docs/en/failure-evidence.md"
   },
   {
@@ -108,7 +124,7 @@
     "route": "/docs/en/reference/failure-review.html",
     "title": "Retain and review failure evidence",
     "group": "reference",
-    "rank": 6,
+    "rank": 7,
     "sourcePath": "docs/en/failure-review.md"
   },
   {
@@ -124,7 +140,7 @@
     "route": "/docs/en/reference/gap-verification.html",
     "title": "Data-gap verification",
     "group": "reference",
-    "rank": 9,
+    "rank": 10,
     "sourcePath": "docs/en/gap-verification.md"
   },
   {
@@ -132,7 +148,7 @@
     "route": "/docs/en/reference/gaussdb-index-policy.html",
     "title": "GaussDB index policy",
     "group": "connectors",
-    "rank": 0,
+    "rank": 3,
     "sourcePath": "docs/en/gaussdb-index-policy.md"
   },
   {
@@ -140,7 +156,7 @@
     "route": "/docs/en/reference/gbase8c-v3.html",
     "title": "GBase 8c",
     "group": "connectors",
-    "rank": 8,
+    "rank": 11,
     "sourcePath": "docs/en/gbase8c-v3.md"
   },
   {
@@ -156,7 +172,7 @@
     "route": "/docs/en/reference/hive-v3.html",
     "title": "Apache Hive",
     "group": "connectors",
-    "rank": 5,
+    "rank": 8,
     "sourcePath": "docs/en/hive-v3.md"
   },
   {
@@ -164,7 +180,7 @@
     "route": "/docs/en/reference/implementation-status.html",
     "title": "Implementation status",
     "group": "architecture",
-    "rank": 3,
+    "rank": 2,
     "sourcePath": "docs/en/implementation-status.md"
   },
   {
@@ -172,7 +188,7 @@
     "route": "/docs/en/reference/kingbase-v3.html",
     "title": "金仓 Kingbase",
     "group": "connectors",
-    "rank": 7,
+    "rank": 10,
     "sourcePath": "docs/en/kingbase-v3.md"
   },
   {
@@ -196,7 +212,7 @@
     "route": "/docs/en/reference/manual-correction.html",
     "title": "Manual target corrections",
     "group": "reference",
-    "rank": 11,
+    "rank": 12,
     "sourcePath": "docs/en/manual-correction.md"
   },
   {
@@ -204,7 +220,7 @@
     "route": "/docs/en/reference/messaging-v3.html",
     "title": "Messaging targets",
     "group": "connectors",
-    "rank": 1,
+    "rank": 4,
     "sourcePath": "docs/en/messaging-v3.md"
   },
   {
@@ -217,18 +233,42 @@
   },
   {
     "locale": "en",
+    "route": "/docs/en/reference/nonempty-target-preview.html",
+    "title": "Nonempty target adoption preview",
+    "group": "reference",
+    "rank": 4,
+    "sourcePath": "docs/en/nonempty-target-preview.md"
+  },
+  {
+    "locale": "en",
     "route": "/docs/en/reference/oceanbase-v3.html",
     "title": "OceanBase",
     "group": "connectors",
-    "rank": 9,
+    "rank": 12,
     "sourcePath": "docs/en/oceanbase-v3.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/oidc-login.html",
+    "title": "OIDC sign-in",
+    "group": "reference",
+    "rank": 2,
+    "sourcePath": "docs/en/oidc-login.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/oracle-source.html",
+    "title": "Oracle source",
+    "group": "connectors",
+    "rank": 2,
+    "sourcePath": "docs/en/oracle-source.md"
   },
   {
     "locale": "en",
     "route": "/docs/en/reference/performance.html",
     "title": "Performance & runtimes",
     "group": "reference",
-    "rank": 13,
+    "rank": 14,
     "sourcePath": "docs/en/performance.md"
   },
   {
@@ -249,6 +289,14 @@
   },
   {
     "locale": "en",
+    "route": "/docs/en/reference/postgresql-source.html",
+    "title": "PostgreSQL source",
+    "group": "connectors",
+    "rank": 1,
+    "sourcePath": "docs/en/postgresql-source.md"
+  },
+  {
+    "locale": "en",
     "route": "/docs/en/reference/reconciliation-workflow.html",
     "title": "Reconciliation workflow",
     "group": "reference",
@@ -260,31 +308,31 @@
     "route": "/docs/en/reference/recovery.html",
     "title": "Recovery & consistency",
     "group": "reference",
-    "rank": 12,
+    "rank": 13,
     "sourcePath": "docs/en/recovery.md"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/reference/release-inventory.html",
+    "title": "Release packages & driver inventory",
+    "group": "architecture",
+    "rank": 3,
+    "sourcePath": "docs/en/release-inventory.md"
   },
   {
     "locale": "en",
     "route": "/docs/en/reference/rename-migration.html",
     "title": "Rename migration",
     "group": "reference",
-    "rank": 14,
+    "rank": 15,
     "sourcePath": "docs/en/rename-migration.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/reference/requirements-and-decisions.html",
-    "title": "Requirements & decisions",
-    "group": "architecture",
-    "rank": 2,
-    "sourcePath": "docs/en/requirements-and-decisions.md"
   },
   {
     "locale": "en",
     "route": "/docs/en/reference/security-audit.html",
     "title": "Security audit",
     "group": "reference",
-    "rank": 4,
+    "rank": 5,
     "sourcePath": "docs/en/security-audit.md"
   },
   {
@@ -292,7 +340,7 @@
     "route": "/docs/en/reference/shared-access.html",
     "title": "Shared access",
     "group": "reference",
-    "rank": 2,
+    "rank": 3,
     "sourcePath": "docs/en/shared-access.md"
   },
   {
@@ -300,7 +348,7 @@
     "route": "/docs/en/reference/task-authorization.html",
     "title": "Task authorization",
     "group": "reference",
-    "rank": 3,
+    "rank": 4,
     "sourcePath": "docs/en/task-authorization.md"
   },
   {
@@ -308,7 +356,7 @@
     "route": "/docs/en/reference/transaction-compensation.html",
     "title": "Failed transaction compensation",
     "group": "reference",
-    "rank": 10,
+    "rank": 11,
     "sourcePath": "docs/en/transaction-compensation.md"
   },
   {
@@ -316,7 +364,7 @@
     "route": "/docs/en/reference/transaction-skip.html",
     "title": "Controlled transaction skipping",
     "group": "reference",
-    "rank": 8,
+    "rank": 9,
     "sourcePath": "docs/en/transaction-skip.md"
   },
   {
@@ -324,7 +372,7 @@
     "route": "/docs/en/reference/validation.html",
     "title": "Validation records",
     "group": "evidence",
-    "rank": 999,
+    "rank": 0,
     "sourcePath": "docs/en/validation.md"
   },
   {
@@ -334,238 +382,6 @@
     "group": "reference",
     "rank": 5,
     "sourcePath": "docs/recovery.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/acceptance.html",
-    "title": "Acceptance matrix",
-    "group": "sdd",
-    "rank": 4,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/acceptance.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/acceptance.html",
-    "title": "验收矩阵",
-    "group": "sdd",
-    "rank": 4,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/acceptance.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/design-checkpoint-recovery.html",
-    "title": "RC-05: failed-transaction native checkpoint reconciliation",
-    "group": "sdd",
-    "rank": -1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-checkpoint-recovery.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/design-checkpoint-recovery.html",
-    "title": "RC-05：失败事务原生断点核对",
-    "group": "sdd",
-    "rank": -1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-checkpoint-recovery.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/design-control-store.html",
-    "title": "Control store design",
-    "group": "sdd",
-    "rank": 5,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-control-store.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/design-control-store.html",
-    "title": "共享控制库设计",
-    "group": "sdd",
-    "rank": 5,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-control-store.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/design-execution-lifecycle.html",
-    "title": "CP-07: management and execution lifecycle separation (separated profile accepted)",
-    "group": "sdd",
-    "rank": -1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-execution-lifecycle.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/design-execution-lifecycle.html",
-    "title": "CP-07：管理入口与执行生命周期分离（分离档案已验收）",
-    "group": "sdd",
-    "rank": -1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-execution-lifecycle.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/design-failed-transactions.html",
-    "title": "Failed-transaction recovery contract",
-    "group": "sdd",
-    "rank": -1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-failed-transactions.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/design-failed-transactions.html",
-    "title": "失败事务恢复契约",
-    "group": "sdd",
-    "rank": -1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-failed-transactions.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/design-failure-evidence.html",
-    "title": "Durable failed-transaction evidence",
-    "group": "sdd",
-    "rank": -1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-failure-evidence.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/design-failure-evidence.html",
-    "title": "失败事务持久证据",
-    "group": "sdd",
-    "rank": -1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-failure-evidence.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/design-gap-verification.html",
-    "title": "Gap verification: common cut and atomic records",
-    "group": "sdd",
-    "rank": -1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-gap-verification.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/design-gap-verification.html",
-    "title": "缺口核验：共同校验点与原子记录",
-    "group": "sdd",
-    "rank": -1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-gap-verification.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/design-global-control.html",
-    "title": "Global control design",
-    "group": "sdd",
-    "rank": 7,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-global-control.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/design-global-control.html",
-    "title": "全局控制设计",
-    "group": "sdd",
-    "rank": 7,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-global-control.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/design-native-skip.html",
-    "title": "RC-03 / RC-08: transaction skipping and durable gaps",
-    "group": "sdd",
-    "rank": -1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-native-skip.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/design-native-skip.html",
-    "title": "RC-03 / RC-08：事务跳过与缺口记录设计",
-    "group": "sdd",
-    "rank": -1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-native-skip.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/design-sessions.html",
-    "title": "Session design",
-    "group": "sdd",
-    "rank": 6,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-sessions.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/design-sessions.html",
-    "title": "会话设计",
-    "group": "sdd",
-    "rank": 6,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-sessions.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/design-shared-access.html",
-    "title": "Shared access design",
-    "group": "sdd",
-    "rank": 8,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-shared-access.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/design-shared-access.html",
-    "title": "共享访问设计",
-    "group": "sdd",
-    "rank": 8,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/design-shared-access.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/plan.html",
-    "title": "Implementation plan",
-    "group": "sdd",
-    "rank": 2,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/plan.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/plan.html",
-    "title": "实施计划",
-    "group": "sdd",
-    "rank": 2,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/plan.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/spec.html",
-    "title": "Requirements",
-    "group": "sdd",
-    "rank": 1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/spec.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/spec.html",
-    "title": "需求规格",
-    "group": "sdd",
-    "rank": 1,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/spec.md"
-  },
-  {
-    "locale": "en",
-    "route": "/docs/en/sdd/tasks.html",
-    "title": "Task inventory",
-    "group": "sdd",
-    "rank": 3,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/tasks.en.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/tasks.html",
-    "title": "任务清单",
-    "group": "sdd",
-    "rank": 3,
-    "sourcePath": "docs/sdd/001-control-recovery-compatibility/tasks.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/sdd/index.html",
-    "title": "SDD 文档索引",
-    "group": "sdd",
-    "rank": 0,
-    "sourcePath": "docs/sdd/README.md"
   },
   {
     "locale": "zh",
@@ -601,10 +417,18 @@
   },
   {
     "locale": "zh",
+    "route": "/docs/zh/reference/capture-recovery.html",
+    "title": "源端采集故障恢复",
+    "group": "reference",
+    "rank": 4,
+    "sourcePath": "docs/zh-CN/capture-recovery.md"
+  },
+  {
+    "locale": "zh",
     "route": "/docs/zh/reference/classic-v3.html",
     "title": "ActiveMQ Classic",
     "group": "connectors",
-    "rank": 2,
+    "rank": 5,
     "sourcePath": "docs/zh-CN/classic-v3.md"
   },
   {
@@ -612,7 +436,7 @@
     "route": "/docs/zh/reference/clickhouse-v3.html",
     "title": "ClickHouse",
     "group": "connectors",
-    "rank": 3,
+    "rank": 6,
     "sourcePath": "docs/zh-CN/clickhouse-v3.md"
   },
   {
@@ -620,7 +444,7 @@
     "route": "/docs/zh/reference/commit-acknowledgement.html",
     "title": "提交确认与断点恢复",
     "group": "reference",
-    "rank": 7,
+    "rank": 8,
     "sourcePath": "docs/zh-CN/commit-acknowledgement.md"
   },
   {
@@ -630,6 +454,14 @@
     "group": "reference",
     "rank": 2,
     "sourcePath": "docs/zh-CN/common-cut-repair.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/compatibility.html",
+    "title": "连接器、运行时与 API 兼容矩阵",
+    "group": "connectors",
+    "rank": 0,
+    "sourcePath": "docs/zh-CN/compatibility.md"
   },
   {
     "locale": "zh",
@@ -652,7 +484,7 @@
     "route": "/docs/zh/reference/dm-v3.html",
     "title": "达梦 DM",
     "group": "connectors",
-    "rank": 6,
+    "rank": 9,
     "sourcePath": "docs/zh-CN/dm-v3.md"
   },
   {
@@ -660,7 +492,7 @@
     "route": "/docs/zh/reference/doris-v3.html",
     "title": "Apache Doris",
     "group": "connectors",
-    "rank": 4,
+    "rank": 7,
     "sourcePath": "docs/zh-CN/doris-v3.md"
   },
   {
@@ -676,7 +508,7 @@
     "route": "/docs/zh/reference/failed-transactions.html",
     "title": "失败事务诊断",
     "group": "reference",
-    "rank": 4,
+    "rank": 5,
     "sourcePath": "docs/zh-CN/failed-transactions.md"
   },
   {
@@ -684,7 +516,7 @@
     "route": "/docs/zh/reference/failure-evidence.html",
     "title": "失败事务证据",
     "group": "reference",
-    "rank": 5,
+    "rank": 6,
     "sourcePath": "docs/zh-CN/failure-evidence.md"
   },
   {
@@ -692,7 +524,7 @@
     "route": "/docs/zh/reference/failure-review.html",
     "title": "证据留存与审阅",
     "group": "reference",
-    "rank": 6,
+    "rank": 7,
     "sourcePath": "docs/zh-CN/failure-review.md"
   },
   {
@@ -708,7 +540,7 @@
     "route": "/docs/zh/reference/gap-verification.html",
     "title": "数据缺口复核",
     "group": "reference",
-    "rank": 9,
+    "rank": 10,
     "sourcePath": "docs/zh-CN/gap-verification.md"
   },
   {
@@ -716,7 +548,7 @@
     "route": "/docs/zh/reference/gaussdb-index-policy.html",
     "title": "GaussDB 索引策略",
     "group": "connectors",
-    "rank": 0,
+    "rank": 3,
     "sourcePath": "docs/zh-CN/gaussdb-index-policy.md"
   },
   {
@@ -724,7 +556,7 @@
     "route": "/docs/zh/reference/gbase8c-v3.html",
     "title": "GBase 8c",
     "group": "connectors",
-    "rank": 8,
+    "rank": 11,
     "sourcePath": "docs/zh-CN/gbase8c-v3.md"
   },
   {
@@ -740,7 +572,7 @@
     "route": "/docs/zh/reference/hive-v3.html",
     "title": "Apache Hive",
     "group": "connectors",
-    "rank": 5,
+    "rank": 8,
     "sourcePath": "docs/zh-CN/hive-v3.md"
   },
   {
@@ -748,7 +580,7 @@
     "route": "/docs/zh/reference/implementation-status.html",
     "title": "当前实施状态",
     "group": "architecture",
-    "rank": 3,
+    "rank": 2,
     "sourcePath": "docs/zh-CN/implementation-status.md"
   },
   {
@@ -756,7 +588,7 @@
     "route": "/docs/zh/reference/kingbase-v3.html",
     "title": "金仓 Kingbase",
     "group": "connectors",
-    "rank": 7,
+    "rank": 10,
     "sourcePath": "docs/zh-CN/kingbase-v3.md"
   },
   {
@@ -780,7 +612,7 @@
     "route": "/docs/zh/reference/manual-correction.html",
     "title": "手工修正目标行",
     "group": "reference",
-    "rank": 11,
+    "rank": 12,
     "sourcePath": "docs/zh-CN/manual-correction.md"
   },
   {
@@ -788,7 +620,7 @@
     "route": "/docs/zh/reference/messaging-v3.html",
     "title": "消息目标与投递协议",
     "group": "connectors",
-    "rank": 1,
+    "rank": 4,
     "sourcePath": "docs/zh-CN/messaging-v3.md"
   },
   {
@@ -801,18 +633,42 @@
   },
   {
     "locale": "zh",
+    "route": "/docs/zh/reference/nonempty-target-preview.html",
+    "title": "非空目标接管预览",
+    "group": "reference",
+    "rank": 4,
+    "sourcePath": "docs/zh-CN/nonempty-target-preview.md"
+  },
+  {
+    "locale": "zh",
     "route": "/docs/zh/reference/oceanbase-v3.html",
     "title": "OceanBase",
     "group": "connectors",
-    "rank": 9,
+    "rank": 12,
     "sourcePath": "docs/zh-CN/oceanbase-v3.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/oidc-login.html",
+    "title": "OIDC 单点登录",
+    "group": "reference",
+    "rank": 2,
+    "sourcePath": "docs/zh-CN/oidc-login.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/reference/oracle-source.html",
+    "title": "Oracle 源端",
+    "group": "connectors",
+    "rank": 2,
+    "sourcePath": "docs/zh-CN/oracle-source.md"
   },
   {
     "locale": "zh",
     "route": "/docs/zh/reference/performance.html",
     "title": "性能与运行时验证",
     "group": "reference",
-    "rank": 13,
+    "rank": 14,
     "sourcePath": "docs/zh-CN/performance.md"
   },
   {
@@ -833,6 +689,14 @@
   },
   {
     "locale": "zh",
+    "route": "/docs/zh/reference/postgresql-source.html",
+    "title": "PostgreSQL 源端",
+    "group": "connectors",
+    "rank": 1,
+    "sourcePath": "docs/zh-CN/postgresql-source.md"
+  },
+  {
+    "locale": "zh",
     "route": "/docs/zh/reference/reconciliation-workflow.html",
     "title": "校验与修复流程",
     "group": "reference",
@@ -841,26 +705,26 @@
   },
   {
     "locale": "zh",
-    "route": "/docs/zh/reference/rename-migration.html",
-    "title": "版本与更名迁移",
-    "group": "reference",
-    "rank": 14,
-    "sourcePath": "docs/zh-CN/rename-migration.md"
+    "route": "/docs/zh/reference/release-inventory.html",
+    "title": "发布包与驱动依赖清单",
+    "group": "architecture",
+    "rank": 3,
+    "sourcePath": "docs/zh-CN/release-inventory.md"
   },
   {
     "locale": "zh",
-    "route": "/docs/zh/reference/requirements-and-decisions.html",
-    "title": "需求与决策",
-    "group": "architecture",
-    "rank": 2,
-    "sourcePath": "docs/zh-CN/requirements-and-decisions.md"
+    "route": "/docs/zh/reference/rename-migration.html",
+    "title": "版本与更名迁移",
+    "group": "reference",
+    "rank": 15,
+    "sourcePath": "docs/zh-CN/rename-migration.md"
   },
   {
     "locale": "zh",
     "route": "/docs/zh/reference/security-audit.html",
     "title": "安全审计",
     "group": "reference",
-    "rank": 4,
+    "rank": 5,
     "sourcePath": "docs/zh-CN/security-audit.md"
   },
   {
@@ -868,7 +732,7 @@
     "route": "/docs/zh/reference/shared-access.html",
     "title": "共享账号、会话与审计",
     "group": "reference",
-    "rank": 2,
+    "rank": 3,
     "sourcePath": "docs/zh-CN/shared-access.md"
   },
   {
@@ -876,7 +740,7 @@
     "route": "/docs/zh/reference/task-authorization.html",
     "title": "按任务授权",
     "group": "reference",
-    "rank": 3,
+    "rank": 4,
     "sourcePath": "docs/zh-CN/task-authorization.md"
   },
   {
@@ -884,7 +748,7 @@
     "route": "/docs/zh/reference/transaction-compensation.html",
     "title": "失败事务补偿",
     "group": "reference",
-    "rank": 10,
+    "rank": 11,
     "sourcePath": "docs/zh-CN/transaction-compensation.md"
   },
   {
@@ -892,7 +756,7 @@
     "route": "/docs/zh/reference/transaction-skip.html",
     "title": "受控事务跳过",
     "group": "reference",
-    "rank": 8,
+    "rank": 9,
     "sourcePath": "docs/zh-CN/transaction-skip.md"
   },
   {
@@ -956,6 +820,20 @@
     "route": "/docs/zh/start/xinchuang.html",
     "title": "信创数据库适配与改造",
     "rank": 4,
+    "group": "start"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/architecture.html",
+    "title": "同步平台架构",
+    "rank": 7,
+    "group": "start"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/replication.html",
+    "title": "源端同步原理",
+    "rank": 8,
     "group": "start"
   },
   {
@@ -1089,6 +967,20 @@
     "route": "/docs/en/start/xinchuang.html",
     "title": "Database compatibility validation",
     "rank": 4,
+    "group": "start"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/architecture.html",
+    "title": "Replication architecture",
+    "rank": 7,
+    "group": "start"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/replication.html",
+    "title": "How source replication works",
+    "rank": 8,
     "group": "start"
   },
   {

@@ -8,7 +8,7 @@ title: Validate data and review repairs
 
 Progress describes how far replication has advanced. Validation compares actual source and target content at a historical common checkpoint; a report does not assert permanent equality afterward.
 
-Initial managed row validation and repair acceptance covers **MySQL 8.4 / PostgreSQL 17** business targets. Other relational profiles need separate verification. Messaging and analytical targets do not use this workflow.
+The initial native row validation and repair profile uses a MySQL 8.4 source and **MySQL 8.4 / PostgreSQL 17** transactional destinations. Other SQL versions and modes require separate verification. Common-cut validation for experimental PostgreSQL capture is still pending.
 
 ## Create a validation report
 
@@ -18,6 +18,14 @@ Initial managed row validation and repair acceptance covers **MySQL 8.4 / Postgr
 4. Review task state and explicitly resume when appropriate. Validation does not repair data automatically.
 
 Establishing the common checkpoint briefly affects source writes. Raw values may contain sensitive business data and require the appropriate permissions.
+
+## Find, retain and recover a report
+
+In **Data validation**, browse historical reports or open one by report ID. Reports remain available after they leave recent operations. In global control, administrators can also find recovery receipts by request ID to locate the associated report, failure evidence or plan.
+
+The report database contains original business values. Keep it on the Agent's protected persistent volume and include it in task backups. In **View storage**, administrators can inspect file sizes. Configure `validationRetentionMinimumDays` to enable approval of a minimum retention period. A report that reaches this date still requires a separate approval and eligibility checks for reclamation.
+
+With a separate `validationArchiveDirectory` mounted, an administrator can seal a checksum-verified copy of a completed report after approving the retention minimum. If the live database is missing, use the report's original ID to restore the sealed copy. See [managed validation](../reference/managed-validation) for limits, receipts and reclamation conditions.
 
 ## Review and execute a repair
 
@@ -33,6 +41,4 @@ On the scoped PostgreSQL/MySQL profile, run a fresh complete common-cut comparis
 
 ## A completed validation report
 
-<ScreenshotPreview name="data-validation" locale="en" alt="Common-cut comparison from the RivoMesh 5c54522 English test console." />
-
-Common-cut comparison from the RivoMesh 5c54522 English test console.
+<ScreenshotPreview name="data-validation" locale="en" alt="Common-cut validation report from the RivoMesh English-language test console." />

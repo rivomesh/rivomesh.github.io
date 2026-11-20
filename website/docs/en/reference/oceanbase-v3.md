@@ -11,7 +11,7 @@ sourcePath: docs/en/oceanbase-v3.md
 
 ## Current scope
 
-V3 configuration, CLI, fan-out workers and the bilingual wizard are implemented. Native OceanBase CE 4.3.5.6 ARM64/Java 8 transactions, cross-database rollback, ownership/epoch fences, snapshots/types and partial CDC passed. **Full mixed restart/recovery acceptance has not passed; the adapter remains EXPERIMENTAL.** See the [evidence](/docs/zh/evidence/baseline.html). This does not claim all versions, clusters or Oracle-mode support.
+V3 configuration, CLI, fan-out workers and the bilingual wizard support OceanBase. The historical OceanBase CE 4.3.5.6 ARM64 and Java 8 profile passed native transactions and mixed MySQL-to-OceanBase-and-PostgreSQL snapshot, CDC and recovery. The MySQL-mode tenant profile remains EXPERIMENTAL. Oracle mode, OBProxy, multi-node and further Temurin 21 combinations require separate acceptance. [Verification](/docs/zh/evidence/baseline.html#oceanbase-mysql-tenant-recovery)
 
 `product: OCEANBASE` uses MySQL Connector/J 8.4.0 and `jdbc:mysql://`, normally port 2881. Connect to a **MySQL-mode user tenant**, usually with `rivomesh@business`, rather than `root@sys`. Every new connection verifies OceanBase identity, mode and a non-system tenant, then forces `ob_read_consistency=STRONG`. A MySQL wire version is not the OceanBase product version. Oracle mode, seekdb and other compatible products are outside this verified profile.
 
@@ -64,10 +64,10 @@ LOCAL Journal supports same-host recovery. Cross-host worker takeover uses the a
 
 ## Test-image startup diagnostics
 
-The official all-in-one image is a fixture, not a production deployment. The current fixture sets instance memory_limit=5G/system_memory=1G, user resource-unit memory_size=2G/log_disk_size=2G, instance logs5G/data2G, and a container limit of 6G/6 CPUs. These are test settings, not production capacity recommendations or throughput standards.
+The official all-in-one fixture passed with an 8 GiB observer limit, 1 GiB system memory, 3 GiB tenant unit, 10 GiB container cap and six CPUs. It used 5 GiB observer log and 2 GiB data sizing. These settings reproduce the correctness run. Size production from its own measured workload.
 
 Unit memory is not exclusively business-tenant memory: an actual 2GiB unit probe showed roughly 1GiB for the user tenant after splitting with its metadata tenant. Other tenants, caches and host load affect recovery. A `boot success!` banner is insufficient; this image can print it even when OBD memory checks prevented observer startup. Check the actual observer process, user-tenant connection, container health and OBD logs together. Do not delete existing data or skip synchronization checkpoints to repair inadequate startup resources. Do not blindly use `obd cluster start -f`; this version's -f means force-delete, not bypassing resource checks.
 
-## Recovery acceptance still pending
+## Reproduce native recovery
 
-All four mixed runs retain their failures. The first15s administrative-DDL timeout followed successful outage catch-up, worker kill and PostgreSQL constraint isolation. With revised timeouts/catalog checks, the 5GiB instance/2GiB unit remained in user-tenant initialization beyond the recovery deadline; increasing CPU did not make the full case pass. A probe showed roughly 1GiB for the user tenant, which alone does not establish root cause. The6GiB instance/3GiB unit was rejected by OBD's available-memory precheck and never launched observer, despite a success banner. Checks were not bypassed, transactions were not skipped and checkpoints were not reset. These results do not establish complete automatic recovery or attribute every failure to Rivomesh or OceanBase; investigation and full acceptance remain required.
+Build the current release, then run `tests/oceanbase-pipeline-run.sh`. It checks the tenant and transaction fence, then exercises full load, CDC, outage catch-up, SIGKILL resume, independent SQL failures on both targets, repair and missing-table isolation. It cleans up its own database resources. `RIVOMESH_TEST_ARTIFACT` selects a frozen repository-relative JAR. Earlier 6 GiB-container attempts included OBD memory admission, tenant recovery and administrative DDL timeouts. The passing fixture used the resource settings above and the original transaction checkpoints.

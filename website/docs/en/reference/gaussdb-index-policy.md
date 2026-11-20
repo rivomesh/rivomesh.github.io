@@ -7,7 +7,7 @@ sourcePath: docs/en/gaussdb-index-policy.md
 
 # Gauss index conversion, correctness, and application takeover
 
-Updated: 2026-11-14. 中文：[Gauss 索引策略](/docs/zh/reference/gaussdb-index-policy.html). See [requirements and decisions](/docs/en/reference/requirements-and-decisions.html) for scope and open questions.
+Updated: 2026-11-14. 中文：[Gauss 索引策略](/docs/zh/reference/gaussdb-index-policy.html). See [requirements and decisions](/docs/en/reference/implementation-status.html) for scope and open questions.
 
 **Status: v3 implements ordinary secondary indexes and business UNIQUE downgrade; v2 still creates columns/PK only.** `IndexPolicy` produces explicit actions and `JdbcSink` executes supported indexes on new tables. Expressions/prefixes/descending/special methods and existing UNIQUE/GSI require separate plans, never blind DROP. Business GSI model entries may become ordinary indexes; identity GSIs are not downgraded. Commercial distributed GaussDB still needs hardware acceptance. See the [V3 manual](/docs/en/reference/pipeline-v3.html).
 
@@ -28,6 +28,35 @@ MySQL is authoritative. Only the synchronization service writes to targets durin
 An ordinary index cannot replace a PK. Replacing a global UNIQUE with `UNIQUE(email, distribution_key)` is not equivalent: it allows duplicate email across distribution keys and still enforces a constraint that may be unnecessary during synchronization.
 
 This topic covers openGauss/distributed GaussDB. Other adapters may also relax incompatible business secondary UNIQUE constraints under declared policies. Preserve PK/candidate identity and internal correctness; analytical Unique Key/materialization identity is not an optional secondary constraint. See [platform design](/docs/en/reference/platform-design.html).
+
+## Review the index plan before starting
+
+In the v3 console, run **Check connections & objects**, then expand **Check results and operation details** for that operation. The v3 CLI `check` command returns the same `gaussIndexReview` section. It reads source index metadata for the MySQL databases mapped to each Gauss target. PostgreSQL and Oracle currently report `SOURCE_INDEX_METADATA_UNAVAILABLE` because their source discovery does not supply secondary index definitions.
+
+| Action | Expected outcome |
+|---|---|
+| `CREATE` | The sink plans an ordinary index with the indicated columns and uniqueness. |
+| `DOWNGRADE_UNIQUE` | The sink plans a nonunique ordinary index for a business UNIQUE. Restore any required constraint before application writes. |
+| `REPLACE_GSI` | The sink plans a nonunique ordinary index for a modeled business GSI. Global routing and uniqueness are lost. MySQL discovery does not report native Gauss GSI definitions. |
+| `REQUIRES_PLAN` | Resolve the reported index requirement before starting. `GLOBAL_IDENTITY_REQUIRES_DISTRIBUTION_PLAN` calls for a distribution plan that preserves row identity. Expressions, prefixes, descending columns and other unsupported definitions have a separate reason. |
+
+The counts cover all discovered index decisions across Gauss mappings, so the same source object may count once per target. `distributionPlanRequired` is part of `requiresPlan`. Ordinary primary keys are created separately and excluded from this review. Details place blockers first and allow up to 24 entries and 8 KiB of compact UTF-8 JSON for each of the blocker and planned groups. `omittedEntries` counts details outside this limit. Details contain identifiers, actions, reasons and planned index properties. Source expressions, SQL and connection credentials are excluded.
+
+A successful connection check can still report `REQUIRES_PLAN`. The live writer recalculates the same policy at startup and stops before business DDL for a blocked index. This check does not execute DDL, inspect existing target indexes or confirm distribution capabilities. Validate openGauss catalog and writer behavior separately. For commercial distributed GaussDB, perform the multi-CN/DN acceptance below on the exact build, compatibility mode, GTM mode and JDBC driver you will deploy.
+
+### Reproduce the openGauss catalog check
+
+The disposable fixture compares the v3 `check` plan to the physical openGauss indexes, including names, column order and uniqueness. It checks that `UNIQUE(email)` becomes an ordinary index on the target while MySQL enforces the original constraint. It verifies the composite business primary key, the native receipt keys and recovery from the same target data and journal. Use the sync Worker as the only writer of the selected target tables until the required constraints have been restored. [openGauss PG_INDEX](https://docs.opengauss.org/en/docs/latest/database_reference/pg_index.html)
+
+The native run used MySQL 8.4.13, openGauss 7.0.0-RC3 build `f08516a2` in compatibility mode A on ARM64, and Temurin 21 with bundled Gauss JDBC. The target restart and Worker restart retained the original snapshot, receipt and all five index OIDs. The next source transaction advanced the native checkpoint by one. The separate prefix-index case returned `REQUIRES_PLAN` and the writer stopped before creating the mapped schema.
+
+```bash
+python3 tests/opengauss-index-native.py --artifact /path/to/rivomesh.jar \
+  --gauss-image opengauss/opengauss-server:latest --gauss-version 7.0.0-RC3 \
+  --output target/opengauss-index-native
+```
+
+The fixture uses local Docker images and records their IDs, the database versions and the bundled JDBC driver. Commercial distributed GaussDB and physical GSI require separate acceptance.
 
 ## What UNIQUE(email) means
 
@@ -88,7 +117,8 @@ Design consequences:
 
 - Ordinary indexes provide neither cross-DN global uniqueness nor GSI's separate distribution/covering design; changing an index does not redistribute its base table.
 - Retaining indexed columns does not preserve query plans, covering behavior, or JOIN performance. Validate representative queries with `EXPLAIN`.
-- A global structure required to enforce PK identity cannot be relaxed. Prefer distribution compatible with the PK; fail preflight when correctness cannot be preserved.
+- A global structure required to enforce PK identity cannot be relaxed. Prefer distribution compatible with the PK. Stop before table creation when correctness cannot be preserved.
+- An explicitly global primary index or a GSI on the exact primary or candidate identity columns requires a distribution plan, even when the columns are reordered. A business GSI with additional columns can still become an ordinary index. A plain UNIQUE on exactly the declared identity columns retains uniqueness.
 - Existing GSI may support constraints or other dependencies. Migration must inspect ownership, dependencies, validity, and rollback paths before removal.
 
 Partition GLOBAL/LOCAL indexes describe partition coverage and must not be confused with distributed GSI. openGauss partition-index syntax is not evidence of GaussDB GSI capability. [openGauss index documentation](https://docs.opengauss.org/zh/docs/latest/database_administration_guide/creating_and_managing_indexes.html).
@@ -146,6 +176,8 @@ After application writes begin, the original one-way sync service cannot safely 
 - Test process death around index DDL, connection loss, uncertain responses, definition conflicts, invalid indexes, and stale owners.
 - Use real multi-CN/DN GaussDB to validate distribution compatibility, global row identity, transaction ordering, and ordinary-index plans; validate openGauss separately.
 - Before takeover, validate collations, empty strings/NULLs, target uniqueness, and the frozen barrier. Deliberate conflicts must block switching without discarding data.
+
+For commercial acceptance, record the distributed GaussDB build, compatibility mode, GTM mode, CN/DN topology and JDBC driver. In a disposable database, run the real sink against a plain business `UNIQUE(email)`, a modeled business GSI, a GSI on reordered composite identity columns and an explicitly global primary index. Use JDBC catalog metadata to verify that both business plans create nonunique ordinary indexes with the planned names and column order. Verify that both identity GSI cases stop before table creation. Capture `EXPLAIN` for representative lookups on the declared distribution. Then disconnect and replay, and check primary-key enforcement and the sink checkpoint together. [GaussDB CREATE GLOBAL INDEX](https://support.huaweicloud.com/intl/zh-cn/distributed-devg-v8-gaussdb/gaussdb-12-0546.html) · [GaussDB GSI query-plan example](https://support.huaweicloud.com/intl/zh-cn/distributed-devg-v8-gaussdb/gaussdb-12-1729.html)
 
 The current [validation record](/docs/en/reference/validation.html) excludes these new capabilities. It must not be used to claim index conversion or commercial distributed GaussDB acceptance.
 

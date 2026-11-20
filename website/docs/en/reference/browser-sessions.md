@@ -7,13 +7,13 @@ sourcePath: docs/en/browser-sessions.md
 
 # Browser sessions and login recovery
 
-中文：[浏览器会话](/docs/zh/reference/browser-sessions.html). Specification: RM-SDD-001 SE-01/02/03/05. Shared sessions across controllers (SE-04) remain unfinished.
+中文：[浏览器会话](/docs/zh/reference/browser-sessions.html).
 
 ## Sign-in and recovery
 
 Sign in with an existing configured or managed-account token. The page exchanges Bearer credentials once through `POST /api/session`, clears the input, then authenticates with an HttpOnly cookie. Long-lived tokens are never saved in localStorage, sessionStorage or URLs. Reloading or opening the same site first calls `GET /api/session` to restore identity, grants and CSRF credentials, then loads tasks. Invalid sessions return to sign-in. Language preference may still use localStorage.
 
-A Store interface separates the session authority from HTTP handling. The current implementation is bounded memory: **controller restart clears browser sessions and requires sign-in again**. Tasks, accounts and audit retain their own persistence contracts. This does not provide session continuity across controllers; putting independent controllers behind a load balancer is not a supported cluster deployment.
+Standalone uses a bounded in-memory session store and requires sign-in after restart. Multiple Controllers can keep sessions with the configured [shared access store](/docs/en/reference/shared-access.html).
 
 Sign-out clears UI permissions, drafts and raw differences immediately, then revokes the server session. BroadcastChannel tells other tabs to sign out; without it, their next request/poll discovers revocation. Sign-in and sign-out are serialized within each page so a delayed login response is also revoked. Late API responses cannot revive cleared UI state. If refresh discovers a different cookie session, it clears the previous identity drafts/details before restoring current grants. Failed server sign-out is reported and can be retried; clearing the page alone is not proof of revocation.
 

@@ -55,15 +55,82 @@ Each transactional target commits data and its checkpoint together under an epoc
 
 Retention follows the slowest subscriber, including paused ones. Snapshot parts are reclaimed only after every target confirms completion; manifests, baselines and keyless identities remain. Losing target metadata after artifact reclamation requires a rebuild plan. `maxBytes` covers logical event, normalized event, snapshot and identity payloads, including unconsumed normalization workspace reservations. Database indexes, WAL, metadata and free pages need additional capacity; reclamation does not immediately shrink physical files. Large-catalog pagination, physical headroom alerts, receipt compaction and oversized-transaction staging remain unfinished. Logical quotas are not total disk quotas.
 
+An open [transaction gap](/docs/en/reference/transaction-skip.html) or a prepared skip pins the exact raw and normalized transaction in the journal. Other fully acknowledged transactions can still be reclaimed. A verified gap releases its pin after the common-cut receipt is checked. If the pinned evidence fills the journal, capture waits without advancing the source position and the Worker records `JOURNAL_BACKPRESSURE`. If capture needs more space to reach a fresh common cut, increase logical capacity before verifying the gap. Verification of an existing valid paused cut does not add event payload to the journal. Keep the original evidence and journal together during recovery.
+
 Raw capture reserves its normalization copy, keyless row IDs and potential identity additions. Normalization consumes that reservation atomically, preventing raw backlog from using the space needed to drain itself. When a slow destination exhausts available capacity, capture waits without advancing unpersisted GTIDs; deliveries, GC and lease heartbeats continue. Recovering consumers free space and capture resumes automatically. Local backpressure does not trigger the source-idle watchdog. Close/pause cancels the blocked receiver before waiting for the dump connection to finish.
 
 If one transaction and workspace exceed the entire quota, `TRANSACTION_EXCEEDS_JOURNAL_QUOTA` preserves the old position. Insufficient snapshot/identity workspace, or old unreserved history that cannot be normalized after upgrade, raises `JOURNAL_WORKSPACE_REQUIRES_QUOTA_PLAN`. Source snapshots are currently all built before delivery; streaming reclamation across a large table, partial snapshot rebasing and oversized-transaction staging are unfinished. Expand capacity or use an explicit plan; never delete journal parts to make room. Quota is excluded from semantic identity: stop affected workers, change/reload configuration, then resume with the current global error generation. See [configuration revisions](/docs/en/reference/configuration-editor.html) for supported console changes.
 
+Use `source.type: MYSQL` in task configuration and the Web wizard. Identify the logical source cluster with `source.clusterId` and select its databases with `databases`. Set `source.expectedVersion: "8.2.0"` to require a patch version or `"8.2"` to accept that major and minor release. Preflight checks the candidate server version. Leaving the field empty enables detection.
+
 ## Journal choices
 
-`LOCAL` uses Java-8-compatible H2 2.2.224. `path` is a private directory, relative to the configuration file; it contains sensitive rows and receives mode 0700. Automatic server mode allows same-host CLI status/resume. It is not a cross-host database service. Preserve the whole directory/volume; do not copy a live `.mv.db` alone. Use `EXTERNAL` for cross-host takeover; shared-filesystem H2 has not been accepted as a cluster journal.
+`LOCAL` uses Java-8-compatible H2 2.2.224. `path` is a private directory, relative to the configuration file; it contains sensitive rows and receives mode 0700. Automatic server mode binds to loopback by default so the Worker and CLI can share the same local journal without depending on the host’s external name resolution. It is not a cross-host database service. Preserve the whole directory/volume; do not copy a live `.mv.db` alone. Use `EXTERNAL` for cross-host takeover; shared-filesystem H2 has not been accepted as a cluster journal.
 
 `EXTERNAL` supports PostgreSQL, openGauss or a separate MySQL instance. Workers share journal instance/namespace/pipelineId and target configuration, with distinct nodeIds. Database-clock leases and epochs fence ownership. MySQL storage must use InnoDB and retain acknowledged commits across restart. External HA systems promote/fence database nodes; Rivomesh does not promote them. V3 worker-crash recovery, MySQL 8.4 async promotion and MGR election during snapshot passed; other versions/soak matrices still need acceptance. V2 results do not prove all V3 variants.
+
+### MySQL 8.2.0 source regression
+
+Run `tests/matrix.sh --v3 8.2.0` for the V3 standalone, GTID async and single-primary group replication suites. The tests use Docker Compose, the `mysql:8.2.0` source image and reports under `target/matrix-v3/8.2.0/`. The source uses GTID, ROW binlog and FULL row images. In the async suite, the fixture promotes a caught-up replica and Rivomesh validates the required history before resuming from the original position.
+
+### MySQL 8.4 binlog profile
+
+MySQL 8.4 uses untagged GTIDs, ROW binlogs and FULL row images. Preflight refuses anonymous-capable mode, tagged history, partial JSON and transaction compression. Capture stops before the failing transaction if it sees partial JSON or a compressed event. Review the retained logs and available source history before resuming or building a new baseline.
+
+Use `tests/mysql84-profile-run.sh` to reproduce the admission and live refusal checks. The fixture writes a tagged test transaction in its disposable database and cleans up afterward.
+
+[MySQL GTID format](https://dev.mysql.com/doc/refman/8.4/en/replication-gtids-concepts.html) · [Binary log options](https://dev.mysql.com/doc/refman/8.4/en/replication-options-binary-log.html)
+
+### Automatic continuation after MySQL 8.4 primary failure
+
+Set `source.topology: ASYNC` and supply the primary and replica as candidate `source.nodes` within one GTID replication topology. The external database HA service fences the failed primary and promotes a caught-up replica. Rivomesh verifies the promoted source's available GTID history and reconnects from the saved position. If the replica is still read-only or replication has an I/O error, investigate the topology while retaining the journal and target checkpoints.
+
+The Java 21 native profile used MySQL 8.4.13 asynchronous GTID replication, an external PostgreSQL journal, two management entries and PostgreSQL and MySQL destinations. After the old primary was killed, both entries showed the capture interruption and the two target checkpoints held. External promotion returned a writable source. Rivomesh delivered the new primary's GTID to both destinations with the original configuration revision, journal generation and snapshot IDs. Reproduce with `python3 tests/global-control-pipeline.py --separate-execution --mysql-async-failover --source-expected-version 8.4.13 --artifact <release jar> --output target/mysql-async-proof`. [Verification archive](/docs/zh/evidence/baseline.html)
+
+A separate Temurin 21 test runs the same packaged JAR with MySQL 5.7.44, 8.0.46, 8.2.0 and 8.4.13, each with a PostgreSQL 17.12 destination and journal. It terminates the original Worker, induces a real replica SQL-thread error 1032, verifies that the unhealthy replica is refused, restores replication and shuts down the original primary. After external promotion it verifies the original snapshot ID and new target rows. Purging an uncaptured binlog range keeps the prior journal checkpoint and pauses capture. To reproduce after building the release JAR and test classes, run `RIVOMESH_TEST_PREBUILT=1 SYNC_V3_HA_POSTGRES_ONLY=1 SYNC_MYSQL_IMAGE=mysql:8.2.0 bash tests/v3-ha-run.sh`. For 5.7 add `SYNC_MYSQL57=1 SYNC_MYSQL57_IMAGE=mysql:5.7`.
+
+### MySQL 8.4 single-primary Group Replication recovery
+
+Set `source.topology: GROUP_REPLICATION` and list the members of one single-primary group in `source.nodes`. MySQL elects the writable member. Rivomesh checks that the candidate is online and writable and retains the required GTID history. Protect a restarted former primary with MySQL super-read-only until it rejoins. Group Replication requires a primary key or equivalent unique key on replicated tables. [Single-primary mode](https://dev.mysql.com/doc/refman/8.4/en/group-replication-single-primary-mode.html) · [Group Replication requirements](https://dev.mysql.com/doc/refman/8.4/en/group-replication-requirements.html)
+
+The Java 21 native test uses MySQL 8.4.13, an external PostgreSQL journal and a PostgreSQL 17.12 destination. It kills the primary, records a different server UUID and verifies that the same Worker delivers both subsequent transactions. The journal generation, two snapshot IDs and full destination rows agree. The former primary restarts read-only with a missing group GTID. MySQL refuses writes. The released JDBC driver reaches the old member at the unchanged endpoint and verifies its UUID and read-only flags before source preflight returns `SOURCE_NO_PRIMARY`. After it catches up as a secondary, capture continues on the elected primary.
+
+Reproduce with a Java 21 JDK, Docker Compose and local `mysql:8.4` and `postgres:17` images.
+
+```bash
+python3 tests/mysql-group-failover-native.py --artifact rivomesh.jar \
+  --java "$JAVA_HOME/bin/java" --output target/mysql-group-failover-proof
+```
+
+A second Temurin 21 profile runs the same release JAR on MySQL 5.7.44, 8.0.46, 8.2.0 and 8.4.13. It shuts down the original primary while a snapshot is still being built. After MySQL elects a replacement, Rivomesh rebuilds the unfinished snapshot and both SQL destinations receive the pre-election update and subsequent insert, delete and update. Both journal ACKs reach the captured sequence. Reproduce with the prebuilt JAR and compiled tests using `RIVOMESH_TEST_PREBUILT=1 SYNC_V3_GROUP_SQL_TARGETS=1 SYNC_MYSQL_IMAGE=mysql:8.2.0 bash tests/v3-group-run.sh`. For MySQL 5.7 add `SYNC_MYSQL57=1 SYNC_MYSQL57_IMAGE=mysql:5.7`. [Version-specific evidence](/files/docs/verification/baseline.json)
+
+### Verified TLS for MySQL capture and delivery
+
+Configure `source.sslMode: VERIFY_IDENTITY` for the binlog channel and include `sslMode=VERIFY_IDENTITY` in `source.jdbcOptions` for discovery and snapshots. Each MySQL target has its own JDBC URL and TLS options. Install the CA roots in the execution JDK trust store available to the Agent and its Worker JVMs. Use the certificate's DNS names in the source candidates and target URLs. The verified binlog modes negotiate through the JDK and can connect to a TLS 1.3-only MySQL endpoint. [Connector/J TLS properties](https://dev.mysql.com/doc/connector-j/en/connector-j-connp-props-security.html)
+
+On MySQL 8.4.13, the real binlog and target JDBC sessions reported TLS 1.3. Preflight rejected a wrong source DNS name. After process termination the Worker reused the original GTID and snapshot, and the targets matched exactly. Reproduce with `python3 tests/mysql-tls-run.py --java-home <Temurin 21 directory> --artifact <release jar> --output target/mysql-tls-proof`. [Verification archive](/docs/zh/evidence/baseline.html)
+
+## Standalone writer transfer with a PostgreSQL journal
+
+For a new standalone MySQL pipeline, set `journal.mode: EXTERNAL`, `journal.product: POSTGRESQL` and `journal.writerAssignment` to a fresh UUID. Use up to eight PostgreSQL/MySQL targets and 256 source tables. Keep the journal, target metadata and source logs accessible on both Workers, and reserve an independent private directory for any report files you generate separately.
+
+```bash
+java -jar rivomesh.jar init-writer original.yml
+java -jar rivomesh.jar run original.yml
+```
+
+`init-writer` creates the initial placement of a new pipeline. An enrolled Worker opens the existing journal on restart. A missing journal or placement requires restoring the original state. The command rejects enrollment on a previously created ordinary journal. Earlier application builds refuse the enrolled journal format.
+
+Wait for the original snapshot and every target acknowledgment to catch up. Stop the original Worker cleanly, or wait for its database-clock lease to expire after a failure. Use `status original.yml` to obtain `generation`, `epoch` and `writerPlacement.assignment`. Create a private candidate configuration with the same pipeline and destination settings, a different `nodeId` if changing hosts, and a fresh `journal.writerAssignment`. Ensure the candidate can read the original source logs and native target metadata.
+
+```bash
+java -jar rivomesh.jar transfer-writer candidate.yml "$previous_assignment" "$journal_generation" "$expected_epoch"
+java -jar rivomesh.jar run candidate.yml
+```
+
+The command verifies GTID history, the original snapshot IDs and target receipts before changing the placement. A live lease, incomplete snapshot, lagging/paused targets, or an unresolved skip intent blocks transfer. If confirmation is lost, repeat the exact original command to recover its durable receipt. A successful transfer keeps the capture position and target acknowledgments. The candidate claims a newer lease. The former configuration cannot claim or renew a lease, and a retired assignment UUID cannot be reused. Use a new UUID for any later transfer, including a move back to the original host. A paused or incomplete job must recover on its currently assigned Worker first.
+
+The cluster console manages Agent assignments separately. This CLI workflow covers the standalone Worker, the existing shared journal and transactional targets. It leaves report files and Agent ownership in their original locations.
 
 ## Troubleshooting and FAQ
 

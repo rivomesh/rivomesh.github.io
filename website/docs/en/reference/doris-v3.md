@@ -76,7 +76,7 @@ Pause reports `UNCONFIRMED_IN_FLIGHT_MATERIALIZATION`; already submitted request
 
 ## Primary references and limits
 
-Design references: [Stream Load](https://doris.apache.org/docs/4.x/data-operate/import/import-way/stream-load-manual/), [Unique Key concurrency](https://doris.apache.org/docs/4.x/data-operate/update/unique-update-concurrent-control/), [JSON precision](https://doris.apache.org/docs/4.x/data-operate/import/file-format/json/), [tablet identity/privileges](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/table-and-view/data-and-status-management/SHOW-TABLET/), [official fixture image](https://doris.apache.org/community/developer-guide/all-in-one-image/). Product documentation is not project acceptance; see [validation](/docs/en/reference/validation.html). Complete clusters/compute-storage separation, combined FE/BE faults, TLS, all JDKs, huge catalogs/transactions, adoption/repair/migration and capacity matrices remain pending.
+Design references: [Stream Load](https://doris.apache.org/docs/4.x/data-operate/import/import-way/stream-load-manual/), [Unique Key concurrency](https://doris.apache.org/docs/4.x/data-operate/update/unique-update-concurrent-control/), [JSON precision](https://doris.apache.org/docs/4.x/data-operate/import/file-format/json/), [tablet identity/privileges](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/table-and-view/data-and-status-management/SHOW-TABLET/), [official fixture image](https://doris.apache.org/community/developer-guide/all-in-one-image/). Product documentation is not project acceptance; see [validation](/docs/en/reference/validation.html). Complete clusters/compute-storage separation, combined FE/BE faults, TLS, huge catalogs/transactions, adoption/repair/migration and capacity matrices remain pending.
 
 ## SQL modes and text validation
 
@@ -85,3 +85,9 @@ Catalog, receipt and row-verification values use binary server-prepared MySQL pa
 Sources: [Doris prepared statements](https://doris.apache.org/docs/4.x/key-features/prepared-statement/), [string literals](https://doris.apache.org/docs/3.x/sql-manual/basic-element/literal/string-literal/).
 
 After the binding change, current release9a087 also passed an actual MySQL8.4.13→PostgreSQL17.12+Doris4.1.3 pipeline with outage catch-up, worker kill, SQL repair/retry and missing-view isolation. The native mode/old-backup case used11667063; all14Doris adapter classes match9a byte-for-byte. See [additional evidence](/docs/zh/evidence/baseline.html) for artifact and scope distinctions.
+
+## Java 21 outage and receipt verification
+
+The ARM64 fixture uses MySQL 8.4.13, PostgreSQL 17.12 and the single-container Doris 4.1.3 image. During the Doris outage, PostgreSQL advances while Doris retains its acknowledgement and exact receipt. The original receipt and its successors remain readable on the same Doris metadata tablets after the target and Worker restart. After a PostgreSQL constraint violation, replay to that subscription leaves the Doris receipt unchanged. The fixture also verifies that a lost Doris view pauses that subscription and marks its pause fence as unconfirmed.
+
+Run `RIVOMESH_TEST_PREBUILT=1 bash tests/doris-pipeline-run.sh` after building the Java 21 release JAR and test classes. The fixture uses disposable databases and the same Doris volumes across its stop and start. Its single FE and BE cover connector behavior, with multi-node failover outside this profile. [Apache Doris all-in-one test image](https://doris.apache.org/community/developer-guide/all-in-one-image/) · [Verification record](/docs/zh/evidence/baseline.html)

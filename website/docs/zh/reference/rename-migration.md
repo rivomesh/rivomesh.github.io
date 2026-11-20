@@ -42,4 +42,4 @@ Java 基础包和 Maven groupId 现统一为 `io.github.rivomesh`。启动类、
 
 本次更名没有引入多目标/多源/新日志状态格式。未来引入这些能力必须单独设计状态迁移、兼容检查与回退，不能只改包名后复用新旧不同语义的断点。
 
-当前运行和真实数据库验证见 [README](https://github.com/rivomesh/rivomesh/blob/5c545222c4175e8407196636725063861a69d4b2/README.md) 与[验证记录](/docs/zh/reference/validation.html)。规划中的新功能见[完整方案](/docs/zh/reference/platform-design.html)。
+当前运行和真实数据库验证见 [README](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/README.md) 与[验证记录](/docs/zh/reference/validation.html)。规划中的新功能见[完整方案](/docs/zh/reference/platform-design.html)。

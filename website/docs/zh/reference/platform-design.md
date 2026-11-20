@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/platform-design.md
 
 # Rivomesh 完整产品与技术方案
 
-更新日期：2026-11-15。English: [Platform design](/docs/en/reference/platform-design.html)。决策状态见[需求记录](/docs/zh/reference/requirements-and-decisions.html)。
+更新日期：2026-11-15。English: [Platform design](/docs/en/reference/platform-design.html)。决策状态见[需求记录](/docs/zh/reference/implementation-status.html)。
 
 **本文是完整需求与设计，不是全部功能完成声明。** V3 已支持每任务一个逻辑 MySQL 源下的多 database 显式映射、同源多目标、多配置独立 Worker、可选持久日志及 Web 管理。v2 单 database/单目标仍保留兼容。各适配器的实际验收范围以[实施状态](/docs/zh/reference/implementation-status.html)和[验证记录](/docs/zh/reference/validation.html)为准，操作见[控制台手册](/docs/zh/reference/console-and-deployment.html)；其余能力按下文继续实施。
 

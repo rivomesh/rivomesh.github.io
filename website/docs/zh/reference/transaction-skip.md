@@ -9,7 +9,7 @@ sourcePath: docs/zh-CN/transaction-skip.md
 
 目标数据偏离导致应用故障时，可以先审阅[事务补偿](/docs/zh/reference/transaction-compensation.html)。
 
-状态：RC-03首批限定档案已验收，RC-08 已验收指定 SQL 档案的[数据缺口复核](/docs/zh/reference/gap-verification.html)。[证据](/docs/zh/evidence/baseline.html)。已验收Java8、MySQL8.4源、原Agent/LOCAL日志、PostgreSQL业务目标及PG/MySQL控制库；MySQL目标原生合同已通过，其完整公开跳过矩阵及其他产品仍待补验。共享任务集群默认关闭；独立控制器提供管理员入口，仍要求完整证据与显式审批。English: [Transaction skipping](/docs/en/reference/transaction-skip.html)。
+RC-03 跳过和 RC-08 缺口核验的早期档案已通过，涵盖 MySQL 8.4 源、原 Agent 与 LOCAL 日志、PostgreSQL 业务目标以及 PostgreSQL/MySQL 控制库。早期记录使用 Java 8，首版的构建和运行版本为 Eclipse Temurin 21 LTS。MySQL 目标原生合同已通过，完整公开跳过矩阵及其他目标仍待补验。共享任务集群需显式启用事务跳过，管理员须保存完整证据并明确审批。[证据](/docs/zh/evidence/baseline.html) · [English](/docs/en/reference/transaction-skip.html)
 
 缺口核验API和界面已接入；原生PG/MySQL各54项合同通过，PG/MySQL控制库各27项真实同步链路检查通过。操作步骤、审批、取消和状态含义见[缺口核验手册](/docs/zh/reference/gap-verification.html)。
 
@@ -59,6 +59,8 @@ cluster:
 
 首次保存跳过意图时，日志数据格式从3单向升级为4，与PREPARED计划在同一事务提交；顶层任务配置仍为`formatVersion: 3`。格式3到4是当前日志在首次准备跳过时的状态转换，不代表承诺支持旧开发程序。待处理计划阻止恢复，必须先继续、确认或安全取消。格式4的计划/缺口表丢失时拒绝重建空历史；应恢复一致的备份单元。
 
+首次准备跳过时，日志连接需要创建恢复元数据表和回收索引的权限。日常重启和状态查询使用已有表。备份日志时同时保留表结构及索引。
+
 目标原生凭据表与两个可空标记列按受控流程添加；MySQL DDL的隐式提交不代替源日志围栏。需要元数据建表/改表权限。此功能不会自动转换非事务表，不会重建已丢失的目标凭据。
 
 ## API
@@ -89,6 +91,8 @@ cluster:
 
 列表最大100条，游标使用返回的`next`；序号/缺口游标使用字符串，不能转换成JavaScript浮点整数。原始行值仍通过授权事务审阅分页获取，不嵌入计划列表。超长源位置会整项省略并给出摘要，不能把截断GTID当作续传位置。
 
+缺口列表的 `journalPayloadRetained` 表示原始和标准化负载是否都在日志中。开放缺口显示 `false`，表示日志中缺少至少一种负载，可使用独立保留的证据归档或一致备份。状态查询只检查记录是否存在。
+
 ## FAQ
 
 **目标提交后Agent中断或日志ACK失败？** PREPARED计划会阻止普通恢复；保留同一原计划，在原Agent目录恢复后只读检查。COMMITTED才能恢复缺口确认。重新发起一个无关跳过操作不是恢复方法。
@@ -97,7 +101,7 @@ cluster:
 
 **管理员被停用或换人怎么办？** 待执行命令会重新验证账号修订及ADMIN权限。新的合法管理员可显式重新审批原计划，实际执行人、原审批人和恢复人分别保留。
 
-**缺口会被GC或对账自动消除吗？** 不会。当前计划、原生回执和缺口历史保留；后续正常APPLY可清除当前断点标记，但不删除缺口。缺口核验流程见核验手册；列表保留不等于缺口已修复。
+**什么时候可以回收原始事务负载？** 开放缺口和待决跳过计划会保护该笔事务。所有目标都确认该序号，且该序号的所有缺口均经[共同校验点核验](/docs/zh/reference/gap-verification.html)并验证回执后，日志可以回收原始和标准化负载。原计划、原生回执与缺口历史持续保留。随后普通投递成功或历史报告匹配时，仍保留该笔事务。
 
 **显示RUNNING是否代表数据完全一致？** 不代表。`hasGaps`和界面缺口警告必须一起看；`gapCountLimited`表示计数有上限。恢复与数据一致是不同状态。
 

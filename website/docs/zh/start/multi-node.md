@@ -16,7 +16,7 @@ RivoMesh 的多节点部署包含节点状态观察、共享访问和同步任�
 | 共享账号、会话与审计 | 多个入口使用同一账号目录、会话与审计链；账号或权限变更会撤销旧会话 | 显式启用共享访问；已通过 PostgreSQL 17 / MySQL 8.4 双节点专项验证 |
 | 管理与执行分离 | 显式分离管理入口与 Agent；已验收管理全停期间原 Worker 继续处理、原请求恢复等场景 | 指定 PostgreSQL / MySQL 控制库、LOCAL/H2 日志、MySQL 源及 MySQL / PostgreSQL 目标；其他组合另验 |
 | 同步任务主备恢复 | 符合条件的备用工作进程按日志租约接管，从持久进度继续 | 使用外部事务日志、相同逻辑任务与目标配置、不同节点标识；按任务手册验收 |
-| 跨节点任务查询与操作 | 可选全局模式提供共享任务视图、持久命令、配置历史和远程只读查询 | 默认任务操作针对本机；可选固定执行节点的全局模式已接入 HTTP 与管理界面，自动跨 Agent 接管和完整高可用矩阵仍待扩展 |
+| 跨节点任务查询与操作 | 可选全局模式提供共享任务视图、持久命令、配置历史和远程只读查询 | 默认任务操作针对本机；可选固定执行节点的全局模式已接入 HTTP 与管理界面 |
 
 同一任务的主备节点依次取得执行权，不会将一条任务拆成多个节点并行处理。多个独立任务可各自运行独立工作进程。
 
@@ -65,7 +65,22 @@ cluster:
 
 首次启用要求没有既有本机任务的目录；旧任务尚无自动导入工具。共享存储接受命令后，还需查看原请求的实际执行回执。固定执行节点失联时显示等待或未知，不能把收到请求当作任务已完成，也不能自动换节点执行。
 
-跨入口校验与审阅修复已有 MySQL / PostgreSQL 业务目标验收；完整取消、容量、故障矩阵及真实 Kubernetes / CSI 仍需补齐。管理入口与执行 Agent 已支持显式分离部署，首批 PostgreSQL / MySQL 控制库、LOCAL/H2 日志和双业务目标档案已验收，见[独立执行生命周期](../reference/execution-lifecycle)。默认组合模式仍耦合；自动跨 Agent 接管和完整存储/适配器/故障矩阵仍需独立验证。
+管理入口与 Agent 分离部署需显式配置角色。已验证使用 PostgreSQL / MySQL 控制库及 LOCAL/H2 日志时，所有管理入口停止期间原 Worker 可继续执行，并在入口恢复后查询原请求回执。见[执行生命周期手册](../reference/execution-lifecycle)。
+
+### 自动分配新任务
+
+在新建向导或导入时选择自动分配。使用 MySQL 或 PostgreSQL 源、MySQL 或 PostgreSQL 目标及外部 PostgreSQL 日志时，最多三个候选 Agent 按容量顺序核对 Temurin 21 Worker、连接器组件和日志连接。全部未通过时会返回 `AGENT_PLACEMENT_UNAVAILABLE`。先修复驱动、凭据或网络，再重新提交。其他组合按容量分配。保存后查看实际所属 Agent，执行源端和目标端的连接与对象检查。
+
+### 审批移交已冻结的任务
+
+当前离线移交档案要求 MySQL 源、MySQL 或 PostgreSQL 目标、预先绑定的管理型日志写入权，以及位于同一 PostgreSQL 数据库中的控制库和外部日志。
+
+1. 在原 Agent 健康时停止任务，核对各目标在同一位置确认。评估候选 Agent，预留任务与 Worker 容量，并在其独立持久目录封存完整的已完成回执。
+2. 审阅 `CLOSED_RECEIPTS_ONLY` 清单，确认不存在需要另外移交的原始采集文件、故障证据或报告，再显式冻结原写入权。
+3. 若原 Agent 在冻结后不可用，核对原租约已过期、封存内容与目标断点仍一致，由有权限的管理员审批变更归属。候选获得任务时仍处于停止状态。
+4. 等待证据接收完成，单独审批目标隔离，再启动候选 Worker。保留原请求 ID 和回执。
+
+冻结前意外失去原 Agent 时，先恢复原 Agent 及其目录与密钥。操作条件与各状态回执见[全局控制手册](../reference/global-control)。
 
 ## 4. 配置同步任务主备恢复
 
@@ -84,7 +99,7 @@ cluster:
 
 Linux / Docker 节点保持独立数据目录。Helm 按节点分别安装 release，使用 [values-cluster.yaml](/files/deploy/helm/rivomesh/values-cluster.yaml)；共享访问使用 [values-shared-access.yaml](/files/deploy/helm/rivomesh/values-shared-access.yaml)。原生部署模板见[节点目录手册](../reference/node-registry)。
 
-这些模板不代表已完成真实 Kubernetes / CSI 或控制面高可用验收。增加控制器副本数不会自动获得全局调度、任务迁移和控制面故障转移。
+现有双节点 Kubernetes 实测覆盖同卷重挂载、镜像与配置替换、Secret 轮换及使用外部日志的恢复。跨节点卷可用性和额外的高可用场景须按部署环境验证，见[执行生命周期手册](../reference/execution-lifecycle)。
 
 ## 上线前验证
 
@@ -94,6 +109,4 @@ Linux / Docker 节点保持独立数据目录。Helm 按节点分别安装 relea
 
 ## 控制台中的节点目录
 
-<ScreenshotPreview name="node-registry" locale="zh" alt="RivoMesh 5c54522 中文控制台实拍，展示单节点登记档案。" />
-
-RivoMesh 5c54522 中文控制台实拍，展示单节点登记档案。
+<ScreenshotPreview name="node-registry" locale="zh" alt="RivoMesh 中文控制台中的节点登记档案。" />

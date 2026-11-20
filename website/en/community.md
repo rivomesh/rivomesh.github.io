@@ -29,11 +29,7 @@ Provide the exact RivoMesh version, database product/version/mode, JDK, deployme
 
 Small fixes can go directly into a pull request. For new connectors, recovery mechanisms or deployment profiles, open an issue to discuss the use case and scope first. Describe the resulting behavior, testing and compatibility impact, and update the relevant documentation.
 
-<details><summary>Detailed development workflow</summary>
-
-Use the [product roadmap](/docs/en/start/roadmap.html), [requirements](/docs/en/sdd/spec.html) and [acceptance matrix](/docs/en/sdd/acceptance.html) to coordinate larger changes. Link existing requirement IDs where relevant and record the environment, recovery behavior and migration impact.
-
-</details>
+Use the [product roadmap](/docs/en/start/roadmap.html) to find existing capabilities and verification priorities. Link any related issue and include the test environment, recovery behavior and migration impact.
 
 ## License and release status
 

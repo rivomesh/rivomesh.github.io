@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "RivoMesh 同步平台架构",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1220,
+      638
+    ],
+    "repository": {
+      "url": "https://github.com/rivomesh/rivomesh",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "48aa0ac91b07e071e84209bbfeb13395cde3c2c0"
+    }
+  },
+  "components": [
+    {
+      "id": "console",
+      "type": "frontend",
+      "label": "Web 控制台 / API 客户端",
+      "sublabel": "浏览器会话 · Bearer 令牌",
+      "pos": [
+        32,
+        56
+      ],
+      "size": [
+        205,
+        68
+      ],
+      "sources": [
+        {
+          "path": "sync-app/src/main/resources/console/index.html",
+          "label": "控制台"
+        }
+      ]
+    },
+    {
+      "id": "controller",
+      "type": "backend",
+      "label": "Controller",
+      "sublabel": "配置修订 · 授权 · 审计",
+      "pos": [
+        348,
+        56
+      ],
+      "size": [
+        205,
+        68
+      ],
+      "sources": [
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/platform/TaskService.java",
+          "label": "任务控制"
+        }
+      ]
+    },
+    {
+      "id": "control-store",
+      "type": "database",
+      "label": "共享控制存储",
+      "sublabel": "任务所有权 · 持久命令",
+      "pos": [
+        664,
+        56
+      ],
+      "size": [
+        205,
+        68
+      ],
+      "sources": [
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/platform/JdbcControlStore.java",
+          "label": "共享控制状态"
+        }
+      ]
+    },
+    {
+      "id": "agent",
+      "type": "backend",
+      "label": "Agent",
+      "sublabel": "注册 · 心跳 · 进程管理",
+      "pos": [
+        980,
+        56
+      ],
+      "size": [
+        205,
+        68
+      ],
+      "sources": [
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/platform/AgentDirectory.java",
+          "label": "Agent 注册"
+        },
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/platform/TaskWorker.java",
+          "label": "Worker 进程"
+        }
+      ]
+    },
+    {
+      "id": "sources",
+      "type": "external",
+      "label": "源数据库",
+      "sublabel": "MySQL / PostgreSQL / Oracle",
+      "pos": [
+        32,
+        296
+      ],
+      "size": [
+        205,
+        68
+      ],
+      "sources": [
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/PipelineSources.java",
+          "label": "源协议选择"
+        }
+      ]
+    },
+    {
+      "id": "capture",
+      "type": "backend",
+      "label": "Worker 采集",
+      "sublabel": "一致快照 · 提交事务",
+      "pos": [
+        348,
+        296
+      ],
+      "size": [
+        205,
+        68
+      ],
+      "sources": [
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/BinlogCapture.java",
+          "label": "MySQL binlog"
+        },
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/PostgresqlCdcSource.java",
+          "label": "PostgreSQL pgoutput"
+        },
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/OracleCdcSource.java",
+          "label": "Oracle 归档采集"
+        }
+      ]
+    },
+    {
+      "id": "journal",
+      "type": "database",
+      "label": "持久日志",
+      "sublabel": "本地 H2 / 外部 JDBC",
+      "pos": [
+        664,
+        296
+      ],
+      "size": [
+        205,
+        68
+      ],
+      "sources": [
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcJournal.java",
+          "label": "日志与持久断点"
+        }
+      ]
+    },
+    {
+      "id": "dispatch",
+      "type": "backend",
+      "label": "Worker 投递",
+      "sublabel": "按订阅应用 · 独立断点",
+      "pos": [
+        980,
+        296
+      ],
+      "size": [
+        205,
+        68
+      ],
+      "sources": [
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/PipelineEngine.java",
+          "label": "同步引擎"
+        },
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/PipelineSinks.java",
+          "label": "目标适配器"
+        }
+      ]
+    },
+    {
+      "id": "validation",
+      "type": "backend",
+      "label": "校验与恢复",
+      "sublabel": "共同校验点 · 审阅与审批",
+      "pos": [
+        664,
+        538
+      ],
+      "size": [
+        205,
+        68
+      ],
+      "sources": [
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/PipelineValidationBarrier.java",
+          "label": "校验屏障"
+        },
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/CaptureRecoveryReview.java",
+          "label": "采集故障核对"
+        }
+      ]
+    },
+    {
+      "id": "targets",
+      "type": "database",
+      "label": "同步目标",
+      "sublabel": "关系库 · 分析库 · 消息系统",
+      "pos": [
+        980,
+        538
+      ],
+      "size": [
+        205,
+        68
+      ],
+      "sources": [
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/cdc/JdbcSink.java",
+          "label": "SQL 事务与断点"
+        },
+        {
+          "path": "sync-app/src/main/java/io/github/rivomesh/cdc/MessageSink.java",
+          "label": "消息投递"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "console-to-controller",
+      "from": "console",
+      "to": "controller",
+      "label": "HTTPS / REST",
+      "variant": "default"
+    },
+    {
+      "id": "controller-to-control-store",
+      "from": "controller",
+      "to": "control-store",
+      "label": "保存命令",
+      "variant": "default"
+    },
+    {
+      "id": "control-store-to-agent",
+      "from": "control-store",
+      "to": "agent",
+      "label": "领取命令",
+      "variant": "default"
+    },
+    {
+      "id": "agent-to-dispatch",
+      "from": "agent",
+      "to": "dispatch",
+      "label": "管理 Worker 进程",
+      "variant": "default",
+      "labelDy": 70
+    },
+    {
+      "id": "sources-to-capture",
+      "from": "sources",
+      "to": "capture",
+      "label": "快照与变更流",
+      "variant": "emphasis"
+    },
+    {
+      "id": "capture-to-journal",
+      "from": "capture",
+      "to": "journal",
+      "label": "持久写入",
+      "variant": "emphasis"
+    },
+    {
+      "id": "journal-to-dispatch",
+      "from": "journal",
+      "to": "dispatch",
+      "label": "已提交事务",
+      "variant": "emphasis"
+    },
+    {
+      "id": "dispatch-to-targets",
+      "from": "dispatch",
+      "to": "targets",
+      "label": "应用与确认",
+      "variant": "emphasis",
+      "labelDy": 70
+    },
+    {
+      "id": "journal-to-validation",
+      "from": "journal",
+      "to": "validation",
+      "label": "建立共同校验点",
+      "variant": "dashed",
+      "labelDy": 70
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "部署方式",
+      "items": [
+        "图示为分离部署。单机模式在同一服务进程中合并 Controller 与 Agent，任务仍运行于独立 Worker。"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "持久化边界",
+      "items": [
+        "同一 Worker 内完成采集和按订阅投递。控制存储保存命令与任务归属，持久日志保存快照、变更和断点。"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "目标进度",
+      "items": [
+        "事务型 SQL 目标在同一事务提交业务行与目标断点。分析目标使用产品回执，消息 Broker 确认仅表示已接收投递。"
+      ]
+    }
+  ]
+}

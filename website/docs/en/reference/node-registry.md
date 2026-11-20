@@ -9,7 +9,7 @@ sourcePath: docs/en/node-registry.md
 
 For current deployment, see the [multi-node guide](/docs/en/start/multi-node.html). Accounts, sessions and audit can now be shared by explicitly enabling [shared access](/docs/en/reference/shared-access.html). Registry-only installations keep them local. Task operations are local by default. Optional fixed-owner [global control](/docs/en/reference/global-control.html) is integrated; explicit controller/Agent separation has initial acceptance, while automatic relocation and the full HA matrix remain open.
 
-中文：[节点目录](/docs/zh/reference/node-registry.html). Contract: [CP-01](/docs/en/sdd/design-control-store.html). This feature shares node observations. Accounts, sessions and audit can be shared by explicitly enabling [shared access](/docs/en/reference/shared-access.html); task/configuration operations are local by default. Optional fixed-owner [global control](/docs/en/reference/global-control.html) is integrated; explicit controller/Agent separation has initial acceptance, while automatic relocation and additional failover profiles remain open.
+中文：[节点目录](/docs/zh/reference/node-registry.html). See [global task control](/docs/en/reference/global-control.html) and [shared access](/docs/en/reference/shared-access.html) for the corresponding deployment requirements.
 
 ADMIN opens **Node registry**. Standalone mode shows one node with an ID retained in private `node-id`. With a shared control database, all endpoints in the same clusterId read the same directory. VIEWER/OPERATOR retain existing task grants without global registry access.
 

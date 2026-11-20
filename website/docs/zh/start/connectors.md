@@ -8,7 +8,7 @@ title: 连接器目录
 
 选择之前，先确认“采集源”还是“接收目标”，再核对状态和专门手册。本目录直接读取核心源码的能力登记，源和目标分别显示，信创数据库目标优先列出。
 
-信创改造可从 openGauss、达梦、金仓、GBase 8c 与 OceanBase 的指定适配范围开始，操作步骤见[信创数据库适配与改造](xinchuang)。当前可运行采集源为 MySQL，PostgreSQL、Oracle 源仍在规划；后续其他数据库通过源适配接口扩展，按产品分别验证。
+信创改造可从 openGauss、达梦、金仓、GBase 8c 与 OceanBase 的指定适配范围开始，操作步骤见[信创数据库适配与改造](xinchuang)。主要采集源为 MySQL。[PostgreSQL](../reference/postgresql-source) 和 [Oracle](../reference/oracle-source) 已有实验性采集档案，可按实际版本、日志条件和目标组合试用。
 
 <ConnectorCatalog />
 
@@ -20,4 +20,4 @@ title: 连接器目录
 
 ## 控制台中的连接器能力
 
-<ScreenshotPreview name="connector-catalog" locale="zh" alt="RivoMesh 5c54522 开发候选版的中文连接器目录实拍。" />
+<ScreenshotPreview name="connector-catalog" locale="zh" alt="RivoMesh 中文控制台的连接器能力目录。" />

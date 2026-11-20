@@ -1,8 +1,8 @@
 formatVersion: 3
 pipelineId: sales-events
 nodeId: rivomesh-node
-sourceType: MYSQL
 source:
+  type: MYSQL
   clusterId: sales-mysql
   host: 127.0.0.1
   port: 3306

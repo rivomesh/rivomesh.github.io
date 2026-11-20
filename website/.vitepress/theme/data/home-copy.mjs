@@ -1,6 +1,6 @@
 export const homeCopy = {
  zh:{
-  release:'RivoMesh · 0.1.0-SNAPSHOT / 开发预览',hero:['数据库实时同步，','可靠连接每一份数据'],lead:'从 MySQL 全量快照衔接 CDC 增量。各目标独立确认与恢复，任务进度、故障和数据差异在控制台集中查看。',tags:['全量 + CDC','多目标独立恢复','可视化管理与校验'],start:'快速开始',docs:'查看文档',scope:'当前采集源为 MySQL；更多数据库采集源见产品路线图。',preview:'任务工作台',tour:'产品导览',
+  release:'RivoMesh · 0.1.0-SNAPSHOT / 开发预览',hero:['数据库实时同步，','可靠连接每一份数据'],lead:'将源库的全量快照与后续变更持续同步到数据库、分析系统或消息系统。各目标独立确认与恢复，控制台集中展示任务进度、故障和数据差异。',tags:['全量 + CDC','多目标独立恢复','可视化管理与校验'],start:'快速开始',docs:'查看文档',scope:'MySQL 是主要采集源，PostgreSQL 和 Oracle 提供实验性采集。',preview:'任务工作台',tour:'产品导览',
   workflowLabel:'同步流程',workflowTitle:'从业务变化，到每一个下游。',workflowText:'采集、持久化与目标确认各有职责。看清数据经过哪里，也看清进度保存在哪里。',
   coreLabel:'核心能力',coreTitle:'为持续同步设计。',coreText:'初始化、分发与日常管理，沿用同一条可恢复的数据链路。',
   core:[
@@ -24,12 +24,12 @@ export const homeCopy = {
    ['按目标确认与恢复','事务型目标提交业务数据与本地断点；消息目标为确认后的至少一次投递，消费者需去重。','messaging-v3'],
    ['核对共同检查点','在共同暂停点比较数据、审阅差异与修复计划。指定 SQL 目标还可按审批复核历史跳过留下的缺口。','gap-verification']
   ],
-  clusterTitle:'多节点管理与恢复',clusterText:'集中查看节点与任务，共享账号、会话和审计记录。按部署需要启用固定执行节点的全局任务控制，或将管理入口与执行 Agent 分开部署。',clusterScope:'管理与执行分离需要显式配置。请核对指南中的存储与数据库组合，其他组合需单独验证；当前不支持自动跨 Agent 接管。',clusterCta:'部署条件与边界',architecture:'完整架构',evidence:'测试与验收记录',limits:'已知限制',
+  clusterTitle:'多节点管理与恢复',clusterText:'集中查看节点与任务，共享账号、会话和审计记录。可将管理入口与执行 Agent 分开部署，由指定 Agent 执行持久化命令。',clusterScope:'符合条件的新任务可自动选择 Agent。已冻结的停止任务可在指定 PostgreSQL 存储组合下审批移交。',clusterCta:'部署条件与边界',architecture:'完整架构',evidence:'测试与验收记录',limits:'已知限制',
   startLabel:'开始试用',startTitle:'从一个测试库开始。',startText:'选择源码构建或 Docker Compose，启动自己的控制台。首次使用独立空目标，先完成小规模同步与恢复验证。',startNote:'打开 http://127.0.0.1:8080，使用自己设置的令牌登录。数据库日志、账号权限及 HTTPS 配置见快速开始。',download:'源码与下载说明',
   trustTitle:'一起改进数据同步。',trustText:'查看实现与验证记录，反馈使用问题，或参与连接器和文档贡献。',trustLinks:['GitHub 源码','问题反馈','贡献指南','实现状态','版本与发布','验证档案']
  },
  en:{
-  release:'RivoMesh · 0.1.0-SNAPSHOT / development preview',hero:['Reliable database replication.','Built for recovery.'],lead:'Move from a MySQL snapshot into continuous CDC. Recover each destination independently, and inspect progress, failures and data differences in the web console.',tags:['Snapshot + CDC','Independent recovery','Web management & validation'],start:'Get started',docs:'Read the docs',scope:'MySQL capture is available today. See the roadmap for additional sources.',preview:'Task workspace',tour:'Product tour',
+  release:'RivoMesh · 0.1.0-SNAPSHOT / development preview',hero:['Reliable database replication.','Built for recovery.'],lead:'Deliver snapshots and ongoing changes to databases, analytics systems or brokers. Recover each destination independently and inspect progress, failures and data differences in the web console.',tags:['Snapshot + CDC','Independent recovery','Web management & validation'],start:'Get started',docs:'Read the docs',scope:'MySQL is the primary source. PostgreSQL and Oracle capture are experimental.',preview:'Task workspace',tour:'Product tour',
   workflowLabel:'How it works',workflowTitle:'From a database change to every destination.',workflowText:'Capture, durable storage and target acknowledgements have distinct responsibilities. Follow the data and the progress that makes recovery possible.',
   coreLabel:'Core capabilities',coreTitle:'Designed for continuous replication.',coreText:'Initialize, distribute and operate data flows through one recoverable pipeline.',
   core:[
@@ -53,7 +53,7 @@ export const homeCopy = {
    ['Acknowledge per destination','Transactional targets commit data with a local checkpoint. Messaging is confirmed at least once; consumers must deduplicate.','messaging-v3'],
    ['Validate a common checkpoint','Compare data at a common cut, review a repair plan and verify historical gaps for scoped SQL destinations.','gap-verification']
   ],
-  clusterTitle:'Multi-node management & recovery',clusterText:'Monitor nodes and tasks with shared accounts, sessions and audit records. Choose optional fixed-owner task control or deploy management separately from execution Agents.',clusterScope:'Management/execution separation requires explicit configuration. Check the documented storage and database profiles; other combinations need separate verification. Automatic cross-Agent failover is not supported.',clusterCta:'Deployment requirements & scope',architecture:'Architecture reference',evidence:'Acceptance records',limits:'Known limitations',
+  clusterTitle:'Multi-node management & recovery',clusterText:'Monitor nodes and tasks with shared accounts, sessions and audit records. Deploy management separately from execution Agents and route durable commands to the task owner.',clusterScope:'New tasks can select an eligible Agent automatically. Stopped tasks with a durably frozen writer can change owners after approval on the documented PostgreSQL storage profile.',clusterCta:'Deployment requirements & scope',architecture:'Architecture reference',evidence:'Acceptance records',limits:'Known limitations',
   startLabel:'Get started',startTitle:'Start with a small test database.',startText:'Build from source or use Docker Compose to start your own console. Use a dedicated empty target and verify a small pipeline before expanding the scope.',startNote:'Open http://127.0.0.1:8080 and sign in with your own token. See the quick start for database logging, privileges and HTTPS settings.',download:'Source & download options',
   trustTitle:'Help improve database replication.',trustText:'Explore the implementation and verification records, report an issue, or contribute connectors and documentation.',trustLinks:['Source on GitHub','Report an issue','Contribute','Implementation status','Versions & downloads','Verification archives']
  }

@@ -11,7 +11,7 @@ sourcePath: docs/en/account-management.md
 
 ## Scope and interface
 
-Administrators open **Accounts and grants** to create identities, edit roles/task scopes, disable/re-enable, rotate tokens and delete accounts. VIEWER/OPERATOR cannot call account administration APIs. These are local Bearer-token identities, not password login or OIDC; external providers remain unfinished.
+Administrators open **Accounts and grants** to create identities, edit roles and task scopes, disable or re-enable accounts, rotate tokens and delete accounts. VIEWER and OPERATOR cannot call account administration APIs. This page covers local bearer-token accounts. Deployments with multiple Controllers use shared accounts and sessions. [Shared access](/docs/en/reference/shared-access.html)
 
 VIEWER reads granted tasks, OPERATOR also controls them, ADMIN manages globally. An empty selected list grants no tasks; all current/future tasks uses `taskIds: null`. ADMIN cannot be scoped. Unloaded task IDs are retained for advance grants; wildcards are rejected.
 
@@ -25,7 +25,7 @@ Once activated, `controller.json` is authoritative, even if configuration still 
 
 To remove bootstrap credentials after initialization, use [platform-managed.yml](/files/config/platform-managed.yml): `accessMode: MANAGED`, no `authToken/users`, same controller/task directories. An empty directory without an administrator fails startup; it never creates anonymous access.
 
-Linux/Docker retain the same persistent directory. Helm [values-managed.yaml](/files/deploy/helm/rivomesh/values-managed.yaml) and [native Kubernetes manifest](/files/deploy/kubernetes/rivomesh-managed.yaml) omit bootstrap-token Secret injection. They require initialized controller storage and matching audit data; a new empty PVC cannot recover identities. Live Kubernetes/CSI acceptance remains pending.
+Linux and Docker deployments reuse the persistent directory. The managed Helm and native Kubernetes examples require initialized Controller storage and matching audit data. Reuse the initialized PVC when replacing the Pod. See the deployment evidence for the tested storage and rollout profiles. [Helm values](/files/deploy/helm/rivomesh/values-managed.yaml) · [Native YAML](/files/deploy/kubernetes/rivomesh-managed.yaml) · [Deployment evidence](/docs/zh/evidence/baseline.html#lg-06-live-kubernetes-rwo-csi)
 
 ## Tokens and uncertain responses
 
@@ -43,7 +43,7 @@ Mutations require `expectedRevision` and `X-Request-ID`. Concurrent edits return
 
 Directory changes, version and audit outbox are atomically saved together. Audit chain and a persistent directory-version anchor follow. Unavailable audit fails management requests; already committed changes recover through the outbox rather than pretending rollback. Events record actor/action/subject/version, never credentials. The audit interface shows the affected task/account.
 
-Legacy audit exports preserve original payload/hash bytes. Controller format2 is separate from pipeline configuration/checkpoint versions. Activating managed access upgrades controller state to version2 so old programs refuse it. Missing/older mismatched directory state fails startup rather than restoring bootstrap identities. Coordinate controller/audit/configuration-version backups. A coherent rollback of all stores can restore old permissions; there is no external immutable anchor to detect every coordinated old backup. Review revocations/tokens after restoration.
+Local managed access stores the account directory in Controller format 2. At startup Rivomesh verifies the directory against its audit version anchor. Missing or mismatched state stops startup. Back up the Controller directory, audit store and configuration versions together. A consistent older backup can restore previously revoked credentials. Review grants, revocations and tokens after restoration, then compare the audit chain with the independently stored checkpoint when available. [Audit checkpoint](/docs/en/reference/security-audit.html)
 
 ## Offline administrator recovery
 
@@ -85,8 +85,8 @@ Common409 codes: `ACCOUNT_LAST_ADMIN`, `ACCOUNTS_REVISION_CHANGED`, `REQUEST_ID_
 
 **How do I revoke every task grant?** Select scoped tasks, clear selections/additional IDs and save. Do not choose all current/future tasks.
 
-**Can the controller be downgraded?** Old programs refuse managed state version2. Synchronization checkpoint formats were not changed by account management, but controller rollback requires a separate migration.
+**Which store determines whether I can sign in?** With local managed access, check the directory and audit anchor in the Controller's persistent storage. With shared access, check the shared SQL authority from either Controller. [Shared access](/docs/en/reference/shared-access.html)
 
-Actual Java8 release acceptance covered old-release audit/hash upgrade, SIGKILL persistence, older/missing directory refusal, old-program refusal, offline recovery and exclusive locking. Real MySQL→PostgreSQL verified grant revocation/rotation during CDC and no permission resurrection on restart, preserving stream/snapshot identity; see [evidence](/docs/zh/evidence/baseline.html). OIDC, passwords/MFA, distributed identity storage, multiple writing controllers and live K8s clusters remain unaccepted.
+The verification archive tracks account grants, session persistence, revocation and the tested deployment profiles. [Verification archive](/docs/zh/evidence/baseline.html)
 
 See [browser sessions](/docs/en/reference/browser-sessions.html) for reload recovery, sign-out and invalidation of all sessions after directory changes.

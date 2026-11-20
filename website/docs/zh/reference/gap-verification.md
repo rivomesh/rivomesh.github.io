@@ -9,7 +9,7 @@ sourcePath: docs/zh-CN/gap-verification.md
 
 [English](/docs/en/reference/gap-verification.html) · [事务跳过](/docs/zh/reference/transaction-skip.html) · [首版配置](/docs/zh/reference/first-release.html)
 
-当前实现 PostgreSQL/MySQL 事务目标的计划、审批、重新扫描及持久凭据，完整验收进度见[SDD](/docs/zh/sdd/tasks.html)。核验不会补数据，不会重新应用跳过事务，也不会自动恢复同步。
+当前实现 PostgreSQL/MySQL 事务目标的计划、审批、重新扫描及持久凭据。核验不会补数据，不会重新应用跳过事务，也不会自动恢复同步。
 
 ## 界面操作
 

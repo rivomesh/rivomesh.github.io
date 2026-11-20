@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/console-and-deployment.md
 
 # 控制台、多任务与部署
 
-更新：2026-11-17。English: [Console and deployment](/docs/en/reference/console-and-deployment.html)。本页描述已实现功能；完整规划见[平台方案](/docs/zh/reference/platform-design.html)。
+更新：2026-11-18。English: [Console and deployment](/docs/en/reference/console-and-deployment.html)。本页描述已实现功能；完整规划见[平台方案](/docs/zh/reference/platform-design.html)。
 
 ## 运行边界
 
@@ -18,6 +18,8 @@ Web 工作台支持中英文切换、创建向导、连接/源对象检查、启
 默认控制范围为本机；可选 `cluster.sharedAccess=true`、`cluster.sharedTasks=true` 启用固定owner全局任务控制。任一入口可管理授权的远程任务，并区分持久接受、实际结果和未知状态。启用、独立目录/密钥、升级拒绝及Helm/原生双节点配置见[全局控制手册](/docs/zh/reference/global-control.html)。自动跨节点执行接管仍未完成。
 
 ## 本机启动
+
+Maven 构建、Controller、Agent 及各 Worker 统一使用 Eclipse Temurin 21 LTS。
 
 ```bash
 mvn -s build/settings.xml verify
@@ -56,6 +58,10 @@ Worker 意外退出按退避重启，连续五次退出后显示 CRASH_LOOP，�
 
 失败不会删除队列或修改 GTID。UI 可以执行恢复，源端复制 SQL 错误仍需要数据库管理员修复。状态查询失败时显示上次成功时间和故障提示，不把缓存结果当作实时健康。
 工作台每任务最多展示前 100 张表的进度并显示总表数，其他表继续正常同步；全表状态仍可通过 CLI 获取，后续补充分页检索。
+
+V3 任务分别显示 Worker 进程与采集租约。采集租约按日志库时钟判断，`captureLeaseState` 可为已持有、已过期或未持有。无法取得最新日志状态时，界面显示租约未知。进程仍在而采集停滞时，可同时查看源端失败阶段和最后断点。
+
+管理员可以从任一管理入口打开 V3 任务的**采集诊断记录**。执行节点返回带时间的采集启动、失败阶段、重试和日志背压事件。最多读取两个 64 KiB 分段，每页上限 25 条，分页使用不透明游标。`GET /api/tasks/{id}/diagnostics?limit=20&after={cursor}` 沿用现有授权和远端查询限额。执行节点失联时返回暂不可用，游标过期时重新打开第一页。阶段事件仅含类型和阶段，原始 Worker 日志保存在私有目录。
 
 ## 持久文件与 API
 
@@ -109,7 +115,7 @@ kubectl -n rivomesh port-forward service/rivomesh 8080:8080
 
 当前控制面单副本、Recreate 更新和持久 PVC；不通过增加 replicas 声称控制面 HA。单任务原有数据库租约接管机制保留，控制面跨实例一致调度尚待实现。探针不因业务源离线/任务暂停而失败。Secret 或原生 ConfigMap 修改后需按操作计划重启；任务保持原身份恢复。
 
-Chart 已提供持久化、防提权、只读根文件系统、临时目录、优雅停止和进程探针；实际集群/CSI/镜像架构与系统兼容性须按环境验证，渲染检查不等于真实 K8s 部署验收。
+Chart 已提供持久化、防提权、只读根文件系统、临时目录、优雅停止和进程探针；已在双节点 Kubernetes v1.31.0 测试两种部署方法。
 
 ## FAQ
 
@@ -125,10 +131,12 @@ Chart 已提供持久化、防提权、只读根文件系统、临时目录、�
 
 ## 开发验证
 
-Maven verify 运行单元/API 测试，tests/matrix.sh 运行 MySQL 8.0/8.4 与 openGauss 的平台和既有故障回归。
+Maven verify 运行单元和 API 测试。在 Eclipse Temurin 21 LTS 上，`tests/matrix.sh` 默认测试 MySQL 5.7.44、8.0.46、8.2.0 和 8.4.13 的 V3 单机、GTID 主从切换和组复制档案。
 可选 npm ci --prefix tests/ui --ignore-scripts 后执行 npm test --prefix tests/ui，验证实际 HTML/JavaScript 的 DOM 交互；仅开发测试需要相应 Node 版本，服务运行不需要 Node。
 构建镜像后执行 python3 tests/deployment-check.py --image rivomesh:0.1.0-SNAPSHOT，检查 Helm/原生清单一致性及非 root 镜像、鉴权、配置权限、重复请求和卷恢复。脚本只删除自己创建的测试容器与卷，不部署到用户 K8s 集群。
-DOM 检查不能替代真实浏览器的外观、键盘与可访问性验收；当前浏览器自动化窗口不可用，此项仍需补验。
+原生 Chrome 测试打开实际控制台，验证键盘登录、刷新续登、诊断弹窗的可访问名称与移动端布局。更多操作和浏览器另行验收。[浏览器记录](/docs/zh/evidence/baseline.html#worker-diagnostic-events-and-chrome-smoke)
+
+控制台使用与 Rivomesh 官网一致的标识、浅色与深色配色。初始外观跟随浏览器的系统设置。导航栏的月亮或太阳按钮可切换外观，选择保存在当前浏览器。使用键盘时，可通过页面首个“跳到主要内容”链接略过导航。
 
 ## 独立账号与访问角色
 
@@ -150,7 +158,7 @@ Linux 可在现有服务命令/环境中指定该配置；Docker、原生 Kubern
 
 Helm 角色配置：预先建立 Secret `rivomesh-accounts`，分别提供不同的 `admin-token`、`operator-token`、`viewer-token` 键，执行 `helm upgrade --install rivomesh deploy/helm/rivomesh -n rivomesh -f deploy/helm/rivomesh/values-rbac.yaml`。手动 YAML 使用 `deploy/kubernetes/rivomesh-rbac.yaml` 替代默认清单；同一资源选择一种管理方式/配置。两份原生文件均由 Chart 渲染并检查一致性。自定义用户格式为 `auth.users: [{id, role, secretRef: {name, key}}]`，`auth.legacyTokenEnabled: false` 关闭共享入口，至少保留一位 ADMIN。重复 ID/Secret 键、非法角色和令牌明文 `token` 字段在渲染时拒绝；不同 Secret 键内容恰好相同则由应用启动检查拒绝。
 
-Secret 环境值在进程启动时读取。仅修改 Kubernetes Secret 不会轮换运行中的管理服务，修改后需执行受控滚动重启；角色/配置变化会改变部署的配置校验和。ConfigMap 和原生 YAML 均不写 Secret 内容。真实 Kubernetes/CSI/滚动升级验收仍待完成，离线 lint/渲染/一致性检查不能替代集群实测。
+Secret 环境值在进程启动时读取。仅修改 Kubernetes Secret 不会轮换运行中的管理服务，修改后需执行受控滚动重启；角色/配置变化会改变部署的配置校验和。ConfigMap 和原生 YAML 均不写 Secret 内容。配置滚动更新和 Secret 轮换已通过双节点实测。
 
 通过 HTTP 新建的配置记录 `createdBy`、`createdRole`、`createdAt`；任务操作记录认证得到的 `actorId`、`actorRole` 及异步结果，管理进程重启后仍保留。身份由服务端填写，请求正文里的身份字段不能冒名覆盖。新幂等回执将请求标识绑定身份/角色，同身份重放仍幂等，其他身份重放返回 `REQUEST_IDENTITY_CHANGED`。旧版无归属回执保持兼容；历史记录、直接文件/内部 API 变更不会被猜测归属。
 
@@ -169,3 +177,35 @@ Doris向导分别配置SQL和Stream Load HTTP入口、重定向白名单、副�
 上述引导 Secret/环境重启说明适用于 CONFIG 或托管前的初始身份。启用托管后使用账号界面/API轮换；若移除引导凭据，请使用 accessMode: MANAGED 并保留匹配的控制/审计持久卷，见[账号管理](/docs/zh/reference/account-management.html)。
 
 事务证据审阅采用可选控制协议5，支持管理员保存历史证据、原始/规范化事件分页及表格镜像；启用/升级及四类部署示例见[审阅手册](/docs/zh/reference/failure-review.html)。默认旧档案不自动升级。限定恢复档案见[当前实施状态](/docs/zh/reference/implementation-status.html)。
+
+### 双节点 K8s 实库复验
+
+已在 ARM64、双节点 Kubernetes v1.31.0 用同一构建分别测试 Helm 与原生 YAML。每种方式验证浏览器刷新保留登录、初始同步、RWO CSI 同卷重挂、停机期间增量追赶、配置滚动替换和 Secret 轮换。节点本地档案使用 `hostpath.csi.k8s.io`。共享 NFS CSI 档案还通过了应用镜像替换和跨节点重挂原卷，两种部署均保留原快照并自动续传。
+
+将待验收镜像加载到隔离集群的所有节点，启用 `csi-hostpath-driver`，再执行下列命令。测试会创建并清理带随机名称的命名空间。
+
+```sh
+python3 tests/kubernetes-csi-runtime.py --context rivomesh-test \
+  --image rivomesh:0.1.0-SNAPSHOT --output target/kubernetes-proof
+```
+
+复验共享卷时，准备可在两个节点先后挂载 ReadWriteOnce 卷的 StorageClass，并将升级前后的镜像都加载到各节点。隔离环境的 [NFS 测试配置](/files/tests/kubernetes-nfs-fixture.yaml) 使用 Ganesha 服务和临时目录。安装 [NFS CSI 驱动](https://github.com/kubernetes-csi/csi-driver-nfs)，配置 StorageClass 的 provisioner 为 `nfs.csi.k8s.io`，`parameters.server` 填该服务的 ClusterIP，`parameters.share` 填 `/`，挂载参数使用实测的 `nfsvers=4.0`。
+
+```sh
+python3 tests/kubernetes-csi-runtime.py --context rivomesh-test \
+  --storage-class rivomesh-shared --csi-driver nfs.csi.k8s.io \
+  --image rivomesh:before --upgrade-image rivomesh:after --cross-node \
+  --output target/kubernetes-shared-proof
+```
+
+计划迁移时，先确认旧 Pod 已退出，再在新节点挂回原 Claim。保留 Claim UID、PV 后端和应用配置，核对原快照标识、新租约及实际增量投递。外部日志可隔离仍存活的旧 Worker。切换到另一份 Agent 私有目录需要单独处理。
+
+见[复验记录](/docs/zh/evidence/baseline.html#lg-06-live-kubernetes-rwo-csi)。
+
+附加节点故障档案在隔离的 Minikube 集群停止一个 worker，数据库保留在控制节点。原 worker 恢复后，任务挂载同一个卷并以更高日志租约继续增量。追加 `--worker-outage-node <测试 worker>` 可运行原生 YAML 故障档案。
+
+### Java 21 部署
+
+Docker 默认使用 Temurin 21 构建镜像和 Temurin 21 JRE。Helm 和原生 Kubernetes 使用构建出的应用镜像。Linux 上确认服务使用的 Java 可执行文件报告 Java 21。滚动替换应用时保留一个管理入口，逐个核对任务断点和执行租约。记录镜像摘要、Java 版本和应用包 SHA。
+
+替换 Java 21 应用镜像前，记录 JAR 和镜像标识，核对任务期望状态，并按部署档案一致备份 Agent 目录、控制库和外部日志。滚动更新保留原持久卷。需要恢复时，先停写，恢复到协调一致的备份点，再核对目标原生回执和断点。首版回退范围以当前发布格式为准。[实测记录](/docs/zh/evidence/baseline.html#java-21-exact-release-candidate)

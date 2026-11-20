@@ -9,7 +9,7 @@ sourcePath: docs/en/gap-verification.md
 
 [中文](/docs/zh/reference/gap-verification.html) · [Transaction skipping](/docs/en/reference/transaction-skip.html) · [First-release configuration](/docs/en/reference/first-release.html)
 
-Plans,approval,fresh scans and durable receipts are implemented for transactional PostgreSQL/MySQL destinations. See [SDD](/docs/en/sdd/tasks.html) for acceptance progress. Verification neither repairs data nor reapplies skipped transactions,nor automatically resumes replication.
+Plans,approval,fresh scans and durable receipts are implemented for transactional PostgreSQL/MySQL destinations. Verification neither repairs data nor reapplies skipped transactions,nor automatically resumes replication.
 
 ## Console workflow
 

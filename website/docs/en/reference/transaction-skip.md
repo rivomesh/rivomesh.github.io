@@ -9,7 +9,7 @@ sourcePath: docs/en/transaction-skip.md
 
 For apply failures caused by target drift, see [transaction compensation](/docs/en/reference/transaction-compensation.html).
 
-Status:RC-03 bounded profile accepted;RC-08 has bounded [data-gap verification](/docs/en/reference/gap-verification.html) acceptance. [Evidence](/docs/zh/evidence/baseline.html). Java8,MySQL8.4 source,original Agent/LOCAL journal,PostgreSQL business target and PG/MySQL control stores are accepted. Native MySQL target contracts pass;its full public skip matrix and other destinations remain open. Shared-task clusters default to disabled;standalone administrator controls still require complete evidence/explicit approval. [中文](/docs/zh/reference/transaction-skip.html).
+The first RC-03 skip and RC-08 gap verification profiles passed with a MySQL 8.4 source, the original Agent and LOCAL journal, a PostgreSQL business target, and PostgreSQL/MySQL control stores. Those archived runs used Java 8. Release builds and deployments use Eclipse Temurin 21 LTS. Native MySQL target contracts passed. Its full public skip matrix and other destinations remain in progress. Shared cluster skip is opt-in. Administrators must retain complete evidence and explicitly approve execution. [Evidence](/docs/zh/evidence/baseline.html) · [中文](/docs/zh/reference/transaction-skip.html)
 
 Gap verification API/UI are integrated,with54 native contracts passing on each of PostgreSQL/MySQL;27 real-CDC checks pass with each PG/MySQL control store. See the [operator guide](/docs/en/reference/gap-verification.html) for approval,cancellation and status semantics.
 
@@ -59,6 +59,8 @@ Use the[first-release baseline](/docs/en/reference/first-release.html)for Linux,
 
 The first PREPARED plan atomically upgrades journal data format 3 to 4. The task configuration still uses `formatVersion: 3`. The format3-to4 transition is part of the current journal lifecycle,not compatibility for old development programs. Pending plans block normal resume. Missing format 4 plan/gap tables are not recreated as empty history;restore the consistent recovery unit.
 
+When preparing the first skip, the journal connection needs permission to create the recovery metadata tables and their collection indexes. Routine restart and status reads use the existing tables. Preserve the indexes with the journal schema when backing it up.
+
 Controlled native metadata migration adds a receipt table and two nullable checkpoint markers. MySQL implicit DDL commit does not release the source-journal fence. Appropriate metadata DDL privileges are required. Nontransactional tables and lost native receipts are not silently converted or rebuilt.
 
 ## API
@@ -89,6 +91,8 @@ For `SKIP_RETRY`,`SKIP_RECOVER` or `SKIP_CANCEL`, replace evidence references wi
 
 All ledger reads are ADMIN-only. Pages permit at most 100 entries;use returned `next` cursors. Sequence/gap cursors are strings and must not be converted to JavaScript floating-point integers. Raw event values remain in separately authorized evidence pages. Oversized source positions are omitted as a whole with a hash;truncated GTIDs are never presented as usable resume positions.
 
+The gap page reports `journalPayloadRetained` when both the raw and normalized payload rows are present in the journal. A false value on an open gap means the journal no longer has both payloads. Use the separately retained evidence archive or a consistent backup in that case. The status does not read business values or attest their content.
+
 ## FAQ
 
 **Native commit followed by Agent interruption or failed source ACK?** Keep the original plan;PREPARED blocks ordinary resume. Restore the original Agent directory and inspect. Only COMMITTED permits acknowledgment recovery. A new unrelated skip request is not recovery.
@@ -97,7 +101,7 @@ All ledger reads are ADMIN-only. Pages permit at most 100 entries;use returned `
 
 **The original administrator was disabled?** Execution rechecks current directory revision and ADMIN authority. Another authorized administrator can explicitly reapprove the original plan;original approver, native executor and source resolver remain separately recorded.
 
-**Do GC or validation close gaps?** No. Plans, receipts and gap history remain. Later normal APPLY may clear the current checkpoint marker but retains the gap. Complete verified gap closure is not yet implemented.
+**When can the journal reclaim the original payload?** A live open gap or prepared skip holds the exact transaction until its pin is lifted. After every subscriber acknowledges the sequence and the [common-cut verification](/docs/en/reference/gap-verification.html) receipt proves closure of each gap for that sequence, the collector can reclaim its payload. The original skip plan, receipt and gap history remain available. An unrelated later apply or a historical comparison report leaves the pin in place.
 
 **Does RUNNING mean equality?** No. Check `hasGaps` and the UI warning;`gapCountLimited` means a bounded count. Replication recovery and data equality are separate facts.
 
