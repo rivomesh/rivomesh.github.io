@@ -27,6 +27,6 @@ The Java build produces `sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar`. Docke
 
 ## Version and release status
 
-Find release assets and version notes in [GitHub Releases](https://github.com/rivomesh/rivomesh/releases). Consult the [core repository](https://github.com/rivomesh/rivomesh) for licensing terms.
+RivoMesh is preparing its first release. To try the current preview, build from the source above or use Docker Compose. Follow [GitHub Releases](https://github.com/rivomesh/rivomesh/releases) for published versions.
 
 [Implementation status](/docs/en/reference/implementation-status.html) · [Known limitations](/docs/en/start/compatibility.html) · [Multi-node deployment](/docs/en/start/multi-node.html) · [Release inventory](/docs/en/reference/release-inventory.html)

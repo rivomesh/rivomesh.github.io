@@ -72,5 +72,3 @@ The current strict directory-revision policy invalidates **all existing browser 
 - **Account edits sign everyone out:** this is the current strict revision policy. Sign in again; disabled or rotated old tokens remain invalid.
 - **409 SESSION_CAPACITY_REACHED:** closing a page does not revoke its session. Sign out unused sessions, wait for expiry, or increase maximum within the memory budget. Restart clears all sessions but is not routine capacity management.
 - **Sign-out was not confirmed:** restore connectivity/audit availability and retry sign-out. Another administrator can disable the account or rotate its token to trigger revision revocation. An API failure is not success.
-
-Acceptance covers single-controller real HTTP, a TLS proxy, expiry/revocation, Bearer conflicts and DOM races. Full-browser/accessibility and multi-controller acceptance remain separate. Consult this iteration's archived evidence for actual results.

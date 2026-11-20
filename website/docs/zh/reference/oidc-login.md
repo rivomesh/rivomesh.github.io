@@ -69,4 +69,4 @@ oidc:
 - **组织账号停用或已退出**。要立刻撤销 Rivomesh 会话，请撤销本地的外部绑定或停用本地账号。会话以 ID Token 到期时间和 Rivomesh 会话期限中较早者为准。Rivomesh 退出结束本地会话。此档案不接收提供方的退出通知，也不会定期反查组织会话。
 - **提供方轮换签名密钥**。协调所有 Controller 更新固定的 `kid` 和公钥后重启。配置切换期间已发起的登录从头开始。此档案采用固定端点与公钥，配置不自动发现或轮换。过渡时仍可使用本地令牌登录。
 
-原 H2 模拟档案覆盖异常签名、一次性 state 和跨入口撤权。真实 Keycloak 26.7.4 也已在两个共享 PostgreSQL 的 Controller 和同一 HTTPS 入口通过。Chrome 从 A 发起登录，再经 B 完成 PKCE S256 回调。签名中的提供方管理员角色不改变本地 Viewer 和任务/节点权限。在 B 撤销绑定后，两个入口都拒绝原会话。[实库验收](/docs/zh/evidence/baseline.html#native-keycloak-login-across-two-controllers) · [复验脚本](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/tests/keycloak-oidc/README.md)
+原 H2 模拟档案覆盖异常签名、一次性 state 和跨入口撤权。真实 Keycloak 26.7.4 也已在两个共享 PostgreSQL 的 Controller 和同一 HTTPS 入口通过。Chrome 从 A 发起登录，再经 B 完成 PKCE S256 回调。签名中的提供方管理员角色不改变本地 Viewer 和任务/节点权限。在 B 撤销绑定后，两个入口都拒绝原会话。[实库验收](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#native-keycloak-login-across-two-controllers) · [复验脚本](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/tests/keycloak-oidc/README.md)

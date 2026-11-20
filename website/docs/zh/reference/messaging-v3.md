@@ -101,7 +101,7 @@ Kafka 业务身份需要 READ 权限才能回读确认偏移。只有 WRITE 权�
 
 管理员可以通过任一受管入口查询留存的证据。任务仍处于暂停状态时，打开成功的 Kafka 回执核对结果并选择 **查验物理收据**。API 客户端向 `POST /api/tasks/<task>/kafka-physical-receipt` 提交 `{"expectedRevision":"<当前任务修订号>","predecessorRequestId":"<成功的 Kafka 回执核对请求 ID>"}`。所属节点核对当前失败、签名、确切前序 ACK 和 Kafka Topic 的物理标识。`VERIFIED` 返回收据摘要及日志库时间。`MISSING` 表示未留证、签名未核实、物理 Topic 已变化，或旧收据只覆盖较早的 ACK。`UNREACHABLE` 表示所属节点、日志库或 Broker 的读取未完成。任务或失败变化后请刷新前序核对。查询不授予通知发布权限。
 
-Kafka 3.9.2 实库档案使用 TLS/SCRAM-SHA-512，两个 Controller 通过同一个 Agent 查验。重建同名 Topic 会提示缺证。使用 Temurin 21 运行 `python3 tests/kafka-notice-writer-run.py --managed-physical-receipt <应用JAR>` 可复验。[实库证据](/docs/zh/evidence/baseline.html#managed-signed-receipt-queries-with-a-native-kafka-broker)
+Kafka 3.9.2 实库档案使用 TLS/SCRAM-SHA-512，两个 Controller 通过同一个 Agent 查验。重建同名 Topic 会提示缺证。使用 Temurin 21 运行 `python3 tests/kafka-notice-writer-run.py --managed-physical-receipt <应用JAR>` 可复验。[实库证据](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#managed-signed-receipt-queries-with-a-native-kafka-broker)
 
 预览的 `catalogCoverage` 显示受管任务的物理归属。`VERIFIED_SINGLETON` 表示一项任务、一个配置版本和一个 Kafka 目标。目录最多四项任务、八个保留配置版本、十二条 Kafka 路由时，`VERIFIED_AT_REVIEW` 表示已按原生 Kafka 集群 ID 和 Topic UUID 核对每条业务路由，范围包括已停止的任务和配置历史中可回退的版本。由当前所属节点按各版本的配置读取 Broker 元数据。即使连接地址使用不同的别名，只要业务目标和通知 Topic 的物理标识相同，就返回 `CONFLICT`。
 
@@ -180,7 +180,7 @@ python3 tests/rabbit-quorum-run.py --artifact sync-app/target/rivomesh-app-0.1.0
 
 NATS 使用 JetStream 发布确认和 `Nats-Msg-Id`。不使用易失 Core NATS。Stream 要求 File 存储、Limits 保留、Discard New、无消息年龄过期、精确的 `namespace.*` subjects，以及配置的副本数。Stream description 绑定 pipeline/subscription/generation，发现不符不会改写既有资源。有限容量满时拒绝新发布；需要恢复容量后重试，不静默覆盖未消费历史。服务不会自动清理消费者历史，请制定容量、归档和消费进度策略。Broker fsync、复制和底层磁盘决定掉电保证。
 
-NATS 2.11.8 三节点档案要求主地址和各备用地址均使用 `tls://`，配置 `messaging.replicas: 3`，在 JVM 信任库中加入 Broker CA。客户端根据证书核验地址名，并按显式配置连接。实测覆盖 Leader 停止、失去多数派时拒绝确认、恢复后使用原事件 ID 重试。Broker 节点间路由加密和双向 TLS 另行验收。[JetStream 集群](https://docs.nats.io/learn/topologies/jetstream-in-a-cluster) · [验收记录](/docs/zh/evidence/baseline.html#nats-jetstream-tls-and-quorum)
+NATS 2.11.8 三节点档案要求主地址和各备用地址均使用 `tls://`，配置 `messaging.replicas: 3`，在 JVM 信任库中加入 Broker CA。客户端根据证书核验地址名，并按显式配置连接。实测覆盖 Leader 停止、失去多数派时拒绝确认、恢复后使用原事件 ID 重试。Broker 节点间路由加密和双向 TLS 另行验收。[JetStream 集群](https://docs.nats.io/learn/topologies/jetstream-in-a-cluster) · [验收记录](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#nats-jetstream-tls-and-quorum)
 
 已有 Stream 可用 `autoCreate: false`，但仍须匹配上述属性和绑定。绑定值为 `rivomesh:` 加 `SHA-256(pipelineId + ':' + subscriptionId + ':' + generation)`；generation 从已初始化的只读状态获取。未初始化任务推荐由服务首次创建，不要猜测 generation。
 
@@ -202,7 +202,7 @@ NATS 2.11.8 三节点档案要求主地址和各备用地址均使用 `tls://`�
 
 [Redis 实库夹具](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/tests/redis-promotion-run.py) 使用 Redis 7.4.2、Temurin 21 和写入发布包 JDBC 日志的确定性源事务，验收运维提升、副本 fsync 暂缺及恢复、原字节重投、消费者 ACK 和待确认条目恢复，以及使用提升节点原 AOF 卷冷重启。Sentinel、Redis Cluster、跨节点 TLS 复制和已确认存储本身丢失需分别验收。
 
-Redis 8.0.2 私有 CA 档案在 Temurin 21 验证主机名、限定 ACL 账号和 DB 2。未受信的 CA、证书未覆盖的主机名和错误账号密码均未创建键。AOF 冷重启保留原 Stream ID 和快照，发布器续传到 ACK 2。使用本机 Redis 7.2 及以上和 OpenSSL 执行 `python3 tests/redis-tls-run.py --artifact sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar --java-home "$JAVA_HOME" --output target/redis-tls-proof`。 [验收记录](/files/docs/verification/baseline.json)
+Redis 8.0.2 私有 CA 档案在 Temurin 21 验证主机名、限定 ACL 账号和 DB 2。未受信的 CA、证书未覆盖的主机名和错误账号密码均未创建键。AOF 冷重启保留原 Stream ID 和快照，发布器续传到 ACK 2。使用本机 Redis 7.2 及以上和 OpenSSL 执行 `python3 tests/redis-tls-run.py --artifact sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar --java-home "$JAVA_HOME" --output target/redis-tls-proof`。 [验收记录](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json)
 
 六项实库检查中，第二份 fsync 恢复前发布回执停在序列 1，恢复后用原事务推进到序列 2。11 个流条目对应 10 个事件 ID，重复事件的字节一致。此前四条消费确认继续有效，恢复消费者认领了原有三条待确认记录。提升后的主库重启后，原流条目 ID、消费组位点和空待确认列表均保留。
 
@@ -227,20 +227,19 @@ messaging:
   tlsTrustCertsFilePath: /run/secrets/pulsar-ca.pem
 ```
 
-
 所有活动 Broker 必须关闭自动建 Topic、关闭闲置 Topic 删除并启用 Topic 级策略；命名空间覆盖策略不能重新允许自动创建。服务通过各 Broker 广播的管理入口读取配置，因此除 Topic 操作外，还需要集群/Broker/命名空间的管理读取权限。原生客户端重连不能误删后自动建空。同步期间应限制管理员修改保留策略；存在性/所有权检查不能发现所有清空或旧备份回退。
 
 首次创建时原子写入 `rivomesh.owner`（通用 pipeline/subscription/generation 绑定）与 `rivomesh.provision=BUILDING_V1`。仅对这个未完成、属于当前订阅的 Topic 设置策略：时间/大小均无限保留、TTL 0、禁止闲置删除、BookKeeper 持久化，以及拒绝生产者而不淘汰消费者历史的积压策略。确认实际生效后才标记 `READY_V1` 并创建生产者。策略异步传播时自动重试，尚不发布业务事件。已有 READY 策略不符、无所有权或其他订阅占用时需要计划，不直接覆盖。`autoCreate: false` 预建资源必须具备正确绑定、READY_V1 与全部策略；已初始化 Topic 丢失时不建空替代。
 
 此档案的 `replicas` 表示 **BookKeeper 最少 ACK 副本数**。新 Topic 的 ensemble/write/ACK quorum 都设置为该值；已有兼容 Topic 可以使用更大的 ensemble/write quorum，但 ACK quorum 不能低于配置下限。它不会部署 bookie、Broker 副本或故障域。确认依赖 BookKeeper 的持久 journal、复制配置及可恢复元数据；单 bookie 测试不是生产高可用或断电保证。无限保留需要规划容量、归档和消费者安全清理。
 
-本机故障夹具使用 Pulsar 4.0.14、两个活动 Broker、三个 BookKeeper 节点和一个 ZooKeeper 节点。验收核对原 Topic 绑定及 2/2/2 的集合、写入和确认策略。服务 Topic 的 Broker 退出后，发布端可通过幸存服务入口重新打开原 Topic。消息写入端在发布未确认时关闭旧连接，并用新连接重试相同事件。两个 bookie 离线时，需要两份确认的发布保持未确认。原 bookie 使用各自的持久卷恢复后，传输端打开原 Topic，并重试同一个稳定事件 ID。消费者应按事件 ID 去重。此档案使用隔离明文网络。安全集群档案同时验证 Broker TLS、Token 与三节点元数据多数派。存储故障域和负载容量仍需单独验收。 [Pulsar 集群配置](https://pulsar.apache.org/docs/4.0.x/deploy-bare-metal/) · [验收记录](/docs/zh/evidence/baseline.html)
+本机故障夹具使用 Pulsar 4.0.14、两个活动 Broker、三个 BookKeeper 节点和一个 ZooKeeper 节点。验收核对原 Topic 绑定及 2/2/2 的集合、写入和确认策略。服务 Topic 的 Broker 退出后，发布端可通过幸存服务入口重新打开原 Topic。消息写入端在发布未确认时关闭旧连接，并用新连接重试相同事件。两个 bookie 离线时，需要两份确认的发布保持未确认。原 bookie 使用各自的持久卷恢复后，传输端打开原 Topic，并重试同一个稳定事件 ID。消费者应按事件 ID 去重。此档案使用隔离明文网络。安全集群档案同时验证 Broker TLS、Token 与三节点元数据多数派。存储故障域和负载容量仍需单独验收。 [Pulsar 集群配置](https://pulsar.apache.org/docs/4.0.x/deploy-bare-metal/) · [验收记录](/docs/zh/start/verification.html)
 
 安全夹具使用私有 CA，并分别为两个 Broker 的公布主机名签发证书。两个 Broker 入口均要求 HTTPS、Pulsar TLS 与 Token。终止 ZooKeeper 主节点后，剩余两节点重新选主。传输端随后能创建并确认新的已绑定 Topic，且再次核对原 Topic 的已确认历史。BookKeeper 与 ZooKeeper 内部链路位于本机测试网络，生产内部链路加密和跨主机持久性需独立验证。 [Pulsar TLS](https://pulsar.apache.org/docs/4.0.x/security-tls-transport/) · [ZooKeeper 与 BookKeeper](https://pulsar.apache.org/docs/4.0.x/administration-zk-bk/)
 
 客户端同步发送字节消息，关闭批处理/分片并限制待发送请求数。消息 properties 携带稳定事件 ID、逻辑通道与传输 header，Pulsar key 携带逻辑行/事务键。收到发送确认后才提交日志回执。Pulsar message ID 或 Broker 去重不能代替事件 ID 持久去重和事务暂存；这里不使用 Pulsar 原生事务，更换生产者或源租约接管后仍采用通用至少一次契约。
 
-Rivomesh 固定 Pulsar 客户端 4.0.14，通过 `rivomesh-pulsar-transport` 隔离其日志、加密、Jackson 注解和 protobuf。Worker 使用 Temurin 21。请用 `mvn verify` 构建整个 reactor，使私有 SDK 先完成打包。传输测试将核心 JAR 放在 classpath 最前，验证两套依赖共存，并验证只读检查、所有权、发布/读取、Broker 重启、错误保留策略拒绝及丢失 Topic 保护。完整混合链路恢复单独记录于[验证记录](/docs/zh/reference/validation.html)。
+Rivomesh 固定 Pulsar 客户端 4.0.14，通过 `rivomesh-pulsar-transport` 隔离其日志、加密、Jackson 注解和 protobuf。Worker 使用 Temurin 21。请用 `mvn verify` 构建整个 reactor，使私有 SDK 先完成打包。传输测试将核心 JAR 放在 classpath 最前，验证两套依赖共存，并验证只读检查、所有权、发布/读取、Broker 重启、错误保留策略拒绝及丢失 Topic 保护。完整混合链路恢复单独记录于[验证记录](/docs/zh/start/verification.html)。
 
 Broker 启动与源事务追平分别测量：故障脚本先确认 Broker 停止时 SQL 继续、消息目标自动重试，再等待 Broker 健康，之后验证无需人工恢复即可追平。管理服务或存储尚在启动时，不能把目标当作已经就绪。诊断码可显示 `PULSAR_ADMIN_HTTP_503` 等安全状态，不向界面复制行数据或凭据。
 
@@ -280,7 +279,7 @@ Kafka 的幂等生产者也不覆盖更换生产者实例后的全部重放。Br
 
 **Redis 一直没有确认怎么办？** 检查 AOF 状态、所需从节点的 AOF fsync、复制延迟、磁盘及 ACL。`REDIS_DURABILITY_NOT_CONFIRMED`、`REDIS_CONNECTION_CHANGED_DURING_CONFIRM` 表示投递未确认、可重放，即使 XADD 已到达服务端。修复根因，不删除历史或随意降低运行中任务的持久性配置。界面的“源快照行数”只表示源快照准备，各目标确认数单独显示，消息目标确认仍不表示消费者完成。
 
-**如何验证？** 执行 `SYNC_MAVEN_CACHE=/path/to/cache bash tests/messaging-run.sh`，只创建/重启/清理自己的 Compose 项目。版本、结果和剩余验收见[验证记录](/docs/zh/reference/validation.html)，包括单机 Broker 与集群故障的区别。
+**如何验证？** 执行 `SYNC_MAVEN_CACHE=/path/to/cache bash tests/messaging-run.sh`，只创建/重启/清理自己的 Compose 项目。版本、结果和剩余验收见[验证记录](/docs/zh/start/verification.html)，包括单机 Broker 与集群故障的区别。
 
 协议依据：[Kafka 3.9 Java 基线](https://kafka.apache.org/39/operations/java-version/)、[生产者参数](https://kafka.apache.org/39/configuration/producer-configs/)、[RabbitMQ Java 客户端与 Java 8 基线](https://www.rabbitmq.com/client-libraries/java-client)、[确认与可靠性](https://www.rabbitmq.com/docs/reliability)、[NATS Java 客户端](https://github.com/nats-io/nats.java)、[JetStream 设计](https://docs.nats.io/learn/jetstream/)。这些资料说明协议行为，不替代本项目的真实环境验收。
 
@@ -288,7 +287,7 @@ Redis 依据：[WAITAOF 同连接语义和返回计数](https://redis.io/docs/la
 
 ## RocketMQ 原生 TCP 配置
 
-`ROCKETMQ` 已实现 Java 8 兼容的 5.5.1 原生客户端，依赖单独隔离。原生 Broker 确认、客户端/Broker 重启、不安全刷盘拒绝、Topic 丢失保护已通过（`target/rocketmq-transport-cached.log`）；联合全量/增量、Worker 强杀及三轮 Broker 重启已通过（`target/messaging-rocketmq-mixed.log`，49 项执行），既有单机实测未覆盖 ACL 或 TLS。默认档案使用单个 `ASYNC_MASTER` Broker 组，确认 **一份本地同步落盘副本**，不代表同步复制或 Raft 保证。默认档案的 `replicas` 为 1。认证配置完成验收前拒绝 username/password/token，应在可信网络使用。
+`ROCKETMQ` 已实现 Java 8 兼容的 5.5.1 原生客户端，依赖单独隔离。原生 Broker 确认、客户端/Broker 重启、不安全刷盘拒绝、Topic 丢失保护已通过；联合全量/增量、Worker 强杀及三轮 Broker 重启已通过，既有单机实测未覆盖 ACL 或 TLS。默认档案使用单个 `ASYNC_MASTER` Broker 组，确认 **一份本地同步落盘副本**，不代表同步复制或 Raft 保证。默认档案的 `replicas` 为 1。认证配置完成验收前拒绝 username/password/token，应在可信网络使用。
 
 配置 `rocketmq://nameserver:9876`，其他同一集群的 NameServer 放在 `messaging.endpoints`；另填 `cluster`、`broker`、`topic`、`minimumRetentionHours`。地址是原生 TCP NameServer，不是 5.x gRPC Proxy。`topic` 是 1–48 位前缀，首位字母，后续仅字母、数字、下划线、连字符；物理 Topic 是 `<前缀>_<64位任务/订阅/代次绑定哈希>`。日志代次初始化后，界面目标卡片展示实际名称。同代次重启复用，新代次使用新名称。这些名称专供 Rivomesh，禁止外部创建、删除、扩队列和写入。
 
@@ -329,7 +328,7 @@ messaging:
 
 仅归属清单匹配不能证明已确认历史仍保留。RocketMQ 已加入下述原生确认回执与回退检测；其他消息产品仍需各自的检测和故障验收，不能把这项保证外推到全部 Broker。
 
-RocketMQ 原生 Broker 选主已验证。原默认档案拒绝 Controller 模式。可选档案执行上文的验证，完整 Worker 续传另行验收。 [原生证据](/docs/zh/evidence/baseline.html#rocketmq-broker-controller-promotion-and-topic-metadata)
+RocketMQ 原生 Broker 选主已验证。原默认档案拒绝 Controller 模式。可选档案执行上文的验证，完整 Worker 续传另行验收。 [原生证据](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#rocketmq-broker-controller-promotion-and-topic-metadata)
 
 ### RocketMQ 原生确认回执
 
@@ -337,11 +336,7 @@ RocketMQ 原生 Broker 选主已验证。原默认档案拒绝 Controller 模式
 
 `ROCKETMQ_OFFSET_V1` 绑定物理 Topic、队列偏移、CommitLog 字节偏移，以及稳定事件 ID 和正文的 SHA-256。重连和每批投递前，通过原生 `viewMessage` 直接读取 CommitLog 记录核验，避免把异步 ConsumeQueue 索引暂未追平误判为已确认数据丢失。已确认记录丢失、位置或内容改变时，以 `ROCKETMQ_CONFIRMED_HISTORY_*_REBUILD_REQUIRED` 阻止该目标继续投递或创建资源。正常重启复用回执。已有投递状态却缺少原生回执时，报 `PUBLICATION_TRANSPORT_UPGRADE_REQUIRES_PLAN`，不能为旧任务猜测一个新基线。
 
-`target/rocketmq-native-progress-restore.log` 已实测通过：首次确认后停 Broker 复制非空数据卷，启动后确认新事件，再还原旧卷；验证首条仍存在、后续已确认事件缺失，并凭后来的回执拒绝续传。同时覆盖内容摘要不符拒绝、正确回执跨客户端重启。`target/messaging-native-progress.log` 进一步通过 53 项执行：实际发布 JAR、六种消息目标加 PostgreSQL、Worker 强杀及三轮全部 Broker 停止/恢复，包含原生回执恢复。
-
 检查保护保存的确认记录，不等于对任意历史做全量校验，也不代表消费者业务已完成。仍需遵守归属、保留、存储要求，核对消费计数/顺序并归档。不能删除回执或强行降低偏移绕过故障；确认历史丢失时需核验恢复/重建计划。回执及其他元数据的物理空间须在逻辑事件配额外预留。
-
-`target/v3-native-progress-external.log` 已通过 47 项执行，包含实际 MySQL、PostgreSQL、openGauss 日志中的回执保存/比较更新/租约/重开契约，以及 V3 SQL 多目标和 HTTP 控制。`target/ui-native-progress.log` 通过 16 项 DOM 测试。
 
 ## Artemis Core 保留队列配置
 
@@ -359,30 +354,16 @@ Broker 必须开启持久化、事务和非事务 journal sync，准备阶段读
 
 准备完成后，服务在日志绑定持久 node ID 与 queue ID。已初始化队列丢失、身份改变、归属或队列配置不符，均在推进发布回执前阻止继续；首次创建中断留下的空专用队列可以完成准备，已初始化资源不能替换。投递前后核对身份。每批确认后，日志另存 `ARTEMIS_RECORD_V1`，包含物理队列、原生消息 ID、事件 ID，以及带长度前缀的事件/正文 SHA-256。续传与下一批发送前，通过过滤 Core 浏览器核对该持久记录及正文；即使旧非空备份保留相同 node/queue ID，也会因最新记录缺失/改变而阻止继续。此项核验最后保存的确认记录，不等于核验全部历史或下游业务断点。既有投递缺少原生回执时需要明确迁移/重建计划，不能清空元数据后继续。已初始化资源被空队列替换时拒绝处理，并且不写入新归属消息。
 
-**为什么 ACK 不释放历史？** 当前配置刻意保留发布日志，需要规划磁盘、下游归档及显式重建/保留工作流。**能使用普通破坏队列吗？** 不能，会被配置校验拒绝。**能连接 Classic 吗？** 不能，Classic 是另一个尚待实现的协议配置。**检查为何提示权限不足？** 除数据权限外，还需要管理回复通道权限；接口不返回凭据或消息正文。
-
-`target/artemis-transport-volume-fixed.log` 已通过 Java 8 客户端与当前 Broker 的确认发布、字节/键/通道一致、消费确认后保留、Broker/客户端重启身份保留、不安全队列拒绝、已初始化队列丢失保护。首次失败是隔离数据卷权限，不能计作协议通过。`target/artemis-wiring-unit.log` 44 项核心执行通过；`target/ui-artemis-fixed.log` 修复切换产品后账号字段错误隐藏后，17 项 DOM 通过。早期七种消息目标联合恢复因超时失败，不计作通过；后续定点重验已通过，见下文独立记录。集群、分页容量、TLS、断电和更多版本/安全配置仍需验收。[管理 API](https://artemis.apache.org/components/artemis/documentation/latest/management.html)、[持久化](https://artemis.apache.org/components/artemis/documentation/latest/persistence)、[地址策略](https://artemis.apache.org/components/artemis/documentation/latest/address-settings.html)。
-
-`target/artemis-native-progress-final.log` 已通过实际发布 JAR 验收：首条确认后停隔离 Broker 复制数据卷，随后确认新记录，再还原旧非空卷；证明 node/queue ID 未变，并以较新回执拒绝续传。正确回执可恢复；摘要改变、格式错误和空替换队列均拒绝，空队列保持为空。`target/ui-artemis-native-progress.log` 17 项 DOM 通过。七种消息目标联合恢复在此前主机休眠期间出现源 SQL/HTTP 超时后另行重跑。上述结果不代表集群、TLS、分页压力或断电验收。
+**为什么 ACK 不释放历史？** 当前配置刻意保留发布日志，需要规划磁盘、下游归档及显式重建/保留工作流。**能使用普通破坏队列吗？** 不能，会被配置校验拒绝。**能连接 Classic 吗？** 请使用[ActiveMQ Classic](/docs/zh/reference/classic-v3.html) 的独立配置。**检查为何提示权限不足？** 除数据权限外，还需要管理回复通道权限；接口不返回凭据或消息正文。
 
 ### 共享存储主备
 
 为同一 Artemis 共享存储主备对配置一个稳定的 TCP 入口，只把新连接转发给当前接受 Core 连接的 Broker。两个实例共享 Bindings、消息日志、分页和大消息目录。发布端继续使用单个 `artemis://` 入口及原队列身份。[Artemis 共享存储主备](https://artemis.apache.org/components/artemis/documentation/latest/ha)
 
-Artemis 2.57.0 双 Broker 实测使用一个本地命名卷和固定回环入口。主进程强制终止后，原备进程接管。入口中断期间发布确认留在原位。恢复转发后，发布端核对原生回执以及 Broker、队列身份，再确认同一个待重试事件。普通消费 ACK 后，两个事件仍在保留队列内。部署时需独立核验存储故障域、Broker 间 TLS、自动回切和容量。[实测证据](/docs/zh/evidence/baseline.html#artemis-shared-store-primary-and-backup)
+Artemis 2.57.0 双 Broker 实测使用一个本地命名卷和固定回环入口。主进程强制终止后，原备进程接管。入口中断期间发布确认留在原位。恢复转发后，发布端核对原生回执以及 Broker、队列身份，再确认同一个待重试事件。普通消费 ACK 后，两个事件仍在保留队列内。部署时需独立核验存储故障域、Broker 间 TLS、自动回切和容量。[实测证据](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#artemis-shared-store-primary-and-backup)
 
-## 管理接口重试诊断与定点恢复重验
+## 管理连接重试诊断
 
 `PULSAR_ADMIN_TIMEOUT` 表示客户端管理请求超时，`PULSAR_ADMIN_CONNECT_RETRY` 表示连接失败。SDK 可能把它们包成默认状态 500 的异常，即使并未收到 HTTP 500 响应；诊断服务端错误前应核对 Broker 访问日志。`PULSAR_ADMIN_REQUEST_FAILED` 保留无法确定的通用 SDK 失败，不虚构 HTTP 响应；实际 HTTP 错误仍保留状态码。凭据提供器/TLS 拒绝作为永久配置故障处理，这种分类本身不等于 TLS 互通已验收。
 
 全量准备阶段现在也输出去重后的重试诊断，只记录异常类和堆栈位置，不记录异常消息、凭据、SQL 或行数据。瞬时网络故障保持 RUNNING 及原有故障代次，应自动重试，无需手动恢复。应检查宿主机/虚拟机负载、堆/直接内存、Broker 就绪、网络及请求超时配置，不能假设与硬件无关的启动/追平截止时间。
-
-完整构建后可以复用已检查发布包和编译测试，定点重跑故障用例：
-
-```bash
-RIVOMESH_TEST_PREBUILT=1 bash tests/messaging-run.sh
-```
-
-检查器拒绝变更后的 Java 源码、过期测试/界面资源及无效发布包，同时核验固定 Java 8 兼容 JUnit Console 的校验和。此模式只执行 **1 项链路用例**，不等于完整 Maven 的 54 项执行；默认命令仍构建并运行较完整的测试。失败时在 `target/broker-tests/<project>/` 留存完整 Pulsar 日志和其他 Broker 的有界日志，只清理该测试自己的项目资源。可选 `RIVOMESH_TEST_JAVA_OPTIONS` 向隔离测试与 Worker 提供 JVM 诊断参数，例如 Temurin 21 的 `-Xlog:gc`；它是测试选项，不是生产容量建议。
-
-历史定点验收 `target/messaging-pulsar-gc-diagnostics.log`：实际 Java 8 发布 JAR、256 MiB Worker 堆，**1 项真实链路用例通过、0 失败/跳过**。PostgreSQL 加 Kafka/RabbitMQ/NATS/Redis/Pulsar/RocketMQ/Artemis 完成全量/增量、Worker 强杀和三轮全部消息 Broker 停止/启动；Broker 停止期间 SQL 继续，重试诊断持久保留，自动追平后清除。最后删除已初始化 Artemis 队列，仅该目标暂停，其他订阅继续追平；原生回执跨重启恢复。在繁忙共享宿主机启用 Java 8 GC 诊断时约耗时 590 秒，没有增加堆或截止时间。这是 1 项定点用例，不等于完整 Maven 54 项重新通过，也不是通用容量或恢复时间承诺。

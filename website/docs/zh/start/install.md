@@ -29,7 +29,7 @@ git clone https://github.com/rivomesh/rivomesh.git
 cd rivomesh
 mvn -s build/settings.xml verify
 export RIVOMESH_TOKEN="$(openssl rand -hex 32)"
-java -Xmx128m -jar sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar serve config/platform.yml
+java -Xmx512m -jar sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar serve config/platform.yml
 ```
 
 打开 <http://127.0.0.1:8080>，使用刚设置的 `RIVOMESH_TOKEN` 登录。默认只允许本机访问。令牌应保存到受控的密码管理位置，不能写进公开配置或网址。

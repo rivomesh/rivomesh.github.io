@@ -9,7 +9,7 @@ sourcePath: docs/zh-CN/execution-lifecycle.md
 
 [English](/docs/en/reference/execution-lifecycle.html) · [全局控制](/docs/zh/reference/global-control.html)
 
-协议4分离档案已通过348项应用构建/发布包优先测试、76项DOM及五JDK各152项专项；PG/MySQL控制库、真实多库双目标、管理全停、控制库中断、接收入口死亡后原命令恢复、非root三进程和SQL并发角色切换均已验收。自动跨Agent接管、完整日志/适配器/JDK矩阵仍待完成。 [Evidence](/docs/zh/evidence/baseline.html).
+协议4分离档案已通过348项应用构建/发布包优先测试、76项DOM及五JDK各152项专项；PG/MySQL控制库、真实多库双目标、管理全停、控制库中断、接收入口死亡后原命令恢复、非root三进程和SQL并发角色切换均已验收。自动跨Agent接管、完整日志/适配器/JDK矩阵仍待完成。 [Evidence](/docs/zh/start/verification.html).
 
 | 配置 role | 节点目录角色 | 职责 |
 |---|---|---|
@@ -80,7 +80,7 @@ helm upgrade --install rivomesh-agent-a deploy/helm/rivomesh -n rivomesh -f depl
 3. 协调备份时先停止任务和管理写入。对控制库、各节点私有目录与密钥、启用时的外部日志、目标业务和断点做一致的备份，保留文件权限和卷身份。在隔离环境恢复同一批备份，核对节点、配置和目标回执后恢复工作。[故障恢复与切换](/docs/zh/reference/reconciliation-workflow.html)
 4. 更换发布包、JDK 或驱动前记录原包、活动配置和断点。演练时保留节点、目录、密钥和卷的身份。混合版本、跨节点更换存储要单独验证。首版按计划停机后启动新版本。[首版配置](/docs/zh/reference/first-release.html) · [兼容矩阵](/docs/zh/reference/compatibility.html)
 
-已在双节点 Kubernetes 上实测 Helm 和原生 YAML、配置及 Secret 替换、节点本地 CSI 同卷重挂与 Worker 节点中断。跨节点 CSI 和自动迁移 Agent 另行验收。[Kubernetes 实库记录](/docs/zh/evidence/baseline.html)
+已在双节点 Kubernetes 上实测 Helm 和原生 YAML、配置及 Secret 替换、节点本地 CSI 同卷重挂与 Worker 节点中断。跨节点 CSI 和自动迁移 Agent 另行验收。[Kubernetes 实库记录](/docs/zh/start/verification.html)
 
 ## 故障与恢复FAQ
 
@@ -90,7 +90,7 @@ helm upgrade --install rivomesh-agent-a deploy/helm/rivomesh -n rivomesh -f depl
 
 **Agent端口为什么没有登录页面？** 该端口只提供GET /healthz与/readyz，管理路径返回404 AGENT_PROBE_ONLY。通过任一管理入口控制Agent任务，查询通道在共享控制存储中完成。
 
-**Agent自己退出或被强杀？** 这会影响其Worker，管理端显示等待/未知。恢复原Agent目录、nodeId和密钥后续传；离线STOP会先处理，不能据心跳过期宣称已停止。自动执行接管和旧Worker隔离仍是CP-04。
+**Agent自己退出或被强杀？** 这会影响其Worker，管理端显示等待/未知。恢复原Agent目录、nodeId和密钥后续传；离线STOP会先处理，不能据心跳过期宣称已停止。已停止且冻结的任务可按[全局控制手册](/docs/zh/reference/global-control.html)的限定流程移交。
 
 **Agent拥有控制凭据是否意味着最小权限隔离已完成？** 不是。Agent属于可信控制域；Worker会过滤控制环境变量。此角色划分不建立多租户或操作系统隔离，最小密钥/外部身份等仍单独追踪。
 

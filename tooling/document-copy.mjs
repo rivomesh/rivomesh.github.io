@@ -17,17 +17,18 @@ export function documentCopy(meta, raw) {
 
 - [多节点部署与恢复](/docs/zh/start/multi-node.html)
 - [兼容性与能力边界](/docs/zh/start/compatibility.html)
-- [验证记录汇总](/docs/zh/reference/validation.html)
+- [验证记录汇总](/docs/zh/start/verification.html)
 - [性能与运行时记录](/docs/zh/reference/performance.html)
 `
 
   let text = raw
   if (meta.sourcePath.endsWith('/implementation-status.md')) {
     text = text
-      .replace(/^(?:The SDD contains the current totals and requirements\. |进度总数和逐项状态以 SDD 为准。)/gm, '')
-      .replace(/^\| DO-01 \|.*\n/gm, '')
-      .replace(/^\[(?:Complete task list|完整任务清单)\].*\n\n/gm, '')
-      .replace(/^.*\[progress-reports\.json\].*\n?/gm, '').trimEnd() + '\n'
+      .replace(/^(?:进度总数和逐项状态以 SDD 为准。|The SDD contains the current totals and requirements\. ).+\n\n/m, '')
+      .replace(/^## (?:已验收|Accepted)\n[\s\S]*?(?=^## )/m, '')
+      .replace(/^## (?:当前清理|Cleanup)\n[\s\S]*/m, meta.locale === 'zh'
+        ? '[已验证范围](/docs/zh/start/verification.html) · [产品路线图](/docs/zh/start/roadmap.html)\n'
+        : '[Verified environments](/docs/en/start/verification.html) · [Product roadmap](/docs/en/start/roadmap.html)\n')
   }
   if (meta.sourcePath.endsWith('/browser-sessions.md')) {
     text = text
@@ -39,12 +40,6 @@ export function documentCopy(meta, raw) {
     text = text
       .replace(/ This feature shares observations;.*$/m, ' See [global task control](global-control.md) and [shared access](shared-access.md) for the corresponding deployment requirements.')
       .replace(/本页描述共享节点观察.*$/m, '[全局任务控制](global-control.md)和[共享访问](shared-access.md)各有独立部署条件。')
-  }
-  if (meta.sourcePath.endsWith('/validation.md')) {
-    text = text.replace(/ · \[SDD验收\]\((?:\.\.\/)?sdd\/[^)]+\)/g, '')
-  }
-  if (meta.sourcePath.endsWith('/release-inventory.md')) {
-    text = text.replace('SDD status and evidence, local links', 'acceptance evidence, local links').replace('SDD 状态与证据、文档链接', '验收证据、文档链接')
   }
   if (meta.locale === 'zh' && meta.group !== 'evidence') text = text.replaceAll('服务政企信创迁移', '服务信创迁移').replaceAll('Rivomesh 面向政企的数据库迁移', 'RivoMesh 支持信创改造中的数据库迁移').replaceAll('政企迁移目标', '信创改造目标')
   if (/\/(pipeline-v3|console-and-deployment)\.md$/.test(meta.sourcePath)) {
@@ -134,6 +129,7 @@ export function documentCopy(meta, raw) {
       text = text.replace(/^(# .+)$/m, '$1\n\nFor current deployment, see the [multi-node guide](/docs/en/start/multi-node.html). Accounts, sessions and audit can now be shared by explicitly enabling [shared access](shared-access.md). Registry-only installations keep them local. Task operations are local by default. Optional fixed-owner [global control](global-control.md) is integrated; explicit controller/Agent separation has initial acceptance, while automatic relocation and the full HA matrix remain open.')
     }
   }
+  text = publicReferenceCopy(stem, meta.locale, text)
   // Keep public manuals and acceptance records focused on the operating procedures.
   return text
     .replace(/Follow \[RC-05 design\]\(\.\.\/sdd\/[^)]+\)\. |实现与验收追踪见 \[RC-05 设计\]\(\.\.\/sdd\/[^)]+\)。/g, '')
@@ -141,4 +137,91 @@ export function documentCopy(meta, raw) {
     .replace(/ Contract: \[CP-01\]\(\.\.\/sdd\/[^)]+\)\.|设计合同：\[[^\]]+\]\(\.\.\/sdd\/[^)]+\)。/g, '')
     .replace(/\s*· \[[^\]\n]+\]\(\.\.\/sdd\/[^)]+\)|\s*\[[^\]\n]+\]\(\.\.\/sdd\/[^)]+\) · |[ 	]+\[Contract\]\(\.\.\/sdd\/[^)]+\)\./g, '')
     .replace(/and\[SDD\]\(\.\.\/sdd\/[^)]+\)|与\[SDD\]\(\.\.\/sdd\/[^)]+\)/g, '')
+}
+
+function publicReferenceCopy(stem, locale, text) {
+  const zh = locale === 'zh'
+  switch (stem) {
+    case 'compatibility':
+      return text
+        .replace('pipeline-v3.md#mysql-820-source-regression', 'pipeline-v3.md#mysql-8-2-0-source-regression')
+        .replace('pipeline-v3.md#mysql-84-binlog-profile', 'pipeline-v3.md#mysql-8-4-binlog-profile')
+    case 'console-and-deployment':
+      return text
+        .replace('OIDC/SSO、令牌有效期和外部不可变审计锚点仍未完成。已有任务操作历史继续保留，完整权限/审计工作流仍在补齐。', '共享 HTTPS 管理入口可接入一个 [OIDC 提供商](oidc-login.md)。部署令牌的轮换与浏览器会话期限分别配置。外部审计锚点及对象锁见[安全审计](security-audit.md)。')
+        .replace('OIDC/SSO, token expiry and external immutable audit anchors remain unfinished.', 'Shared HTTPS entries can use one [OIDC provider](oidc-login.md). Manage token rotation and browser session expiry separately. See [security audit](security-audit.md) for external anchors and object locking.')
+        .replace('它仍不等于外部不可变审计。', '部署方可另行留存带签名的外部锚点和对象锁归档。')
+        .replace('External immutable anchors remain unfinished.', 'Deployments can retain signed anchors and object-locked archives separately.')
+    case 'task-authorization':
+      return text
+        .replace('OIDC/SSO、分组及每个动作单独授权仍未完成；管理私有配置仍属于管理员操作。', '使用 [OIDC 登录](oidc-login.md)时，任务与节点权限来自绑定的本地账号。授权采用角色与任务范围，私有配置由管理员管理。')
+        .replace('OIDC/SSO, groups and individual-action grants remain unfinished; private configuration is still administrator-managed.', 'With [OIDC sign-in](oidc-login.md), the bound local account controls task and node permissions. Grants use roles and task scope. Administrators manage private configuration.')
+    case 'global-control':
+      return text.replace(/^2026-11-17[：:].*$/m, zh
+        ? '任务控制默认为本机模式。启用固定 Agent 的全局模式后，可在多个入口查看共享配置和只读状态，并将持久命令发给任务所有者。容量、迁移与故障恢复请按[多节点指南](/docs/zh/start/multi-node.html)核对适用档案。'
+        : 'Task control defaults to local mode. In fixed-owner global mode, management entries share configuration and read-only state and route durable commands to the owning Agent. See [multi-node deployment](/docs/en/start/multi-node.html) for capacity, handoff and recovery profiles.')
+    case 'postgresql-source':
+      return text
+        .replace('共同点对账、更多目标与切换档案继续由 SO-06 跟踪。', '共同点对账以及其他目标、切换方式与驱动需单独验证。')
+        .replace('SO-06 continues to track common-cut validation and additional target, promotion and driver profiles.', 'Common-cut validation and additional target, promotion and driver profiles need separate verification.')
+    case 'oracle-source':
+      return text
+        .replace('更多版本、类型、RAC 和切主继续由 SO-07 跟踪。', '其他版本、类型、RAC 和切主需单独验证。')
+        .replace('SO-07 tracks the remaining versions, types, RAC and failover.', 'Other versions, types, RAC and failover need separate verification.')
+    case 'capture-recovery':
+      return text
+        .replace('源端范围隔离和批准排除由 RC-04 的后续工作跟踪。', '采集端排除按本文的 MySQL 原始日志核验及管理员审批流程执行。')
+        .replace('RC-04 tracks subsequent source-range quarantine and approved exclusion.', 'For a source-side exclusion, follow the MySQL log verification and administrator approval procedure on this page.')
+    case 'failed-transactions':
+      return text
+        .replace('；源采集范围排除由 RC-04 跟踪。', '。指定 MySQL 档案的事务排除见[采集端故障恢复](capture-recovery.md)。')
+        .replace('Capture-side range exclusion remains open under RC-04.', 'For the scoped MySQL source transaction exclusion, see [capture recovery](capture-recovery.md).')
+        .replace(/^本轮内部检查.*$/m, '[故障恢复的已验证范围](../verification/README.md)')
+    case 'transaction-skip':
+      return text
+        .replace('RC-03 跳过和 RC-08 缺口核验的早期档案已通过', '事务跳过和缺口核验已有实测档案')
+        .replace('The first RC-03 skip and RC-08 gap verification profiles passed', 'Transaction skipping and gap verification have verified profiles')
+    case 'commit-acknowledgement':
+      return text.replace('状态：RC-05 限定档案已验收：','限定档案已验证').replace('Status: RC-05 bounded profile accepted:UI,API,protocol6 admission,atomic ACK/receipt and cross-entry recovery.','The scoped profile verifies the console, API, protocol 6 admission, atomic ACK and receipt handling, and cross-entry recovery.')
+    case 'failure-evidence':
+      return text
+        .replace('早期内部接口验收不等于当前全部界面档案，最新范围见[验证记录](../verification/README.md)。', '[已验证范围](../verification/README.md)')
+        .replace('原生断点核对与提交领先ACK的人工处理属于RC-05。', '目标已提交而日志 ACK 缺失时，按[提交确认](commit-acknowledgement.md)核对原生断点。')
+        .replace('Manual native-checkpoint reconciliation remains RC-05.', 'Use [commit acknowledgement](commit-acknowledgement.md) to verify the native checkpoint when a target may have committed before the journal ACK.')
+    case 'failure-review':
+      return text
+        .replace(/实现与验收追踪见.*?；跳过与补偿继续追踪，不扩大 RC-02 历史档案。/, '指定 SQL 目标支持核对原生断点及[恢复提交确认](commit-acknowledgement.md)。')
+        .replace(/Follow \[RC-05 design\].*?and RC-02 historical scope is unchanged\./, 'Scoped SQL destinations support native checkpoint inspection and [commit acknowledgement recovery](commit-acknowledgement.md).')
+    case 'execution-lifecycle':
+      return text.replace('自动执行接管和旧Worker隔离仍是CP-04。', '已停止且冻结的任务可按[全局控制手册](global-control.md)的限定流程移交。').replace('Automatic takeover/stale-Worker fencing remain CP-04.', 'For stopped tasks with a frozen writer, follow the scoped [Agent handoff procedure](global-control.md).')
+    case 'shared-access':
+      return text.replace(' Retention governance remains LG-09.', '').replace('，活跃回执/历史节点的治理继续归LG-09。', '。')
+    case 'browser-sessions':
+      return text
+        .replace('开发预览 `http://127.0.0.1:18088` 及本地示例', '本地 HTTP 示例')
+        .replace(/^(?:Acceptance covers single-controller real HTTP|验收覆盖单控制器的真实 HTTP).*$/m, '').trimEnd() + '\n'
+    case 'classic-v3':
+      return text.replace(/^## (?:验收记录|Recorded acceptance)\n[\s\S]*/m, zh
+        ? '## 验证范围\n\n指定 KahaDB 档案验证了 Broker 重启、原队列回执核对和多目标链路独立恢复。可使用 `bash tests/classic-pipeline-run.sh` 复现 MySQL、PostgreSQL 与 Classic 联合投递。\n'
+        : '## Verification scope\n\nThe scoped KahaDB profile covers broker restart, receipt checks against the original queue and independent recovery in a mixed pipeline. Run `bash tests/classic-pipeline-run.sh` to reproduce MySQL, PostgreSQL and Classic delivery.\n')
+    case 'clickhouse-v3':
+      return text
+        .replace(/^## (?:验收记录|Recorded acceptance)$/m, zh ? '## 验证范围' : '## Verification scope')
+        .split(/\n\n+/).filter(paragraph => !/target\/[^\s`]+\.log/.test(paragraph)).join('\n\n')
+    case 'messaging-v3':
+      return text
+        .replace(/^## (?:后台重试诊断与定点重验|管理连接重试诊断与定点重验|管理接口重试诊断与定点恢复重验|Admin retry diagnostics and focused recovery reruns)$/m, zh ? '## 管理连接重试诊断' : '## Admin connection retry diagnostics')
+        .replace(/^(?:After a full build, a focused fault rerun|完整构建后可以复用已检查发布包和编译测试)[\s\S]*/m, '')
+        .replace('不能，Classic 是另一个尚待实现的协议配置。', '请使用[ActiveMQ Classic](classic-v3.md) 的独立配置。')
+        .replace(/（`target\/rocketmq-transport-cached\.log`）|（`target\/messaging-rocketmq-mixed\.log`，49 项执行）| \(`target\/rocketmq-transport-cached\.log`\)| \(`target\/messaging-rocketmq-mixed\.log`[^)]*\)/g, '')
+        .split(/\n\n+/).filter(paragraph => !/target\/[^\s`]+\.log/.test(paragraph)).join('\n\n').trimEnd() + '\n'
+    case 'release-inventory':
+      return text
+        .replace(/^# .+$/m, zh ? '# 构建包与驱动依赖' : '# Build packages and driver dependencies')
+        .replace(/^(?:The scan reads Maven properties inside the Hive SDK|清单读取 Hive SDK|The normal Temurin 21 JAR from|`6491ea3` 的 Temurin).*\n\n/mg, '')
+        .replace(/^## (?:ASF 分发审查|ASF distribution review)\n[\s\S]*?(?=^### )/m, zh ? '## 外置 JDBC 驱动配置\n\n' : '## External JDBC driver profiles\n\n')
+        .replace(/^### (?:外置厂商候选包的内容审查|Contents review of the external vendor candidate)\n[\s\S]*/m, '').trimEnd() + '\n'
+    default:
+      return text
+  }
 }

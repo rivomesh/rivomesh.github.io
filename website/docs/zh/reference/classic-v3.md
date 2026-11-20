@@ -70,8 +70,6 @@ python3 tests/classic-shared-store-run.py \
 
 已验收测试策略同时允许 `http://classic:8161` 和 `http://classic:8161/`；该 Jolokia 版本会按包含末尾斜线的完整 Referer 匹配。其他部署应放行精确的 `<管理scheme>://<管理authority>/`，继续保留严格检查。
 
-## 验收记录
+## 验证范围
 
-`target/classic-subscription-selector-fixed.log`：2项SDK分类测试＋63项核心/API测试通过，0失败/错误/跳过。`target/ui-classic-first.log`20项DOM通过。`target/classic-native-selector-fixed.log`：上述实际发布包/Java8原生验收通过，发布包145723459bytes，SHA2561a1945e3f91658e3f666a79af66b5da1d6ec0eb8ea2ff00cd3d9f8242a017115。此前失败的原生日志不算验收；`target/classic-pipeline-first.log` 构建成功，但测试脚本错误依赖了 Maven Java8 镜像中不存在的 Python，不算验收。修正后的 `target/classic-pipeline-prebuilt.log` 一个实际发布包联合链路用例通过：主机验证源文件/编译输入，原生消费工具仅针对实际发布包编译，真实 MySQL8.4＋PostgreSQL17、LOCAL H2 日志。前后发布包 SHA256 均为6eb2a8bb053fcf777b765713e5c21aeb675e586f53c79098e5dffb2103afb954，145723578bytes。按稳定事件ID、行身份和已完成事务从实际消费信封重建全量/当前行，消费批次持久化后才ACK。Worker强杀、Broker停机/追平、SQL CHECK错误时Classic继续、删除约束并按原错误代次重试，以及清空Classic队列时SQL继续均通过。暂停结果区分SQL FENCED与MQ UNCONFIRMED。可运行 `bash tests/classic-pipeline-run.sh`，不变的已验证发布包可加 `RIVOMESH_TEST_PREBUILT=1`；Python只用于主机测试校验，不是运行容器依赖。全部本次隔离资源已清理。
-
-最终打包 `target/classic-final-unit-package.log`：2项SDK＋63项核心/API通过，0失败/错误/跳过；界面20项通过。当前产物145723617bytes，SHA256290adcc746a64c427ccefc6de712b8fbb7bbdc7ed4d48fcd2757485e99b6c2fe。与已通过链路的包逐一比较全部65091个class，仅AdapterCatalog.class的能力说明改变；运行时协议资源字节相同。见[归档证据](/docs/zh/evidence/baseline.html)。
+指定 KahaDB 档案验证了 Broker 重启、原队列回执核对和多目标链路独立恢复。可使用 `bash tests/classic-pipeline-run.sh` 复现 MySQL、PostgreSQL 与 Classic 联合投递。

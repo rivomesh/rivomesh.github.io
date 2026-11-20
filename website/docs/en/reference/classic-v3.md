@@ -166,28 +166,6 @@ The accepted fixture policy allows both `http://classic:8161` and
 including its trailing slash. For another deployment, allow the exact value
 `<management-scheme>://<management-authority>/`, retaining strict checking.
 
-## Recorded acceptance
+## Verification scope
 
-`target/classic-subscription-selector-fixed.log`:2 SDK classification tests and
-63 core/API tests passed,0 failures/errors/skips. `target/ui-classic-first.log`:20
-DOM passes. `target/classic-native-selector-fixed.log`: actual release/native
-Java8 acceptance described above. Release145723459bytes SHA256
-1a1945e3f91658e3f666a79af66b5da1d6ec0eb8ea2ff00cd3d9f8242a017115.
-Earlier native logs failed and are not acceptance. `target/classic-pipeline-first.log` built successfully but its harness failed
-because the Maven Java8 image has no Python; it is not acceptance. The corrected
-`target/classic-pipeline-prebuilt.log` passed ONE actual release pipeline case,
-with host verification of fresh source/tests and native inspector classes
-compiled against that release. Source/MySQL and target/PostgreSQL were real,
-with LOCAL H2 journal. Both pre/post SHA256 were
-6eb2a8bb053fcf777b765713e5c21aeb675e586f53c79098e5dffb2103afb954,
-145723578bytes. Snapshot/current rows were reconstructed from received envelopes
-by stable IDs, row identities and completed transactions. The consumer persists
-its received batch before ACK. Worker SIGKILL, broker outage/catch-up, PostgreSQL
-CHECK failure with Classic continuing, removing the constraint/resuming its
-original error generation, and purging the initialized Classic queue with SQL
-continuing all passed. Pause reports SQL FENCED and MQ UNCONFIRMED.
-Run `bash tests/classic-pipeline-run.sh`; an unchanged verified release can use
-`RIVOMESH_TEST_PREBUILT=1`. Python runs on the host for verification, not as a
-runtime dependency in the Maven/JRE8 containers. All own resources were cleaned.
-
-Final package: `target/classic-final-unit-package.log`2 SDK +63 core/API passes,0fail/error/skip; UI20 passes. Current145723617-byte release SHA256290adcc746a64c427ccefc6de712b8fbb7bbdc7ed4d48fcd2757485e99b6c2fe. All65091 class files were compared with the accepted pipeline release; only AdapterCatalog.class changed (status text). Runtime protocol resources are byte-identical. See [archived evidence](/docs/zh/evidence/baseline.html).
+The scoped KahaDB profile covers broker restart, receipt checks against the original queue and independent recovery in a mixed pipeline. Run `bash tests/classic-pipeline-run.sh` to reproduce MySQL, PostgreSQL and Classic delivery.

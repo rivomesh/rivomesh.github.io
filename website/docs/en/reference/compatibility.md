@@ -9,7 +9,7 @@ sourcePath: docs/en/compatibility.md
 
 [中文](/docs/zh/reference/compatibility.html)
 
-Choose a profile by source version and topology, target product and mode, then Java runtime. Each row records the scope with native evidence or identifies work still pending. Check the exact candidate hash in the [verification baseline](/docs/zh/evidence/baseline.html) and [machine-readable manifests](/files/docs/verification/baseline.json) before selecting a build for acceptance.
+Choose a profile by source version and topology, target product and mode, then Java runtime. Each row records the scope with native evidence or identifies work still pending. Check the exact candidate hash in the [verification baseline](/docs/en/start/verification.html) and [machine-readable manifests](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json) before selecting a build for acceptance.
 
 ## Sources and coordinates
 
@@ -17,8 +17,8 @@ Choose a profile by source version and topology, target product and mode, then J
 |---|---|---|
 | `MYSQL` 5.7.44 | Temurin 21 standalone and three-member single-primary Group Replication to MySQL and PostgreSQL. Async GTID promotion and missing binlog refusal passed with a PostgreSQL target. | [Pipeline configuration](/docs/en/reference/pipeline-v3.html), [missing-log recovery](/docs/en/reference/capture-recovery.html) |
 | `MYSQL` 8.0.46 | Temurin 21 standalone and three-member single-primary Group Replication to both SQL targets. Async GTID promotion passed with a PostgreSQL target. | [Pipeline configuration](/docs/en/reference/pipeline-v3.html), [recovery runbook](/docs/en/reference/reconciliation-workflow.html) |
-| `MYSQL` 8.2.0 | Temurin 21 standalone and three-member single-primary Group Replication to both SQL targets. Async GTID promotion passed with a PostgreSQL target. | [Version-specific test commands](/docs/en/reference/pipeline-v3.html#mysql-820-source-regression) |
-| `MYSQL` 8.4.13 | Temurin 21 standalone, async GTID promotion and three-member single-primary Group Replication to both SQL targets. Binlog admission and the former group primary returning read-only have separate native proofs. | [8.4 binlog profile](/docs/en/reference/pipeline-v3.html#mysql-84-binlog-profile) |
+| `MYSQL` 8.2.0 | Temurin 21 standalone and three-member single-primary Group Replication to both SQL targets. Async GTID promotion passed with a PostgreSQL target. | [Version-specific test commands](/docs/en/reference/pipeline-v3.html#mysql-8-2-0-source-regression) |
+| `MYSQL` 8.4.13 | Temurin 21 standalone, async GTID promotion and three-member single-primary Group Replication to both SQL targets. Binlog admission and the former group primary returning read-only have separate native proofs. | [8.4 binlog profile](/docs/en/reference/pipeline-v3.html#mysql-8-4-binlog-profile) |
 | `POSTGRESQL` 17.12 | Experimental Temurin 21 profile. Synchronized-slot promotion resumes automatically and an earlier timeline is refused. Common-cut verification is pending. | [Source guide](/docs/en/reference/postgresql-source.html), [task example](/files/config/postgresql-source-v3.yml) |
 | `POSTGRESQL` 18.7 | Experimental Temurin 21 profile. PostgreSQL 17.12 materializes published stored generated columns as ordinary columns. | [Source guide and publication](/docs/en/reference/postgresql-source.html) |
 | `ORACLE` 26ai Free 23.26.4.0.0 | Temurin 21 with a separately supplied Oracle JDBC driver. Single-PDB Flashback and single-thread archived CDC to PostgreSQL. RAC and source promotion remain pending. | [Probe privileges and recovery](/docs/en/reference/oracle-source.html), [V3 example](/files/config/oracle-source-v3.yml) |
@@ -43,7 +43,7 @@ The V3 wizard reads `GET /api/capabilities` for source availability and limits d
 
 **Eclipse Temurin 21 LTS is the sole supported build and runtime.** The release uses Java 21 class files. Controller, Agent and Worker processes use Temurin 21 on Linux, Docker and Kubernetes. Record the actual JVM version, architecture and artifact SHA in each native run. Use the matching Temurin 21 fixture to verify a new source, destination, journal or recovery profile. [Reproduction commands](/docs/en/reference/performance.html)
 
-Each result in the source and destination tables applies to its original candidate and environment. Earlier runtime experiments and profiles such as `fiveJdkProcesses`, `postgresqlSourceRuntimeMatrix` and `postgresqlStoredGenerated` retain their original artifact hashes and reproduction commands in the archive. [Verification manifests](/files/docs/verification/baseline.json) · [Fixed historical snapshot](https://github.com/rivomesh/rivomesh/blob/419945c98f197bd6cc1c6cc3e75e9c6a4bb3188c/docs/verification/baseline.json)
+Each result in the source and destination tables applies to its original candidate and environment. Earlier runtime experiments and profiles such as `fiveJdkProcesses`, `postgresqlSourceRuntimeMatrix` and `postgresqlStoredGenerated` retain their original artifact hashes and reproduction commands in the archive. [Verification manifests](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json) · [Fixed historical snapshot](https://github.com/rivomesh/rivomesh/blob/419945c98f197bd6cc1c6cc3e75e9c6a4bb3188c/docs/verification/baseline.json)
 
 ## Management requests
 

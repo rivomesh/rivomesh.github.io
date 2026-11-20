@@ -59,7 +59,7 @@ CPU 和数据库内存限制分别作用于**每个**数据库容器，CPU 限�
 | LOCAL，宿主机挂载 | 24.83 秒 | 4,027 | 53.55 秒 | 2,241 | 23.13 秒 |
 | EXTERNAL，目标 PostgreSQL 独立 schema | 21.61 秒 | 4,628 | 46.25 秒 | 2,595 | 14.04 秒 |
 
-两组在全量后和增量后都通过源目标内容哈希核对。排查时，相同堆大小的 Worker 曾因单批载入过多事务耗尽内存。当前日志读取将每批事务前缀限制为 8 MiB，超过上限的首笔事务单独处理。PostgreSQL 压测的 UPDATE 将主键参数绑定为 BIGINT 后，执行计划从全表扫描切换为主键索引扫描。超大单事务和海量表需要另测。[实测报告和候选包](/files/docs/verification/baseline.json)
+两组在全量后和增量后都通过源目标内容哈希核对。排查时，相同堆大小的 Worker 曾因单批载入过多事务耗尽内存。当前日志读取将每批事务前缀限制为 8 MiB，超过上限的首笔事务单独处理。PostgreSQL 压测的 UPDATE 将主键参数绑定为 BIGINT 后，执行计划从全表扫描切换为主键索引扫描。超大单事务和海量表需要另测。[实测报告和候选包](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json)
 
 ## Temurin 21 多轮硬件参考
 
@@ -74,7 +74,7 @@ CPU 和数据库内存限制分别作用于**每个**数据库容器，CPU 限�
 | EXTERNAL | 1 | 2,558（2,469–2,763） | 2,925（2,784–3,030） | 1.00 秒（0.88–1.29） |
 | EXTERNAL | 2 | 3,143（1,554–3,382） | 3,038（2,169–3,472） | 0.36 秒（0.28–0.37） |
 
-12 轮全量与增量均核对了排序后的源、目标数据字节。追平判定同时核对首尾主键，因为仅完成更新的中间状态也可能满足最终行数和版本合计。全量计时包含 Worker 启动，增量计时包含源端写入。测量值适用于该负载、资源配额和宿主机。[各轮实测、镜像与候选包](/files/docs/verification/baseline.json)
+12 轮全量与增量均核对了排序后的源、目标数据字节。追平判定同时核对首尾主键，因为仅完成更新的中间状态也可能满足最终行数和版本合计。全量计时包含 Worker 启动，增量计时包含源端写入。测量值适用于该负载、资源配额和宿主机。[各轮实测、镜像与候选包](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json)
 
 ## 256 库映射与单笔大事务
 
@@ -94,7 +94,7 @@ python3 tests/catalog-benchmark.py \
   --output target/catalog-256 --schemas 256 --payload-bytes 8192 --cpus 2
 ```
 
-[内容摘要与实际夹具资源](/files/docs/verification/baseline.json)
+[内容摘要与实际夹具资源](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json)
 
 ## 慢目标与外部日志配额
 
@@ -110,7 +110,7 @@ python3 tests/catalog-benchmark.py --slow-target \
 
 夹具在目标暂停期间强杀 Worker，解除目标暂停后启动新 Worker。恢复后必须使用原日志世代及更高的租约纪元，追至源端的最终偏移和目标确认序号，并逐字节核对排序后的源目标数据及原快照 ID。恢复耗时从启动新 Worker 计至最终事务确认。
 
-使用同一 Temurin 21 候选包、每个服务 2 CPU 时，源端提交 768 条变更并写入 12,724,136 字节 binlog。采集序号 3 与目标确认序号 0 在 9 次观测、共 5.34 秒内保持稳定。观测到的日志逻辑峰值为 3,244,602 字节，配额为 3,538,944 字节。停滞点的日志表空间为 638,976 字节。强杀重启后 18.76 秒追到源端最终偏移及确认序号 24。64 行数据全部一致，32 个快照 ID 保持一致，回收后待确认日志逻辑字节归零。[候选包、实测与内容摘要](/files/docs/verification/baseline.json)
+使用同一 Temurin 21 候选包、每个服务 2 CPU 时，源端提交 768 条变更并写入 12,724,136 字节 binlog。采集序号 3 与目标确认序号 0 在 9 次观测、共 5.34 秒内保持稳定。观测到的日志逻辑峰值为 3,244,602 字节，配额为 3,538,944 字节。停滞点的日志表空间为 638,976 字节。强杀重启后 18.76 秒追到源端最终偏移及确认序号 24。64 行数据全部一致，32 个快照 ID 保持一致，回收后待确认日志逻辑字节归零。[候选包、实测与内容摘要](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json)
 
 ## 建立硬件标准
 
@@ -120,7 +120,7 @@ python3 tests/catalog-benchmark.py --slow-target \
 
 ## 工具验证范围
 
-早期进程与日志结果保留当时的制品、JVM 和验收范围。当前候选容量测试统一使用 Eclipse Temurin 21 LTS，比较结果时核对原硬件、负载和存储。[验收基线](/files/docs/verification/baseline.json) · [固定历史快照](https://github.com/rivomesh/rivomesh/blob/419945c98f197bd6cc1c6cc3e75e9c6a4bb3188c/docs/verification/baseline.json)
+早期进程与日志结果保留当时的制品、JVM 和验收范围。当前候选容量测试统一使用 Eclipse Temurin 21 LTS，比较结果时核对原硬件、负载和存储。[验收基线](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json) · [固定历史快照](https://github.com/rivomesh/rivomesh/blob/419945c98f197bd6cc1c6cc3e75e9c6a4bb3188c/docs/verification/baseline.json)
 
 ## 运行时与日志配置
 

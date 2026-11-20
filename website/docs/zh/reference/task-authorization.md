@@ -45,6 +45,6 @@ Linux/Docker使用上述配置，令牌通过环境提供。授权、角色和�
 
 Helm使用 `deploy/helm/rivomesh/values-task-scopes.yaml`，Secret引用与原RBAC示例相同；手动Kubernetes使用 `deploy/kubernetes/rivomesh-task-scopes.yaml`。这是默认清单/RBAC清单的替代配置，不是额外部署一份同名资源。自定义 `auth.users[].taskIds` 为数组，空列表会渲染为 `[]`；原生清单由相同Chart生成。修改后执行受控重启。真实Kubernetes/CSI验收仍未完成。
 
-授权失败进入全局[审计](/docs/zh/reference/security-audit.html)，由ADMIN查看。本地账号/授权编辑界面已实现，见[账号管理](/docs/zh/reference/account-management.html)；OIDC/SSO、分组及每个动作单独授权仍未完成；管理私有配置仍属于管理员操作。此功能隔离控制台任务访问，不提供数据库账号、OS文件或跨部署令牌隔离，也不意味着控制器已经支持多副本调度。
+授权失败进入全局[审计](/docs/zh/reference/security-audit.html)，由ADMIN查看。本地账号/授权编辑界面已实现，见[账号管理](/docs/zh/reference/account-management.html)；使用 [OIDC 登录](/docs/zh/reference/oidc-login.html)时，任务与节点权限来自绑定的本地账号。授权采用角色与任务范围，私有配置由管理员管理。此功能隔离控制台任务访问，不提供数据库账号、OS文件或跨部署令牌隔离，也不意味着控制器已经支持多副本调度。
 
 默认 CONFIG 仍使用启动配置快照；显式启用界面托管后，持久目录管理身份和授权，重启不复活旧配置令牌。授权变更对后续请求生效，已接受的异步操作可能继续。

@@ -299,10 +299,6 @@
       "title": "架构与实现",
       "items": [
         {
-          "route": "/docs/zh/reference/platform-design.html",
-          "title": "完整平台设计"
-        },
-        {
           "route": "/docs/zh/reference/global-control.html",
           "title": "跨节点任务控制"
         },
@@ -323,12 +319,8 @@
       "title": "验收与参考记录",
       "items": [
         {
-          "route": "/docs/zh/evidence/baseline.html",
-          "title": "首版验证基线 / Verification baseline"
-        },
-        {
-          "route": "/docs/zh/reference/validation.html",
-          "title": "验证记录汇总"
+          "route": "/docs/zh/start/verification.html",
+          "title": "已验证范围"
         }
       ]
     }
@@ -633,10 +625,6 @@
       "title": "Architecture & implementation",
       "items": [
         {
-          "route": "/docs/en/reference/platform-design.html",
-          "title": "Platform design"
-        },
-        {
           "route": "/docs/en/reference/global-control.html",
           "title": "Global task control"
         },
@@ -657,8 +645,8 @@
       "title": "Evidence & reference",
       "items": [
         {
-          "route": "/docs/en/reference/validation.html",
-          "title": "Validation records"
+          "route": "/docs/en/start/verification.html",
+          "title": "Verified environments and behavior"
         }
       ]
     }

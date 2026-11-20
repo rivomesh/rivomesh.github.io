@@ -14,11 +14,11 @@ title: 项目资料
 
 <PipelineFlow />
 
-[完整架构图](/docs/zh/start/architecture.html) · [采集原理](/docs/zh/start/replication.html) · [平台技术设计](/docs/zh/reference/platform-design.html) · [恢复与一致性](/docs/zh/reference/recovery.html) · [多节点部署](/docs/zh/start/multi-node.html) · [跨节点任务控制](/docs/zh/reference/global-control.html) · [当前实现范围](/docs/zh/reference/implementation-status.html)
+[完整架构图](/docs/zh/start/architecture.html) · [采集原理](/docs/zh/start/replication.html) · [恢复与一致性](/docs/zh/reference/recovery.html) · [多节点部署](/docs/zh/start/multi-node.html) · [跨节点任务控制](/docs/zh/reference/global-control.html) · [当前实现范围](/docs/zh/reference/implementation-status.html)
 
 ## 验证资料
 
-[验证记录汇总](/docs/zh/reference/validation.html) · [性能与运行时记录](/docs/zh/reference/performance.html) · [首版验证基线](/docs/zh/evidence/baseline.html) · [文档来源清单](/source-snapshot.json) · [发布包审查](/docs/zh/reference/release-inventory.html)
+[已验证范围](/docs/zh/start/verification.html) · [性能与运行时记录](/docs/zh/reference/performance.html) · [发布包与驱动依赖](/docs/zh/reference/release-inventory.html)
 
 这些资料用于核对特定环境和版本下的行为。实际部署需要结合自己的数据库版本、数据类型、负载和运维流程进行验证。
 

@@ -141,6 +141,6 @@ python3 tools/audit-retain-s3.py --verify-event-archive /private/retained-events
 
 ## 安全及验收边界
 
-本地链和注册表可检测普通损坏、缺行和新空库替换。离线核验依赖独立保管的最新可信检查点。签名验证检查点字节，旧检查点的签名也可能仍然有效。S3 在回执记录的到期时间前保护已确认的 `COMPLIANCE` 对象版本。运维方独立维护存储策略及最新可信序号。精确任务授权见[授权手册](/docs/zh/reference/task-authorization.html)，实际验证范围见[验收记录](/docs/zh/evidence/baseline.html)。
+本地链和注册表可检测普通损坏、缺行和新空库替换。离线核验依赖独立保管的最新可信检查点。签名验证检查点字节，旧检查点的签名也可能仍然有效。S3 在回执记录的到期时间前保护已确认的 `COMPLIANCE` 对象版本。运维方独立维护存储策略及最新可信序号。精确任务授权见[授权手册](/docs/zh/reference/task-authorization.html)，实际验证范围见[验收记录](/docs/zh/start/verification.html)。
 
 本地账号变更记录 ACCOUNT_COMMITTED，包含目标账号 subjectId 与目录版本；界面显示“任务 / 账号”。账号变更与审计待写记录原子保存，目录版本另有持久锚点，审计保留清理不删除该锚点；旧载荷导出保留原字节/哈希，见[账号管理](/docs/zh/reference/account-management.html)。

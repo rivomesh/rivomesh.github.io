@@ -9,7 +9,7 @@ sourcePath: docs/zh-CN/oracle-source.md
 
 [English](/docs/en/reference/oracle-source.html)
 
-Oracle 26ai 档案检查单一可写 CDB/PDB、归档模式、强制日志和最小补充日志、源身份及 Flashback 读取权限。归档采集到 PostgreSQL 和持久 SCN 恢复已在 ARM64 上使用 Oracle Free 23.26.4.0.0、Temurin 21 和 Oracle JDBC 23.26.4.0.0 复验。更多版本、类型、RAC 和切主继续由 SO-07 跟踪。
+Oracle 26ai 档案检查单一可写 CDB/PDB、归档模式、强制日志和最小补充日志、源身份及 Flashback 读取权限。归档采集到 PostgreSQL 和持久 SCN 恢复已在 ARM64 上使用 Oracle Free 23.26.4.0.0、Temurin 21 和 Oracle JDBC 23.26.4.0.0 复验。其他版本、类型、RAC 和切主需单独验证。
 
 1. 在 Rivomesh JAR 旁提供与运行时匹配的 Oracle JDBC JAR。[Oracle JDBC 兼容矩阵](https://docs.oracle.com/en/database/oracle/oracle-database/26/jjdbc/JDBC-getting-started.html)
 2. 为 CDB 根账号授予 `V_$DATABASE`、`V_$INSTANCE`、`V_$PDBS` 的读取权限，按所选 PDB 配置 `CONTAINER_DATA`。PDB 账号需要读取 `V_$PDBS` 中的自身身份，以及所选表的 `SELECT`、`FLASHBACK` 权限。[Oracle 容器数据权限](https://docs.oracle.com/en/database/oracle/oracle-database/26/dbseg/managing-commonly-and-locally-granted-privileges.html)
@@ -113,7 +113,7 @@ Oracle `DATE` 映射为 PostgreSQL `timestamp(6) without time zone`，保留年�
 
 此档案接受 1582-10-15 至 9999-12-31 的日期。采集识别到更早日期时，包括公元前日期，会报告 `ORACLE_DATE_VALUE_OUT_OF_RANGE`。遇到尚未支持的 LogMiner 日期格式则报告 `ORACLE_DATE_FORMAT_UNSUPPORTED`。中断后先核对源值、受影响的表和持久化位点，再重试。Oracle 的各类 `TIMESTAMP` 另行验证。
 
-用 `tests/oracle-source-probe.py --logminer --pipeline` 和冻结 JAR、Oracle JDBC 参数复现临时实库、强杀和恢复。加入 `--text-json` 验证严格文本 JSON，加入 `--date-values` 验证 Oracle DATE，均覆盖有主键、无主键表的 Flashback、归档 CDC 和恢复。[验收记录](/docs/zh/evidence/baseline.html#oracle-archived-cdc-and-restart)
+用 `tests/oracle-source-probe.py --logminer --pipeline` 和冻结 JAR、Oracle JDBC 参数复现临时实库、强杀和恢复。加入 `--text-json` 验证严格文本 JSON，加入 `--date-values` 验证 Oracle DATE，均覆盖有主键、无主键表的 Flashback、归档 CDC 和恢复。[验收记录](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#oracle-archived-cdc-and-restart)
 
 ## 整数虚拟列
 
@@ -125,10 +125,10 @@ Worker 在全量阶段读取历史 SCN 的虚拟值并独立核对。增量阶�
 
 在创建日志时开启此项。设置会改变源指纹。已有任务应先审阅表结构与断点迁移，再启用此功能。
 
-以冻结应用包及 Oracle JDBC 参数运行 `tests/oracle-source-probe.py --logminer --pipeline --virtual-columns --startup-timeout 480`。实库夹具检查前后值、无主键重复行、原快照续传，以及对不支持表达式的拒绝。 [验证证据](/docs/zh/evidence/baseline.html#oracle-virtual-column-feasibility)
+以冻结应用包及 Oracle JDBC 参数运行 `tests/oracle-source-probe.py --logminer --pipeline --virtual-columns --startup-timeout 480`。实库夹具检查前后值、无主键重复行、原快照续传，以及对不支持表达式的拒绝。 [验证证据](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#oracle-virtual-column-feasibility)
 
 ## Oracle 虚拟生成列可行性
 
 Oracle Free 26ai `23.26.4.0.0` 的目录显示虚拟 `NUMBER` 表达式 `"AMOUNT"*2` 没有物理段列。在同一历史 SCN，Flashback 读取了原生成值并保留无主键重复行数量。归档 redo 和 undo 包含同一行两次更新的基础值、SQL NULL 插入和无主键删除的前镜像，生成值未出现在归档语句中。独立的 `COLUMN_PRESENT` 探测对限定列标识返回 `ORA-00904`，无法使用该函数的存在标记。该次可行性试验确认了原生归档提供的操作数。
 
-使用已冻结的应用包和 Oracle JDBC 参数运行 `tests/oracle-source-probe.py --logminer --virtual-evidence --startup-timeout 480`。该档案在临时 Oracle 实例中运行。 [验证证据](/docs/zh/evidence/baseline.html#oracle-virtual-column-feasibility)
+使用已冻结的应用包和 Oracle JDBC 参数运行 `tests/oracle-source-probe.py --logminer --virtual-evidence --startup-timeout 480`。该档案在临时 Oracle 实例中运行。 [验证证据](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#oracle-virtual-column-feasibility)

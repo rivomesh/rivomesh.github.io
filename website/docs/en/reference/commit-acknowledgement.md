@@ -7,7 +7,7 @@ sourcePath: docs/en/commit-acknowledgement.md
 
 # Confirm an already committed destination transaction
 
-Status: RC-05 bounded profile accepted:UI,API,protocol6 admission,atomic ACK/receipt and cross-entry recovery. [Evidence](/docs/zh/evidence/baseline.html).[中文](/docs/zh/reference/commit-acknowledgement.html)
+The scoped profile verifies the console, API, protocol 6 admission, atomic ACK and receipt handling, and cross-entry recovery. [Evidence](/docs/en/start/verification.html).[中文](/docs/zh/reference/commit-acknowledgement.html)
 
 The initial profile uses a MySQL source and transactional PostgreSQL/MySQL destinations,retained complete raw/normalized transactions,and destinations written only by the synchronization service. Snapshot faults,unbounded/incomplete capture or decode failures,and other destination protocols cannot use this operation.
 

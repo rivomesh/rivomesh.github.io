@@ -8,7 +8,7 @@ sourcePath: docs/recovery.md
 # 恢复、主库切换与一致性
 
 本文描述 **v2 单 database、单目标核心**，不是 v3 快照和独立日志协议。English: [V2 recovery](/docs/en/reference/recovery.html)。已实现的 v3 多库多目标、可选日志、Web 和消息恢复见 [V3 手册](/docs/zh/reference/pipeline-v3.html) 与[消息手册](/docs/zh/reference/messaging-v3.html)。完整设计见
-[完整平台方案](/docs/zh/reference/platform-design.html)（[English](/docs/en/reference/platform-design.html)）。已确认的多库显式映射、同源多目标及独立恢复设计见
+[完整平台方案](/docs/zh/start/architecture.html)（[English](/docs/en/start/architecture.html)）。已确认的多库显式映射、同源多目标及独立恢复设计见
 [需求与决策](/docs/zh/reference/implementation-status.html)（[English](/docs/en/reference/implementation-status.html)）；
 业务次级 UNIQUE/GSI 转普通索引及接管约束恢复见
 [Gauss 索引策略](/docs/zh/reference/gaussdb-index-policy.html)（[English](/docs/en/reference/gaussdb-index-policy.html)）。剩余适配器、修复和接管范围见[实施状态](/docs/zh/reference/implementation-status.html)。

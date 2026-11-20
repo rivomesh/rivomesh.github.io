@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-20T00:21:51.376Z",
+  "capturedAt": "2026-11-20T00:52:17.990Z",
   "version": "0.1.0-SNAPSHOT",
   "sourceRepository": "https://github.com/rivomesh/rivomesh",
   "sourceCommit": "48aa0ac91b07e071e84209bbfeb13395cde3c2c0",
@@ -145,10 +145,6 @@
       "sha256": "b5e33871dfde43aa339a6c0487349988529f98bbc1ba213e6e898c1695f63e93"
     },
     {
-      "path": "docs/en/platform-design.md",
-      "sha256": "d3141544bbf477530094bf70054875abefb752057f238c5dd9422a05e6c9bd78"
-    },
-    {
       "path": "docs/en/postgresql-source.md",
       "sha256": "7af280e73b33f271dbb382f470c7df818b4b2e93740925c3f2e9d3bfbcd1bfd1"
     },
@@ -189,20 +185,8 @@
       "sha256": "1f1853e99a29fc89dbc162da0eba264c6d39cb9352109f82eac1d6caa9306e0a"
     },
     {
-      "path": "docs/en/validation.md",
-      "sha256": "12779eab68acd667caf48dfb94b3a06804db16eae82241540044c3059f7e9b7f"
-    },
-    {
       "path": "docs/recovery.md",
       "sha256": "bd8a834333af9aa3bf96658dffa14ac2a0f1874a38b83b523f4121744f362804"
-    },
-    {
-      "path": "docs/validation.md",
-      "sha256": "4dd91f0b5e41e9899ce41297a655974db3a2e6fa2db28949c7c23c69921cce40"
-    },
-    {
-      "path": "docs/verification/README.md",
-      "sha256": "6da867a26236da18e8da4a5a9d4d1ce3be3c1d15b70de4eee41eb596e0cf2e97"
     },
     {
       "path": "docs/zh-CN/account-management.md",
@@ -345,10 +329,6 @@
       "sha256": "163d79e1000b52dc5c538c08f703cdc27605c827125210618ad0d8418366783a"
     },
     {
-      "path": "docs/zh-CN/platform-design.md",
-      "sha256": "2cabb6a9a4d657f422edc4887fed543c166ba287971fbac814326ae2cc8801f7"
-    },
-    {
       "path": "docs/zh-CN/postgresql-source.md",
       "sha256": "f9fbe7cb97699874ee1d048bf9d9ddbb020d1761ddd2c1d0c105986acbab0c12"
     },
@@ -390,7 +370,6 @@
     "deploy/helm/rivomesh/values-managed.yaml",
     "config/platform-managed.yml",
     "config/classic-v3.yml",
-    "docs/verification/baseline.json",
     "config/clickhouse-v3.yml",
     "config/pipeline-v3.yml",
     "config/oracle-source-v3.yml",

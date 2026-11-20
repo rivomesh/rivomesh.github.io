@@ -44,4 +44,4 @@ title: 社区与贡献
 
 ## 许可证与发布状态
 
-许可条款与发行资源以[核心仓库](https://github.com/rivomesh/rivomesh)的说明为准。试用方式和环境要求见[下载与构建](/download.html)。
+首个正式版本仍在准备。当前可按[下载与构建](/download.html)在测试环境试用。许可证和正式发布信息以[核心项目](https://github.com/rivomesh/rivomesh)公布的说明为准。

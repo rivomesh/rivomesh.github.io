@@ -85,7 +85,7 @@ One run per journal mode used the same artifact, MySQL 8.4.13, PostgreSQL 17.12 
 | LOCAL, host bind mount | 24.83 s | 4,027 | 53.55 s | 2,241 | 23.13 s |
 | EXTERNAL, schema on target PostgreSQL | 21.61 s | 4,628 | 46.25 s | 2,595 | 14.04 s |
 
-Both runs matched source and target content hashes after snapshot and CDC. During diagnosis, a Worker with the same heap exhausted memory while loading an unbounded payload batch. The journal now limits fetched transaction prefixes to 8 MiB and processes an oversized first transaction alone. PostgreSQL also changed from a sequential scan to a primary-key index scan for the benchmark UPDATE when the BIGINT key was bound as BIGINT. Individual transaction limits and large-catalog scaling remain separate measurements. [Reports and exact artifact](/files/docs/verification/baseline.json)
+Both runs matched source and target content hashes after snapshot and CDC. During diagnosis, a Worker with the same heap exhausted memory while loading an unbounded payload batch. The journal now limits fetched transaction prefixes to 8 MiB and processes an oversized first transaction alone. PostgreSQL also changed from a sequential scan to a primary-key index scan for the benchmark UPDATE when the BIGINT key was bound as BIGINT. Individual transaction limits and large-catalog scaling remain separate measurements. [Reports and exact artifact](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json)
 
 ## Repeated Temurin 21 capacity reference
 
@@ -100,7 +100,7 @@ Each trial loaded 20,000 rows with a 256-byte payload, then checked 24,000 inser
 | EXTERNAL | 1 | 2,558 (2,469–2,763) | 2,925 (2,784–3,030) | 1.00 s (0.88–1.29) |
 | EXTERNAL | 2 | 3,143 (1,554–3,382) | 3,038 (2,169–3,472) | 0.36 s (0.28–0.37) |
 
-All 12 cases matched exact ordered source and target bytes after both phases. The visibility check includes the expected first and last IDs, because the intermediate update-only state can share the final row count and version sum. The measurements include worker startup for snapshots and source writes for CDC. They apply to this workload and the recorded host. [Trial values, image IDs and artifact SHA-256](/files/docs/verification/baseline.json)
+All 12 cases matched exact ordered source and target bytes after both phases. The visibility check includes the expected first and last IDs, because the intermediate update-only state can share the final row count and version sum. The measurements include worker startup for snapshots and source writes for CDC. They apply to this workload and the recorded host. [Trial values, image IDs and artifact SHA-256](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json)
 
 ## 256 mapped databases and a large transaction
 
@@ -120,7 +120,7 @@ python3 tests/catalog-benchmark.py \
   --output target/catalog-256 --schemas 256 --payload-bytes 8192 --cpus 2
 ```
 
-[Content hashes and exact fixture resources](/files/docs/verification/baseline.json)
+[Content hashes and exact fixture resources](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json)
 
 ## Slow destination and external journal quota
 
@@ -136,7 +136,7 @@ After all snapshots are acknowledged, the fixture pauses only the destination. I
 
 The fixture kills the Worker during the outage, unpauses the destination and starts a fresh Worker process. Recovery must reach the final source offset and target acknowledgment in the original journal generation at a newer epoch. It compares all ordered source and target row bytes and the original snapshot identifiers. The reported recovery time runs from Worker restart through the final acknowledged transaction.
 
-On the same Temurin 21 artifact with two CPUs per service, the source committed 768 changes and wrote 12,724,136 binlog bytes. Capture held at sequence 3 and target acknowledgment at 0 for 5.34 seconds over nine observations. The maximum observed logical size was 3,244,602 bytes against a 3,538,944-byte quota. Journal relations occupied 638,976 bytes at the stalled cut. After SIGKILL and restart, the Worker reached acknowledgment 24 and the final source offset in 18.76 seconds. All 64 rows matched, all 32 snapshot identifiers stayed identical, and collection reduced pending logical bytes to zero. [Exact artifact, measurements and content hashes](/files/docs/verification/baseline.json)
+On the same Temurin 21 artifact with two CPUs per service, the source committed 768 changes and wrote 12,724,136 binlog bytes. Capture held at sequence 3 and target acknowledgment at 0 for 5.34 seconds over nine observations. The maximum observed logical size was 3,244,602 bytes against a 3,538,944-byte quota. Journal relations occupied 638,976 bytes at the stalled cut. After SIGKILL and restart, the Worker reached acknowledgment 24 and the final source offset in 18.76 seconds. All 64 rows matched, all 32 snapshot identifiers stayed identical, and collection reduced pending logical bytes to zero. [Exact artifact, measurements and content hashes](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json)
 
 ## Building the hardware standard
 
@@ -153,7 +153,7 @@ journaled SQL target with the stated quota and workload.
 
 ## Harness validation scope
 
-The earlier process and journal runs retain their tested artifacts, runtimes and scope. Current candidate measurements use Eclipse Temurin 21 LTS. Compare capacity only with the recorded host, workload and storage. [Verification baseline](/files/docs/verification/baseline.json) · [Fixed historical snapshot](https://github.com/rivomesh/rivomesh/blob/419945c98f197bd6cc1c6cc3e75e9c6a4bb3188c/docs/verification/baseline.json)
+The earlier process and journal runs retain their tested artifacts, runtimes and scope. Current candidate measurements use Eclipse Temurin 21 LTS. Compare capacity only with the recorded host, workload and storage. [Verification baseline](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json) · [Fixed historical snapshot](https://github.com/rivomesh/rivomesh/blob/419945c98f197bd6cc1c6cc3e75e9c6a4bb3188c/docs/verification/baseline.json)
 
 ## Runtime and journal profiles
 

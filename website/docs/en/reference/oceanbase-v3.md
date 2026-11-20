@@ -11,7 +11,7 @@ sourcePath: docs/en/oceanbase-v3.md
 
 ## Current scope
 
-V3 configuration, CLI, fan-out workers and the bilingual wizard support OceanBase. The historical OceanBase CE 4.3.5.6 ARM64 and Java 8 profile passed native transactions and mixed MySQL-to-OceanBase-and-PostgreSQL snapshot, CDC and recovery. The MySQL-mode tenant profile remains EXPERIMENTAL. Oracle mode, OBProxy, multi-node and further Temurin 21 combinations require separate acceptance. [Verification](/docs/zh/evidence/baseline.html#oceanbase-mysql-tenant-recovery)
+V3 configuration, CLI, fan-out workers and the bilingual wizard support OceanBase. The historical OceanBase CE 4.3.5.6 ARM64 and Java 8 profile passed native transactions and mixed MySQL-to-OceanBase-and-PostgreSQL snapshot, CDC and recovery. The MySQL-mode tenant profile remains EXPERIMENTAL. Oracle mode, OBProxy, multi-node and further Temurin 21 combinations require separate acceptance. [Verification](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#oceanbase-mysql-tenant-recovery)
 
 `product: OCEANBASE` uses MySQL Connector/J 8.4.0 and `jdbc:mysql://`, normally port 2881. Connect to a **MySQL-mode user tenant**, usually with `rivomesh@business`, rather than `root@sys`. Every new connection verifies OceanBase identity, mode and a non-system tenant, then forces `ob_read_consistency=STRONG`. A MySQL wire version is not the OceanBase product version. Oracle mode, seekdb and other compatible products are outside this verified profile.
 

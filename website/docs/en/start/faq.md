@@ -12,7 +12,7 @@ Read the [introduction](introduction), then use the [quick start](quick-start) w
 
 ## What does V3 in the console mean?
 
-It identifies the task configuration format, `formatVersion: 3`, for multi-database, multi-target tasks. It is not a database version or a development stage you need to learn. Keep the default for new tasks; changing the number does not migrate an old task's persisted state.
+It identifies the task configuration format, `formatVersion: 3`, for multi-database, multi-target tasks. Keep the default for new tasks; changing the number does not migrate an old task's persisted state.
 
 ## Are other capture sources available?
 

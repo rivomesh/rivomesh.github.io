@@ -28,7 +28,7 @@ Linux/Docker use the same role configuration and independent persistent director
 
 Restart recovery,leases/epochs,authorization revocation and damaged/stale-backup refusal are current behavior rather than obsolete development compatibility.
 
-Replace superseded development implementations directly. Do not retain branches,configuration aliases or upgrade tests solely for old prerelease candidates. Documents describe current behavior;duplicate evidence/build snapshots converge on one [verification baseline](/docs/zh/evidence/baseline.html). Keep tests that validate current data correctness,recovery and security boundaries. Remove temporary containers,obsolete project images and intermediate builds once unused.
+Replace superseded development implementations directly. Do not retain branches,configuration aliases or upgrade tests solely for old prerelease candidates. Documents describe current behavior;duplicate evidence/build snapshots converge on one [verification baseline](/docs/en/start/verification.html). Keep tests that validate current data correctness,recovery and security boundaries. Remove temporary containers,obsolete project images and intermediate builds once unused.
 
 ## Back up and restore a LOCAL journal
 

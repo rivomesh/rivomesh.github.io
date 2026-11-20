@@ -27,7 +27,7 @@ MySQL 是数据权威源。同步期间目标仅由同步服务写入，业务�
 
 普通索引不能代替主键。不能把原来的全局 UNIQUE 擅自改成 `UNIQUE(email, distribution_key)` 并宣称等价：这允许不同分布键下重复 email，且仍然保留同步过程中可能不需要的约束。
 
-本专题适用于 openGauss/分布式 GaussDB。其他目标在约束不兼容时也已允许降级业务次级 UNIQUE，具体方式由各适配器声明；主键/候选定位键和内部正确性约束不能降级。分析引擎的 Unique Key/物化键也不属于可任意降级的次级约束，详见[平台设计](/docs/zh/reference/platform-design.html)。
+本专题适用于 openGauss/分布式 GaussDB。其他目标在约束不兼容时也已允许降级业务次级 UNIQUE，具体方式由各适配器声明；主键/候选定位键和内部正确性约束不能降级。分析引擎的 Unique Key/物化键也不属于可任意降级的次级约束，详见[平台设计](/docs/zh/start/architecture.html)。
 
 ## 启动前审阅索引计划
 
@@ -155,7 +155,7 @@ CREATE INDEX ix_customer_email ON app.customer (email);
 
 ## FAQ
 
-**去掉 UNIQUE，重试会多插入一行吗？** 本专题的有键方案按主键和事务断点幂等处理；email 普通索引不参与去重。无主键已纳入首版需求，但当前代码仍拒绝：需实现候选键或一致基线/多重集方案，不能直接套用有键保证，详见[平台设计](/docs/zh/reference/platform-design.html)。
+**去掉 UNIQUE，重试会多插入一行吗？** 本专题的有键方案按主键和事务断点幂等处理；email 普通索引不参与去重。无主键已纳入首版需求，但当前代码仍拒绝：需实现候选键或一致基线/多重集方案，不能直接套用有键保证，详见[平台设计](/docs/zh/start/architecture.html)。
 
 **多个源行 email 相同是否永远是错误？** 不是。NULL、源/目标比较语义差异以及追平前的混合扫描状态都要区分。用源定义及约定边界判断，不自动删除“重复”行。
 
@@ -178,7 +178,7 @@ CREATE INDEX ix_customer_email ON app.customer (email);
 
 商用验收要记录分布式 GaussDB 的确切版本、兼容模式、GTM 模式、CN/DN 拓扑及 JDBC 驱动。在一次性测试库用实际写入端分别验证普通业务 `UNIQUE(email)`、建模的业务 GSI、键列换序的复合定位 GSI 和显式全局主键。通过 JDBC 目录核对两类业务索引均为非唯一普通索引，名称和列顺序符合计划，并确认两类身份 GSI 均在建表前停止。对声明分布上的代表查询留存 `EXPLAIN`。随后执行断连重放，同时核验真实主键约束与写入断点。[GaussDB CREATE GLOBAL INDEX](https://support.huaweicloud.com/intl/zh-cn/distributed-devg-v8-gaussdb/gaussdb-12-0546.html) · [GaussDB GSI 查询计划](https://support.huaweicloud.com/intl/zh-cn/distributed-devg-v8-gaussdb/gaussdb-12-1729.html)
 
-当前 [验证记录](/docs/zh/reference/validation.html) 不包含以上新增能力；不能据此标记索引转换或商业分布式 GaussDB 已通过验收。
+当前 [验证记录](/docs/zh/start/verification.html) 不包含以上新增能力；不能据此标记索引转换或商业分布式 GaussDB 已通过验收。
 
 
 Doris目标的业务UNIQUE/GSI转换为非唯一倒排索引，内部UNIQUE KEY只保护源行身份；不等于GaussDB普通B树，也不保留业务唯一性、排序规则或全局路由。类型、布局和接管限制见[Doris手册](/docs/zh/reference/doris-v3.html)。

@@ -24,7 +24,7 @@ export const homeCopy = {
    ['按目标确认与恢复','事务型目标提交业务数据与本地断点；消息目标为确认后的至少一次投递，消费者需去重。','messaging-v3'],
    ['核对共同检查点','在共同暂停点比较数据、审阅差异与修复计划。指定 SQL 目标还可按审批复核历史跳过留下的缺口。','gap-verification']
   ],
-  clusterTitle:'多节点管理与恢复',clusterText:'集中查看节点与任务，共享账号、会话和审计记录。可将管理入口与执行 Agent 分开部署，由指定 Agent 执行持久化命令。',clusterScope:'符合条件的新任务可自动选择 Agent。已冻结的停止任务可在指定 PostgreSQL 存储组合下审批移交。',clusterCta:'部署条件与边界',architecture:'完整架构',evidence:'测试与验收记录',limits:'已知限制',
+  clusterTitle:'多节点管理与恢复',clusterText:'集中查看节点与任务，共享账号、会话和审计记录。可将管理入口与执行 Agent 分开部署，由指定 Agent 执行持久化命令。',clusterScope:'符合条件的新任务可自动选择 Agent。已冻结的停止任务可在指定 PostgreSQL 存储组合下审批移交。',clusterCta:'部署条件与边界',architecture:'完整架构',evidence:'已验证范围',limits:'已知限制',
   startLabel:'开始试用',startTitle:'从一个测试库开始。',startText:'选择源码构建或 Docker Compose，启动自己的控制台。首次使用独立空目标，先完成小规模同步与恢复验证。',startNote:'打开 http://127.0.0.1:8080，使用自己设置的令牌登录。数据库日志、账号权限及 HTTPS 配置见快速开始。',download:'源码与下载说明',
   trustTitle:'一起改进数据同步。',trustText:'查看实现与验证记录，反馈使用问题，或参与连接器和文档贡献。',trustLinks:['GitHub 源码','问题反馈','贡献指南','实现状态','版本与发布','验证档案']
  },
@@ -55,6 +55,6 @@ export const homeCopy = {
   ],
   clusterTitle:'Multi-node management & recovery',clusterText:'Monitor nodes and tasks with shared accounts, sessions and audit records. Deploy management separately from execution Agents and route durable commands to the task owner.',clusterScope:'New tasks can select an eligible Agent automatically. Stopped tasks with a durably frozen writer can change owners after approval on the documented PostgreSQL storage profile.',clusterCta:'Deployment requirements & scope',architecture:'Architecture reference',evidence:'Acceptance records',limits:'Known limitations',
   startLabel:'Get started',startTitle:'Start with a small test database.',startText:'Build from source or use Docker Compose to start your own console. Use a dedicated empty target and verify a small pipeline before expanding the scope.',startNote:'Open http://127.0.0.1:8080 and sign in with your own token. See the quick start for database logging, privileges and HTTPS settings.',download:'Source & download options',
-  trustTitle:'Help improve database replication.',trustText:'Explore the implementation and verification records, report an issue, or contribute connectors and documentation.',trustLinks:['Source on GitHub','Report an issue','Contribute','Implementation status','Versions & downloads','Verification archives']
+  trustTitle:'Help improve database replication.',trustText:'Explore the implementation and verification records, report an issue, or contribute connectors and documentation.',trustLinks:['Source on GitHub','Report an issue','Contribute','Implementation status','Versions & downloads','Verified environments']
  }
 }

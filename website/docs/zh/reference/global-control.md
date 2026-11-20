@@ -9,7 +9,7 @@ sourcePath: docs/zh-CN/global-control.md
 
 [English](/docs/en/reference/global-control.html)
 
-2026-11-17：已接入可选的固定 owner 全局模式，包括公开 HTTP、管理界面、共享配置、持久命令和远程只读查询。默认仍为本机模式。CP-02/03 保持 PARTIAL：旧任务导入、完整业务工作流、容量和故障矩阵尚未全部验收；这不是自动跨节点接管。
+任务控制默认为本机模式。启用固定 Agent 的全局模式后，可在多个入口查看共享配置和只读状态，并将持久命令发给任务所有者。容量、迁移与故障恢复请按[多节点指南](/docs/zh/start/multi-node.html)核对适用档案。
 
 ## 启用条件
 
@@ -42,7 +42,7 @@ helm upgrade --install rivomesh-global-b deploy/helm/rivomesh --namespace rivome
 
 全局 maximumTasks/maximumCommands 与每节点 maxTasks/maxRunningTasks 是不同预算。当前默认全局任务上限 10000、活动命令上限 1000，配置范围见示例/Schema；这只是资源保护参数，不是硬件吞吐承诺。查询请求最多 512KiB、响应 1MiB，有效期 1–60 秒；线程池和保留容量均有界。
 
-全局任务列表支持按精确任务 ID 或执行节点 ID 筛选，也可以同时使用两项。`GET /api/tasks?ownerNodeId=agent-a&taskId=orders&limit=20` 先应用当前授权和筛选条件，再计算总数及下一页。使用 `after` 时保持原筛选条件。在任务详情中选择目标可单独查看该目标的状态、SQL 故障及待确认日志事务。积压数是观察时已采集序号与安全覆盖序号的差值，观察过期时隐藏。消费者完成时间需单独度量。[验收证据](/docs/zh/evidence/baseline.html#global-task-filters-and-destination-backlog)
+全局任务列表支持按精确任务 ID 或执行节点 ID 筛选，也可以同时使用两项。`GET /api/tasks?ownerNodeId=agent-a&taskId=orders&limit=20` 先应用当前授权和筛选条件，再计算总数及下一页。使用 `after` 时保持原筛选条件。在任务详情中选择目标可单独查看该目标的状态、SQL 故障及待确认日志事务。积压数是观察时已采集序号与安全覆盖序号的差值，观察过期时隐藏。消费者完成时间需单独度量。[验收证据](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#global-task-filters-and-destination-backlog)
 
 管理员可在 **诊断记录** 中从 **采集端** 切换到单个目标。接口为 `GET /api/tasks/orders/diagnostics?subscriptionId=warehouse&limit=20`。记录包括目标故障暂停、重试及重试结束的观察时间。采集和目标事件分开保存在执行 Agent 的私有日志目录内。同一任务的目标共用两段各 64 KiB 的滚动文件，频繁故障时早期记录可能轮换。使用 `after` 翻页时保持相同目标。记录已脱敏，只包含事件类型及元数据。重试结束表示 Worker 已观察到恢复，可用目标确认序号及待确认数量判断投递进度。
 

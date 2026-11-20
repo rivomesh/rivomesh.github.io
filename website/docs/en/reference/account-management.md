@@ -25,7 +25,7 @@ Once activated, `controller.json` is authoritative, even if configuration still 
 
 To remove bootstrap credentials after initialization, use [platform-managed.yml](/files/config/platform-managed.yml): `accessMode: MANAGED`, no `authToken/users`, same controller/task directories. An empty directory without an administrator fails startup; it never creates anonymous access.
 
-Linux and Docker deployments reuse the persistent directory. The managed Helm and native Kubernetes examples require initialized Controller storage and matching audit data. Reuse the initialized PVC when replacing the Pod. See the deployment evidence for the tested storage and rollout profiles. [Helm values](/files/deploy/helm/rivomesh/values-managed.yaml) · [Native YAML](/files/deploy/kubernetes/rivomesh-managed.yaml) · [Deployment evidence](/docs/zh/evidence/baseline.html#lg-06-live-kubernetes-rwo-csi)
+Linux and Docker deployments reuse the persistent directory. The managed Helm and native Kubernetes examples require initialized Controller storage and matching audit data. Reuse the initialized PVC when replacing the Pod. See the deployment evidence for the tested storage and rollout profiles. [Helm values](/files/deploy/helm/rivomesh/values-managed.yaml) · [Native YAML](/files/deploy/kubernetes/rivomesh-managed.yaml) · [Deployment evidence](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#lg-06-live-kubernetes-rwo-csi)
 
 ## Tokens and uncertain responses
 
@@ -87,6 +87,6 @@ Common409 codes: `ACCOUNT_LAST_ADMIN`, `ACCOUNTS_REVISION_CHANGED`, `REQUEST_ID_
 
 **Which store determines whether I can sign in?** With local managed access, check the directory and audit anchor in the Controller's persistent storage. With shared access, check the shared SQL authority from either Controller. [Shared access](/docs/en/reference/shared-access.html)
 
-The verification archive tracks account grants, session persistence, revocation and the tested deployment profiles. [Verification archive](/docs/zh/evidence/baseline.html)
+The verification archive tracks account grants, session persistence, revocation and the tested deployment profiles. [Verification archive](/docs/en/start/verification.html)
 
 See [browser sessions](/docs/en/reference/browser-sessions.html) for reload recovery, sign-out and invalidation of all sessions after directory changes.

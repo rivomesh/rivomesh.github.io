@@ -20,9 +20,9 @@ The UI supports destination phase summaries,original incremental retry,snapshot-
 
 Activation can fail before a transaction is identified,so no invented failed sequence is shown. Legacy pauses without trusted phase records remain Unknown. Corrupt diagnostics are visibly unavailable and raw inspection refuses. Equal SQLStates do not make activation and apply faults equivalent.
 
-Existing global task queries carry summaries through different management entries. Summaries contain only phase,sequence and failure epoch;no event IDs,row values,SQL or credentials. Existing task-view grants apply. Ordinary status does not gain raw-value access. Initial preparation/snapshot have dedicated diagnostics;legacy records may remain Unknown. Source diagnostics appear separately at task level. See [native snapshot evidence](/docs/zh/evidence/baseline.html).
+Existing global task queries carry summaries through different management entries. Summaries contain only phase,sequence and failure epoch;no event IDs,row values,SQL or credentials. Existing task-view grants apply. Ordinary status does not gain raw-value access. Initial preparation/snapshot have dedicated diagnostics;legacy records may remain Unknown. Source diagnostics appear separately at task level. See [native snapshot evidence](/docs/en/start/verification.html).
 
-[Accepted scope and evidence](/docs/zh/evidence/baseline.html) cover internal inspection,two-entry real SQL fault/restart and five-JRE foundation contracts;they do not accept the complete manual recovery workflow.
+[Accepted scope and evidence](/docs/en/start/verification.html) cover internal inspection,two-entry real SQL fault/restart and five-JRE foundation contracts;they do not accept the complete manual recovery workflow.
 
 ## Recovery by target product
 
@@ -80,6 +80,6 @@ This low-level inspection is not an execution plan;managed access adds [durable 
 
 **Can Unknown be treated as an apply error?** No. Legacy records,corrupt diagnostics and capture/decode faults do not establish a known skippable transaction. Inspect source history,retention and historical configuration first.
 
-**What if required binlogs were purged or cannot be decoded?** Destination resume cannot recreate source history. Restore logs,use a qualified source retaining required history or prepare a new baseline/rebuild. Capture-side range exclusion remains open under RC-04.
+**What if required binlogs were purged or cannot be decoded?** Destination resume cannot recreate source history. Restore logs,use a qualified source retaining required history or prepare a new baseline/rebuild. For the scoped MySQL source transaction exclusion, see [capture recovery](/docs/en/reference/capture-recovery.html).
 
 **Can I patch destination rows directly?** Synchronization assumes exclusive destination writes. Unplanned edits can affect constraints,keyless identities and replay. To edit approved rows while the task is paused, use [typed correction](/docs/en/reference/manual-correction.html).

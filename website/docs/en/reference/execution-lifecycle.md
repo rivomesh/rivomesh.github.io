@@ -9,7 +9,7 @@ sourcePath: docs/en/execution-lifecycle.md
 
 [中文](/docs/zh/reference/execution-lifecycle.html) · [Global control](/docs/en/reference/global-control.html)
 
-The protocol4 separated profile passes348app/actual-JAR tests,76DOM and5x152controls,PG/MySQL stores,actual multi-database/two-target CDC,all-controller loss,store outage,pending accepting-entry recovery,nonroot processes and SQL role races.Automatic Agent takeover and complete journal/adapter/JDK matrices remain open. [Evidence](/docs/zh/evidence/baseline.html).
+The protocol4 separated profile passes348app/actual-JAR tests,76DOM and5x152controls,PG/MySQL stores,actual multi-database/two-target CDC,all-controller loss,store outage,pending accepting-entry recovery,nonroot processes and SQL role races.Automatic Agent takeover and complete journal/adapter/JDK matrices remain open. [Evidence](/docs/en/start/verification.html).
 
 | Configuration role | Registry role | Responsibility |
 |---|---|---|
@@ -80,7 +80,7 @@ If there is no independent database available for control metadata, deploy stand
 3. For a coordinated backup, quiesce the tasks and management writes. Back up the control database, all private node directories and keys, external journals if configured, and target business/checkpoint stores at the approved cut. Use a database-consistent backup method for each store. Preserve permissions and volume identity. Restore a matched set in an isolated environment, verify the node/configuration identities and each target receipt, and only then resume. [Recovery and cutover](/docs/en/reference/reconciliation-workflow.html)
 4. Before changing the release, runtime or drivers, record the active artifact, configurations and checkpoints. Keep the same node IDs, paths and keys during the rehearsal. Use separate validation for deployments with mixed versions or cross-node volume replacement. The initial release procedure uses a controlled stop and restart. [First-release configuration](/docs/en/reference/first-release.html) · [Compatibility matrix](/docs/en/reference/compatibility.html)
 
-The live evidence includes Helm and native YAML on a two-node Kubernetes cluster, configuration and Secret replacement, local CSI remount and Worker-node interruption. Cross-node CSI availability and automatic Agent relocation have separate acceptance. [Kubernetes live evidence](/docs/zh/evidence/baseline.html)
+The live evidence includes Helm and native YAML on a two-node Kubernetes cluster, configuration and Secret replacement, local CSI remount and Worker-node interruption. Cross-node CSI availability and automatic Agent relocation have separate acceptance. [Kubernetes live evidence](/docs/en/start/verification.html)
 
 ## Recovery FAQ
 
@@ -90,7 +90,7 @@ The live evidence includes Helm and native YAML on a two-node Kubernetes cluster
 
 **Why does the Agent have no login page?** Its HTTP endpoint serves GET /healthz and /readyz only;administration paths return404 AGENT_PROBE_ONLY. Use management entries;typed owner queries travel through shared storage.
 
-**What if the Agent exits or is killed?** Its Workers are affected;management shows pending/unknown. Restore original Agent directory,nodeId and keys;queued offline STOP is processed before restoring old RUNNING intent. Expiry does not prove process termination. Automatic takeover/stale-Worker fencing remain CP-04.
+**What if the Agent exits or is killed?** Its Workers are affected;management shows pending/unknown. Restore original Agent directory,nodeId and keys;queued offline STOP is processed before restoring old RUNNING intent. Expiry does not prove process termination. For stopped tasks with a frozen writer, follow the scoped [Agent handoff procedure](/docs/en/reference/global-control.html).
 
 **Are Agent secrets least-privilege isolation?** No. Agents remain in the trusted control domain;Workers filter controller environment variables. Roles do not establish tenant/OS isolation. Least-secret/external-identity work remains separately tracked.
 

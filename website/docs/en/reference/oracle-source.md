@@ -9,7 +9,7 @@ sourcePath: docs/en/oracle-source.md
 
 [中文](/docs/zh/reference/oracle-source.html)
 
-The Oracle 26ai profile verifies one writable CDB/PDB, archive mode, force and minimal supplemental logging, source identity and Flashback read access. Archived capture and durable SCN recovery to PostgreSQL were revalidated on ARM64 with Oracle Free 23.26.4.0.0, Temurin 21 and Oracle JDBC 23.26.4.0.0. SO-07 tracks the remaining versions, types, RAC and failover.
+The Oracle 26ai profile verifies one writable CDB/PDB, archive mode, force and minimal supplemental logging, source identity and Flashback read access. Archived capture and durable SCN recovery to PostgreSQL were revalidated on ARM64 with Oracle Free 23.26.4.0.0, Temurin 21 and Oracle JDBC 23.26.4.0.0. Other versions, types, RAC and failover need separate verification.
 
 1. Provide an Oracle JDBC JAR compatible with your Java runtime alongside the Rivomesh JAR. [Oracle JDBC compatibility](https://docs.oracle.com/en/database/oracle/oracle-database/26/jjdbc/JDBC-getting-started.html)
 2. Give the CDB-root account read access to `V_$DATABASE`, `V_$INSTANCE` and the selected PDB in `V_$PDBS`. Configure its `CONTAINER_DATA` visibility for that PDB. Give the PDB account read access to its `V_$PDBS` identity and `SELECT` and `FLASHBACK` on the declared tables. [Oracle container data privileges](https://docs.oracle.com/en/database/oracle/oracle-database/26/dbseg/managing-commonly-and-locally-granted-privileges.html)
@@ -113,7 +113,7 @@ Oracle `DATE` maps to PostgreSQL `timestamp(6) without time zone` and preserves 
 
 The profile accepts dates from 1582-10-15 through 9999-12-31. A value before that range, including BCE, raises `ORACLE_DATE_VALUE_OUT_OF_RANGE` when its era and format can be decoded. Unexpected LogMiner date masks raise `ORACLE_DATE_FORMAT_UNSUPPORTED`. Inspect the source values, the affected table and the durable position before retrying an interrupted run. Oracle's `TIMESTAMP` variants require a separate profile.
 
-Run `tests/oracle-source-probe.py --logminer --pipeline` with the frozen JAR and Oracle JDBC arguments to reproduce the temporary real databases and actual SIGKILL/restart. Add `--text-json` for strict textual JSON or `--date-values` for Oracle DATE, covering Flashback, archived CDC and recovery for both keyed and keyless tables. [Evidence](/docs/zh/evidence/baseline.html#oracle-archived-cdc-and-restart)
+Run `tests/oracle-source-probe.py --logminer --pipeline` with the frozen JAR and Oracle JDBC arguments to reproduce the temporary real databases and actual SIGKILL/restart. Add `--text-json` for strict textual JSON or `--date-values` for Oracle DATE, covering Flashback, archived CDC and recovery for both keyed and keyless tables. [Evidence](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#oracle-archived-cdc-and-restart)
 
 ## Integer virtual columns
 
@@ -125,10 +125,10 @@ The Worker reads the original Flashback value and verifies it against the same a
 
 Enable the setting when creating the journal. It changes the source fingerprint. An existing task needs a separately reviewed schema and checkpoint migration before it can adopt this profile.
 
-Run `tests/oracle-source-probe.py --logminer --pipeline --virtual-columns --startup-timeout 480` with the frozen application and Oracle JDBC arguments. The fixture checks old and new outputs, keyless duplicates, restart from the same snapshot IDs and unsupported expression refusal. Use `--virtual-evidence` for the separate dictionary, Flashback and archived operand inspection. [Verification evidence](/docs/zh/evidence/baseline.html#oracle-virtual-column-feasibility)
+Run `tests/oracle-source-probe.py --logminer --pipeline --virtual-columns --startup-timeout 480` with the frozen application and Oracle JDBC arguments. The fixture checks old and new outputs, keyless duplicates, restart from the same snapshot IDs and unsupported expression refusal. Use `--virtual-evidence` for the separate dictionary, Flashback and archived operand inspection. [Verification evidence](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#oracle-virtual-column-feasibility)
 
 ## Oracle virtual column feasibility
 
 Oracle Free 26ai `23.26.4.0.0` exposed the virtual `NUMBER` definition `"AMOUNT"*2` without a physical segment column. A native Flashback read returned the original generated values and duplicate multiplicity at one SCN. The archived redo and undo contained the physical operands for two successive updates of the same row, a SQL NULL insert and a keyless delete. They omitted the generated value. The independent `COLUMN_PRESENT` probe returned `ORA-00904` for the qualified operand, so its presence flags are unavailable. That feasibility run established which operand images are available in native archives.
 
-Use `tests/oracle-source-probe.py --logminer --virtual-evidence --startup-timeout 480` with the frozen application and Oracle JDBC arguments. This profile inspects a disposable native database. [Evidence](/docs/zh/evidence/baseline.html#oracle-virtual-column-feasibility)
+Use `tests/oracle-source-probe.py --logminer --virtual-evidence --startup-timeout 480` with the frozen application and Oracle JDBC arguments. This profile inspects a disposable native database. [Evidence](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#oracle-virtual-column-feasibility)

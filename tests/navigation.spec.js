@@ -40,7 +40,7 @@ describe('persistent documentation navigation',()=>{
   await wrapper.setProps({active:'/docs/zh/reference/pipeline-v3.html'});await nextTick()
   expect(wrapper.get('[data-group="operations"] .sidebar-group-heading').attributes('aria-expanded')).toBe('false');expect(panel.scrollTop).toBe(377)
   wrapper.unmount();wrappers=wrappers.filter(w=>w!==wrapper)
-  wrapper=create(DocSidebar,{props:{...props,active:'/docs/zh/reference/platform-design.html'}});await flushPromises();await nextTick()
+  wrapper=create(DocSidebar,{props:{...props,active:'/docs/zh/reference/implementation-status.html'}});await flushPromises();await nextTick()
   expect(wrapper.get('[data-sidebar-scroll]').element.scrollTop).toBe(377)
   expect(wrapper.get('[data-group="operations"] .sidebar-group-heading').attributes('aria-expanded')).toBe('false')
  })

@@ -27,7 +27,7 @@ MySQL is authoritative. Only the synchronization service writes to targets durin
 
 An ordinary index cannot replace a PK. Replacing a global UNIQUE with `UNIQUE(email, distribution_key)` is not equivalent: it allows duplicate email across distribution keys and still enforces a constraint that may be unnecessary during synchronization.
 
-This topic covers openGauss/distributed GaussDB. Other adapters may also relax incompatible business secondary UNIQUE constraints under declared policies. Preserve PK/candidate identity and internal correctness; analytical Unique Key/materialization identity is not an optional secondary constraint. See [platform design](/docs/en/reference/platform-design.html).
+This topic covers openGauss/distributed GaussDB. Other adapters may also relax incompatible business secondary UNIQUE constraints under declared policies. Preserve PK/candidate identity and internal correctness; analytical Unique Key/materialization identity is not an optional secondary constraint. See [platform design](/docs/en/start/architecture.html).
 
 ## Review the index plan before starting
 
@@ -156,7 +156,7 @@ After application writes begin, the original one-way sync service cannot safely 
 
 ## FAQ
 
-**Will retries insert extra rows without UNIQUE?** The keyed design uses PKs and transaction checkpoints; an ordinary email index does not deduplicate. No-PK support is now a first-release requirement but remains unimplemented. It needs candidate identity or consistent-baseline/multiset handling, not the keyed guarantee; see [platform design](/docs/en/reference/platform-design.html).
+**Will retries insert extra rows without UNIQUE?** The keyed design uses PKs and transaction checkpoints; an ordinary email index does not deduplicate. No-PK support is now a first-release requirement but remains unimplemented. It needs candidate identity or consistent-baseline/multiset handling, not the keyed guarantee; see [platform design](/docs/en/start/architecture.html).
 
 **Are repeated email values always errors?** No. Distinguish NULLs, comparison differences, and pre-catch-up mixed scan states. Judge against source definitions at a declared boundary; do not automatically delete rows.
 
@@ -179,7 +179,7 @@ After application writes begin, the original one-way sync service cannot safely 
 
 For commercial acceptance, record the distributed GaussDB build, compatibility mode, GTM mode, CN/DN topology and JDBC driver. In a disposable database, run the real sink against a plain business `UNIQUE(email)`, a modeled business GSI, a GSI on reordered composite identity columns and an explicitly global primary index. Use JDBC catalog metadata to verify that both business plans create nonunique ordinary indexes with the planned names and column order. Verify that both identity GSI cases stop before table creation. Capture `EXPLAIN` for representative lookups on the declared distribution. Then disconnect and replay, and check primary-key enforcement and the sink checkpoint together. [GaussDB CREATE GLOBAL INDEX](https://support.huaweicloud.com/intl/zh-cn/distributed-devg-v8-gaussdb/gaussdb-12-0546.html) · [GaussDB GSI query-plan example](https://support.huaweicloud.com/intl/zh-cn/distributed-devg-v8-gaussdb/gaussdb-12-1729.html)
 
-The current [validation record](/docs/en/reference/validation.html) excludes these new capabilities. It must not be used to claim index conversion or commercial distributed GaussDB acceptance.
+The current [validation record](/docs/en/start/verification.html) excludes these new capabilities. It must not be used to claim index conversion or commercial distributed GaussDB acceptance.
 
 
 Doris business UNIQUE/GSI conversion uses nonunique inverted indexes; its internal UNIQUE KEY protects source row identity only. This is not GaussDB B-tree equivalence and does not preserve business uniqueness, collation or global routing. See the [Doris handbook](/docs/en/reference/doris-v3.html).

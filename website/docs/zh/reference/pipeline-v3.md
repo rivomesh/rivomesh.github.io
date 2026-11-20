@@ -85,7 +85,7 @@ MySQL 8.4 使用无标签 GTID、ROW binlog 和 FULL 行镜像。预检拒绝匿
 
 设置 `source.topology: ASYNC`，在 `source.nodes` 中配置同一 GTID 复制拓扑的主库与备库。由数据库高可用服务隔离故障主库，提升已追平的备库。Rivomesh 核验新主可用的 GTID 历史并从持久断点恢复连接。备库仍为只读或复制出现 I/O 错误时，排查数据库拓扑并保留原日志和目标断点。
 
-Java 21 实库档案使用 MySQL 8.4.13 异步 GTID 主备、外部 PostgreSQL 日志、两个管理入口和 PostgreSQL、MySQL 目标。强杀原主后，两入口显示采集中断，两个目标断点保持原值。外部流程完成提升后，Rivomesh 把新主的 GTID 自动投递到两个目标，并复用配置修订、日志代次和快照 ID。复现命令为 `python3 tests/global-control-pipeline.py --separate-execution --mysql-async-failover --source-expected-version 8.4.13 --artifact <发布包> --output target/mysql-async-proof`。[验收归档](/docs/zh/evidence/baseline.html)
+Java 21 实库档案使用 MySQL 8.4.13 异步 GTID 主备、外部 PostgreSQL 日志、两个管理入口和 PostgreSQL、MySQL 目标。强杀原主后，两入口显示采集中断，两个目标断点保持原值。外部流程完成提升后，Rivomesh 把新主的 GTID 自动投递到两个目标，并复用配置修订、日志代次和快照 ID。复现命令为 `python3 tests/global-control-pipeline.py --separate-execution --mysql-async-failover --source-expected-version 8.4.13 --artifact <发布包> --output target/mysql-async-proof`。[验收归档](/docs/zh/start/verification.html)
 
 另一组 Temurin 21 实测使用同一发行包，以 PostgreSQL 17.12 为目标和日志库，分别运行 MySQL 5.7.44、8.0.46、8.2.0 和 8.4.13。用例终止原 Worker、制造真实复制 SQL 线程 1032 错误并拒绝不健康副本，再恢复复制并关停原主。外部提升后，核对原快照 ID 和新写入目标的行。清除尚未采集的 binlog 区间时，采集停在原日志断点。构建发行 JAR 和测试类后，用 `RIVOMESH_TEST_PREBUILT=1 SYNC_V3_HA_POSTGRES_ONLY=1 SYNC_MYSQL_IMAGE=mysql:8.2.0 bash tests/v3-ha-run.sh` 复现。5.7 另设 `SYNC_MYSQL57=1 SYNC_MYSQL57_IMAGE=mysql:5.7`。
 
@@ -102,13 +102,13 @@ python3 tests/mysql-group-failover-native.py --artifact rivomesh.jar \
   --java "$JAVA_HOME/bin/java" --output target/mysql-group-failover-proof
 ```
 
-另一组 Temurin 21 档案用同一发布包验收 MySQL 5.7.44、8.0.46、8.2.0 和 8.4.13。原主在快照构建中途关闭。MySQL 选出新主后，Rivomesh 重建未完成快照。两个 SQL 目标收到切主前的更新和切主后的插入、删除及更新，两路 ACK 追平共享日志。编译好发布包和测试类后运行 `RIVOMESH_TEST_PREBUILT=1 SYNC_V3_GROUP_SQL_TARGETS=1 SYNC_MYSQL_IMAGE=mysql:8.2.0 bash tests/v3-group-run.sh`。MySQL 5.7 使用 `SYNC_MYSQL57=1 SYNC_MYSQL57_IMAGE=mysql:5.7`。 [分版本验收记录](/files/docs/verification/baseline.json)
+另一组 Temurin 21 档案用同一发布包验收 MySQL 5.7.44、8.0.46、8.2.0 和 8.4.13。原主在快照构建中途关闭。MySQL 选出新主后，Rivomesh 重建未完成快照。两个 SQL 目标收到切主前的更新和切主后的插入、删除及更新，两路 ACK 追平共享日志。编译好发布包和测试类后运行 `RIVOMESH_TEST_PREBUILT=1 SYNC_V3_GROUP_SQL_TARGETS=1 SYNC_MYSQL_IMAGE=mysql:8.2.0 bash tests/v3-group-run.sh`。MySQL 5.7 使用 `SYNC_MYSQL57=1 SYNC_MYSQL57_IMAGE=mysql:5.7`。 [分版本验收记录](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json)
 
 ### MySQL 采集和投递的 TLS 验证
 
 在 `source.sslMode` 设置 `VERIFY_IDENTITY` 供 binlog 采集使用，在 `source.jdbcOptions` 加入 `sslMode=VERIFY_IDENTITY` 供发现和快照读取使用。每个 MySQL 目标单独设置 JDBC URL 和 TLS 参数。把签发证书的 CA 根证书加入执行 JDK 信任库，Agent 和它启动的 Worker 都应能读取。源候选节点和目标 URL 使用与证书匹配的 DNS 名称。binlog 的证书验证模式由 JDK 协商协议，可连接仅启用 TLS 1.3 的 MySQL。[Connector/J TLS 参数](https://dev.mysql.com/doc/connector-j/en/connector-j-connp-props-security.html)
 
-MySQL 8.4.13 实测 binlog 和目标 JDBC 会话使用 TLS 1.3，预检拒绝错误的源域名。强杀重启后从原 GTID 和快照续传，目标数据逐行一致。复现命令为 `python3 tests/mysql-tls-run.py --java-home <Temurin 21 目录> --artifact <发布包> --output target/mysql-tls-proof`。[验收归档](/docs/zh/evidence/baseline.html)
+MySQL 8.4.13 实测 binlog 和目标 JDBC 会话使用 TLS 1.3，预检拒绝错误的源域名。强杀重启后从原 GTID 和快照续传，目标数据逐行一致。复现命令为 `python3 tests/mysql-tls-run.py --java-home <Temurin 21 目录> --artifact <发布包> --output target/mysql-tls-proof`。[验收归档](/docs/zh/start/verification.html)
 
 ## 使用 PostgreSQL 日志接管独立 Worker
 

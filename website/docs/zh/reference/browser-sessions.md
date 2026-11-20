@@ -47,7 +47,7 @@ sessions:
 
 TLS 在代理终止，控制服务本身仍是 HTTP。代理应只允许授权网络到达后端，向浏览器提供 HTTPS；`publicOrigin` 明确外部地址，程序不信任客户端提供的 X-Forwarded-*。不配置时按 `https://Host` 验证浏览器来源。Cookie 写请求必须有精确匹配的 Origin 和正确 `X-CSRF-Token`，缺失或错误均拒绝。
 
-开发预览 `http://127.0.0.1:18088` 及本地示例显式使用 `secureCookie: false`，Cookie 名为 `rivomesh-dev-session`。仅用于 HTTP 开发/本地访问。生产请改为上面的 HTTPS 配置。Helm 默认 Secure；本地 port-forward 预览可显式 `--set sessions.secureCookie=false`，生产指定 `--set sessions.publicOrigin=https://sync.example.com`。原生 YAML 的 ConfigMap 中修改相同字段。
+本地 HTTP 示例显式使用 `secureCookie: false`，Cookie 名为 `rivomesh-dev-session`。仅用于 HTTP 开发/本地访问。生产请改为上面的 HTTPS 配置。Helm 默认 Secure；本地 port-forward 预览可显式 `--set sessions.secureCookie=false`，生产指定 `--set sessions.publicOrigin=https://sync.example.com`。原生 YAML 的 ConfigMap 中修改相同字段。
 
 ## API 合同和身份撤销
 
@@ -72,5 +72,3 @@ TLS 在代理终止，控制服务本身仍是 HTTP。代理应只允许授权�
 - **修改账号后全部退出？** 这是当前严格修订策略，重新登录即可；被停用/轮换的旧令牌不能继续使用。
 - **409 SESSION_CAPACITY_REACHED？** 关闭页面不等于服务端退出；先退出不再使用的会话，等待过期，或按内存预算提高 maximum。重启会清空全部会话，但不是日常容量管理方式。
 - **退出提示未确认？** 恢复网络/审计服务后再次退出。需要立即封禁时，由其他管理员停用账号或轮换令牌；这会触发上述目录修订撤销。不要把 API 失败当成成功。
-
-验收覆盖单控制器的真实 HTTP、TLS 代理、到期/撤销、Bearer 冲突及 DOM 竞态；完整浏览器交互/可访问性与多控制节点仍属于后续验收范围。具体结果以本轮归档证据为准。

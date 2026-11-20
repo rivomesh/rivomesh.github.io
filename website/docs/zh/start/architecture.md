@@ -9,9 +9,7 @@ description: RivoMesh 控制台、Controller、Agent、Worker、持久日志和�
 
 Controller 负责鉴权、配置和命令。Agent 执行分配给本节点的任务操作，并管理 Worker 进程。Worker 负责采集与投递。控制存储与持久日志分别记录管理状态和数据进度。
 
-[打开交互架构图](/architecture/zh.html)
-
-<iframe class="architecture-diagram" src="/architecture/zh.html?embed=1" title="RivoMesh 同步平台交互架构图" loading="lazy"></iframe>
+<figure class="architecture-figure"><img src="/architecture/zh.webp" alt="RivoMesh 架构图。上方为控制台、Controller、共享控制存储和 Agent。下方为数据库源、Worker 采集、持久日志、Worker 投递和目标，另有校验与恢复分支。" width="1586" height="992" /><figcaption><a href="/architecture/zh.html" target="_self">查看完整架构图</a></figcaption></figure>
 
 ## 控制与执行
 
@@ -27,9 +25,9 @@ Controller 负责鉴权、配置和命令。Agent 执行分配给本节点的任
 
 ## 数据链路与恢复
 
-1. **源端。** MySQL 通过 GTID/binlog，PostgreSQL 通过逻辑复制槽与 pgoutput，Oracle 通过 Flashback 和归档 LogMiner 建立全量与增量的衔接。[源端同步原理](replication)
+1. **源端。** MySQL 通过 GTID/binlog，实验性 PostgreSQL 档案通过逻辑复制槽与 pgoutput，实验性 Oracle 档案通过 Flashback 和归档 LogMiner 建立全量与增量的衔接。[源端同步原理](replication)
 2. **持久日志。** 本地 H2 用于单节点，外部日志用于指定多节点档案。日志保存快照、已提交事务、采集位置、订阅确认及写入租约。暂停的订阅可延长日志保留。
 3. **目标投递。** 事务型 SQL 目标在同一事务提交业务行和目标断点。分析库用产品原生物化回执，消息系统用 Broker 确认和稳定事件 ID。各目标通过各自订阅独立推进。[连接器目录](connectors)
 4. **校验与恢复。** 指定的 MySQL 与事务型 SQL 目标可在共同校验点逐行核对。审批修复、提交确认与事务跳过分别绑定对应的报告、回执、错误代次和目标范围。[数据校验](data-validation) · [故障处理](troubleshooting)
 
-[平台设计手册](../reference/platform-design) · [详细兼容性矩阵](../reference/compatibility)
+[详细兼容性矩阵](../reference/compatibility)

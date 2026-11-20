@@ -108,14 +108,4 @@ java -jar rivomesh.jar review-clickhouse-recovery config.yml clickhouse 1
 
 ## 已记录验收
 
-`target/clickhouse-native-protocol-decimal.log`：真实服务的类型边界、二进制/JSON/NULL、UInt128 版本重放、重启身份/历史和删除过滤。
-
-`target/clickhouse-materializer-release.log`：实际发布 JAR、不写入的能力检查、自动表/视图、主键移动、无主键次数/删除、重复重放、客户端/服务端重启，以及还原旧非空目标后拒绝较新断点。
-
-`target/clickhouse-pipeline-first.log`：24 项执行通过，包含实际 MySQL 8.4 → ClickHouse＋PostgreSQL 发布包链路（LOCAL H2 日志），JSON/无符号/小数/二进制/生成列、目标停机时 SQL 继续、自动追平、Worker 强杀恢复及视图丢失隔离。
-
-`target/ui-clickhouse-first.log`：18 项 DOM 通过。上述结果不代表集群/副本/TLS/断电及大目录或长期运行验收。
-
-Temurin 21 使用真实 ClickHouse 25.8.33.6 和 LOCAL H2 日志通过了物化验收。服务沿用原数据卷重启后确认第 3 笔提交。还原旧非空卷后，较新的业务行消失，适配器以 `CLICKHOUSE_CONFIRMED_HISTORY_MISSING_REBUILD_REQUIRED` 拒绝写入，日志侧仍保留第 3 笔断点。测试还核对了 NONE 重开、BTREE/GSI 转换后的跳数索引、FINAL、无主键和重复重放。构建后运行 `bash tests/clickhouse-materializer-run.sh`。[确切验收记录](/files/docs/verification/baseline.json)
-
-历史兼容验收：`target/clickhouse-index-compat-unit.log`58项通过，0失败/错误/跳过；`target/ui-clickhouse-index-compat.log`19项通过。`target/clickhouse-index-native-compat.log` 历史 Java 8 发布包验收通过：NONE布局不建跳数索引且重开保留数据，以及索引FINAL、重放、重启和恢复旧非空卷保护。旧配置省略新字段时保留NONE及旧指纹，新向导/示例显式启用DATA_SKIPPING。归档产物 144098892 字节，SHA25695dbdbb462929ed1a262072e80d1db885696fa53007d5315c38c4d951c193212。此前28项联合链路验收先于这次仅默认兼容策略调整。全部本次测试资源已清理。
+Temurin 21 使用真实 ClickHouse 25.8.33.6 和 LOCAL H2 日志通过了物化验收。服务沿用原数据卷重启后确认第 3 笔提交。还原旧非空卷后，较新的业务行消失，适配器以 `CLICKHOUSE_CONFIRMED_HISTORY_MISSING_REBUILD_REQUIRED` 拒绝写入，日志侧仍保留第 3 笔断点。测试还核对了 NONE 重开、BTREE/GSI 转换后的跳数索引、FINAL、无主键和重复重放。构建后运行 `bash tests/clickhouse-materializer-run.sh`。[确切验收记录](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json)

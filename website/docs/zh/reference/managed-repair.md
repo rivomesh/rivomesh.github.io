@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/managed-repair.md
 
 # 管理界面数据修复
 
-首版已通过 LOCAL/H2、外部 MySQL/PostgreSQL/openGauss 日志下的真实 HTTP/Worker/数据库验收，业务目标为 MySQL8.4/PostgreSQL17，详见[验收证据](/docs/zh/evidence/baseline.html)。完整厂商、集群、容量及安全验收仍未完成。
+首版已通过 LOCAL/H2、外部 MySQL/PostgreSQL/openGauss 日志下的真实 HTTP/Worker/数据库验收，业务目标为 MySQL8.4/PostgreSQL17，详见[验收证据](/docs/zh/start/verification.html)。完整厂商、集群、容量及安全验收仍未完成。
 
 ## 操作顺序
 

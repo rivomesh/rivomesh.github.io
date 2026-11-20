@@ -1,9 +1,0 @@
-{
-  "workerState": "PAUSED",
-  "desired": "PAUSED",
-  "pipelineState": "PAUSED",
-  "deliveryStatus": "UNKNOWN",
-  "code": "OWNER_RECEIPT_MISMATCH",
-  "actualResult": "VALIDATION_DIFFERENCES",
-  "reportIdentityRetained": true
-}

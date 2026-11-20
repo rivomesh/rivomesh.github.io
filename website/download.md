@@ -43,4 +43,4 @@ java -Xmx512m -jar sync-app/target/rivomesh-app-0.1.0-SNAPSHOT.jar serve config/
 
 [当前实施状态](/docs/zh/reference/implementation-status.html) · [兼容性说明](/docs/zh/start/compatibility.html) · [产品路线图](/docs/zh/start/roadmap.html) · [发布包审查](/docs/zh/reference/release-inventory.html)
 
-发行资源与版本说明请查阅 [GitHub Releases](https://github.com/rivomesh/rivomesh/releases)，许可条款以[核心仓库](https://github.com/rivomesh/rivomesh)的说明为准。
+RivoMesh 正在准备首个正式版本。当前预览版可通过源码或 Docker Compose 构建，正式发行信息见 [GitHub Releases](https://github.com/rivomesh/rivomesh/releases)。

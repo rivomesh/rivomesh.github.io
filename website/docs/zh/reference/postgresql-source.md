@@ -33,7 +33,7 @@ PostgreSQL 源使用 pgJDBC 42.7.14，并关闭驱动自动推进确认位置。
 - PostgreSQL 18 的存储型生成列可发布到目标普通列。对发布设置 `ALTER PUBLICATION rivomesh_capture SET (publish_generated_columns=stored)`，表保留 `REPLICA IDENTITY FULL`。PostgreSQL 17 生成列、PostgreSQL 18 虚拟生成列、行或列过滤、分区路由、TRUNCATE 和自动 DDL 迁移需要独立档案。遇到不支持的类型或关系结构，预检或采集会给出明确错误。
 - 原实例、时间线、槽和日志完好时，重启复用持续的 LSN 和已有快照。目标 SQL 错误可在修复目标原因后恢复该订阅。
 - 显示 `POSTGRESQL_REQUIRED_WAL_UNAVAILABLE` 时，记录最后采集 LSN 并保留旧日志。评估原槽和所需 WAL 是否可恢复，必要时用新任务和经审阅的目标范围重建基线。
-- 共同点对账、更多目标与切换档案继续由 SO-06 跟踪。
+- 共同点对账以及其他目标、切换方式与驱动需单独验证。
 
 ### 精确小数
 
@@ -55,7 +55,7 @@ PostgreSQL 源使用 pgJDBC 42.7.14，并关闭驱动自动推进确认位置。
 
 PostgreSQL `REAL` 和 `DOUBLE PRECISION` 分别映射成 PostgreSQL 目标的同名类型，以及 MySQL 目标的 `FLOAT`、`DOUBLE`。快照和 pgoutput 会话固定使用精确的浮点文本输出。实库对比验证相邻浮点值、次正规数、SQL NULL、无主键重复及重启续传。正零和负零统一写为零，使用同一行身份。[PostgreSQL 浮点类型](https://www.postgresql.org/docs/17/datatype-numeric.html#DATATYPE-FLOAT) · [MySQL 浮点类型](https://dev.mysql.com/doc/refman/8.4/en/floating-point-types.html)
 
-非有限值（NaN、正负无穷）触发 `POSTGRESQL_FLOAT_NONFINITE`。增量场景保持原 LSN、两个目标的 ACK 和业务行，整笔事务暂停。复验时在原生命令追加 `--source-image postgres:17.12 --floating-values`。[验收](/docs/zh/evidence/baseline.html#postgresql-real-and-double-precision-to-two-sql-targets)
+非有限值（NaN、正负无穷）触发 `POSTGRESQL_FLOAT_NONFINITE`。增量场景保持原 LSN、两个目标的 ACK 和业务行，整笔事务暂停。复验时在原生命令追加 `--source-image postgres:17.12 --floating-values`。[验收](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#postgresql-real-and-double-precision-to-two-sql-targets)
 
 ### 实库验收命令
 
@@ -67,7 +67,7 @@ PostgreSQL `REAL` 和 `DOUBLE PRECISION` 分别映射成 PostgreSQL 目标的同
 
 追加 `--source-image postgres:17.12 --clock-values` 可复测两个 SQL 目标的钟点值、两个午夜边界、主键和无主键行、原 LSN 重启，以及 `TIMETZ` 的预检拒绝。
 
-当前构建与夹具统一使用 Temurin 21。早期多版本测试记录按原候选包留档。[验收记录](/docs/zh/evidence/baseline.html#postgresql-source-runtime-matrix)
+当前构建与夹具统一使用 Temurin 21。早期多版本测试记录按原候选包留档。[验收记录](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#postgresql-source-runtime-matrix)
 
 PostgreSQL 18.7 到 PostgreSQL 17.12 在 Temurin 21 下通过八项实库检查，覆盖有主键和无主键更新后的存储型生成列、目标普通列，以及发布遗漏生成列的拒绝行为。复现时追加 `--source-image postgres:18 --generated`。[生成列发布](https://www.postgresql.org/docs/18/logical-replication-gencols.html)
 

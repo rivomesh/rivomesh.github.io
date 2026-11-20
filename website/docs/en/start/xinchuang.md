@@ -18,4 +18,4 @@ Start with an empty target and representative business tables. Validate Chinese 
 
 MySQL is the main path for the target profiles above. Experimental [PostgreSQL 17/18 capture](../reference/postgresql-source) writes to PostgreSQL or MySQL. Experimental [Oracle 26ai Free capture](../reference/oracle-source) uses Flashback snapshots and archived changes from a single PDB with a PostgreSQL destination. See the [detailed compatibility matrix](../reference/compatibility).
 
-[Multi-node deployment](multi-node) · [Compatibility](compatibility) · [Roadmap](roadmap) · [Platform design](../reference/platform-design)
+[Multi-node deployment](multi-node) · [Compatibility](compatibility) · [Roadmap](roadmap) · [Platform design](architecture)

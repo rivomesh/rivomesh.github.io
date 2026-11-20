@@ -33,7 +33,7 @@ The PostgreSQL source uses pgJDBC 42.7.14 with automatic flush advancement disab
 - PostgreSQL 18 stored generated columns can be materialized as ordinary destination columns when the publication includes them. Use `ALTER PUBLICATION rivomesh_capture SET (publish_generated_columns=stored)` and retain `REPLICA IDENTITY FULL`. PostgreSQL 17 generated columns, PostgreSQL 18 virtual generated columns, publication filters, partition routing, TRUNCATE and automatic DDL migration require separate profiles. Preflight or capture reports unsupported relation changes and types.
 - Restart uses the existing LSN and snapshot when the original primary, timeline, slot and journal remain available. Resume a failed target subscription after addressing its SQL error.
 - With `POSTGRESQL_REQUIRED_WAL_UNAVAILABLE`, retain the old journal and record the last captured LSN. Evaluate whether the original slot and required WAL can be recovered. If needed, rebuild through a new pipeline and a reviewed destination scope.
-- SO-06 continues to track common-cut validation and additional target, promotion and driver profiles.
+- Common-cut validation and additional target, promotion and driver profiles need separate verification.
 
 ### Exact numeric values
 
@@ -55,7 +55,7 @@ Append `--source-image postgres:17.12 --numeric-values` to the fixture command b
 
 PostgreSQL `REAL` and `DOUBLE PRECISION` map to the same types on a PostgreSQL target and to `FLOAT` and `DOUBLE` on MySQL. Snapshot and pgoutput sessions select exact floating-point text. Native checks cover adjacent representable values, subnormals, SQL NULL, keyless duplicates and continuation after restart. Both signs of zero are copied as zero and share the same row identity. [PostgreSQL floating-point types](https://www.postgresql.org/docs/17/datatype-numeric.html#DATATYPE-FLOAT) · [MySQL floating-point types](https://dev.mysql.com/doc/refman/8.4/en/floating-point-types.html)
 
-NaN and positive or negative infinity cause `POSTGRESQL_FLOAT_NONFINITE`. At the affected streaming transaction, capture holds its previous LSN, both target receipts and the business rows. Append `--source-image postgres:17.12 --floating-values` to the native fixture command. [Verification](/docs/zh/evidence/baseline.html#postgresql-real-and-double-precision-to-two-sql-targets)
+NaN and positive or negative infinity cause `POSTGRESQL_FLOAT_NONFINITE`. At the affected streaming transaction, capture holds its previous LSN, both target receipts and the business rows. Append `--source-image postgres:17.12 --floating-values` to the native fixture command. [Verification](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#postgresql-real-and-double-precision-to-two-sql-targets)
 
 ### Native verification commands
 
@@ -67,7 +67,7 @@ Add `--source-image postgres:17.12 --timestamp-values` to exercise both timestam
 
 Add `--source-image postgres:17.12 --clock-values` to verify both SQL destinations, the two midnight endpoints, keys, keyless rows, restart at the original LSN and preflight refusal of `TIMETZ`.
 
-Use Temurin 21 for current builds and fixtures. Earlier cross-runtime results are archived with their exact artifact. [Verification record](/docs/zh/evidence/baseline.html#postgresql-source-runtime-matrix)
+Use Temurin 21 for current builds and fixtures. Earlier cross-runtime results are archived with their exact artifact. [Verification record](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#postgresql-source-runtime-matrix)
 
 PostgreSQL 18.7 with PostgreSQL 17.12 as the destination passed eight Temurin 21 checks. The fixture covers stored generated values on keyed and keyless updates, materialization at the destination and omission from the publication. Add `--source-image postgres:18 --generated` to reproduce. [Generated column publication](https://www.postgresql.org/docs/18/logical-replication-gencols.html)
 

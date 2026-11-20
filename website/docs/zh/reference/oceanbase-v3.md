@@ -11,7 +11,7 @@ English：[OceanBase V3](/docs/en/reference/oceanbase-v3.html)。示例：[ocean
 
 ## 当前范围
 
-V3 配置、CLI、多目标 Worker 和中英文向导均支持 OceanBase。历史档案使用 OceanBase CE 4.3.5.6 ARM64 和 Java 8，通过原生事务以及 MySQL 同时写入 OceanBase 与 PostgreSQL 的全量、增量和恢复验收。MySQL 模式租户档案保持 EXPERIMENTAL。Oracle 模式、OBProxy、多节点和更多 Temurin 21 组合另行验收。[实测记录](/docs/zh/evidence/baseline.html#oceanbase-mysql-tenant-recovery)
+V3 配置、CLI、多目标 Worker 和中英文向导均支持 OceanBase。历史档案使用 OceanBase CE 4.3.5.6 ARM64 和 Java 8，通过原生事务以及 MySQL 同时写入 OceanBase 与 PostgreSQL 的全量、增量和恢复验收。MySQL 模式租户档案保持 EXPERIMENTAL。Oracle 模式、OBProxy、多节点和更多 Temurin 21 组合另行验收。[实测记录](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#oceanbase-mysql-tenant-recovery)
 
 `product: OCEANBASE` 使用 MySQL Connector/J8.4.0 和 `jdbc:mysql://`，默认端口2881。必须连接 **MySQL 兼容的业务租户**，用户名通常为 `rivomesh@business`；不是 `root@sys`。启动和每次重新连接均核对 OceanBase 产品、兼容模式及非系统租户，并强制 `ob_read_consistency=STRONG`。MySQL 线协议版本号不代表 OceanBase 产品版本。Oracle 模式、seekdb 和其他兼容数据库不在本配置的已验证范围内。
 

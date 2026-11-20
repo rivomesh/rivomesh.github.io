@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/common-cut-repair.md
 
 # 共同校验点数据修复（首批 CLI）
 
-MySQL8.4/PostgreSQL17 的首批修复场景已通过四种真实日志模式验收，见[证据](/docs/zh/evidence/baseline.html)。完整生产、厂商及容量验收仍未完成。管理界面已提供经认证的计划审阅、执行、取消与重试，见[管理端修复](/docs/zh/reference/managed-repair.html)。
+MySQL8.4/PostgreSQL17 的首批修复场景已通过四种真实日志模式验收，见[证据](/docs/zh/start/verification.html)。完整生产、厂商及容量验收仍未完成。管理界面已提供经认证的计划审阅、执行、取消与重试，见[管理端修复](/docs/zh/reference/managed-repair.html)。
 
 适用条件：MySQL 源的共同校验点已完成逐行比对，报告为 COMPLETE，源数据已经密封，任务仍保持该校验点的全局 PAUSED 状态。首批执行器限定 MySQL/PostgreSQL 事务型目标；其他关系库、分析库、消息队列的修复需要单独验证。目标业务表仅由同步服务写入，修复期间继续禁止外部写入。首批验收使用同步服务自动创建且没有触发器/外键的表；执行器会拒绝检测到的触发器、传入/传出外键及 PostgreSQL 行策略、继承等依赖；MySQL 还要求可验证的元数据可见权限。完整依赖迁移规划未实现，详见管理端修复手册。
 

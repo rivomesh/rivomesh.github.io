@@ -7,7 +7,7 @@ sourcePath: docs/zh-CN/console-and-deployment.md
 
 # 控制台、多任务与部署
 
-更新：2026-11-18。English: [Console and deployment](/docs/en/reference/console-and-deployment.html)。本页描述已实现功能；完整规划见[平台方案](/docs/zh/reference/platform-design.html)。
+更新：2026-11-18。English: [Console and deployment](/docs/en/reference/console-and-deployment.html)。本页描述已实现功能；完整规划见[平台方案](/docs/zh/start/architecture.html)。
 
 ## 运行边界
 
@@ -134,7 +134,7 @@ Chart 已提供持久化、防提权、只读根文件系统、临时目录、�
 Maven verify 运行单元和 API 测试。在 Eclipse Temurin 21 LTS 上，`tests/matrix.sh` 默认测试 MySQL 5.7.44、8.0.46、8.2.0 和 8.4.13 的 V3 单机、GTID 主从切换和组复制档案。
 可选 npm ci --prefix tests/ui --ignore-scripts 后执行 npm test --prefix tests/ui，验证实际 HTML/JavaScript 的 DOM 交互；仅开发测试需要相应 Node 版本，服务运行不需要 Node。
 构建镜像后执行 python3 tests/deployment-check.py --image rivomesh:0.1.0-SNAPSHOT，检查 Helm/原生清单一致性及非 root 镜像、鉴权、配置权限、重复请求和卷恢复。脚本只删除自己创建的测试容器与卷，不部署到用户 K8s 集群。
-原生 Chrome 测试打开实际控制台，验证键盘登录、刷新续登、诊断弹窗的可访问名称与移动端布局。更多操作和浏览器另行验收。[浏览器记录](/docs/zh/evidence/baseline.html#worker-diagnostic-events-and-chrome-smoke)
+原生 Chrome 测试打开实际控制台，验证键盘登录、刷新续登、诊断弹窗的可访问名称与移动端布局。更多操作和浏览器另行验收。[浏览器记录](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#worker-diagnostic-events-and-chrome-smoke)
 
 控制台使用与 Rivomesh 官网一致的标识、浅色与深色配色。初始外观跟随浏览器的系统设置。导航栏的月亮或太阳按钮可切换外观，选择保存在当前浏览器。使用键盘时，可通过页面首个“跳到主要内容”链接略过导航。
 
@@ -152,7 +152,7 @@ Maven verify 运行单元和 API 测试。在 Eclipse Temurin 21 LTS 上，`test
 
 `GET /api/session` 返回当前 ID、角色、权限和任务范围，不返回令牌或其他账号列表。界面刷新权限，退出或认证失效时清空草稿，旧登录迟到响应不能清除新登录。默认 CONFIG 模式从启动配置取身份；启用界面托管后由持久账号目录管理，配置/环境变化和重启不会覆盖托管授权。只有 ADMIN 可管理账号，操作、恢复和兼容边界见[账号管理](/docs/zh/reference/account-management.html)。
 
-在 CONFIG/引导模式，旧 `authToken` 对应全权管理员 `legacy-admin`；采用独立账号时可省略。若与 `users` 同时保留，两种方式均有效，用户不能复用共享令牌。本地用户/授权界面、令牌轮换及离线恢复已提供；OIDC/SSO、令牌有效期和外部不可变审计锚点仍未完成。已有任务操作历史继续保留，完整权限/审计工作流仍在补齐。
+在 CONFIG/引导模式，旧 `authToken` 对应全权管理员 `legacy-admin`；采用独立账号时可省略。若与 `users` 同时保留，两种方式均有效，用户不能复用共享令牌。本地用户/授权界面、令牌轮换及离线恢复已提供；共享 HTTPS 管理入口可接入一个 [OIDC 提供商](/docs/zh/reference/oidc-login.html)。部署令牌的轮换与浏览器会话期限分别配置。外部审计锚点及对象锁见[安全审计](/docs/zh/reference/security-audit.html)。
 
 Linux 可在现有服务命令/环境中指定该配置；Docker、原生 Kubernetes 通过挂载平台配置文件和注入对应 Secret/环境变量使用。默认 Helm/原生配置保留兼容的共享令牌；独立角色使用下方示例，两种配置均不嵌入令牌值。不要将令牌明文提交到 values 或导出诊断包。
 
@@ -162,7 +162,7 @@ Secret 环境值在进程启动时读取。仅修改 Kubernetes Secret 不会轮
 
 通过 HTTP 新建的配置记录 `createdBy`、`createdRole`、`createdAt`；任务操作记录认证得到的 `actorId`、`actorRole` 及异步结果，管理进程重启后仍保留。身份由服务端填写，请求正文里的身份字段不能冒名覆盖。新幂等回执将请求标识绑定身份/角色，同身份重放仍幂等，其他身份重放返回 `REQUEST_IDENTITY_CHANGED`。旧版无归属回执保持兼容；历史记录、直接文件/内部 API 变更不会被猜测归属。
 
-这是有界操作历史：每任务保留 40 次操作、管理注册表保留 500 个请求回执，界面显示最近八次。独立全局审计已记录API拒绝/安全事件和异步操作结果，支持链校验、保留、ADMIN界面和导出，见[安全审计](/docs/zh/reference/security-audit.html)。它仍不等于外部不可变审计。
+这是有界操作历史：每任务保留 40 次操作、管理注册表保留 500 个请求回执，界面显示最近八次。独立全局审计已记录API拒绝/安全事件和异步操作结果，支持链校验、保留、ADMIN界面和导出，见[安全审计](/docs/zh/reference/security-audit.html)。部署方可另行留存带签名的外部锚点和对象锁归档。
 
 
 ClickHouse V3 目标使用原生版本物化和 FINAL 查询视图，事务内各行可能分批可见。
@@ -200,7 +200,7 @@ python3 tests/kubernetes-csi-runtime.py --context rivomesh-test \
 
 计划迁移时，先确认旧 Pod 已退出，再在新节点挂回原 Claim。保留 Claim UID、PV 后端和应用配置，核对原快照标识、新租约及实际增量投递。外部日志可隔离仍存活的旧 Worker。切换到另一份 Agent 私有目录需要单独处理。
 
-见[复验记录](/docs/zh/evidence/baseline.html#lg-06-live-kubernetes-rwo-csi)。
+见[复验记录](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#lg-06-live-kubernetes-rwo-csi)。
 
 附加节点故障档案在隔离的 Minikube 集群停止一个 worker，数据库保留在控制节点。原 worker 恢复后，任务挂载同一个卷并以更高日志租约继续增量。追加 `--worker-outage-node <测试 worker>` 可运行原生 YAML 故障档案。
 
@@ -208,4 +208,4 @@ python3 tests/kubernetes-csi-runtime.py --context rivomesh-test \
 
 Docker 默认使用 Temurin 21 构建镜像和 Temurin 21 JRE。Helm 和原生 Kubernetes 使用构建出的应用镜像。Linux 上确认服务使用的 Java 可执行文件报告 Java 21。滚动替换应用时保留一个管理入口，逐个核对任务断点和执行租约。记录镜像摘要、Java 版本和应用包 SHA。
 
-替换 Java 21 应用镜像前，记录 JAR 和镜像标识，核对任务期望状态，并按部署档案一致备份 Agent 目录、控制库和外部日志。滚动更新保留原持久卷。需要恢复时，先停写，恢复到协调一致的备份点，再核对目标原生回执和断点。首版回退范围以当前发布格式为准。[实测记录](/docs/zh/evidence/baseline.html#java-21-exact-release-candidate)
+替换 Java 21 应用镜像前，记录 JAR 和镜像标识，核对任务期望状态，并按部署档案一致备份 Agent 目录、控制库和外部日志。滚动更新保留原持久卷。需要恢复时，先停写，恢复到协调一致的备份点，再核对目标原生回执和断点。首版回退范围以当前发布格式为准。[实测记录](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#java-21-exact-release-candidate)

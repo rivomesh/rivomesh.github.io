@@ -11,7 +11,7 @@ sourcePath: docs/en/kingbase-v3.md
 
 ## Scope and connection
 
-V3 configuration, CLI, explicit mappings, independent fan-out workers and the bilingual wizard accept `product: KINGBASE`. The first profile targets **PG compatibility mode** and remains **EXPERIMENTAL**. The first Java8/Kingbase V009R001C001B0025 PG/UTF8 native transaction and MySQL8.4.13+PostgreSQL17.12 mixed recovery profile passed; see [evidence](/docs/zh/evidence/baseline.html). Existing PostgreSQL results do not prove Kingbase compatibility. Other modes, RAC/distributed products, all versions and capacity remain pending.
+V3 configuration, CLI, explicit mappings, independent fan-out workers and the bilingual wizard accept `product: KINGBASE`. The first profile targets **PG compatibility mode** and remains **EXPERIMENTAL**. The first Java8/Kingbase V009R001C001B0025 PG/UTF8 native transaction and MySQL8.4.13+PostgreSQL17.12 mixed recovery profile passed; see [evidence](/docs/en/start/verification.html). Existing PostgreSQL results do not prove Kingbase compatibility. Other modes, RAC/distributed products, all versions and capacity remain pending.
 
 The pinned Java8 driver is `cn.com.kingbase:kingbase8:9.0.1`, with `com.kingbase8.Driver` and `jdbc:kingbase8://`, normally port54321. The vendor namespace coexists with PostgreSQL. Maven Central's vendor POM declares Apache-2.0; a complete distribution license/NOTICE review is still required.
 

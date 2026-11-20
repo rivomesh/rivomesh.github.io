@@ -9,7 +9,7 @@ sourcePath: docs/zh-CN/failure-evidence.md
 
 [English](/docs/en/reference/failure-evidence.html) · [故障处理](/docs/zh/reference/failed-transactions.html)
 
-存储与捕获接口已接入[管理界面审阅](/docs/zh/reference/failure-review.html)，包含管理员/任务权限、审计及协议5门禁；本页解释底层文件与限额。保存成功不代表目标未提交，也不构成跳过、补偿或业务接管批准。早期内部接口验收不等于当前全部界面档案，最新范围见[验证记录](/docs/zh/evidence/baseline.html)。
+存储与捕获接口已接入[管理界面审阅](/docs/zh/reference/failure-review.html)，包含管理员/任务权限、审计及协议5门禁；本页解释底层文件与限额。保存成功不代表目标未提交，也不构成跳过、补偿或业务接管批准。[已验证范围](/docs/zh/start/verification.html)
 
 ## 保存内容与身份
 
@@ -47,6 +47,6 @@ sourcePath: docs/zh-CN/failure-evidence.md
 
 **交接任务时怎样保留证据？** 使用经审阅的交接，将原签名文件保留为只读历史。直接复制到其他 Agent 的在线故障证据目录会被归属及目录身份检查拒绝。
 
-**保存证据是否固定了目标提交状态？** 没有。当前捕获不连接或激活业务目标；不会假设目标未提交。原生断点核对与提交领先ACK的人工处理属于RC-05。
+**保存证据是否固定了目标提交状态？** 没有。当前捕获不连接或激活业务目标；不会假设目标未提交。目标已提交而日志 ACK 缺失时，按[提交确认](/docs/zh/reference/commit-acknowledgement.html)核对原生断点。
 
 **拿到证据后如何跳过或补数据？** 在管理界面按目标能力发起对应恢复流程。系统会重新核验当前断点、原生回执和审批范围，并记录缺口及恢复凭据。交接后的历史摘要可用来关联原事件和已办结回执。 [事务跳过](/docs/zh/reference/transaction-skip.html) · [目标修复](/docs/zh/reference/managed-repair.html)

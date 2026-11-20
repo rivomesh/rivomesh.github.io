@@ -9,7 +9,7 @@ sourcePath: docs/en/failure-evidence.md
 
 [中文](/docs/zh/reference/failure-evidence.html) · [Recovery](/docs/en/reference/failed-transactions.html)
 
-Storage/capture now backs [managed review](/docs/en/reference/failure-review.html),including administrator/task authorization,audit and protocol5 gates. This page explains files/limits. Successful retention does not prove destination non-commit or authorize skip,compensation or takeover. Earlier internal acceptance is distinct from the [current managed profile](/docs/zh/evidence/baseline.html).
+Storage/capture now backs [managed review](/docs/en/reference/failure-review.html),including administrator/task authorization,audit and protocol5 gates. This page explains files/limits. Successful retention does not prove destination non-commit or authorize skip,compensation or takeover. Earlier internal acceptance is distinct from the [current managed profile](/docs/en/start/verification.html).
 
 ## Contents and identity
 
@@ -47,6 +47,6 @@ The original Agent keeps the HMAC key. The candidate stores the original signed 
 
 **How can I retain evidence when transferring the task?** Use the reviewed handoff to preserve the original signed files as read-only history. A copy into a different Agent’s live evidence directory fails the owner and directory checks.
 
-**Does retention freeze destination commit status?** No. Capture does not connect to or activate business destinations and never assumes non-commit. Manual native-checkpoint reconciliation remains RC-05.
+**Does retention freeze destination commit status?** No. Capture does not connect to or activate business destinations and never assumes non-commit. Use [commit acknowledgement](/docs/en/reference/commit-acknowledgement.html) to verify the native checkpoint when a target may have committed before the journal ACK.
 
 **How can I skip or correct data after reviewing evidence?** Use the recovery flow that supports the destination. It rechecks the current cut, native receipts and approval scope, then records the gap and recovery receipt. Use handed-off history to locate the original incident and its closed receipts. [Transaction skip](/docs/en/reference/transaction-skip.html) · [Managed repair](/docs/en/reference/managed-repair.html)

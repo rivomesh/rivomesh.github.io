@@ -9,7 +9,7 @@ sourcePath: docs/zh-CN/configuration-editor.md
 
 English：[Configuration revisions](/docs/en/reference/configuration-editor.html)。
 
-控制台已接入不重置断点的配置编辑、凭据轮换和版本恢复。旧 Java 8 候选包的 MySQL 8.4 → PostgreSQL 17 链路已验证目标密码轮换、恢复历史版本和控制器重启后续传；详细范围见[验收记录](/docs/zh/evidence/baseline.html)。
+控制台已接入不重置断点的配置编辑、凭据轮换和版本恢复。旧 Java 8 候选包的 MySQL 8.4 → PostgreSQL 17 链路已验证目标密码轮换、恢复历史版本和控制器重启后续传；详细范围见[验收记录](/docs/zh/start/verification.html)。
 
 仅 ADMIN 可以读取/编辑配置及版本历史。GET 返回的密码、令牌、含凭据的URL/连接选项都替换为不透明引用，不返回已保存值或ENV引用。保留引用即保留原值；替换为新字符串可轮换，适配器允许时可用null/空串清空。引用绑定任务、版本、字段位置及目标身份，不能跨目标搬移；重启或并发修改后可能需要重新读取。保存响应不回显配置。
 

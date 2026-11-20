@@ -7,7 +7,7 @@ sourcePath: docs/en/console-and-deployment.md
 
 # Console, multiple tasks, and deployment
 
-Updated: 2026-11-18. 中文：[控制台与部署](/docs/zh/reference/console-and-deployment.html). This page describes implemented behavior; see [platform design](/docs/en/reference/platform-design.html) for the full roadmap.
+Updated: 2026-11-18. 中文：[控制台与部署](/docs/zh/reference/console-and-deployment.html). This page describes implemented behavior; see [platform design](/docs/en/start/architecture.html) for the full roadmap.
 
 ## Runtime scope
 
@@ -134,7 +134,7 @@ Manifests include persistence, restricted privileges, read-only root filesystem,
 Maven verify runs unit and API tests. With Eclipse Temurin 21 LTS, `tests/matrix.sh` defaults to the V3 standalone, asynchronous GTID failover and Group Replication profiles for MySQL 5.7.44, 8.0.46, 8.2.0 and 8.4.13.
 Optionally run npm ci --prefix tests/ui --ignore-scripts and npm test --prefix tests/ui for the actual HTML/JavaScript DOM interactions. Node is a development-test dependency only, not a service requirement.
 After building, python3 tests/deployment-check.py --image rivomesh:0.1.0-SNAPSHOT checks Helm/native parity, nonroot image, authentication, file permissions, request replay, and volume recovery. It removes only its own containers/volumes and never deploys into user Kubernetes clusters.
-A Chrome smoke test opens the real console, signs in with the keyboard, verifies session restoration after reload and checks the accessible diagnostics dialog and mobile viewport. Broader workflows and browsers have separate acceptance. [Browser record](/docs/zh/evidence/baseline.html#worker-diagnostic-events-and-chrome-smoke)
+A Chrome smoke test opens the real console, signs in with the keyboard, verifies session restoration after reload and checks the accessible diagnostics dialog and mobile viewport. Broader workflows and browsers have separate acceptance. [Browser record](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#worker-diagnostic-events-and-chrome-smoke)
 
 The console uses the Rivomesh website wordmark and its light and dark palettes. It follows the browser's system preference until you choose an appearance with the moon or sun control in the navigation. Your browser remembers that choice. Keyboard users can use the first link, **Skip to main content**, to bypass navigation.
 
@@ -152,7 +152,7 @@ Roles determine actions; `users[].taskIds` can restrict VIEWER/OPERATOR to exact
 
 `GET /api/session` returns the current identity, role, permissions and task scope, never tokens or other accounts. The console refreshes permissions and clears drafts on logout/auth loss; stale responses cannot clear a new login. Default CONFIG uses startup identities. After explicit managed activation, the durable directory is authoritative and restart/configuration changes do not overwrite managed grants. ADMIN account UI/API, rotation and offline recovery are documented in [accounts](/docs/en/reference/account-management.html).
 
-In CONFIG/bootstrap mode, `authToken` is the global `legacy-admin`; omit it when using only individual accounts. Configured identities require distinct credentials. Managed activation preserves the current identities, after which the durable directory controls changes. Local user/grant UI, rotation and offline recovery are implemented. OIDC/SSO, token expiry and external immutable audit anchors remain unfinished.
+In CONFIG/bootstrap mode, `authToken` is the global `legacy-admin`; omit it when using only individual accounts. Configured identities require distinct credentials. Managed activation preserves the current identities, after which the durable directory controls changes. Local user/grant UI, rotation and offline recovery are implemented. Shared HTTPS entries can use one [OIDC provider](/docs/en/reference/oidc-login.html). Manage token rotation and browser session expiry separately. See [security audit](/docs/en/reference/security-audit.html) for external anchors and object locking.
 
 For Linux use the selected platform file in the existing service command/environment. For Docker or native Kubernetes mount it as the platform configuration and inject the referenced tokens through the deployment secret/environment mechanism. The default Helm/native profile keeps the backward-compatible shared token. For individual roles use the example below; neither profile embeds token values. Do not put literal tokens in committed values or exported diagnostic bundles.
 
@@ -162,7 +162,7 @@ For CONFIG/bootstrap identity only, Secret environment values are read at startu
 
 New configurations created through HTTP record `createdBy`, `createdRole`, `createdAt`. Task operations record the authenticated `actorId` and `actorRole`, including their asynchronous outcome, and retain them across controller restart. The server supplies these fields; request-body identity fields cannot impersonate another account. New idempotency receipts also bind the request ID to that identity/role: matching identity replay is idempotent, another identity receives `REQUEST_IDENTITY_CHANGED`. Older receipts without attribution retain their compatibility behavior; old records and direct filesystem/internal API changes are not assigned an invented identity.
 
-This is bounded operational history: 40 operations per task and 500 request receipts in the controller registry; the UI displays the most recent eight operations. The independent global store records denied API/security events and asynchronous outcomes, with integrity checks, retention, export and an audit screen; see the [security audit handbook](/docs/en/reference/security-audit.html). External immutable anchors remain unfinished.
+This is bounded operational history: 40 operations per task and 500 request receipts in the controller registry; the UI displays the most recent eight operations. The independent global store records denied API/security events and asynchronous outcomes, with integrity checks, retention, export and an audit screen; see the [security audit handbook](/docs/en/reference/security-audit.html). Deployments can retain signed anchors and object-locked archives separately.
 
 
 ClickHouse V3 targets use native versioned materialization and FINAL query views;
@@ -200,7 +200,7 @@ python3 tests/kubernetes-csi-runtime.py --context rivomesh-test \
 
 For a planned move, confirm the old Pod has exited before attaching its claim on the new node. Keep the claim UID, PV backing volume and application configuration. Verify the original snapshot ID, a newer lease and incremental delivery before declaring recovery. An external journal can fence concurrent Workers. Agent handoff to a different private directory has separate requirements.
 
-See the [verification record](/docs/zh/evidence/baseline.html#lg-06-live-kubernetes-rwo-csi).
+See the [verification record](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#lg-06-live-kubernetes-rwo-csi).
 
 The worker-outage profile stops a worker in a disposable Minikube cluster while the database remains on the control plane. CDC resumes with the same volume and a newer lease when the worker returns. Add `--worker-outage-node <test worker>` to run the native YAML outage profile.
 
@@ -208,4 +208,4 @@ The worker-outage profile stops a worker in a disposable Minikube cluster while 
 
 The Docker build defaults to the Temurin 21 Maven image and the Temurin 21 JRE. Helm and native Kubernetes use the built application image. For Linux, confirm that the service's Java executable reports Java 21. For a rolling application update, keep one management entry available and follow the durable task checkpoints and owner lease through each replacement. Record the deployed image digest, Java version and application SHA in the deployment evidence.
 
-Before replacing a Java 21 application image, record the exact JAR and image IDs, confirm the old version's intended task state and take consistent backups of the Agent directory, control store and external journal where used. Keep the same persistent volume on a rolling restart. If restoration is necessary, stop writers, restore a coordinated point and reconcile target-native receipts before restarting from the saved position. A prior development-format application is outside the first-release rollback scope. [Live evidence](/docs/zh/evidence/baseline.html#java-21-exact-release-candidate)
+Before replacing a Java 21 application image, record the exact JAR and image IDs, confirm the old version's intended task state and take consistent backups of the Agent directory, control store and external journal where used. Keep the same persistent volume on a rolling restart. If restoration is necessary, stop writers, restore a coordinated point and reconcile target-native receipts before restarting from the saved position. A prior development-format application is outside the first-release rollback scope. [Live evidence](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#java-21-exact-release-candidate)

@@ -9,7 +9,7 @@ sourcePath: docs/en/global-control.md
 
 [中文](/docs/zh/reference/global-control.html)
 
-2026-11-17: an optional fixed-owner global profile now wires public HTTP, UI, shared configuration, durable commands and remote reads. Local control remains the default. CP-02/03 remain PARTIAL: legacy task import, complete business workflows, capacity and fault matrices are not fully accepted. Automatic owner relocation is separate.
+Task control defaults to local mode. In fixed-owner global mode, management entries share configuration and read-only state and route durable commands to the owning Agent. See [multi-node deployment](/docs/en/start/multi-node.html) for capacity, handoff and recovery profiles.
 
 ## Activation
 
@@ -42,7 +42,7 @@ Create/edit/restore/actions return 202 for durable admission only. Configuration
 
 Global maximumTasks/maximumCommands differ from per-node maxTasks/maxRunningTasks. Defaults are 10000 global tasks and 1000 active commands; configuration ranges are resource guards, not hardware throughput promises. Queries are limited to 512KiB requests, 1MiB responses, 1–60 second lifetime, bounded readers and retained capacity.
 
-Filter the shared task list by exact task ID or execution node ID. Both filters also work together. `GET /api/tasks?ownerNodeId=agent-a&taskId=orders&limit=20` applies account grants and the requested filters before computing the total or next page. Keep the same filters when using `after`. Within a task select a destination to isolate its state, SQL error and pending journal transactions. The count is the difference between captured and safely covered sequence at the observation time. Stale observations hide this count. Consumer completion requires its own measurement. [Evidence](/docs/zh/evidence/baseline.html#global-task-filters-and-destination-backlog)
+Filter the shared task list by exact task ID or execution node ID. Both filters also work together. `GET /api/tasks?ownerNodeId=agent-a&taskId=orders&limit=20` applies account grants and the requested filters before computing the total or next page. Keep the same filters when using `after`. Within a task select a destination to isolate its state, SQL error and pending journal transactions. The count is the difference between captured and safely covered sequence at the observation time. Stale observations hide this count. Consumer completion requires its own measurement. [Evidence](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#global-task-filters-and-destination-backlog)
 
 In **Diagnostics**, administrators can switch from **Source capture** to an individual destination. The scoped endpoint is `GET /api/tasks/orders/diagnostics?subscriptionId=warehouse&limit=20`. It returns recent destination pauses, retries and cleared retries with observation timestamps. Capture and destination events have separate rotating files in the execution Agent's private log directory. Destination files share two 64 KiB segments per task. Events can expire during heavy fault activity. Keep the same destination when using `after`. Error text, SQL, row values and credentials are excluded. A cleared retry records the Worker’s recovery observation. Check the destination's acknowledged sequence and pending count for delivery progress.
 

@@ -13,15 +13,15 @@ description: Explore RivoMesh replication architecture, recovery procedures, dep
 
 <PipelineFlow />
 
-[Architecture diagram](/docs/en/start/architecture.html) · [Capture mechanics](/docs/en/start/replication.html) · [Platform design](/docs/en/reference/platform-design.html) · [Pipeline configuration](/docs/en/reference/pipeline-v3.html) · [Recovery and consistency](/docs/en/reference/recovery.html) · [Multi-node deployment](/docs/en/start/multi-node.html) · [Global task control](/docs/en/reference/global-control.html)
+[Architecture diagram](/docs/en/start/architecture.html) · [Capture mechanics](/docs/en/start/replication.html) · [Pipeline configuration](/docs/en/reference/pipeline-v3.html) · [Recovery and consistency](/docs/en/reference/recovery.html) · [Multi-node deployment](/docs/en/start/multi-node.html) · [Global task control](/docs/en/reference/global-control.html)
 
 [Quick start](/docs/en/start/quick-start.html) covers the first pipeline. [Compatibility](/docs/en/start/compatibility.html) explains current source/target, delivery and deployment boundaries.
 
 ## Verification evidence
 
-[Implementation status](/docs/en/reference/implementation-status.html) · [Performance and runtimes](/docs/en/reference/performance.html) · [Verification baseline](/docs/zh/evidence/baseline.html) · [Source snapshot](/source-snapshot.json) · [Release inventory](/docs/en/reference/release-inventory.html)
+[Implementation status](/docs/en/reference/implementation-status.html) · [Performance and runtimes](/docs/en/reference/performance.html) · [Verified environments and behavior](/docs/en/start/verification.html) · [Release inventory](/docs/en/reference/release-inventory.html)
 
-The consolidated baseline records candidate hashes, exact profiles and bounded results. It identifies evidence carried forward from earlier candidates. See the implementation status for an English summary.
+Use the verification guide to match your database versions, drivers and topology to a tested configuration.
 
 ## Source and contribution
 

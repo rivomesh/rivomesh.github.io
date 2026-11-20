@@ -11,7 +11,7 @@ English: [Kingbase V3](/docs/en/reference/kingbase-v3.html)。配置：[kingbase
 
 ## 当前范围
 
-V3 配置、CLI、逐库映射、多目标 Worker 和中英文向导已接入 `product: KINGBASE`。当前适配 PG 兼容模式，能力目录保持 **EXPERIMENTAL**；首批 Java8 / 金仓 V009R001C001B0025 PG/UTF8 原生事务与 MySQL8.4.13＋PostgreSQL17.12 联合恢复已通过，见[验收记录](/docs/zh/evidence/baseline.html)。不能用 PostgreSQL 的既有通过记录代替金仓验收。其他兼容模式、RAC、分布式产品、全部版本及性能尚未完成。
+V3 配置、CLI、逐库映射、多目标 Worker 和中英文向导已接入 `product: KINGBASE`。当前适配 PG 兼容模式，能力目录保持 **EXPERIMENTAL**；首批 Java8 / 金仓 V009R001C001B0025 PG/UTF8 原生事务与 MySQL8.4.13＋PostgreSQL17.12 联合恢复已通过，见[验收记录](/docs/zh/start/verification.html)。不能用 PostgreSQL 的既有通过记录代替金仓验收。其他兼容模式、RAC、分布式产品、全部版本及性能尚未完成。
 
 使用厂商命名空间的 `com.kingbase8.Driver`、`jdbc:kingbase8://` 和固定 Java8 驱动 `cn.com.kingbase:kingbase8:9.0.1`；不把目标配置成 PostgreSQL 来绕过检查。驱动来自 Maven Central，厂商 POM 声明 Apache-2.0，完整发行依赖/NOTICE 审核仍属于发布准备工作。
 

@@ -18,11 +18,11 @@ The source must meet snapshot and replication requirements. Target business tabl
 
 <ScreenshotPreview name="task-wizard" locale="en" alt="Pipeline wizard in the RivoMesh English-language console." />
 
-1. Choose **Create task** and keep the default multi-database, multi-target format.
+1. Choose **+ New pipeline** and keep the default multi-database, multi-target format.
 2. Assign stable task and logical source identities, then enter MySQL details.
 3. Add one PostgreSQL target and explicit mappings for each source database.
 4. Select a persistent journal. Local storage is suitable for same-host trials; cross-host continuation requires the external journal profile.
-5. Save, check connections and objects, then start. A check does not validate every runtime or snapshot privilege.
+5. Save the task, choose **Check connections & objects**, then **Start / retry**. Verify any additional runtime and snapshot privileges before starting.
 
 A saved task remains stopped until started. In optional global mode, select an Agent or use automatic placement on an [eligible profile](multi-node#assign-a-new-task-automatically). Check the original command receipt for the execution outcome.
 

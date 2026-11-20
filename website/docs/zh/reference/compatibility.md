@@ -9,7 +9,7 @@ sourcePath: docs/zh-CN/compatibility.md
 
 [English](/docs/en/reference/compatibility.html)
 
-先选源版本和拓扑，再选目标产品与模式、Java 运行时。每行记录已实测范围或待验收事项。上线验收前，到[验证基线](/docs/zh/evidence/baseline.html)和[机器可读记录](/files/docs/verification/baseline.json)核对对应包的 SHA-256。
+先选源版本和拓扑，再选目标产品与模式、Java 运行时。每行记录已实测范围或待验收事项。上线验收前，到[验证基线](/docs/zh/start/verification.html)和[机器可读记录](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json)核对对应包的 SHA-256。
 
 ## 源版本和坐标
 
@@ -43,7 +43,7 @@ V3 向导读取 `GET /api/capabilities` 判断源类型可用性，并按源引�
 
 **构建、运行和验收仅支持 Eclipse Temurin 21 LTS。** 发布包使用 Java 21 字节码。Linux、Docker 和 Kubernetes 的 Controller、Agent 和 Worker 都使用 Temurin 21。实库档案记录实际 JVM 版本、架构和包 SHA。新增源、目标、日志和恢复组合按对应的 Temurin 21 用例验收。[复现命令](/docs/zh/reference/performance.html)
 
-上述源和目标档案仍对应各自的候选包与实测环境。早期运行时实验和 `fiveJdkProcesses`、`postgresqlSourceRuntimeMatrix`、`postgresqlStoredGenerated` 等档案保留原制品摘要和复现命令。[验收清单](/files/docs/verification/baseline.json) · [固定历史快照](https://github.com/rivomesh/rivomesh/blob/419945c98f197bd6cc1c6cc3e75e9c6a4bb3188c/docs/verification/baseline.json)
+上述源和目标档案仍对应各自的候选包与实测环境。早期运行时实验和 `fiveJdkProcesses`、`postgresqlSourceRuntimeMatrix`、`postgresqlStoredGenerated` 等档案保留原制品摘要和复现命令。[验收清单](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/baseline.json) · [固定历史快照](https://github.com/rivomesh/rivomesh/blob/419945c98f197bd6cc1c6cc3e75e9c6a4bb3188c/docs/verification/baseline.json)
 
 ## 管理端请求
 

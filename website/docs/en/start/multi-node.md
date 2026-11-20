@@ -25,7 +25,7 @@ Stopping a local worker does not stop every standby. Pausing the shared pipeline
 
 Helm provides [cluster values](/files/deploy/helm/rivomesh/values-cluster.yaml) and [shared-access values](/files/deploy/helm/rivomesh/values-shared-access.yaml), with independent releases per node. Live two-node Kubernetes evidence covers same-volume remounts, image and configuration replacement, Secret rotation and recovery with an external journal. Cross-node volume availability and additional HA profiles require separate verification.
 
-[Node registry](../reference/node-registry) · [Recovery](../reference/recovery) · [Global control progress](../reference/global-control)
+[Node registry](../reference/node-registry) · [Recovery](../reference/recovery) · [Global control guide](../reference/global-control)
 
 ## Enable optional fixed-owner global mode
 

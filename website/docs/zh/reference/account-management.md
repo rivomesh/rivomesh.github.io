@@ -25,7 +25,7 @@ English：[Account management](/docs/en/reference/account-management.html)。任
 
 如需去掉旧引导凭据，初始化后可换用 [platform-managed.yml](/files/config/platform-managed.yml)：`accessMode: MANAGED`，省略 `authToken/users`，保持原控制/任务目录。空数据目录没有管理员时会拒绝启动，不会创建匿名管理员；不能把它当首次安装配置。
 
-Linux 和 Docker 部署继续使用原持久目录。托管模式的 Helm 和原生 Kubernetes 示例使用已初始化的控制目录及匹配的审计库。替换 Pod 时复用已初始化的 PVC。存储和滚动部署的已验收范围见部署证据。[Helm 配置](/files/deploy/helm/rivomesh/values-managed.yaml) · [原生 YAML](/files/deploy/kubernetes/rivomesh-managed.yaml) · [部署验收](/docs/zh/evidence/baseline.html#lg-06-live-kubernetes-rwo-csi)
+Linux 和 Docker 部署继续使用原持久目录。托管模式的 Helm 和原生 Kubernetes 示例使用已初始化的控制目录及匹配的审计库。替换 Pod 时复用已初始化的 PVC。存储和滚动部署的已验收范围见部署证据。[Helm 配置](/files/deploy/helm/rivomesh/values-managed.yaml) · [原生 YAML](/files/deploy/kubernetes/rivomesh-managed.yaml) · [部署验收](https://github.com/rivomesh/rivomesh/blob/48aa0ac91b07e071e84209bbfeb13395cde3c2c0/docs/verification/README.md#lg-06-live-kubernetes-rwo-csi)
 
 ## 令牌的生成、轮换与不确定结果
 
@@ -87,6 +87,6 @@ Linux 和 Docker 部署继续使用原持久目录。托管模式的 Helm 和原
 
 **登录时以哪个存储为准？** 本地托管模式检查 Controller 持久目录和审计锚点。共享模式可以从任一 Controller 查询共享 SQL 权威状态。[共享身份](/docs/zh/reference/shared-access.html)
 
-账号授权、会话保持、撤销和部署的实测范围见验收归档。[验收归档](/docs/zh/evidence/baseline.html)
+账号授权、会话保持、撤销和部署的实测范围见验收归档。[验收归档](/docs/zh/start/verification.html)
 
 浏览器登录保持、退出及目录变更后所有会话失效的策略见[浏览器会话](/docs/zh/reference/browser-sessions.html)。

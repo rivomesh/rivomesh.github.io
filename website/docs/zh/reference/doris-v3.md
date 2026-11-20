@@ -11,7 +11,7 @@ English：[Doris V3](/docs/en/reference/doris-v3.html)。配置：[doris-v3.yml]
 
 ## 当前范围
 
-已实现原生 MySQL 协议建表/元数据与 HTTP Stream Load 写入，独立原生恢复及真实 MySQL＋PostgreSQL 联合故障链路均已通过，见[归档证据](/docs/zh/evidence/baseline.html)。首批环境为官方 `apache/doris:all-in-one-4.1.3` ARM64 镜像，内部报告 `doris-4.1.3-rc02-7126cf65d96`。这不是全部 Doris 版本、集群或生产性能验收。
+已实现原生 MySQL 协议建表/元数据与 HTTP Stream Load 写入，独立原生恢复及真实 MySQL＋PostgreSQL 联合故障链路均已通过，见[归档证据](/docs/zh/start/verification.html)。首批环境为官方 `apache/doris:all-in-one-4.1.3` ARM64 镜像，内部报告 `doris-4.1.3-rc02-7126cf65d96`。这不是全部 Doris 版本、集群或生产性能验收。
 
 Doris 是分析物化目标。关系库事务目标仍使用自身事务/断点协议，Doris 不进入普通 MySQL JDBC Sink，也不作为外部 Journal。源仍为 MySQL，支持多 database 显式映射和同源多目标。
 
@@ -76,18 +76,18 @@ Stream Load要求零过滤、严格模式、完整输入行数确认。返回Pub
 
 ## 官方依据与验收边界
 
-设计依据：[Stream Load](https://doris.apache.org/docs/4.x/data-operate/import/import-way/stream-load-manual/)、[Unique Key并发更新](https://doris.apache.org/docs/4.x/data-operate/update/unique-update-concurrent-control/)、[JSON导入精度](https://doris.apache.org/docs/4.x/data-operate/import/file-format/json/)、[Tablet权限与身份](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/table-and-view/data-and-status-management/SHOW-TABLET/)、[官方测试镜像](https://doris.apache.org/community/developer-guide/all-in-one-image/)。这些产品文档不是本项目的验收证明；实际范围见[验证记录](/docs/zh/reference/validation.html)。完整集群/存算分离、FE/BE联合故障、TLS、海量表/巨型事务、接管/修复/迁移及吞吐矩阵仍待完成。
+设计依据：[Stream Load](https://doris.apache.org/docs/4.x/data-operate/import/import-way/stream-load-manual/)、[Unique Key并发更新](https://doris.apache.org/docs/4.x/data-operate/update/unique-update-concurrent-control/)、[JSON导入精度](https://doris.apache.org/docs/4.x/data-operate/import/file-format/json/)、[Tablet权限与身份](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/table-and-view/data-and-status-management/SHOW-TABLET/)、[官方测试镜像](https://doris.apache.org/community/developer-guide/all-in-one-image/)。这些产品文档不是本项目的验收证明；实际范围见[验证记录](/docs/zh/start/verification.html)。完整集群/存算分离、FE/BE联合故障、TLS、海量表/巨型事务、接管/修复/迁移及吞吐矩阵仍待完成。
 
 ## SQL 模式与字符校验
 
-目录、回执和行核验的值通过 MySQL 二进制服务端预编译参数传递，不拼接源表名到字符串值。适配器强制 `useServerPrepStmts=true` 和 `emulateUnsupportedPstmts=false`；不支持该协议的版本会明确失败，不回退为字符串插值。DDL 注释只允许内部安全标识。已在 Doris4.1.3/Java8 实测空 SQL 模式及 `NO_BACKSLASH_ESCAPES`，包括引号/反斜杠表名、Unicode/emoji 文本、快照、增量和会话重建。非法 UTF-16 文本以 `DORIS_TEXT_ENCODING_INVALID` 暂停，不反复重试同一非法内容，见[补充验证](/docs/zh/evidence/baseline.html)。
+目录、回执和行核验的值通过 MySQL 二进制服务端预编译参数传递，不拼接源表名到字符串值。适配器强制 `useServerPrepStmts=true` 和 `emulateUnsupportedPstmts=false`；不支持该协议的版本会明确失败，不回退为字符串插值。DDL 注释只允许内部安全标识。已在 Doris4.1.3/Java8 实测空 SQL 模式及 `NO_BACKSLASH_ESCAPES`，包括引号/反斜杠表名、Unicode/emoji 文本、快照、增量和会话重建。非法 UTF-16 文本以 `DORIS_TEXT_ENCODING_INVALID` 暂停，不反复重试同一非法内容，见[补充验证](/docs/zh/start/verification.html)。
 
 Sources: [Doris prepared statements](https://doris.apache.org/docs/4.x/key-features/prepared-statement/), [string literals](https://doris.apache.org/docs/3.x/sql-manual/basic-element/literal/string-literal/).
 
-参数绑定修改后，当前发布包9a087又通过实际MySQL8.4.13→PostgreSQL17.12＋Doris4.1.3联合用例，包含目标停机自动追平、Worker强杀续传、SQL修复重试及视图丢失隔离。原生特殊SQL模式/旧备份用例使用11667063；两包14个Doris适配器类逐字节一致，验收范围和包差异见[补充证据](/docs/zh/evidence/baseline.html)。
+参数绑定修改后，当前发布包9a087又通过实际MySQL8.4.13→PostgreSQL17.12＋Doris4.1.3联合用例，包含目标停机自动追平、Worker强杀续传、SQL修复重试及视图丢失隔离。原生特殊SQL模式/旧备份用例使用11667063；两包14个Doris适配器类逐字节一致，验收范围和包差异见[补充证据](/docs/zh/start/verification.html)。
 
 ## Java 21 停机与回执验证
 
 ARM64 夹具使用 MySQL 8.4.13、PostgreSQL 17.12 和 Doris 4.1.3 单容器镜像。Doris 停机期间 PostgreSQL 继续推进，Doris 保留原确认位点和精确回执。Doris 与 Worker 重启后，仍可从同一批 Doris 元数据 Tablet 读回原回执和后续回执。PostgreSQL 约束错误修复后，单独重放该订阅不会改变 Doris 回执。夹具也验证 Doris 视图丢失时仅暂停该订阅，并将其暂停隔离标记为未确认。
 
-构建 Java 21 发布包和测试类后，运行 `RIVOMESH_TEST_PREBUILT=1 bash tests/doris-pipeline-run.sh`。夹具使用临时数据库，停机和启动沿用原 Doris 数据卷。本场景覆盖单 FE 和单 BE 的连接器行为，多节点故障切换需单独验收。[Doris 单容器测试镜像](https://doris.apache.org/community/developer-guide/all-in-one-image/) · [验收记录](/docs/zh/evidence/baseline.html)
+构建 Java 21 发布包和测试类后，运行 `RIVOMESH_TEST_PREBUILT=1 bash tests/doris-pipeline-run.sh`。夹具使用临时数据库，停机和启动沿用原 Doris 数据卷。本场景覆盖单 FE 和单 BE 的连接器行为，多节点故障切换需单独验收。[Doris 单容器测试镜像](https://doris.apache.org/community/developer-guide/all-in-one-image/) · [验收记录](/docs/zh/start/verification.html)

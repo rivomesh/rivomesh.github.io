@@ -33,7 +33,7 @@ Use the [product roadmap](/docs/en/start/roadmap.html) to find existing capabili
 
 ## License and release status
 
-Consult the [core repository](https://github.com/rivomesh/rivomesh) for licensing terms and release assets. See [source and downloads](/en/download.html) for the trial setup and environment requirements.
+The first release is in preparation. See [source and downloads](/en/download.html) to build a preview for evaluation. Follow the [core repository](https://github.com/rivomesh/rivomesh) for licensing and release announcements.
 
 ## Website and documentation
 

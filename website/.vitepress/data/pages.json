@@ -164,7 +164,7 @@
     "route": "/docs/en/reference/global-control.html",
     "title": "Global task control",
     "group": "architecture",
-    "rank": 1,
+    "rank": 0,
     "sourcePath": "docs/en/global-control.md"
   },
   {
@@ -180,7 +180,7 @@
     "route": "/docs/en/reference/implementation-status.html",
     "title": "Implementation status",
     "group": "architecture",
-    "rank": 2,
+    "rank": 1,
     "sourcePath": "docs/en/implementation-status.md"
   },
   {
@@ -281,14 +281,6 @@
   },
   {
     "locale": "en",
-    "route": "/docs/en/reference/platform-design.html",
-    "title": "Platform design",
-    "group": "architecture",
-    "rank": 0,
-    "sourcePath": "docs/en/platform-design.md"
-  },
-  {
-    "locale": "en",
     "route": "/docs/en/reference/postgresql-source.html",
     "title": "PostgreSQL source",
     "group": "connectors",
@@ -316,7 +308,7 @@
     "route": "/docs/en/reference/release-inventory.html",
     "title": "Release packages & driver inventory",
     "group": "architecture",
-    "rank": 3,
+    "rank": 2,
     "sourcePath": "docs/en/release-inventory.md"
   },
   {
@@ -368,36 +360,12 @@
     "sourcePath": "docs/en/transaction-skip.md"
   },
   {
-    "locale": "en",
-    "route": "/docs/en/reference/validation.html",
-    "title": "Validation records",
-    "group": "evidence",
-    "rank": 0,
-    "sourcePath": "docs/en/validation.md"
-  },
-  {
     "locale": "zh",
     "route": "/docs/zh/reference/recovery.html",
     "title": "恢复与一致性",
     "group": "reference",
     "rank": 5,
     "sourcePath": "docs/recovery.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/reference/validation.html",
-    "title": "验证记录汇总",
-    "group": "evidence",
-    "rank": 0,
-    "sourcePath": "docs/validation.md"
-  },
-  {
-    "locale": "zh",
-    "route": "/docs/zh/evidence/baseline.html",
-    "title": "首版验证基线 / Verification baseline",
-    "group": "evidence",
-    "rank": 0,
-    "sourcePath": "docs/verification/README.md"
   },
   {
     "locale": "zh",
@@ -564,7 +532,7 @@
     "route": "/docs/zh/reference/global-control.html",
     "title": "跨节点任务控制",
     "group": "architecture",
-    "rank": 1,
+    "rank": 0,
     "sourcePath": "docs/zh-CN/global-control.md"
   },
   {
@@ -580,7 +548,7 @@
     "route": "/docs/zh/reference/implementation-status.html",
     "title": "当前实施状态",
     "group": "architecture",
-    "rank": 2,
+    "rank": 1,
     "sourcePath": "docs/zh-CN/implementation-status.md"
   },
   {
@@ -681,14 +649,6 @@
   },
   {
     "locale": "zh",
-    "route": "/docs/zh/reference/platform-design.html",
-    "title": "完整平台设计",
-    "group": "architecture",
-    "rank": 0,
-    "sourcePath": "docs/zh-CN/platform-design.md"
-  },
-  {
-    "locale": "zh",
     "route": "/docs/zh/reference/postgresql-source.html",
     "title": "PostgreSQL 源端",
     "group": "connectors",
@@ -708,7 +668,7 @@
     "route": "/docs/zh/reference/release-inventory.html",
     "title": "发布包与驱动依赖清单",
     "group": "architecture",
-    "rank": 3,
+    "rank": 2,
     "sourcePath": "docs/zh-CN/release-inventory.md"
   },
   {
@@ -758,6 +718,20 @@
     "group": "reference",
     "rank": 9,
     "sourcePath": "docs/zh-CN/transaction-skip.md"
+  },
+  {
+    "locale": "zh",
+    "route": "/docs/zh/start/verification.html",
+    "title": "已验证范围",
+    "rank": 0,
+    "group": "evidence"
+  },
+  {
+    "locale": "en",
+    "route": "/docs/en/start/verification.html",
+    "title": "Verified environments and behavior",
+    "rank": 0,
+    "group": "evidence"
   },
   {
     "locale": "zh",

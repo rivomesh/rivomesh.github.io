@@ -68,11 +68,11 @@ npm test
 npm run build
 ```
 
-导入器从同一 Git 提交读取核心项目的中英文公开手册、验收资料和 `AdapterCatalog.java`。默认使用源仓库的 `HEAD`，也可在源仓库路径后传入 Git 提交。导入保留 `start/` 原创文档。旧规格、计划和任务清单页面跳转到对应语言的实施状态。
+导入器从同一 Git 提交读取核心项目的中英文公开手册和 `AdapterCatalog.java`。默认使用源仓库的 `HEAD`，也可在源仓库路径后传入 Git 提交。导入保留 `start/` 原创文档。站内验证页按版本、拓扑和部署方式说明已验证的行为；手册中的原始测试证据链接指向对应的核心源码提交。旧规格、计划和任务清单页面跳转到对应语言的实施状态。
 
 快照清单保存原始文件的 SHA-256。导入时转换站内文档链接，并将源码外链固定到对应提交。`tooling/document-copy.mjs` 维护站点用语与手册中的过时状态。生成前检查路由唯一性。
 
-中英文交互架构图的 Archify 源在 `tooling/architecture/`，生成的 HTML 放在 `website/public/architecture/`。两种语言的架构页都嵌入简版预览，并可打开完整交互图。
+中英文架构图由 GPT 图像生成，提示词记录在 `tooling/architecture/prompts.md`，网站图片和原尺寸查看页位于 `website/public/architecture/`。修改查看页模板后，运行 `node tooling/architecture/build-viewers.mjs`。
 
 ## 品牌与视频
 

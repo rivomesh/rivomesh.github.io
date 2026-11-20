@@ -9,7 +9,7 @@ sourcePath: docs/zh-CN/transaction-skip.md
 
 目标数据偏离导致应用故障时，可以先审阅[事务补偿](/docs/zh/reference/transaction-compensation.html)。
 
-RC-03 跳过和 RC-08 缺口核验的早期档案已通过，涵盖 MySQL 8.4 源、原 Agent 与 LOCAL 日志、PostgreSQL 业务目标以及 PostgreSQL/MySQL 控制库。早期记录使用 Java 8，首版的构建和运行版本为 Eclipse Temurin 21 LTS。MySQL 目标原生合同已通过，完整公开跳过矩阵及其他目标仍待补验。共享任务集群需显式启用事务跳过，管理员须保存完整证据并明确审批。[证据](/docs/zh/evidence/baseline.html) · [English](/docs/en/reference/transaction-skip.html)
+事务跳过和缺口核验已有实测档案，涵盖 MySQL 8.4 源、原 Agent 与 LOCAL 日志、PostgreSQL 业务目标以及 PostgreSQL/MySQL 控制库。早期记录使用 Java 8，首版的构建和运行版本为 Eclipse Temurin 21 LTS。MySQL 目标原生合同已通过，完整公开跳过矩阵及其他目标仍待补验。共享任务集群需显式启用事务跳过，管理员须保存完整证据并明确审批。[证据](/docs/zh/start/verification.html) · [English](/docs/en/reference/transaction-skip.html)
 
 缺口核验API和界面已接入；原生PG/MySQL各54项合同通过，PG/MySQL控制库各27项真实同步链路检查通过。操作步骤、审批、取消和状态含义见[缺口核验手册](/docs/zh/reference/gap-verification.html)。
 
